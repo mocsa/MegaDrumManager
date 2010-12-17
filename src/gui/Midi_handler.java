@@ -7,6 +7,7 @@ import	javax.sound.midi.Sequence;
 import	javax.sound.midi.Sequencer;
 //import	javax.sound.midi.Track;
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.SysexMessage;
@@ -21,20 +22,56 @@ public class Midi_handler {
 	private MidiDevice midiout;
 	private MidiDevice midiin;
 	private MidiDevice.Info[]	aInfos;
+	private Receiver receiver;
+	private DumpReceiver dump_receiver;
+	private Transmitter	transmitter;
+	
+	public int config_chain_id;
+	public ConfigMisc config_misc;
 
 	public Midi_handler () {
 		midiin = null;
 		midiout = null;
+		receiver = null;
+		transmitter = null;
 		port_in = 0;
 		port_out = 0;
+		DumpReceiver rcvr = new DumpReceiver();
+		config_chain_id = 0;
+		config_misc = new ConfigMisc();
 	}
 	
 	public void Close_all_ports() {
-		if (midiout.isOpen()) {
-			midiout.close();
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				midiout.close();
+			}
 		}
-		if (midiin.isOpen()) {
-			midiin.close();
+		if (midiin != null) {
+			if (midiin.isOpen()) {
+				midiin.close();
+			}
+		}
+	}
+	
+//	public void send_sysex(Receiver rr, byte [] buf, int size) {
+	public void send_sysex(byte [] buf) {
+		SysexMessage	sysexMessage = new SysexMessage();
+
+		try {
+			sysexMessage.setMessage(buf, buf.length);
+			receiver.send(sysexMessage, -1);
+		} catch (InvalidMidiDataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
+	public void send_config_misc() {
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				send_sysex(config_misc.getSysex(config_chain_id));
+			}
 		}
 	}
 	
@@ -96,15 +133,24 @@ public class Midi_handler {
 			midiout.close();
 			midiin.close();
 		    try {
+		    	if (midiin.isOpen()) {
+		    		midiin.close();
+		    	}
 		    	midiin = MidiSystem.getMidiDevice(aInfos[table_in[port_in]]);
 		    	midiin.open();
+				transmitter = midiin.getTransmitter();
+				transmitter.setReceiver(dump_receiver);		    	
 				//System.out.printf("\nOpened MIDI In port %d (%d) - %s.\n", port_in,table_in[port_in],aInfos[table_in[port_in]].getName());
 		    } catch (MidiUnavailableException e) {
 		    	Main_window.show_error("Cannot open MIDI In port");
 		    }		    		    
 		    try {
+		    	if (midiout.isOpen()) {
+		    		midiout.close();
+		    	}
 		    	midiout = MidiSystem.getMidiDevice(aInfos[table_out[port_out]]);
 		    	midiout.open();
+		    	receiver = midiout.getReceiver();
 				//System.out.printf("\nOpened MIDI Out port %d (%d) - %s.\n", port_out,table_out[port_out],aInfos[table_out[port_out]].getName());
 		    } catch (MidiUnavailableException e) {
 		    	Main_window.show_error("Cannot open MIDI Out port");

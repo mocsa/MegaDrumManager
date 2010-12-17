@@ -31,7 +31,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class Main_window {
 
@@ -126,6 +127,11 @@ public class Main_window {
 		mnMiscSettings.add(mntmLoadFromMd_1);
 		
 		JMenuItem mntmSendToMd_1 = new JMenuItem("Send to MD");
+		mntmSendToMd_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.send_config_misc();
+			}
+		});
 		mnMiscSettings.add(mntmSendToMd_1);
 		
 		JMenu mnHihatPedalSettings = new JMenu("HiHat pedal settings");
@@ -212,10 +218,17 @@ public class Main_window {
 		lblNoteoffDelay.setBounds(13, 7, 74, 16);
 		panel_misc_noteoff.add(lblNoteoffDelay);
 		
-		JSpinner spinner_noteoff = new JSpinner();
+		final JSpinner spinner_noteoff = new JSpinner();
+		spinner_noteoff.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				short value = ((Short)spinner_noteoff.getValue()).shortValue();
+				midi_handler.config_misc.setNote_off((short)(value/10));
+			}
+		});
 		spinner_noteoff.setBounds(92, 5, 52, 20);
 		panel_misc_noteoff.add(spinner_noteoff);
 		spinner_noteoff.setModel(new SpinnerNumberModel(new Short((short) 200), new Short((short) 100), new Short((short) 2000), new Short((short) 10)));
+		spinner_noteoff.setValue((short)(midi_handler.config_misc.getNote_off()*10));
 		
 		JPanel panel_misc_pressroll = new JPanel();
 		panel_misc_pressroll.setLayout(null);
