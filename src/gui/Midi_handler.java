@@ -36,9 +36,9 @@ public class Midi_handler {
 		transmitter = null;
 		port_in = 0;
 		port_out = 0;
-		DumpReceiver rcvr = new DumpReceiver();
 		config_chain_id = 0;
 		config_misc = new ConfigMisc();
+		dump_receiver = new DumpReceiver();
 	}
 	
 	public void Close_all_ports() {
@@ -86,6 +86,61 @@ public class Midi_handler {
 		if (midiout != null) {
 			if (midiout.isOpen()) {
 				send_sysex(sx);
+			}
+		}
+	}
+	
+	public void clear_midi_input() {
+		byte [] result;
+		result = null;
+		int size = 1;
+		
+		if (midiin != null) {
+			if (midiin.isOpen()) {
+				// Clear MIDI input buffer
+				while (size > 0) {
+					result = dump_receiver.getByteMessage();
+					if (result == null)
+					{
+						size = 0;
+						//out("input buffer cleared");
+					}
+					else
+					{
+						size = result.length;
+					}			
+				}
+			}
+		}
+	}
+	
+	public void get_midi() {
+		byte [] buffer;
+		buffer = null;
+		int size = 0;
+		
+		if (midiin != null) {
+			if (midiin.isOpen()) {
+				buffer = dump_receiver.getByteMessage();
+				
+				if (buffer != null) {
+					size = buffer.length;
+					if (( buffer[0] == Constants.SYSEX_START) && (buffer[size-1] == Constants.SYSEX_END)) {
+						if (buffer[1] == Constants.MD_SYSEX) {
+							if (buffer[2] == (byte) config_chain_id) {
+								switch(buffer[3]) {
+								case Constants.MD_SYSEX_MISC:
+									config_misc.setFromSysex(buffer);
+									break;
+								default:
+									break;
+								}
+							}
+						}
+					} else {
+						// TO-DO
+					}
+				}
 			}
 		}
 	}

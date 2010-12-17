@@ -2,6 +2,8 @@ package gui;
 
 public class ConfigMisc {
 	
+	public boolean changed; 
+	
 	private short note_off;
 	private short latency;
 	private short pressroll;
@@ -16,6 +18,8 @@ public class ConfigMisc {
 	private byte[] sysex;
 	
 	public ConfigMisc (){
+		changed = false;
+		
 		note_off = 20;
 		latency = 40;
 		pressroll = 0;
@@ -140,5 +144,7 @@ public class ConfigMisc {
 		quick_access = ((flags&(1<<3)) != 0);
 		alt_false_tr_supp = ((flags&(1<<5)) != 0);
 		inputs_priority = ((flags&(1<<6)) != 0);
+		
+		changed = true;
 	}
 }

@@ -34,12 +34,25 @@ import java.awt.event.WindowEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.Font;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main_window {
 
 	private JFrame frmMegadrummanager;
 	private Options dialog_options;
 	private Midi_handler midi_handler;
+	private Timer timer_midi;
+	
+	private JCheckBox chckbxAllGainsLow;
+	private JSpinner spinner_noteoff;
+	private JSpinner spinner_pressroll;
+	private JSpinner spinner_latency;
+	private JCheckBox chckbxBigVuMeter;
+	private JCheckBox chckbxQuickAccess;
+	private JCheckBox chckbxAltFalseTrig;
+	private JCheckBox chckbxInputsPriority;
+
 
 	/**
 	 * Launch the application.
@@ -77,7 +90,7 @@ public class Main_window {
 			    "Error",
 			    JOptionPane.ERROR_MESSAGE);
 	}
-
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -96,6 +109,18 @@ public class Main_window {
 
 		dialog_options = new Options();
 		midi_handler = new Midi_handler();
+		timer_midi = new Timer();
+		timer_midi.scheduleAtFixedRate(
+				new TimerTask() {
+					public void run() {
+						midi_handler.get_midi();
+						if (midi_handler.config_misc.changed) {
+							update_misc_config_controls();
+							midi_handler.config_misc.changed = false;
+						}
+					}
+				}
+				, 1000, 1);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmMegadrummanager.setJMenuBar(menuBar);
@@ -219,7 +244,7 @@ public class Main_window {
 		lblNoteoffDelay.setBounds(13, 7, 74, 16);
 		panel_misc_noteoff.add(lblNoteoffDelay);
 		
-		final JSpinner spinner_noteoff = new JSpinner();
+		spinner_noteoff = new JSpinner();
 		spinner_noteoff.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_noteoff.getValue()).shortValue();
@@ -228,7 +253,6 @@ public class Main_window {
 		});
 		spinner_noteoff.setBounds(92, 5, 52, 20);
 		spinner_noteoff.setModel(new SpinnerNumberModel(new Short((short) 200), new Short((short) 100), new Short((short) 2000), new Short((short) 10)));
-		spinner_noteoff.setValue((short)(midi_handler.config_misc.getNote_off()*10));
 		panel_misc_noteoff.add(spinner_noteoff);
 		
 		JPanel panel_misc_pressroll = new JPanel();
@@ -240,7 +264,7 @@ public class Main_window {
 		lblPressrollTime.setBounds(13, 7, 74, 16);
 		panel_misc_pressroll.add(lblPressrollTime);
 		
-		final JSpinner spinner_pressroll = new JSpinner();
+		spinner_pressroll = new JSpinner();
 		spinner_pressroll.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_pressroll.getValue()).shortValue();
@@ -249,7 +273,6 @@ public class Main_window {
 		});
 		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 2000), new Short((short) 1)));
 		spinner_pressroll.setBounds(92, 5, 52, 20);
-		spinner_pressroll.setValue((short)(midi_handler.config_misc.getPressroll()*10));
 		panel_misc_pressroll.add(spinner_pressroll);
 		
 		JPanel panel_misc_latency = new JPanel();
@@ -261,7 +284,7 @@ public class Main_window {
 		lblLatency.setBounds(13, 7, 74, 16);
 		panel_misc_latency.add(lblLatency);
 		
-		final JSpinner spinner_latency = new JSpinner();
+		spinner_latency = new JSpinner();
 		spinner_latency.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_latency.getValue()).shortValue();
@@ -270,7 +293,6 @@ public class Main_window {
 		});
 		spinner_latency.setModel(new SpinnerNumberModel(new Short((short) 40), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
 		spinner_latency.setBounds(92, 5, 52, 20);
-		spinner_latency.setValue((short)(midi_handler.config_misc.getLatency()));
 		panel_misc_latency.add(spinner_latency);
 		
 		JPanel panel_misc_flags = new JPanel();
@@ -278,61 +300,57 @@ public class Main_window {
 		panel_misc.add(panel_misc_flags);
 		panel_misc_flags.setLayout(null);
 		
-		final JCheckBox chckbxBigVuMeter = new JCheckBox("Big VU meter");
+		chckbxBigVuMeter = new JCheckBox("Big VU meter");
 		chckbxBigVuMeter.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				midi_handler.config_misc.setBig_vu_meter(chckbxBigVuMeter.isSelected());
 			}
 		});
 		chckbxBigVuMeter.setBounds(0, 0, 105, 25);
-		chckbxBigVuMeter.setSelected(midi_handler.config_misc.getBig_vu_meter());
 		panel_misc_flags.add(chckbxBigVuMeter);
 		
-		final JCheckBox chckbxQuickAccess = new JCheckBox("Quick Access");
+		chckbxQuickAccess = new JCheckBox("Quick Access");
 		chckbxQuickAccess.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				midi_handler.config_misc.setQuick_access(chckbxQuickAccess.isSelected());
 			}
 		});
 		chckbxQuickAccess.setBounds(0, 21, 105, 25);
-		chckbxQuickAccess.setSelected(midi_handler.config_misc.getQuick_access());
 		panel_misc_flags.add(chckbxQuickAccess);
 		
-		final JCheckBox chckbxAltFalseTrig = new JCheckBox("Alt False Trig");
+		chckbxAltFalseTrig = new JCheckBox("Alt False Trig");
 		chckbxAltFalseTrig.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				midi_handler.config_misc.setAlt_false_tr_supp(chckbxAltFalseTrig.isSelected());
 			}
 		});
 		chckbxAltFalseTrig.setBounds(0, 43, 105, 25);
-		chckbxAltFalseTrig.setSelected(midi_handler.config_misc.getAlt_false_tr_supp());
 		panel_misc_flags.add(chckbxAltFalseTrig);
 		
-		final JCheckBox chckbxInputsPriority = new JCheckBox("Inputs Priority");
+		chckbxInputsPriority = new JCheckBox("Inputs Priority");
 		chckbxInputsPriority.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				midi_handler.config_misc.setInputs_priority(chckbxInputsPriority.isSelected());
 			}
 		});
 		chckbxInputsPriority.setBounds(0, 65, 105, 25);
-		chckbxInputsPriority.setSelected(midi_handler.config_misc.getInputs_priority());
 		panel_misc_flags.add(chckbxInputsPriority);
 		
-		final JCheckBox chckbxAllGainsLow = new JCheckBox("All Gains Low");
+		chckbxAllGainsLow = new JCheckBox("All Gains Low");
 		chckbxAllGainsLow.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				midi_handler.config_misc.setAll_gains_low(chckbxAllGainsLow.isSelected());
 			}
 		});
-		chckbxAllGainsLow.setSelected(false);
 		chckbxAllGainsLow.setBounds(0, 87, 105, 25);
-		chckbxAllGainsLow.setSelected(midi_handler.config_misc.getAll_gains_low());
 		panel_misc_flags.add(chckbxAllGainsLow);
 		
 		JButton btnGet_misc = new JButton("Get");
 		btnGet_misc.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		btnGet_misc.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.clear_midi_input();
+				midi_handler.request_config_misc();
 			}
 		});
 		btnGet_misc.setBounds(52, 243, 59, 25);
@@ -348,6 +366,20 @@ public class Main_window {
 		btnSend_misc.setBounds(115, 243, 59, 25);
 		panel_misc.add(btnSend_misc);
 		frmMegadrummanager.getContentPane().setLayout(groupLayout);
+		
+		update_misc_config_controls();
 	}
+	
+	public void update_misc_config_controls() {
+		spinner_noteoff.setValue((short)(midi_handler.config_misc.getNote_off()*10));
+		spinner_pressroll.setValue((short)(midi_handler.config_misc.getPressroll()*10));
+		spinner_latency.setValue((short)(midi_handler.config_misc.getLatency()));
+		chckbxBigVuMeter.setSelected(midi_handler.config_misc.getBig_vu_meter());
+		chckbxQuickAccess.setSelected(midi_handler.config_misc.getQuick_access());
+		chckbxAltFalseTrig.setSelected(midi_handler.config_misc.getAlt_false_tr_supp());
+		chckbxInputsPriority.setSelected(midi_handler.config_misc.getInputs_priority());
+		chckbxAllGainsLow.setSelected(midi_handler.config_misc.getAll_gains_low());
+	}
+	
 }
 
