@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.EventQueue;
 
-import javax.sound.midi.MidiDevice;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -30,18 +29,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-import javax.sound.midi.Transmitter;
-import javax.sound.midi.Receiver;
-import	javax.sound.midi.Sequence;
-import	javax.sound.midi.Sequencer;
-//import	javax.sound.midi.Track;
-//import javax.sound.midi.Synthesizer;
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiDevice;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.SysexMessage;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -50,15 +37,7 @@ public class Main_window {
 
 	private JFrame frmMegadrummanager;
 	private Options dialog_options;
-
-	private int nPorts;
-	private int port;
-	private int port_in;
-	private int port_out;
-
-	private MidiDevice midiout;
-	private MidiDevice midiin;
-	private MidiDevice.Info[]	aInfos;
+	private Midi_handler midi_handler;
 
 	/**
 	 * Launch the application.
@@ -81,91 +60,16 @@ public class Main_window {
 	 * Create the application.
 	 */
 	public Main_window() {
-		midiin = null;
-		midiout = null;
-		port_in = 0;
-		port_out = 0;
 		
 		initialize();
 	}
 	
 	private void open_options_dialog() {
-		aInfos = MidiSystem.getMidiDeviceInfo(); 
-		nPorts = aInfos.length;
-		int[] table_in = new int[nPorts];
-		int[] table_out = new int[nPorts];
-
-		dialog_options.comboBox_MIDI_In.removeAllItems();
-		dialog_options.comboBox_MIDI_Out.removeAllItems();
-
- 		port = 0;
-		for (int i = 0; i < nPorts; i++)
-		{
-			try
-			{
-				midiin = MidiSystem.getMidiDevice(aInfos[i]);
-				if (midiin.getMaxTransmitters() != 0)
-				{
-					table_in[port] = i;
-					dialog_options.comboBox_MIDI_In.addItem(aInfos[i].getName());
-					port++;
-				}
-			}
-			catch (MidiUnavailableException e)
-			{
-				show_error("Error trying to list MIDI In devices");
-			}
-		}
 		
-		port = 0;		
-		for (int i = 0; i < nPorts; i++)
-		{
-			try
-			{
-				midiout = MidiSystem.getMidiDevice(aInfos[i]);
-				if (midiout.getMaxReceivers() != 0)
-				{
-					table_out[port] = i;
-					dialog_options.comboBox_MIDI_Out.addItem(aInfos[i].getName());
-					port++;
-				}
-			}
-			catch (MidiUnavailableException e)
-			{
-				show_error("Error trying to list MIDI Out devices");
-			}
-		}
-		
-		dialog_options.comboBox_MIDI_In.setSelectedIndex(port_in);
-		dialog_options.comboBox_MIDI_Out.setSelectedIndex(port_out);
-		dialog_options.config_applied = false;
-
-		dialog_options.setVisible(true);
-
-		if (dialog_options.config_applied) {
-			port_in = dialog_options.midi_port_in;
-			port_out = dialog_options.midi_port_out;
-			midiout.close();
-			midiin.close();
-		    try {
-		    	midiin = MidiSystem.getMidiDevice(aInfos[table_in[port_in]]);
-		    	midiin.open();
-				//System.out.printf("\nOpened MIDI In port %d (%d) - %s.\n", port_in,table_in[port_in],aInfos[table_in[port_in]].getName());
-		    } catch (MidiUnavailableException e) {
-		    	show_error("Cannot open MIDI In port");
-		    }		    		    
-		    try {
-		    	midiout = MidiSystem.getMidiDevice(aInfos[table_out[port_out]]);
-		    	midiout.open();
-				//System.out.printf("\nOpened MIDI Out port %d (%d) - %s.\n", port_out,table_out[port_out],aInfos[table_out[port_out]].getName());
-		    } catch (MidiUnavailableException e) {
-		    	show_error("Cannot open MIDI Out port");
-		    }
-		}
-		
+		midi_handler.Init_options(dialog_options);
 	}
 	
-	private void show_error(String msg) {
+	public static void show_error(String msg) {
 		JOptionPane.showMessageDialog(null,
 			    msg,
 			    "Error",
@@ -180,12 +84,7 @@ public class Main_window {
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				if (midiout.isOpen()) {
-					midiout.close();
-				}
-				if (midiin.isOpen()) {
-					midiin.close();
-				}
+				midi_handler.Close_all_ports();
 			}
 		});
 		frmMegadrummanager.setResizable(false);
@@ -194,6 +93,7 @@ public class Main_window {
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		dialog_options = new Options();
+		midi_handler = new Midi_handler();
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmMegadrummanager.setJMenuBar(menuBar);
@@ -280,6 +180,11 @@ public class Main_window {
 		mnMain.add(separator);
 		
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.exit(0);
+			}
+		});
 		mnMain.add(mntmExit);
 		
 		JPanel panel_misc = new JPanel();
