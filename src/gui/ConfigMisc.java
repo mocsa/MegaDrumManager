@@ -124,27 +124,31 @@ public class ConfigMisc {
 	}
 	
 	public void setFromSysex(byte [] sx) {
-		sysex_byte[0] = sx[4];
-		sysex_byte[1] = sx[5];
-		note_off = Utils.sysex2byte(sysex_byte);
-		sysex_byte[0] = sx[6];
-		sysex_byte[1] = sx[7];
-		latency = Utils.sysex2byte(sysex_byte);
-		sysex_short[0] = sx[8];
-		sysex_short[0] = sx[9];
-		sysex_short[0] = sx[10];
-		sysex_short[0] = sx[11];
-		flags = Utils.sysex2short(sysex_short);
-		sysex_byte[0] = sx[12];
-		sysex_byte[1] = sx[13];
-		pressroll = Utils.sysex2byte(sysex_byte);
-		
-		all_gains_low = ((flags&1) != 0);
-		big_vu_meter = ((flags&(1<<2)) != 0);
-		quick_access = ((flags&(1<<3)) != 0);
-		alt_false_tr_supp = ((flags&(1<<5)) != 0);
-		inputs_priority = ((flags&(1<<6)) != 0);
-		
-		changed = true;
+		//System.out.printf("sysex_byte size: %d\n", sysex_byte.length);
+		//System.out.printf("sx size: %d\n", sx.length);
+		if (sx.length >= 15) {
+			sysex_byte[0] = sx[4];
+			sysex_byte[1] = sx[5];
+			note_off = Utils.sysex2byte(sysex_byte);
+			sysex_byte[0] = sx[6];
+			sysex_byte[1] = sx[7];
+			latency = Utils.sysex2byte(sysex_byte);
+			sysex_short[0] = sx[8];
+			sysex_short[0] = sx[9];
+			sysex_short[0] = sx[10];
+			sysex_short[0] = sx[11];
+			flags = Utils.sysex2short(sysex_short);
+			sysex_byte[0] = sx[12];
+			sysex_byte[1] = sx[13];
+			pressroll = Utils.sysex2byte(sysex_byte);
+			
+			all_gains_low = ((flags&1) != 0);
+			big_vu_meter = ((flags&(1<<2)) != 0);
+			quick_access = ((flags&(1<<3)) != 0);
+			alt_false_tr_supp = ((flags&(1<<5)) != 0);
+			inputs_priority = ((flags&(1<<6)) != 0);
+			
+			changed = true;
+		}
 	}
 }

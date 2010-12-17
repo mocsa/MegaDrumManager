@@ -249,6 +249,10 @@ public class Main_window {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_noteoff.getValue()).shortValue();
 				midi_handler.config_misc.setNote_off((short)(value/10));
+				if (midi_handler.config_misc.getNote_off() < midi_handler.config_misc.getPressroll()) {
+					midi_handler.config_misc.setPressroll(midi_handler.config_misc.getNote_off()); 
+				}
+				spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (midi_handler.config_misc.getPressroll()*10)), new Short((short) 0), new Short((short) (midi_handler.config_misc.getNote_off()*10)), new Short((short) 10)));
 			}
 		});
 		spinner_noteoff.setBounds(92, 5, 52, 20);
@@ -271,7 +275,7 @@ public class Main_window {
 				midi_handler.config_misc.setPressroll((short)(value/10));
 			}
 		});
-		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 2000), new Short((short) 1)));
+		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 2000), new Short((short) 10)));
 		spinner_pressroll.setBounds(92, 5, 52, 20);
 		panel_misc_pressroll.add(spinner_pressroll);
 		
@@ -288,7 +292,7 @@ public class Main_window {
 		spinner_latency.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_latency.getValue()).shortValue();
-				midi_handler.config_misc.setLatency((short)(value/10));
+				midi_handler.config_misc.setLatency((short)value);
 			}
 		});
 		spinner_latency.setModel(new SpinnerNumberModel(new Short((short) 40), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
@@ -372,7 +376,7 @@ public class Main_window {
 	
 	public void update_misc_config_controls() {
 		spinner_noteoff.setValue((short)(midi_handler.config_misc.getNote_off()*10));
-		spinner_pressroll.setValue((short)(midi_handler.config_misc.getPressroll()*10));
+		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (midi_handler.config_misc.getPressroll()*10)), new Short((short) 0), new Short((short) (midi_handler.config_misc.getNote_off()*10)), new Short((short) 10)));
 		spinner_latency.setValue((short)(midi_handler.config_misc.getLatency()));
 		chckbxBigVuMeter.setSelected(midi_handler.config_misc.getBig_vu_meter());
 		chckbxQuickAccess.setSelected(midi_handler.config_misc.getQuick_access());
