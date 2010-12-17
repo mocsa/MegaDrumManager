@@ -75,6 +75,21 @@ public class Midi_handler {
 		}
 	}
 	
+	public void request_config_misc() {
+		byte [] sx = new byte[5];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)config_chain_id;
+		sx[3] = Constants.MD_SYSEX_MISC;
+		sx[4] = Constants.SYSEX_END;
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				send_sysex(sx);
+			}
+		}
+	}
+	
 	public void Init_options (Options dialog_options) {
 		aInfos = MidiSystem.getMidiDeviceInfo(); 
 		nPorts = aInfos.length;

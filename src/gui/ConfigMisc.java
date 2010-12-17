@@ -95,27 +95,50 @@ public class ConfigMisc {
 
 	public byte[] getSysex(int chain_id){
 		
-		flags = (short) ((all_gains_low)?1:0|((big_vu_meter)?1:0<<2)
-				|((quick_access)?1:0<<3)|((alt_false_tr_supp)?1:0<<5)|((inputs_priority)?1:0<<6));
-		sysex[0] = (byte)0xf0;
+		flags = (short) (((all_gains_low)?1:0)|(((big_vu_meter)?1:0)<<2)
+				|(((quick_access)?1:0)<<3)|(((alt_false_tr_supp)?1:0)<<5)|(((inputs_priority)?1:0)<<6));
+		sysex[0] = Constants.SYSEX_START;
 		sysex[1] = Constants.MD_SYSEX;
 		sysex[2] = (byte) chain_id;
 		sysex[3] = Constants.MD_SYSEX_MISC;
-		sysex_byte = Utils.sysex_get_byte((byte)note_off);
+		sysex_byte = Utils.byte2sysex((byte)note_off);
 		sysex[4] = sysex_byte[0];
 		sysex[5] = sysex_byte[1];
-		sysex_byte = Utils.sysex_get_byte((byte)latency);
+		sysex_byte = Utils.byte2sysex((byte)latency);
 		sysex[6] = sysex_byte[0];
 		sysex[7] = sysex_byte[1];
-		sysex_short = Utils.sysex_get_short(flags);
+		sysex_short = Utils.short2sysex(flags);
 		sysex[8] = sysex_short[0];
 		sysex[9] = sysex_short[1];
 		sysex[10] = sysex_short[2];
 		sysex[11] = sysex_short[3];
-		sysex_byte = Utils.sysex_get_byte((byte)pressroll);
+		sysex_byte = Utils.short2sysex((byte)pressroll);
 		sysex[12] = sysex_byte[0];
 		sysex[13] = sysex_byte[1];
-		sysex[14] = (byte) 0xf7;
+		sysex[14] = Constants.SYSEX_END;
 		return sysex;
+	}
+	
+	public void setFromSysex(byte [] sx) {
+		sysex_byte[0] = sx[4];
+		sysex_byte[1] = sx[5];
+		note_off = Utils.sysex2byte(sysex_byte);
+		sysex_byte[0] = sx[6];
+		sysex_byte[1] = sx[7];
+		latency = Utils.sysex2byte(sysex_byte);
+		sysex_short[0] = sx[8];
+		sysex_short[0] = sx[9];
+		sysex_short[0] = sx[10];
+		sysex_short[0] = sx[11];
+		flags = Utils.sysex2short(sysex_short);
+		sysex_byte[0] = sx[12];
+		sysex_byte[1] = sx[13];
+		pressroll = Utils.sysex2byte(sysex_byte);
+		
+		all_gains_low = ((flags&1) != 0);
+		big_vu_meter = ((flags&(1<<2)) != 0);
+		quick_access = ((flags&(1<<3)) != 0);
+		alt_false_tr_supp = ((flags&(1<<5)) != 0);
+		inputs_priority = ((flags&(1<<6)) != 0);
 	}
 }
