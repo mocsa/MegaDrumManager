@@ -28,6 +28,7 @@ public class Midi_handler {
 	
 	public int config_chain_id;
 	public ConfigMisc config_misc;
+	public ConfigPedal config_pedal;
 
 	public Midi_handler () {
 		midiin = null;
@@ -38,6 +39,7 @@ public class Midi_handler {
 		port_out = 0;
 		config_chain_id = 0;
 		config_misc = new ConfigMisc();
+		config_pedal = new ConfigPedal();
 		dump_receiver = new DumpReceiver();
 	}
 	
@@ -75,6 +77,14 @@ public class Midi_handler {
 		}
 	}
 	
+	public void send_config_pedal() {
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				send_sysex(config_pedal.getSysex(config_chain_id));
+			}
+		}
+	}
+	
 	public void request_config_misc() {
 		byte [] sx = new byte[5];
 		
@@ -82,6 +92,21 @@ public class Midi_handler {
 		sx[1] = Constants.MD_SYSEX;
 		sx[2] = (byte)config_chain_id;
 		sx[3] = Constants.MD_SYSEX_MISC;
+		sx[4] = Constants.SYSEX_END;
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				send_sysex(sx);
+			}
+		}
+	}
+
+	public void request_config_pedal() {
+		byte [] sx = new byte[5];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)config_chain_id;
+		sx[3] = Constants.MD_SYSEX_PEDAL;
 		sx[4] = Constants.SYSEX_END;
 		if (midiout != null) {
 			if (midiout.isOpen()) {
@@ -131,6 +156,9 @@ public class Midi_handler {
 								switch(buffer[3]) {
 								case Constants.MD_SYSEX_MISC:
 									config_misc.setFromSysex(buffer);
+									break;
+								case Constants.MD_SYSEX_PEDAL:
+									config_pedal.setFromSysex(buffer);
 									break;
 								default:
 									break;

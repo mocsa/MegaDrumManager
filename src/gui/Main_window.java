@@ -164,6 +164,12 @@ public class Main_window {
 		mnMain.add(mnMiscSettings);
 		
 		JMenuItem mntmLoadFromMd_1 = new JMenuItem("Load from MD");
+		mntmLoadFromMd_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.clear_midi_input();
+				midi_handler.request_config_misc();
+			}
+		});
 		mnMiscSettings.add(mntmLoadFromMd_1);
 		
 		JMenuItem mntmSendToMd_1 = new JMenuItem("Send to MD");
@@ -255,7 +261,7 @@ public class Main_window {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panel_83, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(231, Short.MAX_VALUE))
+					.addContainerGap(225, Short.MAX_VALUE))
 		);
 		panel_83.setLayout(null);
 		
