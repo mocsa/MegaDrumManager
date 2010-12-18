@@ -48,6 +48,8 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.SwingConstants;
 import java.awt.Dimension;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import java.awt.Color;
 
 public class Main_window {
 
@@ -232,8 +234,9 @@ public class Main_window {
 		mnMain.add(mntmExit);
 		
 		JPanel panel_misc = new JPanel();
+		panel_misc.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		
-		panel_misc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_misc.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
 		JPanel panel_83 = new JPanel();
 		panel_83.setBorder(new TitledBorder(null, "HiHat Pedal/Controller", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -287,6 +290,8 @@ public class Main_window {
 		JComboBox comboBoxHHtype = new JComboBox();
 		panel_1.add(comboBoxHHtype, BorderLayout.CENTER);
 		comboBoxHHtype.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		comboBoxHHtype.addItem("FootContr");
+		comboBoxHHtype.addItem("Pot");
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(12, 20, 202, 18);
@@ -310,6 +315,9 @@ public class Main_window {
 		
 		JComboBox comboBoxHHcurve = new JComboBox();
 		comboBoxHHcurve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		for (String string : Constants.CURVES_LIST) {
+			   comboBoxHHcurve.addItem(string);
+			}
 		panel_4.add(comboBoxHHcurve, BorderLayout.CENTER);
 		
 		JPanel panel_35 = new JPanel();
@@ -964,14 +972,15 @@ public class Main_window {
 		panel_misc_noteoff.add(lblNoteoffDelay);
 		
 		spinner_noteoff = new JSpinner();
+		spinner_noteoff.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		spinner_noteoff.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_noteoff.getValue()).shortValue();
-				midi_handler.config_misc.setNote_off((short)(value/10));
-				if (midi_handler.config_misc.getNote_off() < midi_handler.config_misc.getPressroll()) {
-					midi_handler.config_misc.setPressroll(midi_handler.config_misc.getNote_off()); 
+				midi_handler.config_misc.note_off = (short)(value/10);
+				if (midi_handler.config_misc.note_off < midi_handler.config_misc.pressroll) {
+					midi_handler.config_misc.pressroll = midi_handler.config_misc.note_off; 
 				}
-				spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (midi_handler.config_misc.getPressroll()*10)), new Short((short) 0), new Short((short) (midi_handler.config_misc.getNote_off()*10)), new Short((short) 10)));
+				spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (midi_handler.config_misc.pressroll*10)), new Short((short) 0), new Short((short) (midi_handler.config_misc.note_off*10)), new Short((short) 10)));
 			}
 		});
 		spinner_noteoff.setBounds(92, 5, 52, 20);
@@ -989,10 +998,11 @@ public class Main_window {
 		panel_misc_pressroll.add(lblPressrollTime);
 		
 		spinner_pressroll = new JSpinner();
+		spinner_pressroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		spinner_pressroll.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_pressroll.getValue()).shortValue();
-				midi_handler.config_misc.setPressroll((short)(value/10));
+				midi_handler.config_misc.pressroll = (short)(value/10);
 			}
 		});
 		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 2000), new Short((short) 10)));
@@ -1010,10 +1020,11 @@ public class Main_window {
 		panel_misc_latency.add(lblLatency);
 		
 		spinner_latency = new JSpinner();
+		spinner_latency.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		spinner_latency.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_latency.getValue()).shortValue();
-				midi_handler.config_misc.setLatency((short)value);
+				midi_handler.config_misc.latency = (short)value;
 			}
 		});
 		spinner_latency.setModel(new SpinnerNumberModel(new Short((short) 40), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
@@ -1029,7 +1040,7 @@ public class Main_window {
 		chckbxBigVuMeter.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		chckbxBigVuMeter.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.setBig_vu_meter(chckbxBigVuMeter.isSelected());
+				midi_handler.config_misc.big_vu_meter = chckbxBigVuMeter.isSelected();
 			}
 		});
 		chckbxBigVuMeter.setBounds(0, 0, 105, 25);
@@ -1039,7 +1050,7 @@ public class Main_window {
 		chckbxQuickAccess.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		chckbxQuickAccess.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.setQuick_access(chckbxQuickAccess.isSelected());
+				midi_handler.config_misc.quick_access = chckbxQuickAccess.isSelected();
 			}
 		});
 		chckbxQuickAccess.setBounds(0, 21, 105, 25);
@@ -1049,7 +1060,7 @@ public class Main_window {
 		chckbxAltFalseTrig.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		chckbxAltFalseTrig.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.setAlt_false_tr_supp(chckbxAltFalseTrig.isSelected());
+				midi_handler.config_misc.alt_false_tr_supp = chckbxAltFalseTrig.isSelected();
 			}
 		});
 		chckbxAltFalseTrig.setBounds(0, 43, 105, 25);
@@ -1059,7 +1070,7 @@ public class Main_window {
 		chckbxInputsPriority.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		chckbxInputsPriority.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.setInputs_priority(chckbxInputsPriority.isSelected());
+				midi_handler.config_misc.inputs_priority = chckbxInputsPriority.isSelected();
 			}
 		});
 		chckbxInputsPriority.setBounds(0, 65, 105, 25);
@@ -1069,7 +1080,7 @@ public class Main_window {
 		chckbxAllGainsLow.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		chckbxAllGainsLow.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.setAll_gains_low(chckbxAllGainsLow.isSelected());
+				midi_handler.config_misc.all_gains_low = chckbxAllGainsLow.isSelected();
 			}
 		});
 		chckbxAllGainsLow.setBounds(0, 87, 105, 25);
@@ -1101,14 +1112,14 @@ public class Main_window {
 	}
 	
 	public void update_misc_config_controls() {
-		spinner_noteoff.setValue((short)(midi_handler.config_misc.getNote_off()*10));
-		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (midi_handler.config_misc.getPressroll()*10)), new Short((short) 0), new Short((short) (midi_handler.config_misc.getNote_off()*10)), new Short((short) 10)));
-		spinner_latency.setValue((short)(midi_handler.config_misc.getLatency()));
-		chckbxBigVuMeter.setSelected(midi_handler.config_misc.getBig_vu_meter());
-		chckbxQuickAccess.setSelected(midi_handler.config_misc.getQuick_access());
-		chckbxAltFalseTrig.setSelected(midi_handler.config_misc.getAlt_false_tr_supp());
-		chckbxInputsPriority.setSelected(midi_handler.config_misc.getInputs_priority());
-		chckbxAllGainsLow.setSelected(midi_handler.config_misc.getAll_gains_low());
+		spinner_noteoff.setValue((short)(midi_handler.config_misc.note_off*10));
+		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (midi_handler.config_misc.pressroll*10)), new Short((short) 0), new Short((short) (midi_handler.config_misc.note_off*10)), new Short((short) 10)));
+		spinner_latency.setValue((short)(midi_handler.config_misc.latency));
+		chckbxBigVuMeter.setSelected(midi_handler.config_misc.big_vu_meter);
+		chckbxQuickAccess.setSelected(midi_handler.config_misc.quick_access);
+		chckbxAltFalseTrig.setSelected(midi_handler.config_misc.alt_false_tr_supp);
+		chckbxInputsPriority.setSelected(midi_handler.config_misc.inputs_priority);
+		chckbxAllGainsLow.setSelected(midi_handler.config_misc.all_gains_low);
 	}
 }
 
