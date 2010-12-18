@@ -50,6 +50,7 @@ import java.awt.Dimension;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.Insets;
 
 public class Main_window {
 
@@ -261,7 +262,7 @@ public class Main_window {
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panel_83, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(225, Short.MAX_VALUE))
+					.addContainerGap(130, Short.MAX_VALUE))
 		);
 		panel_83.setLayout(null);
 		
@@ -618,343 +619,133 @@ public class Main_window {
 		
 		JPanel panel_67 = new JPanel();
 		tabbedPane.addTab("Notes", null, panel_67, null);
-		panel_67.setLayout(null);
-		
-		JPanel panel_38 = new JPanel();
-		panel_38.setBounds(12, 0, 202, 18);
-		panel_67.add(panel_38);
-		panel_38.setLayout(null);
-		
-		JPanel panel_39 = new JPanel();
-		panel_39.setBounds(0, 0, 80, 18);
-		panel_38.add(panel_39);
-		panel_39.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBowSopen = new JLabel("Bow SemiOpen ");
-		lblBowSopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_39.add(lblBowSopen, BorderLayout.EAST);
-		
-		JPanel panel_40 = new JPanel();
-		panel_40.setLayout(null);
-		panel_40.setBounds(92, 0, 110, 18);
-		panel_38.add(panel_40);
-		
-		JSpinner spinner_7 = new JSpinner();
-		spinner_7.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_7.setBounds(0, 0, 44, 18);
-		panel_40.add(spinner_7);
-		
-		JPanel panel_41 = new JPanel();
-		panel_41.setBounds(12, 20, 202, 18);
-		panel_67.add(panel_41);
-		panel_41.setLayout(null);
-		
-		JPanel panel_42 = new JPanel();
-		panel_42.setBounds(0, 0, 80, 18);
-		panel_41.add(panel_42);
-		panel_42.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblEdgeSemiopen = new JLabel("Edge SemiOpen ");
-		lblEdgeSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_42.add(lblEdgeSemiopen, BorderLayout.EAST);
-		
-		JPanel panel_43 = new JPanel();
-		panel_43.setLayout(null);
-		panel_43.setBounds(92, 0, 110, 18);
-		panel_41.add(panel_43);
-		
-		JSpinner spinner_8 = new JSpinner();
-		spinner_8.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_8.setBounds(0, 0, 44, 18);
-		panel_43.add(spinner_8);
-		
-		JPanel panel_44 = new JPanel();
-		panel_44.setBounds(12, 40, 202, 18);
-		panel_67.add(panel_44);
-		panel_44.setLayout(null);
-		
-		JPanel panel_45 = new JPanel();
-		panel_45.setBounds(0, 0, 80, 18);
-		panel_44.add(panel_45);
-		panel_45.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBellSemiopen = new JLabel("Bell SemiOpen ");
-		lblBellSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_45.add(lblBellSemiopen, BorderLayout.EAST);
-		
-		JPanel panel_46 = new JPanel();
-		panel_46.setLayout(null);
-		panel_46.setBounds(92, 0, 110, 18);
-		panel_44.add(panel_46);
-		
-		JSpinner spinner_9 = new JSpinner();
-		spinner_9.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_9.setBounds(0, 0, 44, 18);
-		panel_46.add(spinner_9);
-		
-		JPanel panel_47 = new JPanel();
-		panel_47.setBounds(12, 60, 202, 18);
-		panel_67.add(panel_47);
-		panel_47.setLayout(null);
-		
-		JPanel panel_48 = new JPanel();
-		panel_48.setBounds(0, 0, 80, 18);
-		panel_47.add(panel_48);
-		panel_48.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBowHalfopen = new JLabel("Bow HalfOpen ");
-		lblBowHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_48.add(lblBowHalfopen, BorderLayout.EAST);
-		
-		JPanel panel_49 = new JPanel();
-		panel_49.setLayout(null);
-		panel_49.setBounds(92, 0, 110, 18);
-		panel_47.add(panel_49);
-		
-		JSpinner spinner_10 = new JSpinner();
-		spinner_10.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_10.setBounds(0, 0, 44, 18);
-		panel_49.add(spinner_10);
-		
-		JPanel panel_50 = new JPanel();
-		panel_50.setBounds(12, 80, 202, 18);
-		panel_67.add(panel_50);
-		panel_50.setLayout(null);
-		
-		JPanel panel_51 = new JPanel();
-		panel_51.setBounds(0, 0, 80, 18);
-		panel_50.add(panel_51);
-		panel_51.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBowHalfopen_1 = new JLabel("Edge HalfOpen ");
-		lblBowHalfopen_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_51.add(lblBowHalfopen_1, BorderLayout.EAST);
-		
-		JPanel panel_52 = new JPanel();
-		panel_52.setLayout(null);
-		panel_52.setBounds(92, 0, 110, 18);
-		panel_50.add(panel_52);
-		
-		JSpinner spinner_11 = new JSpinner();
-		spinner_11.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_11.setBounds(0, 0, 44, 18);
-		panel_52.add(spinner_11);
-		
-		JPanel panel_53 = new JPanel();
-		panel_53.setBounds(12, 100, 202, 18);
-		panel_67.add(panel_53);
-		panel_53.setLayout(null);
-		
-		JPanel panel_54 = new JPanel();
-		panel_54.setBounds(0, 0, 80, 18);
-		panel_53.add(panel_54);
-		panel_54.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBowHalfopen_2 = new JLabel("Bell HalfOpen ");
-		lblBowHalfopen_2.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_54.add(lblBowHalfopen_2, BorderLayout.EAST);
-		
-		JPanel panel_55 = new JPanel();
-		panel_55.setLayout(null);
-		panel_55.setBounds(92, 0, 110, 18);
-		panel_53.add(panel_55);
-		
-		JSpinner spinner_12 = new JSpinner();
-		spinner_12.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_12.setBounds(0, 0, 44, 18);
-		panel_55.add(spinner_12);
-		
-		JPanel panel_56 = new JPanel();
-		panel_56.setBounds(12, 120, 202, 18);
-		panel_67.add(panel_56);
-		panel_56.setLayout(null);
-		
-		JPanel panel_57 = new JPanel();
-		panel_57.setBounds(0, 0, 80, 18);
-		panel_56.add(panel_57);
-		panel_57.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBowSemiopen = new JLabel("Bow SemiClosed ");
-		lblBowSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_57.add(lblBowSemiopen, BorderLayout.EAST);
-		
-		JPanel panel_58 = new JPanel();
-		panel_58.setLayout(null);
-		panel_58.setBounds(92, 0, 110, 18);
-		panel_56.add(panel_58);
-		
-		JSpinner spinner_13 = new JSpinner();
-		spinner_13.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_13.setBounds(0, 0, 44, 18);
-		panel_58.add(spinner_13);
-		
-		JPanel panel_59 = new JPanel();
-		panel_59.setBounds(12, 140, 202, 18);
-		panel_67.add(panel_59);
-		panel_59.setLayout(null);
-		
-		JPanel panel_60 = new JPanel();
-		panel_60.setBounds(0, 0, 80, 18);
-		panel_59.add(panel_60);
-		panel_60.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblEdgeSemiclosed = new JLabel("Edge SemiClosed ");
-		lblEdgeSemiclosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_60.add(lblEdgeSemiclosed, BorderLayout.EAST);
-		
-		JPanel panel_61 = new JPanel();
-		panel_61.setLayout(null);
-		panel_61.setBounds(92, 0, 110, 18);
-		panel_59.add(panel_61);
-		
-		JSpinner spinner_14 = new JSpinner();
-		spinner_14.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_14.setBounds(0, 0, 44, 18);
-		panel_61.add(spinner_14);
-		
-		JPanel panel_62 = new JPanel();
-		panel_62.setBounds(12, 160, 202, 18);
-		panel_67.add(panel_62);
-		panel_62.setLayout(null);
-		
-		JPanel panel_63 = new JPanel();
-		panel_63.setBounds(0, 0, 80, 18);
-		panel_62.add(panel_63);
-		panel_63.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBellHalfopen = new JLabel("Bell SemiClosed ");
-		lblBellHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_63.add(lblBellHalfopen, BorderLayout.EAST);
-		
-		JPanel panel_64 = new JPanel();
-		panel_64.setLayout(null);
-		panel_64.setBounds(92, 0, 110, 18);
-		panel_62.add(panel_64);
-		
-		JSpinner spinner_15 = new JSpinner();
-		spinner_15.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_15.setBounds(0, 0, 44, 18);
-		panel_64.add(spinner_15);
-		
-		JPanel panel_68 = new JPanel();
-		panel_68.setLayout(null);
-		panel_68.setBounds(12, 180, 202, 18);
-		panel_67.add(panel_68);
-		
-		JPanel panel_69 = new JPanel();
-		panel_69.setBounds(0, 0, 80, 18);
-		panel_68.add(panel_69);
-		panel_69.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBowClosed = new JLabel("Bow Closed ");
-		lblBowClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_69.add(lblBowClosed, BorderLayout.EAST);
-		
-		JPanel panel_70 = new JPanel();
-		panel_70.setLayout(null);
-		panel_70.setBounds(92, 0, 110, 18);
-		panel_68.add(panel_70);
-		
-		JSpinner spinner_16 = new JSpinner();
-		spinner_16.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_16.setBounds(0, 0, 44, 18);
-		panel_70.add(spinner_16);
-		
-		JPanel panel_71 = new JPanel();
-		panel_71.setLayout(null);
-		panel_71.setBounds(12, 200, 202, 18);
-		panel_67.add(panel_71);
-		
-		JPanel panel_72 = new JPanel();
-		panel_72.setBounds(0, 0, 80, 18);
-		panel_71.add(panel_72);
-		panel_72.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblEdgeClosed = new JLabel("Edge Closed ");
-		lblEdgeClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_72.add(lblEdgeClosed, BorderLayout.EAST);
-		
-		JPanel panel_73 = new JPanel();
-		panel_73.setLayout(null);
-		panel_73.setBounds(92, 0, 110, 18);
-		panel_71.add(panel_73);
-		
-		JSpinner spinner_17 = new JSpinner();
-		spinner_17.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_17.setBounds(0, 0, 44, 18);
-		panel_73.add(spinner_17);
-		
-		JPanel panel_74 = new JPanel();
-		panel_74.setLayout(null);
-		panel_74.setBounds(12, 220, 202, 18);
-		panel_67.add(panel_74);
-		
-		JPanel panel_75 = new JPanel();
-		panel_75.setBounds(0, 0, 80, 18);
-		panel_74.add(panel_75);
-		panel_75.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBellClosed = new JLabel("Bell Closed ");
-		lblBellClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_75.add(lblBellClosed, BorderLayout.EAST);
-		
-		JPanel panel_76 = new JPanel();
-		panel_76.setLayout(null);
-		panel_76.setBounds(92, 0, 110, 18);
-		panel_74.add(panel_76);
-		
-		JSpinner spinner_18 = new JSpinner();
-		spinner_18.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_18.setBounds(0, 0, 44, 18);
-		panel_76.add(spinner_18);
-		
-		JPanel panel_77 = new JPanel();
-		panel_77.setLayout(null);
-		panel_77.setBounds(12, 240, 202, 18);
-		panel_67.add(panel_77);
-		
-		JPanel panel_78 = new JPanel();
-		panel_78.setBounds(0, 0, 80, 18);
-		panel_77.add(panel_78);
-		panel_78.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblChick = new JLabel("Chick ");
-		lblChick.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_78.add(lblChick, BorderLayout.EAST);
-		
-		JPanel panel_79 = new JPanel();
-		panel_79.setLayout(null);
-		panel_79.setBounds(92, 0, 110, 18);
-		panel_77.add(panel_79);
-		
-		JSpinner spinner_19 = new JSpinner();
-		spinner_19.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_19.setBounds(0, 0, 44, 18);
-		panel_79.add(spinner_19);
-		
-		JPanel panel_80 = new JPanel();
-		panel_80.setLayout(null);
-		panel_80.setBounds(12, 260, 202, 18);
-		panel_67.add(panel_80);
-		
-		JPanel panel_81 = new JPanel();
-		panel_81.setBounds(0, 0, 80, 18);
-		panel_80.add(panel_81);
-		panel_81.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblBlClosed = new JLabel("Splash ");
-		lblBlClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_81.add(lblBlClosed, BorderLayout.EAST);
-		
-		JPanel panel_82 = new JPanel();
-		panel_82.setLayout(null);
-		panel_82.setBounds(92, 0, 110, 18);
-		panel_80.add(panel_82);
-		
-		JSpinner spinner_20 = new JSpinner();
-		spinner_20.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_20.setBounds(0, 0, 44, 18);
-		panel_82.add(spinner_20);
+		panel_67.setLayout(new GridLayout(15, 1, 0, 0));
+		
+		NoteControl noteControl = new NoteControl();
+		GridBagLayout gridBagLayout = (GridBagLayout) noteControl.getLayout();
+		gridBagLayout.rowWeights = new double[]{0.0};
+		gridBagLayout.rowHeights = new int[]{0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout.columnWidths = new int[]{112, 45, 84};
+		noteControl.setLabelText("Bow SemiOpen");
+		panel_67.add(noteControl);
+		
+		NoteControl noteControl_1 = new NoteControl();
+		GridBagLayout gridBagLayout_1 = (GridBagLayout) noteControl_1.getLayout();
+		gridBagLayout_1.rowWeights = new double[]{0.0};
+		gridBagLayout_1.rowHeights = new int[]{0};
+		gridBagLayout_1.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_1.columnWidths = new int[]{112, 45, 84};
+		noteControl_1.setLabelText("Edge SemiOpen");
+		panel_67.add(noteControl_1);
+		
+		NoteControl noteControl_2 = new NoteControl();
+		GridBagLayout gridBagLayout_2 = (GridBagLayout) noteControl_2.getLayout();
+		gridBagLayout_2.rowWeights = new double[]{0.0};
+		gridBagLayout_2.rowHeights = new int[]{0};
+		gridBagLayout_2.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_2.columnWidths = new int[]{112, 45, 84};
+		noteControl_2.setLabelText("Bell SemiOpen");
+		panel_67.add(noteControl_2);
+		
+		NoteControl noteControl_3 = new NoteControl();
+		GridBagLayout gridBagLayout_3 = (GridBagLayout) noteControl_3.getLayout();
+		gridBagLayout_3.rowWeights = new double[]{0.0};
+		gridBagLayout_3.rowHeights = new int[]{0};
+		gridBagLayout_3.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_3.columnWidths = new int[]{112, 45, 84};
+		noteControl_3.setLabelText("Bow HalfOpen");
+		panel_67.add(noteControl_3);
+		
+		NoteControl noteControl_4 = new NoteControl();
+		GridBagLayout gridBagLayout_4 = (GridBagLayout) noteControl_4.getLayout();
+		gridBagLayout_4.rowWeights = new double[]{0.0};
+		gridBagLayout_4.rowHeights = new int[]{0};
+		gridBagLayout_4.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_4.columnWidths = new int[]{112, 45, 84};
+		noteControl_4.setLabelText("Edge HalfOpen");
+		panel_67.add(noteControl_4);
+		
+		NoteControl noteControl_5 = new NoteControl();
+		GridBagLayout gridBagLayout_5 = (GridBagLayout) noteControl_5.getLayout();
+		gridBagLayout_5.rowWeights = new double[]{0.0};
+		gridBagLayout_5.rowHeights = new int[]{0};
+		gridBagLayout_5.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_5.columnWidths = new int[]{112, 45, 84};
+		noteControl_5.setLabelText("Bell HalfOpen");
+		panel_67.add(noteControl_5);
+		
+		NoteControl noteControl_6 = new NoteControl();
+		GridBagLayout gridBagLayout_6 = (GridBagLayout) noteControl_6.getLayout();
+		gridBagLayout_6.rowWeights = new double[]{0.0};
+		gridBagLayout_6.rowHeights = new int[]{0};
+		gridBagLayout_6.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_6.columnWidths = new int[]{112, 45, 84};
+		noteControl_6.setLabelText("Bow SemiClosed");
+		panel_67.add(noteControl_6);
+		
+		NoteControl noteControl_7 = new NoteControl();
+		GridBagLayout gridBagLayout_7 = (GridBagLayout) noteControl_7.getLayout();
+		gridBagLayout_7.rowWeights = new double[]{0.0};
+		gridBagLayout_7.rowHeights = new int[]{0};
+		gridBagLayout_7.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_7.columnWidths = new int[]{112, 45, 84};
+		noteControl_7.setLabelText("Edge SemiClosed");
+		panel_67.add(noteControl_7);
+		
+		NoteControl noteControl_8 = new NoteControl();
+		GridBagLayout gridBagLayout_8 = (GridBagLayout) noteControl_8.getLayout();
+		gridBagLayout_8.rowWeights = new double[]{0.0};
+		gridBagLayout_8.rowHeights = new int[]{0};
+		gridBagLayout_8.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_8.columnWidths = new int[]{112, 45, 84};
+		noteControl_8.setLabelText("Bell SemiClosed");
+		panel_67.add(noteControl_8);
+		
+		NoteControl noteControl_9 = new NoteControl();
+		GridBagLayout gridBagLayout_9 = (GridBagLayout) noteControl_9.getLayout();
+		gridBagLayout_9.rowWeights = new double[]{0.0};
+		gridBagLayout_9.rowHeights = new int[]{0};
+		gridBagLayout_9.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_9.columnWidths = new int[]{112, 45, 84};
+		noteControl_9.setLabelText("Bow Closed");
+		panel_67.add(noteControl_9);
+		
+		NoteControl noteControl_10 = new NoteControl();
+		GridBagLayout gridBagLayout_10 = (GridBagLayout) noteControl_10.getLayout();
+		gridBagLayout_10.rowWeights = new double[]{0.0};
+		gridBagLayout_10.rowHeights = new int[]{0};
+		gridBagLayout_10.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_10.columnWidths = new int[]{112, 45, 84};
+		noteControl_10.setLabelText("Edge Closed");
+		panel_67.add(noteControl_10);
+		
+		NoteControl noteControl_11 = new NoteControl();
+		GridBagLayout gridBagLayout_11 = (GridBagLayout) noteControl_11.getLayout();
+		gridBagLayout_11.rowWeights = new double[]{0.0};
+		gridBagLayout_11.rowHeights = new int[]{0};
+		gridBagLayout_11.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_11.columnWidths = new int[]{112, 45, 84};
+		noteControl_11.setLabelText("Bell Closed");
+		panel_67.add(noteControl_11);
+		
+		NoteControl noteControl_12 = new NoteControl();
+		GridBagLayout gridBagLayout_12 = (GridBagLayout) noteControl_12.getLayout();
+		gridBagLayout_12.rowWeights = new double[]{0.0};
+		gridBagLayout_12.rowHeights = new int[]{0};
+		gridBagLayout_12.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_12.columnWidths = new int[]{112, 45, 84};
+		noteControl_12.setLabelText("Chick");
+		panel_67.add(noteControl_12);
+		
+		NoteControl noteControl_13 = new NoteControl();
+		GridBagLayout gridBagLayout_13 = (GridBagLayout) noteControl_13.getLayout();
+		gridBagLayout_13.rowWeights = new double[]{0.0};
+		gridBagLayout_13.rowHeights = new int[]{0};
+		gridBagLayout_13.columnWeights = new double[]{0.0, 0.0, 0.0};
+		gridBagLayout_13.columnWidths = new int[]{112, 45, 84};
+		noteControl_13.setLabelText("Splash");
+		panel_67.add(noteControl_13);
 		
 		JButton button = new JButton("Get");
 		button.setFont(new Font("Segoe UI", Font.PLAIN, 10));
