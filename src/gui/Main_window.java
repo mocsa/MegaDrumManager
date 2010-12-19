@@ -51,6 +51,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.Insets;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.SpringLayout;
 
 public class Main_window {
 
@@ -67,6 +70,7 @@ public class Main_window {
 	private JCheckBox chckbxQuickAccess;
 	private JCheckBox chckbxAltFalseTrig;
 	private JCheckBox chckbxInputsPriority;
+
 
 
 	/**
@@ -245,38 +249,48 @@ public class Main_window {
 		
 		panel_misc.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		
-		JPanel panel_83 = new JPanel();
-		panel_83.setBorder(new TitledBorder(null, "HiHat Pedal/Controller", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		JPanel panel_pedal = new JPanel();
+		panel_pedal.setBorder(new TitledBorder(null, "HiHat Pedal/Controller", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		
+		JPanel panel_38 = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(frmMegadrummanager.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_83, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(337, Short.MAX_VALUE))
+					.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(panel_38, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(77, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_83, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(130, Short.MAX_VALUE))
+						.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(225, Short.MAX_VALUE))
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(panel_38, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addGap(251))
 		);
-		panel_83.setLayout(null);
+		panel_38.setLayout(null);
+				
+		panel_pedal.setLayout(null);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBounds(12, 23, 236, 318);
-		panel_83.add(tabbedPane);
+		panel_pedal.add(tabbedPane);
 		
-		JPanel panel_65 = new JPanel();
-		tabbedPane.addTab("Misc", null, panel_65, null);
-		panel_65.setLayout(null);
+		JPanel panel_pedal_misc = new JPanel();
+		tabbedPane.addTab("Misc", null, panel_pedal_misc, null);
+		panel_pedal_misc.setLayout(null);
 		
 		JPanel panel_hh_type = new JPanel();
 		panel_hh_type.setBounds(12, 0, 202, 18);
-		panel_65.add(panel_hh_type);
+		panel_pedal_misc.add(panel_hh_type);
 		panel_hh_type.setLayout(null);
 		
 		JPanel panel = new JPanel();
@@ -302,7 +316,7 @@ public class Main_window {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(12, 20, 202, 18);
-		panel_65.add(panel_2);
+		panel_pedal_misc.add(panel_2);
 		panel_2.setLayout(null);
 		
 		JPanel panel_3 = new JPanel();
@@ -329,7 +343,7 @@ public class Main_window {
 		
 		JPanel panel_35 = new JPanel();
 		panel_35.setBounds(12, 40, 202, 18);
-		panel_65.add(panel_35);
+		panel_pedal_misc.add(panel_35);
 		panel_35.setLayout(null);
 		
 		JPanel panel_36 = new JPanel();
@@ -353,31 +367,31 @@ public class Main_window {
 		
 		JCheckBox checkBoxHHaltIn = new JCheckBox("Alt Input   ");
 		checkBoxHHaltIn.setBounds(49, 60, 104, 18);
-		panel_65.add(checkBoxHHaltIn);
+		panel_pedal_misc.add(checkBoxHHaltIn);
 		checkBoxHHaltIn.setHorizontalTextPosition(SwingConstants.LEADING);
 		checkBoxHHaltIn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		
 		JCheckBox checkBoxHHreverseLevels = new JCheckBox("Reverse Levels   ");
 		checkBoxHHreverseLevels.setBounds(25, 80, 104, 18);
-		panel_65.add(checkBoxHHreverseLevels);
+		panel_pedal_misc.add(checkBoxHHreverseLevels);
 		checkBoxHHreverseLevels.setHorizontalTextPosition(SwingConstants.LEADING);
 		checkBoxHHreverseLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		
 		JCheckBox chckbxSoftChicks = new JCheckBox("Soft Chicks   ");
 		chckbxSoftChicks.setBounds(39, 100, 88, 18);
-		panel_65.add(chckbxSoftChicks);
+		panel_pedal_misc.add(chckbxSoftChicks);
 		chckbxSoftChicks.setHorizontalTextPosition(SwingConstants.LEADING);
 		chckbxSoftChicks.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		
 		JCheckBox chckbxAutoLevels = new JCheckBox("Auto Levels   ");
 		chckbxAutoLevels.setBounds(37, 120, 92, 18);
-		panel_65.add(chckbxAutoLevels);
+		panel_pedal_misc.add(chckbxAutoLevels);
 		chckbxAutoLevels.setHorizontalTextPosition(SwingConstants.LEADING);
 		chckbxAutoLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setBounds(12, 140, 202, 18);
-		panel_65.add(panel_5);
+		panel_pedal_misc.add(panel_5);
 		panel_5.setLayout(null);
 		
 		JPanel panel_6 = new JPanel();
@@ -400,7 +414,7 @@ public class Main_window {
 		
 		JPanel panel_11 = new JPanel();
 		panel_11.setBounds(12, 160, 202, 18);
-		panel_65.add(panel_11);
+		panel_pedal_misc.add(panel_11);
 		panel_11.setLayout(null);
 		
 		JPanel panel_12 = new JPanel();
@@ -421,341 +435,111 @@ public class Main_window {
 		spinnerHHccValue.setBounds(0, 0, 44, 18);
 		panel_13.add(spinnerHHccValue);
 		
-		JPanel panel_66 = new JPanel();
-		tabbedPane.addTab("Levels", null, panel_66, null);
-		panel_66.setLayout(null);
+		JPanel panel_pedal_levels = new JPanel();
+		tabbedPane.addTab("Levels", null, panel_pedal_levels, null);
+		panel_pedal_levels.setLayout(new GridLayout(15, 1, 0, 0));
 		
-		JPanel panel_8 = new JPanel();
-		panel_8.setBounds(12, 0, 202, 18);
-		panel_66.add(panel_8);
-		panel_8.setLayout(null);
+		Spin1023Control spin1023Control = new Spin1023Control();
+		spin1023Control.setLabelText("Low");
+		panel_pedal_levels.add(spin1023Control);
 		
-		JPanel panel_9 = new JPanel();
-		panel_9.setBounds(0, 0, 80, 18);
-		panel_8.add(panel_9);
-		panel_9.setLayout(new BorderLayout(0, 0));
+		Spin1023Control spin1023Control_1 = new Spin1023Control();
+		spin1023Control_1.setLabelText("High");
+		panel_pedal_levels.add(spin1023Control_1);
 		
-		JLabel lblLowLevel = new JLabel("Low");
-		lblLowLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_9.add(lblLowLevel, BorderLayout.EAST);
+		Spin127Control spin127Control = new Spin127Control();
+		spin127Control.setLabelText("Open");
+		panel_pedal_levels.add(spin127Control);
 		
-		JPanel panel_10 = new JPanel();
-		panel_10.setLayout(null);
-		panel_10.setBounds(92, 0, 110, 18);
-		panel_8.add(panel_10);
+		Spin127Control spin127Control_1 = new Spin127Control();
+		spin127Control_1.setLabelText("Semi Open");
+		panel_pedal_levels.add(spin127Control_1);
 		
-		JSpinner spinnerHHlowLEvel = new JSpinner();
-		spinnerHHlowLEvel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinnerHHlowLEvel.setBounds(0, 0, 44, 18);
-		panel_10.add(spinnerHHlowLEvel);
+		Spin127Control spin127Control_2 = new Spin127Control();
+		spin127Control_2.setLabelText("Half Open");
+		panel_pedal_levels.add(spin127Control_2);
 		
-		JPanel panel_14 = new JPanel();
-		panel_14.setBounds(12, 20, 202, 18);
-		panel_66.add(panel_14);
-		panel_14.setLayout(null);
+		Spin127Control spin127Control_3 = new Spin127Control();
+		spin127Control_3.setLabelText("Closed");
+		panel_pedal_levels.add(spin127Control_3);
 		
-		JPanel panel_15 = new JPanel();
-		panel_15.setBounds(0, 0, 80, 18);
-		panel_14.add(panel_15);
-		panel_15.setLayout(new BorderLayout(0, 0));
+		Spin127Control spin127Control_4 = new Spin127Control();
+		spin127Control_4.setLabelText("Short Chick Thrs");
+		panel_pedal_levels.add(spin127Control_4);
 		
-		JLabel lblHighLevel = new JLabel("High");
-		lblHighLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_15.add(lblHighLevel, BorderLayout.EAST);
+		Spin127Control spin127Control_5 = new Spin127Control();
+		spin127Control_5.setLabelText("Long Chick Thrs");
+		panel_pedal_levels.add(spin127Control_5);
 		
-		JPanel panel_16 = new JPanel();
-		panel_16.setLayout(null);
-		panel_16.setBounds(92, 0, 110, 18);
-		panel_14.add(panel_16);
-		
-		JSpinner spinner = new JSpinner();
-		spinner.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner.setBounds(0, 0, 44, 18);
-		panel_16.add(spinner);
-		
-		JPanel panel_17 = new JPanel();
-		panel_17.setBounds(12, 40, 202, 18);
-		panel_66.add(panel_17);
-		panel_17.setLayout(null);
-		
-		JPanel panel_18 = new JPanel();
-		panel_18.setBounds(0, 0, 80, 18);
-		panel_17.add(panel_18);
-		panel_18.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblOpenCcLevel = new JLabel("Open");
-		lblOpenCcLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_18.add(lblOpenCcLevel, BorderLayout.EAST);
-		
-		JPanel panel_19 = new JPanel();
-		panel_19.setLayout(null);
-		panel_19.setBounds(92, 0, 110, 18);
-		panel_17.add(panel_19);
-		
-		JSpinner spinner_1 = new JSpinner();
-		spinner_1.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_1.setBounds(0, 0, 44, 18);
-		panel_19.add(spinner_1);
-		
-		JPanel panel_20 = new JPanel();
-		panel_20.setBounds(12, 60, 202, 18);
-		panel_66.add(panel_20);
-		panel_20.setLayout(null);
-		
-		JPanel panel_21 = new JPanel();
-		panel_21.setBounds(0, 0, 80, 18);
-		panel_20.add(panel_21);
-		panel_21.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblSemiOpenLevel = new JLabel("Semi Open");
-		lblSemiOpenLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_21.add(lblSemiOpenLevel, BorderLayout.EAST);
-		
-		JPanel panel_22 = new JPanel();
-		panel_22.setLayout(null);
-		panel_22.setBounds(92, 0, 110, 18);
-		panel_20.add(panel_22);
-		
-		JSpinner spinner_2 = new JSpinner();
-		spinner_2.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_2.setBounds(0, 0, 44, 18);
-		panel_22.add(spinner_2);
-		
-		JPanel panel_23 = new JPanel();
-		panel_23.setBounds(12, 80, 202, 18);
-		panel_66.add(panel_23);
-		panel_23.setLayout(null);
-		
-		JPanel panel_24 = new JPanel();
-		panel_24.setBounds(0, 0, 80, 18);
-		panel_23.add(panel_24);
-		panel_24.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblHopenLevel = new JLabel("Half Open");
-		lblHopenLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_24.add(lblHopenLevel, BorderLayout.EAST);
-		
-		JPanel panel_25 = new JPanel();
-		panel_25.setLayout(null);
-		panel_25.setBounds(92, 0, 110, 18);
-		panel_23.add(panel_25);
-		
-		JSpinner spinner_3 = new JSpinner();
-		spinner_3.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_3.setBounds(0, 0, 44, 18);
-		panel_25.add(spinner_3);
-		
-		JPanel panel_26 = new JPanel();
-		panel_26.setBounds(12, 100, 202, 18);
-		panel_66.add(panel_26);
-		panel_26.setLayout(null);
-		
-		JPanel panel_27 = new JPanel();
-		panel_27.setBounds(0, 0, 80, 18);
-		panel_26.add(panel_27);
-		panel_27.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblClosedLevel = new JLabel("Closed");
-		lblClosedLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_27.add(lblClosedLevel, BorderLayout.EAST);
-		
-		JPanel panel_28 = new JPanel();
-		panel_28.setLayout(null);
-		panel_28.setBounds(92, 0, 110, 18);
-		panel_26.add(panel_28);
-		
-		JSpinner spinner_4 = new JSpinner();
-		spinner_4.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_4.setBounds(0, 0, 44, 18);
-		panel_28.add(spinner_4);
-		
-		JPanel panel_29 = new JPanel();
-		panel_29.setBounds(12, 120, 202, 18);
-		panel_66.add(panel_29);
-		panel_29.setLayout(null);
-		
-		JPanel panel_30 = new JPanel();
-		panel_30.setBounds(0, 0, 80, 18);
-		panel_29.add(panel_30);
-		panel_30.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblShrtchThres = new JLabel("Short Chick Thres");
-		lblShrtchThres.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_30.add(lblShrtchThres, BorderLayout.EAST);
-		
-		JPanel panel_31 = new JPanel();
-		panel_31.setLayout(null);
-		panel_31.setBounds(92, 0, 110, 18);
-		panel_29.add(panel_31);
-		
-		JSpinner spinner_5 = new JSpinner();
-		spinner_5.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_5.setBounds(0, 0, 44, 18);
-		panel_31.add(spinner_5);
-		
-		JPanel panel_32 = new JPanel();
-		panel_32.setBounds(12, 140, 202, 18);
-		panel_66.add(panel_32);
-		panel_32.setLayout(null);
-		
-		JPanel panel_33 = new JPanel();
-		panel_33.setBounds(0, 0, 80, 18);
-		panel_32.add(panel_33);
-		panel_33.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblLngchThres = new JLabel("Long Chick Thres");
-		lblLngchThres.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_33.add(lblLngchThres, BorderLayout.EAST);
-		
-		JPanel panel_34 = new JPanel();
-		panel_34.setLayout(null);
-		panel_34.setBounds(92, 0, 110, 18);
-		panel_32.add(panel_34);
-		
-		JSpinner spinner_6 = new JSpinner();
-		spinner_6.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_6.setBounds(0, 0, 44, 18);
-		panel_34.add(spinner_6);
-		
-		JPanel panel_67 = new JPanel();
-		tabbedPane.addTab("Notes", null, panel_67, null);
-		panel_67.setLayout(new GridLayout(15, 1, 0, 0));
+		JPanel panel_pedal_notes = new JPanel();
+		tabbedPane.addTab("Notes", null, panel_pedal_notes, null);
+		panel_pedal_notes.setLayout(new GridLayout(15, 1, 0, 0));
 		
 		NoteControl noteControl = new NoteControl();
-		GridBagLayout gridBagLayout = (GridBagLayout) noteControl.getLayout();
-		gridBagLayout.rowWeights = new double[]{0.0};
-		gridBagLayout.rowHeights = new int[]{0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout.columnWidths = new int[]{112, 45, 84};
 		noteControl.setLabelText("Bow SemiOpen");
-		panel_67.add(noteControl);
+		panel_pedal_notes.add(noteControl);
 		
 		NoteControl noteControl_1 = new NoteControl();
-		GridBagLayout gridBagLayout_1 = (GridBagLayout) noteControl_1.getLayout();
-		gridBagLayout_1.rowWeights = new double[]{0.0};
-		gridBagLayout_1.rowHeights = new int[]{0};
-		gridBagLayout_1.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_1.columnWidths = new int[]{112, 45, 84};
 		noteControl_1.setLabelText("Edge SemiOpen");
-		panel_67.add(noteControl_1);
+		panel_pedal_notes.add(noteControl_1);
 		
 		NoteControl noteControl_2 = new NoteControl();
-		GridBagLayout gridBagLayout_2 = (GridBagLayout) noteControl_2.getLayout();
-		gridBagLayout_2.rowWeights = new double[]{0.0};
-		gridBagLayout_2.rowHeights = new int[]{0};
-		gridBagLayout_2.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_2.columnWidths = new int[]{112, 45, 84};
 		noteControl_2.setLabelText("Bell SemiOpen");
-		panel_67.add(noteControl_2);
+		panel_pedal_notes.add(noteControl_2);
 		
 		NoteControl noteControl_3 = new NoteControl();
-		GridBagLayout gridBagLayout_3 = (GridBagLayout) noteControl_3.getLayout();
-		gridBagLayout_3.rowWeights = new double[]{0.0};
-		gridBagLayout_3.rowHeights = new int[]{0};
-		gridBagLayout_3.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_3.columnWidths = new int[]{112, 45, 84};
 		noteControl_3.setLabelText("Bow HalfOpen");
-		panel_67.add(noteControl_3);
+		panel_pedal_notes.add(noteControl_3);
 		
 		NoteControl noteControl_4 = new NoteControl();
-		GridBagLayout gridBagLayout_4 = (GridBagLayout) noteControl_4.getLayout();
-		gridBagLayout_4.rowWeights = new double[]{0.0};
-		gridBagLayout_4.rowHeights = new int[]{0};
-		gridBagLayout_4.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_4.columnWidths = new int[]{112, 45, 84};
 		noteControl_4.setLabelText("Edge HalfOpen");
-		panel_67.add(noteControl_4);
+		panel_pedal_notes.add(noteControl_4);
 		
 		NoteControl noteControl_5 = new NoteControl();
-		GridBagLayout gridBagLayout_5 = (GridBagLayout) noteControl_5.getLayout();
-		gridBagLayout_5.rowWeights = new double[]{0.0};
-		gridBagLayout_5.rowHeights = new int[]{0};
-		gridBagLayout_5.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_5.columnWidths = new int[]{112, 45, 84};
 		noteControl_5.setLabelText("Bell HalfOpen");
-		panel_67.add(noteControl_5);
+		panel_pedal_notes.add(noteControl_5);
 		
 		NoteControl noteControl_6 = new NoteControl();
-		GridBagLayout gridBagLayout_6 = (GridBagLayout) noteControl_6.getLayout();
-		gridBagLayout_6.rowWeights = new double[]{0.0};
-		gridBagLayout_6.rowHeights = new int[]{0};
-		gridBagLayout_6.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_6.columnWidths = new int[]{112, 45, 84};
 		noteControl_6.setLabelText("Bow SemiClosed");
-		panel_67.add(noteControl_6);
+		panel_pedal_notes.add(noteControl_6);
 		
 		NoteControl noteControl_7 = new NoteControl();
-		GridBagLayout gridBagLayout_7 = (GridBagLayout) noteControl_7.getLayout();
-		gridBagLayout_7.rowWeights = new double[]{0.0};
-		gridBagLayout_7.rowHeights = new int[]{0};
-		gridBagLayout_7.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_7.columnWidths = new int[]{112, 45, 84};
 		noteControl_7.setLabelText("Edge SemiClosed");
-		panel_67.add(noteControl_7);
+		panel_pedal_notes.add(noteControl_7);
 		
 		NoteControl noteControl_8 = new NoteControl();
-		GridBagLayout gridBagLayout_8 = (GridBagLayout) noteControl_8.getLayout();
-		gridBagLayout_8.rowWeights = new double[]{0.0};
-		gridBagLayout_8.rowHeights = new int[]{0};
-		gridBagLayout_8.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_8.columnWidths = new int[]{112, 45, 84};
 		noteControl_8.setLabelText("Bell SemiClosed");
-		panel_67.add(noteControl_8);
+		panel_pedal_notes.add(noteControl_8);
 		
 		NoteControl noteControl_9 = new NoteControl();
-		GridBagLayout gridBagLayout_9 = (GridBagLayout) noteControl_9.getLayout();
-		gridBagLayout_9.rowWeights = new double[]{0.0};
-		gridBagLayout_9.rowHeights = new int[]{0};
-		gridBagLayout_9.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_9.columnWidths = new int[]{112, 45, 84};
 		noteControl_9.setLabelText("Bow Closed");
-		panel_67.add(noteControl_9);
+		panel_pedal_notes.add(noteControl_9);
 		
 		NoteControl noteControl_10 = new NoteControl();
-		GridBagLayout gridBagLayout_10 = (GridBagLayout) noteControl_10.getLayout();
-		gridBagLayout_10.rowWeights = new double[]{0.0};
-		gridBagLayout_10.rowHeights = new int[]{0};
-		gridBagLayout_10.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_10.columnWidths = new int[]{112, 45, 84};
 		noteControl_10.setLabelText("Edge Closed");
-		panel_67.add(noteControl_10);
+		panel_pedal_notes.add(noteControl_10);
 		
 		NoteControl noteControl_11 = new NoteControl();
-		GridBagLayout gridBagLayout_11 = (GridBagLayout) noteControl_11.getLayout();
-		gridBagLayout_11.rowWeights = new double[]{0.0};
-		gridBagLayout_11.rowHeights = new int[]{0};
-		gridBagLayout_11.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_11.columnWidths = new int[]{112, 45, 84};
 		noteControl_11.setLabelText("Bell Closed");
-		panel_67.add(noteControl_11);
+		panel_pedal_notes.add(noteControl_11);
 		
 		NoteControl noteControl_12 = new NoteControl();
-		GridBagLayout gridBagLayout_12 = (GridBagLayout) noteControl_12.getLayout();
-		gridBagLayout_12.rowWeights = new double[]{0.0};
-		gridBagLayout_12.rowHeights = new int[]{0};
-		gridBagLayout_12.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_12.columnWidths = new int[]{112, 45, 84};
 		noteControl_12.setLabelText("Chick");
-		panel_67.add(noteControl_12);
+		panel_pedal_notes.add(noteControl_12);
 		
 		NoteControl noteControl_13 = new NoteControl();
-		GridBagLayout gridBagLayout_13 = (GridBagLayout) noteControl_13.getLayout();
-		gridBagLayout_13.rowWeights = new double[]{0.0};
-		gridBagLayout_13.rowHeights = new int[]{0};
-		gridBagLayout_13.columnWeights = new double[]{0.0, 0.0, 0.0};
-		gridBagLayout_13.columnWidths = new int[]{112, 45, 84};
 		noteControl_13.setLabelText("Splash");
-		panel_67.add(noteControl_13);
-		
+		panel_pedal_notes.add(noteControl_13);
+
 		JButton button = new JButton("Get");
 		button.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		button.setBounds(122, 354, 59, 25);
-		panel_83.add(button);
+		panel_pedal.add(button);
 		
 		JButton button_1 = new JButton("Send");
 		button_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		button_1.setBounds(184, 354, 59, 25);
-		panel_83.add(button_1);
+		panel_pedal.add(button_1);
 		panel_misc.setLayout(null);
 		
 		JPanel panel_misc_noteoff = new JPanel();
@@ -903,6 +687,7 @@ public class Main_window {
 		});
 		btnSend_misc.setBounds(115, 243, 59, 25);
 		panel_misc.add(btnSend_misc);
+
 		frmMegadrummanager.getContentPane().setLayout(groupLayout);
 		
 		update_misc_config_controls();
