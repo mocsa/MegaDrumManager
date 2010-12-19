@@ -44,11 +44,11 @@ public class Spin127Control extends JPanel {
 		spinner.setEditor(editor);
 		spinner.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		spinner.setModel(new SpinnerNumberModel(0, 0, 127, 1));
-		GridBagConstraints gbc_spinner = new GridBagConstraints();
-		gbc_spinner.fill = GridBagConstraints.HORIZONTAL;
-		gbc_spinner.gridx = 1;
-		gbc_spinner.gridy = 0;
-		add(spinner, gbc_spinner);
+		GridBagConstraints gbc_control = new GridBagConstraints();
+		gbc_control.fill = GridBagConstraints.HORIZONTAL;
+		gbc_control.gridx = 1;
+		gbc_control.gridy = 0;
+		add(spinner, gbc_control);
 	}
 
 	public String getLabelText() {

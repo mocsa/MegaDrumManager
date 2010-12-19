@@ -286,154 +286,48 @@ public class Main_window {
 		
 		JPanel panel_pedal_misc = new JPanel();
 		tabbedPane.addTab("Misc", null, panel_pedal_misc, null);
-		panel_pedal_misc.setLayout(null);
+		panel_pedal_misc.setLayout(new GridLayout(15, 1, 0, 0));
 		
-		JPanel panel_hh_type = new JPanel();
-		panel_hh_type.setBounds(12, 0, 202, 18);
-		panel_pedal_misc.add(panel_hh_type);
-		panel_hh_type.setLayout(null);
+		ComboControl comboControl_1 = new ComboControl();
+		comboControl_1.setLabelText("Type");
+		comboControl_1.addItem("FootContr");
+		comboControl_1.addItem("Pot");
+		panel_pedal_misc.add(comboControl_1);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 80, 18);
-		panel_hh_type.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblType = new JLabel("Type");
-		lblType.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblType.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblType);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(92, 0, 110, 18);
-		panel_hh_type.add(panel_1);
-		panel_1.setLayout(new BorderLayout(0, 0));
-		
-		JComboBox comboBoxHHtype = new JComboBox();
-		panel_1.add(comboBoxHHtype, BorderLayout.CENTER);
-		comboBoxHHtype.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		comboBoxHHtype.addItem("FootContr");
-		comboBoxHHtype.addItem("Pot");
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBounds(12, 20, 202, 18);
-		panel_pedal_misc.add(panel_2);
-		panel_2.setLayout(null);
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(0, 0, 80, 18);
-		panel_2.add(panel_3);
-		panel_3.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblCurve = new JLabel("Curve");
-		lblCurve.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCurve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_3.add(lblCurve, BorderLayout.EAST);
-		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBounds(92, 0, 110, 18);
-		panel_2.add(panel_4);
-		panel_4.setLayout(new BorderLayout(0, 0));
-		
-		JComboBox comboBoxHHcurve = new JComboBox();
-		comboBoxHHcurve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		ComboControl comboControl_2 = new ComboControl();
+		comboControl_2.setLabelText("Curve");
 		for (String string : Constants.CURVES_LIST) {
-			   comboBoxHHcurve.addItem(string);
+			comboControl_2.addItem(string);
 			}
-		panel_4.add(comboBoxHHcurve, BorderLayout.CENTER);
+		panel_pedal_misc.add(comboControl_2);
 		
-		JPanel panel_35 = new JPanel();
-		panel_35.setBounds(12, 40, 202, 18);
-		panel_pedal_misc.add(panel_35);
-		panel_35.setLayout(null);
+		ComboControl comboControl_3 = new ComboControl();
+		comboControl_3.setLabelText("HiHat Input");
+		panel_pedal_misc.add(comboControl_3);
 		
-		JPanel panel_36 = new JPanel();
-		panel_36.setBounds(0, 0, 80, 18);
-		panel_35.add(panel_36);
-		panel_36.setLayout(new BorderLayout(0, 0));
+		CheckboxControl checkboxControl_1 = new CheckboxControl();
+		checkboxControl_1.setLabelText("Alt Input");
+		panel_pedal_misc.add(checkboxControl_1);
 		
-		JLabel lblHihatInput = new JLabel("HiHat Input");
-		lblHihatInput.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblHihatInput.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_36.add(lblHihatInput, BorderLayout.EAST);
+		CheckboxControl checkboxControl_2 = new CheckboxControl();
+		checkboxControl_2.setLabelText("Reverse Levels");
+		panel_pedal_misc.add(checkboxControl_2);
 		
-		JPanel panel_37 = new JPanel();
-		panel_37.setBounds(92, 0, 110, 18);
-		panel_35.add(panel_37);
-		panel_37.setLayout(new BorderLayout(0, 0));
+		CheckboxControl checkboxControl_3 = new CheckboxControl();
+		checkboxControl_3.setLabelText("Soft Chocks");
+		panel_pedal_misc.add(checkboxControl_3);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_37.add(comboBox, BorderLayout.CENTER);
+		CheckboxControl checkboxControl_4 = new CheckboxControl();
+		checkboxControl_4.setLabelText("Auto Levels");
+		panel_pedal_misc.add(checkboxControl_4);
 		
-		JCheckBox checkBoxHHaltIn = new JCheckBox("Alt Input   ");
-		checkBoxHHaltIn.setBounds(49, 60, 104, 18);
-		panel_pedal_misc.add(checkBoxHHaltIn);
-		checkBoxHHaltIn.setHorizontalTextPosition(SwingConstants.LEADING);
-		checkBoxHHaltIn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		Spin127Control spin127Control_7 = new Spin127Control();
+		spin127Control_7.setLabelText("Chick Delay");
+		panel_pedal_misc.add(spin127Control_7);
 		
-		JCheckBox checkBoxHHreverseLevels = new JCheckBox("Reverse Levels   ");
-		checkBoxHHreverseLevels.setBounds(25, 80, 104, 18);
-		panel_pedal_misc.add(checkBoxHHreverseLevels);
-		checkBoxHHreverseLevels.setHorizontalTextPosition(SwingConstants.LEADING);
-		checkBoxHHreverseLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		
-		JCheckBox chckbxSoftChicks = new JCheckBox("Soft Chicks   ");
-		chckbxSoftChicks.setBounds(39, 100, 88, 18);
-		panel_pedal_misc.add(chckbxSoftChicks);
-		chckbxSoftChicks.setHorizontalTextPosition(SwingConstants.LEADING);
-		chckbxSoftChicks.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		
-		JCheckBox chckbxAutoLevels = new JCheckBox("Auto Levels   ");
-		chckbxAutoLevels.setBounds(37, 120, 92, 18);
-		panel_pedal_misc.add(chckbxAutoLevels);
-		chckbxAutoLevels.setHorizontalTextPosition(SwingConstants.LEADING);
-		chckbxAutoLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		
-		JPanel panel_5 = new JPanel();
-		panel_5.setBounds(12, 140, 202, 18);
-		panel_pedal_misc.add(panel_5);
-		panel_5.setLayout(null);
-		
-		JPanel panel_6 = new JPanel();
-		panel_6.setBounds(0, 0, 80, 18);
-		panel_5.add(panel_6);
-		panel_6.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblChickDelay = new JLabel("Chick delay");
-		lblChickDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_6.add(lblChickDelay, BorderLayout.EAST);
-		
-		JPanel panel_7 = new JPanel();
-		panel_7.setBounds(92, 0, 110, 18);
-		panel_5.add(panel_7);
-		panel_7.setLayout(null);
-		
-		JSpinner spinnerHHchickDelay = new JSpinner();
-		spinnerHHchickDelay.setBounds(0, 0, 44, 18);
-		panel_7.add(spinnerHHchickDelay);
-		
-		JPanel panel_11 = new JPanel();
-		panel_11.setBounds(12, 160, 202, 18);
-		panel_pedal_misc.add(panel_11);
-		panel_11.setLayout(null);
-		
-		JPanel panel_12 = new JPanel();
-		panel_12.setBounds(0, 0, 80, 18);
-		panel_11.add(panel_12);
-		panel_12.setLayout(new BorderLayout(0, 0));
-		
-		JLabel lblCcValue = new JLabel("CC Value");
-		lblCcValue.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_12.add(lblCcValue, BorderLayout.EAST);
-		
-		JPanel panel_13 = new JPanel();
-		panel_13.setLayout(null);
-		panel_13.setBounds(92, 0, 110, 18);
-		panel_11.add(panel_13);
-		
-		JSpinner spinnerHHccValue = new JSpinner();
-		spinnerHHccValue.setBounds(0, 0, 44, 18);
-		panel_13.add(spinnerHHccValue);
+		Spin127Control spin127Control_8 = new Spin127Control();
+		spin127Control_8.setLabelText("CC Value");
+		panel_pedal_misc.add(spin127Control_8);
 		
 		JPanel panel_pedal_levels = new JPanel();
 		tabbedPane.addTab("Levels", null, panel_pedal_levels, null);

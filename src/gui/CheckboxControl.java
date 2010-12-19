@@ -14,24 +14,24 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.Dimension;
 import java.awt.Rectangle;
-import javax.swing.JComboBox;
+import javax.swing.JCheckBox;
 
-public class ComboControl extends JPanel {
+public class CheckboxControl extends JPanel {
 	private JLabel lblSpin;
-	private JComboBox combobox;
+	private JCheckBox checkbox;
 
 	/**
 	 * Create the panel.
 	 */
-	public ComboControl() {
+	public CheckboxControl() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{80, 100, 0};
+		gridBagLayout.columnWidths = new int[]{80, 21, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		lblSpin = new JLabel("ComboControl");
+		lblSpin = new JLabel("ChbxControl");
 		lblSpin.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		GridBagConstraints gbc_lblSpin = new GridBagConstraints();
 		gbc_lblSpin.insets = new Insets(0, 0, 0, 5);
@@ -40,14 +40,13 @@ public class ComboControl extends JPanel {
 		gbc_lblSpin.gridy = 0;
 		add(lblSpin, gbc_lblSpin);
 		
-		combobox = new JComboBox();
-		combobox.setPreferredSize(new Dimension(30, 18));
-		combobox.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		checkbox = new JCheckBox();
+		checkbox.setPreferredSize(new Dimension(30, 18));
 		GridBagConstraints gbc_control = new GridBagConstraints();
 		gbc_control.fill = GridBagConstraints.HORIZONTAL;
 		gbc_control.gridx = 1;
 		gbc_control.gridy = 0;
-		add(combobox, gbc_control);
+		add(checkbox, gbc_control);
 	}
 
 	public String getLabelText() {
@@ -55,14 +54,6 @@ public class ComboControl extends JPanel {
 	}
 	public void setLabelText(String text) {
 		lblSpin.setText(text);
-	}
-
-	public void addItem(Object object) {
-		combobox.addItem(object);
-	}
-
-	public void removeAllItems() {
-		combobox.removeAllItems();
 	}
 	
 }
