@@ -123,7 +123,7 @@ public class Main_window {
 		});
 		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.setTitle("MegaDrumManager");
-		frmMegadrummanager.setBounds(100, 100, 786, 656);
+		frmMegadrummanager.setBounds(100, 100, 875, 656);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		dialog_options = new Options();
@@ -252,7 +252,8 @@ public class Main_window {
 		JPanel panel_pedal = new JPanel();
 		panel_pedal.setBorder(new TitledBorder(null, "HiHat Pedal/Controller", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		JPanel panel_38 = new JPanel();
+		JPanel panel_pads = new JPanel();
+		panel_pads.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		GroupLayout groupLayout = new GroupLayout(frmMegadrummanager.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -261,22 +262,54 @@ public class Main_window {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_38, GroupLayout.PREFERRED_SIZE, 268, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(77, Short.MAX_VALUE))
+					.addComponent(panel_pads, GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE, false)
 						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(225, Short.MAX_VALUE))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel_38, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(251))
+						.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_pads, GroupLayout.PREFERRED_SIZE, 594, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
 		);
-		panel_38.setLayout(null);
+		panel_pads.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				RowSpec.decode("16dlu"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("max(201dlu;default):grow"),
+				RowSpec.decode("max(17dlu;default)"),
+				RowSpec.decode("max(22dlu;default)"),}));
+		
+		ComboControl comboControl = new ComboControl();
+		GridBagLayout gridBagLayout = (GridBagLayout) comboControl.getLayout();
+		gridBagLayout.rowWeights = new double[]{0.0};
+		gridBagLayout.rowHeights = new int[]{0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0};
+		gridBagLayout.columnWidths = new int[]{80, 100};
+		comboControl.setLabelText("Input");
+		panel_pads.add(comboControl, "1, 1, fill, fill");
+		
+		JPanel panel_pads_head_rim = new JPanel();
+		panel_pads.add(panel_pads_head_rim, "1, 3, fill, fill");
+		panel_pads_head_rim.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JPanel panel_pads_head = new JPanel();
+		panel_pads_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_pads_head_rim.add(panel_pads_head);
+		panel_pads_head.setLayout(new GridLayout(0, 1, 0, 0));
+		PadCommonControls padHeadControl = new PadCommonControls();
+		panel_pads_head.add(padHeadControl);
+		
+		JPanel panel_pads_rim = new JPanel();
+		panel_pads_rim.setBorder(new TitledBorder(null, "Rim/Edge", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_pads_head_rim.add(panel_pads_rim);
+		panel_pads_rim.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		PadCommonControls padCommonControls = new PadCommonControls();
+		panel_pads_rim.add(padCommonControls);
 				
 		panel_pedal.setLayout(null);
 		
