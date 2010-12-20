@@ -14,49 +14,30 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
 
 public class Spin127Control extends JPanel {
-	private JLabel lblSpin;
 	private JSpinner spinner;
 
 	/**
 	 * Create the panel.
 	 */
 	public Spin127Control() {
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{80, 46, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, Double.MIN_VALUE};
-		setLayout(gridBagLayout);
-		
-		lblSpin = new JLabel("Spin127");
-		lblSpin.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		GridBagConstraints gbc_lblSpin = new GridBagConstraints();
-		gbc_lblSpin.insets = new Insets(0, 0, 0, 5);
-		gbc_lblSpin.anchor = GridBagConstraints.EAST;
-		gbc_lblSpin.gridx = 0;
-		gbc_lblSpin.gridy = 0;
-		add(lblSpin, gbc_lblSpin);
+		setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("46px"),},
+			new RowSpec[] {
+				RowSpec.decode("20px"),}));
 		
 		spinner = new JSpinner();
 		JSpinner.NumberEditor editor = new JSpinner.NumberEditor(spinner,"#");
 		spinner.setEditor(editor);
 		spinner.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		spinner.setModel(new SpinnerNumberModel(0, 0, 127, 1));
-		GridBagConstraints gbc_control = new GridBagConstraints();
-		gbc_control.fill = GridBagConstraints.HORIZONTAL;
-		gbc_control.gridx = 1;
-		gbc_control.gridy = 0;
-		add(spinner, gbc_control);
+		add(spinner, "1, 1, fill, center");
 	}
 
-	public String getLabelText() {
-		return lblSpin.getText();
-	}
-	public void setLabelText(String text) {
-		lblSpin.setText(text);
-	}
 	public SpinnerModel getSpinnerModel() {
 		return spinner.getModel();
 	}

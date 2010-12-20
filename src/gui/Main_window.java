@@ -123,7 +123,7 @@ public class Main_window {
 		});
 		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.setTitle("MegaDrumManager");
-		frmMegadrummanager.setBounds(100, 100, 875, 656);
+		frmMegadrummanager.setBounds(100, 100, 971, 656);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		dialog_options = new Options();
@@ -258,39 +258,67 @@ public class Main_window {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
 					.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 255, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_pads, GroupLayout.DEFAULT_SIZE, 407, Short.MAX_VALUE)
-					.addContainerGap())
+					.addComponent(panel_pads, GroupLayout.PREFERRED_SIZE, 490, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(13, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE, false)
-						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
+			groupLayout.createParallelGroup(Alignment.TRAILING)
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
 						.addComponent(panel_pads, GroupLayout.PREFERRED_SIZE, 594, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
+					.addContainerGap(235, Short.MAX_VALUE))
 		);
+		panel_pedal.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),}));
+		PedalControls pedalControls = new PedalControls();
+		panel_pedal.add(pedalControls, "1, 1");
+		
+		JPanel panel = new JPanel();
+		panel_pedal.add(panel, "1, 3, fill, fill");
+		
+				JButton button = new JButton("Get");
+				panel.add(button);
+				button.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+				
+				JButton button_1 = new JButton("Send");
+				panel.add(button_1);
+				button_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_pads.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("16dlu"),
-				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("max(201dlu;default):grow"),
-				RowSpec.decode("max(17dlu;default)"),
+				RowSpec.decode("12dlu:grow"),
+				RowSpec.decode("1dlu"),
+				RowSpec.decode("max(267dlu;default)"),
+				RowSpec.decode("57dlu"),
 				RowSpec.decode("max(22dlu;default)"),}));
 		
-		ComboControl comboControl = new ComboControl();
-		GridBagLayout gridBagLayout = (GridBagLayout) comboControl.getLayout();
-		gridBagLayout.rowWeights = new double[]{0.0};
-		gridBagLayout.rowHeights = new int[]{0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0};
-		gridBagLayout.columnWidths = new int[]{80, 100};
-		comboControl.setLabelText("Input");
-		panel_pads.add(comboControl, "1, 1, fill, fill");
+		JPanel panel_input_selection = new JPanel();
+		panel_pads.add(panel_input_selection, "1, 1, fill, fill");
+		panel_input_selection.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("50dlu"),},
+			new RowSpec[] {
+				RowSpec.decode("12dlu"),}));
+		
+		JLabel lblInput = new JLabel("Input");
+		lblInput.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		panel_input_selection.add(lblInput, "2, 1, right, default");
+		
+		JComboBox comboBox = new JComboBox();
+		panel_input_selection.add(comboBox, "4, 1, fill, default");
 		
 		JPanel panel_pads_head_rim = new JPanel();
 		panel_pads.add(panel_pads_head_rim, "1, 3, fill, fill");
@@ -310,163 +338,14 @@ public class Main_window {
 		
 		PadCommonControls padCommonControls = new PadCommonControls();
 		panel_pads_rim.add(padCommonControls);
-				
-		panel_pedal.setLayout(null);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(12, 23, 236, 318);
-		panel_pedal.add(tabbedPane);
+		JPanel panel_3rd_zone = new JPanel();
+		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_pads.add(panel_3rd_zone, "1, 4, fill, fill");
+		panel_3rd_zone.setLayout(new BoxLayout(panel_3rd_zone, BoxLayout.X_AXIS));
 		
-		JPanel panel_pedal_misc = new JPanel();
-		tabbedPane.addTab("Misc", null, panel_pedal_misc, null);
-		panel_pedal_misc.setLayout(new GridLayout(15, 1, 0, 0));
-		
-		ComboControl comboControl_1 = new ComboControl();
-		comboControl_1.setLabelText("Type");
-		comboControl_1.addItem("FootContr");
-		comboControl_1.addItem("Pot");
-		panel_pedal_misc.add(comboControl_1);
-		
-		ComboControl comboControl_2 = new ComboControl();
-		comboControl_2.setLabelText("Curve");
-		for (String string : Constants.CURVES_LIST) {
-			comboControl_2.addItem(string);
-			}
-		panel_pedal_misc.add(comboControl_2);
-		
-		ComboControl comboControl_3 = new ComboControl();
-		comboControl_3.setLabelText("HiHat Input");
-		panel_pedal_misc.add(comboControl_3);
-		
-		CheckboxControl checkboxControl_1 = new CheckboxControl();
-		checkboxControl_1.setLabelText("Alt Input");
-		panel_pedal_misc.add(checkboxControl_1);
-		
-		CheckboxControl checkboxControl_2 = new CheckboxControl();
-		checkboxControl_2.setLabelText("Reverse Levels");
-		panel_pedal_misc.add(checkboxControl_2);
-		
-		CheckboxControl checkboxControl_3 = new CheckboxControl();
-		checkboxControl_3.setLabelText("Soft Chocks");
-		panel_pedal_misc.add(checkboxControl_3);
-		
-		CheckboxControl checkboxControl_4 = new CheckboxControl();
-		checkboxControl_4.setLabelText("Auto Levels");
-		panel_pedal_misc.add(checkboxControl_4);
-		
-		Spin127Control spin127Control_7 = new Spin127Control();
-		spin127Control_7.setLabelText("Chick Delay");
-		panel_pedal_misc.add(spin127Control_7);
-		
-		Spin127Control spin127Control_8 = new Spin127Control();
-		spin127Control_8.setLabelText("CC Value");
-		panel_pedal_misc.add(spin127Control_8);
-		
-		JPanel panel_pedal_levels = new JPanel();
-		tabbedPane.addTab("Levels", null, panel_pedal_levels, null);
-		panel_pedal_levels.setLayout(new GridLayout(15, 1, 0, 0));
-		
-		Spin1023Control spin1023Control = new Spin1023Control();
-		spin1023Control.setLabelText("Low");
-		panel_pedal_levels.add(spin1023Control);
-		
-		Spin1023Control spin1023Control_1 = new Spin1023Control();
-		spin1023Control_1.setLabelText("High");
-		panel_pedal_levels.add(spin1023Control_1);
-		
-		Spin127Control spin127Control = new Spin127Control();
-		spin127Control.setLabelText("Open");
-		panel_pedal_levels.add(spin127Control);
-		
-		Spin127Control spin127Control_1 = new Spin127Control();
-		spin127Control_1.setLabelText("Semi Open");
-		panel_pedal_levels.add(spin127Control_1);
-		
-		Spin127Control spin127Control_2 = new Spin127Control();
-		spin127Control_2.setLabelText("Half Open");
-		panel_pedal_levels.add(spin127Control_2);
-		
-		Spin127Control spin127Control_3 = new Spin127Control();
-		spin127Control_3.setLabelText("Closed");
-		panel_pedal_levels.add(spin127Control_3);
-		
-		Spin127Control spin127Control_4 = new Spin127Control();
-		spin127Control_4.setLabelText("Short Chick Thrs");
-		panel_pedal_levels.add(spin127Control_4);
-		
-		Spin127Control spin127Control_5 = new Spin127Control();
-		spin127Control_5.setLabelText("Long Chick Thrs");
-		panel_pedal_levels.add(spin127Control_5);
-		
-		JPanel panel_pedal_notes = new JPanel();
-		tabbedPane.addTab("Notes", null, panel_pedal_notes, null);
-		panel_pedal_notes.setLayout(new GridLayout(15, 1, 0, 0));
-		
-		NoteControl noteControl = new NoteControl();
-		noteControl.setLabelText("Bow SemiOpen");
-		panel_pedal_notes.add(noteControl);
-		
-		NoteControl noteControl_1 = new NoteControl();
-		noteControl_1.setLabelText("Edge SemiOpen");
-		panel_pedal_notes.add(noteControl_1);
-		
-		NoteControl noteControl_2 = new NoteControl();
-		noteControl_2.setLabelText("Bell SemiOpen");
-		panel_pedal_notes.add(noteControl_2);
-		
-		NoteControl noteControl_3 = new NoteControl();
-		noteControl_3.setLabelText("Bow HalfOpen");
-		panel_pedal_notes.add(noteControl_3);
-		
-		NoteControl noteControl_4 = new NoteControl();
-		noteControl_4.setLabelText("Edge HalfOpen");
-		panel_pedal_notes.add(noteControl_4);
-		
-		NoteControl noteControl_5 = new NoteControl();
-		noteControl_5.setLabelText("Bell HalfOpen");
-		panel_pedal_notes.add(noteControl_5);
-		
-		NoteControl noteControl_6 = new NoteControl();
-		noteControl_6.setLabelText("Bow SemiClosed");
-		panel_pedal_notes.add(noteControl_6);
-		
-		NoteControl noteControl_7 = new NoteControl();
-		noteControl_7.setLabelText("Edge SemiClosed");
-		panel_pedal_notes.add(noteControl_7);
-		
-		NoteControl noteControl_8 = new NoteControl();
-		noteControl_8.setLabelText("Bell SemiClosed");
-		panel_pedal_notes.add(noteControl_8);
-		
-		NoteControl noteControl_9 = new NoteControl();
-		noteControl_9.setLabelText("Bow Closed");
-		panel_pedal_notes.add(noteControl_9);
-		
-		NoteControl noteControl_10 = new NoteControl();
-		noteControl_10.setLabelText("Edge Closed");
-		panel_pedal_notes.add(noteControl_10);
-		
-		NoteControl noteControl_11 = new NoteControl();
-		noteControl_11.setLabelText("Bell Closed");
-		panel_pedal_notes.add(noteControl_11);
-		
-		NoteControl noteControl_12 = new NoteControl();
-		noteControl_12.setLabelText("Chick");
-		panel_pedal_notes.add(noteControl_12);
-		
-		NoteControl noteControl_13 = new NoteControl();
-		noteControl_13.setLabelText("Splash");
-		panel_pedal_notes.add(noteControl_13);
-
-		JButton button = new JButton("Get");
-		button.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		button.setBounds(122, 354, 59, 25);
-		panel_pedal.add(button);
-		
-		JButton button_1 = new JButton("Send");
-		button_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		button_1.setBounds(184, 354, 59, 25);
-		panel_pedal.add(button_1);
+		ThirdZoneControls thirdZoneControls = new ThirdZoneControls();
+		panel_3rd_zone.add(thirdZoneControls);
 		panel_misc.setLayout(null);
 		
 		JPanel panel_misc_noteoff = new JPanel();
