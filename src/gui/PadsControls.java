@@ -34,13 +34,14 @@ public class PadsControls extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,}));
+				RowSpec.decode("12dlu"),}));
 		
 		JLabel label = new JLabel("Input");
 		label.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		panel_input_selection.add(label, "2, 1, right, default");
 		
 		JComboBox comboBox = new JComboBox();
+		comboBox.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_input_selection.add(comboBox, "4, 1, fill, default");
 		
 		JPanel panel_head_rim = new JPanel();
@@ -63,9 +64,11 @@ public class PadsControls extends JPanel {
 		add(panel_buttons, "1, 4, fill, fill");
 		
 		JButton btnGet = new JButton("Get");
+		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnGet);
 		
 		JButton btnSend = new JButton("Send");
+		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnSend);
 
 	}
