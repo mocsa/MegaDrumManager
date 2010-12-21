@@ -53,4 +53,7 @@ public class Spin1023Control extends JPanel {
 			spinner.setValue(value);
 		}
 	}
+	public JSpinner getSpinner() {
+		return spinner;
+	}
 }

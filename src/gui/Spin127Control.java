@@ -14,6 +14,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.util.EventObject;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
@@ -54,4 +56,8 @@ public class Spin127Control extends JPanel {
 			spinner.setValue(value);
 		}
 	}
+	public JSpinner getSpinner() {
+		return spinner;
+	}
+
 }

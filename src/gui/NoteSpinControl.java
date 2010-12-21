@@ -80,4 +80,7 @@ public class NoteSpinControl extends JPanel {
 			spinner.setValue(value);
 		}
 	}
+	public JSpinner getSpinner() {
+		return spinner;
+	}
 }
