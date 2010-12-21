@@ -16,6 +16,7 @@ import java.awt.Font;
 import java.awt.GridBagLayout;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
+import javax.swing.JButton;
 
 public class PedalControls extends JPanel {
 
@@ -23,10 +24,20 @@ public class PedalControls extends JPanel {
 	 * Create the panel.
 	 */
 	public PedalControls() {
-		setLayout(new GridLayout(1, 0, 0, 0));
+		setLayout(new GridLayout(1, 0, 0, 0));		
+		JPanel panel = new JPanel();
+		add(panel);
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("220px"),},
+			new RowSpec[] {
+				FormFactory.LINE_GAP_ROWSPEC,
+				RowSpec.decode("310px"),
+				FormFactory.NARROW_LINE_GAP_ROWSPEC,
+				RowSpec.decode("max(20dlu;default)"),}));
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		add(tabbedPane);
+		panel.add(tabbedPane, "2, 2, left, top");
 		
 		JPanel panel_misc = new JPanel();
 		tabbedPane.addTab("Misc", null, panel_misc, null);
@@ -311,6 +322,17 @@ public class PedalControls extends JPanel {
 		
 		NoteSpinControl noteSpinControl_13 = new NoteSpinControl();
 		panel_notes.add(noteSpinControl_13, "3, 14, left, center");
+		
+		JPanel panel_1 = new JPanel();
+		panel.add(panel_1, "2, 4, fill, fill");
+		
+		JButton button = new JButton("Get");
+		button.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_1.add(button);
+		
+		JButton button_1 = new JButton("Send");
+		button_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_1.add(button_1);
 
 	}
 
