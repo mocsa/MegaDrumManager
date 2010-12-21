@@ -533,6 +533,48 @@ public class PedalControls extends JPanel {
 		panel_buttons.add(btnSend);
 
 	}
+	private void updateControls() {
+		comboBox_type.setSelectedIndex(configPedal.type?1:0);
+		comboBox_curve.setSelectedIndex(configPedal.curve);
+		comboBox_input.setSelectedIndex(configPedal.hhInput);
+		checkBox_altInput.setSelected(configPedal.altIn);
+		checkBox_reverseLevels.setSelected(configPedal.reverseLevels);
+		checkBox_softChicks.setSelected(configPedal.softChicks);
+		checkBox_autoLevels.setSelected(configPedal.autoLevels);
+		spin127Control_chickDelay.getSpinner().setValue(configPedal.chickDelay);
+		spin127Control_cc.getSpinner().setValue(configPedal.cc);
+		spin1023Control_lowLevel.getSpinner().setValue(configPedal.lowLevel);
+		spin1023Control_highLevel.getSpinner().setValue(configPedal.highLevel);
+		spin127Control_openLevel.getSpinner().setValue(configPedal.openLevel);
+		spin127Control_semiOpen.getSpinner().setValue(configPedal.semiOpenLevel);
+		spin127Control_halfOpen.getSpinner().setValue(configPedal.halfOpenLevel);
+		spin127Control_closed.getSpinner().setValue(configPedal.closedLevel);
+		spin127Control_shortThres.getSpinner().setValue(configPedal.shortThres);
+		spin127Control_longThres.getSpinner().setValue(configPedal.longThres);
+		noteSpinControl_bowSemiOpen.getSpinner().setValue(configPedal.bowSemiOpenNote);
+		noteSpinControl_edgeSemiOpen.getSpinner().setValue(configPedal.edgeSemiOpenNote);
+		noteSpinControl_bellSemiOpen.getSpinner().setValue(configPedal.bellSemiOpenNote);
+		noteSpinControl_bowHalfOpen.getSpinner().setValue(configPedal.bowHalfOpenNote);
+		noteSpinControl_edgeHalfOpen.getSpinner().setValue(configPedal.edgeHalfOpenNote);
+		noteSpinControl_bellHalfOpen.getSpinner().setValue(configPedal.bellHalfOpenNote);
+		noteSpinControl_bowSemiClosed.getSpinner().setValue(configPedal.bowSemiClosedNote);
+		noteSpinControl_edgeSemiClosed.getSpinner().setValue(configPedal.edgeSemiClosedNote);
+		noteSpinControl_bellSemiClosed.getSpinner().setValue(configPedal.bellSemiClosedNote);
+		noteSpinControl_bowClosed.getSpinner().setValue(configPedal.bowClosedNote);
+		noteSpinControl_edgeClosed.getSpinner().setValue(configPedal.edgeClosedNote);
+		noteSpinControl_bellClosed.getSpinner().setValue(configPedal.bellClosedNote);
+		noteSpinControl_chick.getSpinner().setValue(configPedal.chickNote);
+		noteSpinControl_splash.getSpinner().setValue(configPedal.splashNote);
+	}
+	
+	public void setConfig(ConfigPedal config) {
+		configPedal = config;
+		updateControls();
+	}
+	
+	public ConfigPedal getConfig() {
+		return configPedal;
+	}
 
 	public JButton getBtnGet() {
 		return btnGet;

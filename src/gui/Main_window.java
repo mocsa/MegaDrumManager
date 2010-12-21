@@ -62,10 +62,7 @@ public class Main_window {
 	private Midi_handler midi_handler;
 	private Timer timer_midi;
 	private MiscControls miscControls;
-	
-	private JButton misc_btn_get;
-	private JButton misc_btn_send;
-
+	private PedalControls pedalControls;
 
 
 	/**
@@ -131,6 +128,10 @@ public class Main_window {
 						if (midi_handler.config_misc.changed) {
 							midi_handler.config_misc.changed = false;
 							miscControls.setConfig(midi_handler.config_misc);
+						}
+						if (midi_handler.config_pedal.changed) {
+							midi_handler.config_pedal.changed = false;
+							pedalControls.setConfig(midi_handler.config_pedal);
 						}
 					}
 				}
@@ -277,15 +278,13 @@ public class Main_window {
 		
 		miscControls = new MiscControls();
 		panel_misc.add(miscControls, "1, 2");
-		misc_btn_get = miscControls.getBtnGet();
-		misc_btn_get.addActionListener(new ActionListener() {
+		miscControls.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				midi_handler.clear_midi_input();
 				midi_handler.request_config_misc();				
 			}
 		});
-		misc_btn_send = miscControls.getBtnSend();
-		misc_btn_send.addActionListener(new ActionListener() {
+		miscControls.getBtnSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				midi_handler.config_misc = miscControls.getConfig();
 				midi_handler.send_config_misc();
@@ -303,8 +302,21 @@ public class Main_window {
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("default:grow"),}));
-		PedalControls pedalControls = new PedalControls();
+
+		pedalControls = new PedalControls();
 		panel_pedal.add(pedalControls, "1, 1");
+		pedalControls.getBtnGet().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.clear_midi_input();
+				midi_handler.request_config_pedal();				
+			}
+		});
+		pedalControls.getBtnSend().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.config_pedal = pedalControls.getConfig();
+				midi_handler.send_config_pedal();
+			}
+		});
 
 		frmMegadrummanager.getContentPane().setLayout(groupLayout);
 		
