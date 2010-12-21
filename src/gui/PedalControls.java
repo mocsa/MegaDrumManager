@@ -264,6 +264,11 @@ public class PedalControls extends JPanel {
 		panel_levels.add(lblOpen, "1, 3");
 		
 		spin127Control_openLevel = new Spin127Control();
+		spin127Control_openLevel.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.openLevel = ((Integer)spin127Control_openLevel.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_levels.add(spin127Control_openLevel, "3, 3, fill, fill");
 		
 		JLabel lblClosed = new JLabel("SemiOpen");
@@ -273,6 +278,7 @@ public class PedalControls extends JPanel {
 		spin127Control_semiOpen = new Spin127Control();
 		spin127Control_semiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
+				configPedal.semiOpenLevel = ((Integer)spin127Control_semiOpen.getSpinner().getValue()).shortValue();
 			}
 		});
 		panel_levels.add(spin127Control_semiOpen, "3, 4, fill, fill");
@@ -282,6 +288,11 @@ public class PedalControls extends JPanel {
 		panel_levels.add(lblHalfopen, "1, 5");
 		
 		spin127Control_halfOpen = new Spin127Control();
+		spin127Control_halfOpen.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.halfOpenLevel = ((Integer)spin127Control_halfOpen.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_levels.add(spin127Control_halfOpen, "3, 5, fill, fill");
 		
 		JLabel lblClosed_1 = new JLabel("Closed");
@@ -289,6 +300,11 @@ public class PedalControls extends JPanel {
 		panel_levels.add(lblClosed_1, "1, 6");
 		
 		spin127Control_closed = new Spin127Control();
+		spin127Control_closed.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.closedLevel = ((Integer)spin127Control_closed.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_levels.add(spin127Control_closed, "3, 6, fill, fill");
 		
 		JLabel lblShortThresh = new JLabel("ShortChickThresh");
@@ -296,6 +312,11 @@ public class PedalControls extends JPanel {
 		panel_levels.add(lblShortThresh, "1, 7");
 		
 		spin127Control_shortThres = new Spin127Control();
+		spin127Control_shortThres.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.shortThres = ((Integer)spin127Control_shortThres.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_levels.add(spin127Control_shortThres, "3, 7, fill, fill");
 		
 		JLabel lblLongchickthresh = new JLabel("LongChickThresh");
@@ -303,6 +324,11 @@ public class PedalControls extends JPanel {
 		panel_levels.add(lblLongchickthresh, "1, 8");
 		
 		spin127Control_longThres = new Spin127Control();
+		spin127Control_longThres.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.longThres = ((Integer)spin127Control_longThres.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_levels.add(spin127Control_longThres, "3, 8, fill, fill");
 		
 		JPanel panel_notes = new JPanel();
@@ -332,6 +358,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblBowSemiopen, "1, 1");
 		
 		noteSpinControl_bowSemiOpen = new NoteSpinControl();
+		noteSpinControl_bowSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.bowSemiOpenNote = ((Short)noteSpinControl_bowSemiOpen.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_bowSemiOpen, "3, 1, left, center");
 		
 		JLabel lblEdgeSemiopen = new JLabel("Edge SemiOpen");
@@ -339,6 +370,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblEdgeSemiopen, "1, 2");
 		
 		noteSpinControl_edgeSemiOpen = new NoteSpinControl();
+		noteSpinControl_edgeSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.edgeSemiOpenNote = ((Short)noteSpinControl_edgeSemiOpen.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_edgeSemiOpen, "3, 2, left, center");
 		
 		JLabel lblBellSemiopen = new JLabel("Bell SemiOpen");
@@ -346,6 +382,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblBellSemiopen, "1, 3");
 		
 		noteSpinControl_bellSemiOpen = new NoteSpinControl();
+		noteSpinControl_bellSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.bellSemiOpenNote = ((Short)noteSpinControl_bellSemiOpen.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_bellSemiOpen, "3, 3, left, center");
 		
 		JLabel lblBowHalfopen = new JLabel("Bow HalfOpen");
@@ -353,6 +394,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblBowHalfopen, "1, 4");
 		
 		noteSpinControl_bowHalfOpen = new NoteSpinControl();
+		noteSpinControl_bowHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.bowHalfOpenNote = ((Short)noteSpinControl_bowHalfOpen.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_bowHalfOpen, "3, 4, left, center");
 		
 		JLabel lblEdgeHalfopen = new JLabel("Edge HalfOpen");
@@ -360,6 +406,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblEdgeHalfopen, "1, 5");
 		
 		noteSpinControl_edgeHalfOpen = new NoteSpinControl();
+		noteSpinControl_edgeHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.edgeHalfOpenNote = ((Short)noteSpinControl_edgeHalfOpen.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_edgeHalfOpen, "3, 5, left, center");
 		
 		JLabel lblBellHalfopen = new JLabel("Bell HalfOpen");
@@ -367,6 +418,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblBellHalfopen, "1, 6");
 		
 		noteSpinControl_bellHalfOpen = new NoteSpinControl();
+		noteSpinControl_bellHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.bellHalfOpenNote = ((Short)noteSpinControl_bellHalfOpen.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_bellHalfOpen, "3, 6, left, center");
 		
 		JLabel lblBowSemiclosed = new JLabel("Bow SemiClosed");
@@ -374,6 +430,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblBowSemiclosed, "1, 7");
 		
 		noteSpinControl_bowSemiClosed = new NoteSpinControl();
+		noteSpinControl_bowSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.bowSemiClosedNote = ((Short)noteSpinControl_bowSemiClosed.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_bowSemiClosed, "3, 7, left, center");
 		
 		JLabel lblEdgeSemiclosed = new JLabel("Edge SemiClosed");
@@ -381,6 +442,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblEdgeSemiclosed, "1, 8");
 		
 		noteSpinControl_edgeSemiClosed = new NoteSpinControl();
+		noteSpinControl_edgeSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.edgeSemiClosedNote = ((Short)noteSpinControl_edgeSemiClosed.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_edgeSemiClosed, "3, 8, left, center");
 		
 		JLabel lblBellSemiclosed = new JLabel("Bell SemiClosed");
@@ -388,6 +454,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblBellSemiclosed, "1, 9");
 		
 		noteSpinControl_bellSemiClosed = new NoteSpinControl();
+		noteSpinControl_bellSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.bellSemiClosedNote = ((Short)noteSpinControl_bellSemiClosed.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_bellSemiClosed, "3, 9, left, center");
 		
 		JLabel lblBowClosed = new JLabel("Bow Closed");
@@ -395,6 +466,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblBowClosed, "1, 10");
 		
 		noteSpinControl_bowClosed = new NoteSpinControl();
+		noteSpinControl_bowClosed.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.bowClosedNote = ((Short)noteSpinControl_bowClosed.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_bowClosed, "3, 10, left, center");
 		
 		JLabel lblEdgeClosed = new JLabel("Edge Closed");
@@ -402,6 +478,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblEdgeClosed, "1, 11");
 		
 		noteSpinControl_edgeClosed = new NoteSpinControl();
+		noteSpinControl_edgeClosed.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.edgeClosedNote = ((Short)noteSpinControl_edgeClosed.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_edgeClosed, "3, 11, left, center");
 		
 		JLabel lblBellClosed = new JLabel("Bell Closed");
@@ -409,6 +490,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblBellClosed, "1, 12");
 		
 		noteSpinControl_bellClosed = new NoteSpinControl();
+		noteSpinControl_bellClosed.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.bellClosedNote = ((Short)noteSpinControl_bellClosed.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_bellClosed, "3, 12, left, center");
 		
 		JLabel lblChick = new JLabel("Chick");
@@ -416,6 +502,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblChick, "1, 13");
 		
 		noteSpinControl_chick = new NoteSpinControl();
+		noteSpinControl_chick.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.chickNote = ((Short)noteSpinControl_chick.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_chick, "3, 13, left, center");
 		
 		JLabel lblSplash = new JLabel("Splash");
@@ -423,6 +514,11 @@ public class PedalControls extends JPanel {
 		panel_notes.add(lblSplash, "1, 14");
 		
 		noteSpinControl_splash = new NoteSpinControl();
+		noteSpinControl_splash.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.splashNote = ((Short)noteSpinControl_splash.getSpinner().getValue()).shortValue();
+			}
+		});
 		panel_notes.add(noteSpinControl_splash, "3, 14, left, center");
 		
 		JPanel panel_buttons = new JPanel();
