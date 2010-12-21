@@ -323,16 +323,16 @@ public class PedalControls extends JPanel {
 		NoteSpinControl noteSpinControl_13 = new NoteSpinControl();
 		panel_notes.add(noteSpinControl_13, "3, 14, left, center");
 		
-		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, "2, 4, fill, fill");
+		JPanel panel_buttons = new JPanel();
+		panel.add(panel_buttons, "2, 4, fill, fill");
 		
 		JButton button = new JButton("Get");
 		button.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_1.add(button);
+		panel_buttons.add(button);
 		
 		JButton button_1 = new JButton("Send");
 		button_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_1.add(button_1);
+		panel_buttons.add(button_1);
 
 	}
 

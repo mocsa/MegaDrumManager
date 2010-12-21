@@ -61,15 +61,10 @@ public class Main_window {
 	private Options dialog_options;
 	private Midi_handler midi_handler;
 	private Timer timer_midi;
+	private MiscControls miscControls;
 	
-	private JCheckBox chckbxAllGainsLow;
-	private JSpinner spinner_noteoff;
-	private JSpinner spinner_pressroll;
-	private JSpinner spinner_latency;
-	private JCheckBox chckbxBigVuMeter;
-	private JCheckBox chckbxQuickAccess;
-	private JCheckBox chckbxAltFalseTrig;
-	private JCheckBox chckbxInputsPriority;
+	private JButton misc_btn_get;
+	private JButton misc_btn_send;
 
 
 
@@ -134,8 +129,8 @@ public class Main_window {
 					public void run() {
 						midi_handler.get_midi();
 						if (midi_handler.config_misc.changed) {
-							update_misc_config_controls();
 							midi_handler.config_misc.changed = false;
+							miscControls.setConfig(midi_handler.config_misc);
 						}
 					}
 				}
@@ -180,6 +175,7 @@ public class Main_window {
 		JMenuItem mntmSendToMd_1 = new JMenuItem("Send to MD");
 		mntmSendToMd_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.config_misc = miscControls.getConfig();
 				midi_handler.send_config_misc();
 			}
 		});
@@ -244,37 +240,58 @@ public class Main_window {
 		});
 		mnMain.add(mntmExit);
 		
-		JPanel panel_misc = new JPanel();
-		panel_misc.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		
-		panel_misc.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
 		JPanel panel_pedal = new JPanel();
 		panel_pedal.setBorder(new TitledBorder(null, "HiHat Pedal/Controller", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		JPanel panel_pads = new JPanel();
 		panel_pads.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		
+		JPanel panel_misc = new JPanel();
+		panel_misc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GroupLayout groupLayout = new GroupLayout(frmMegadrummanager.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(7)
+					.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 244, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
 					.addComponent(panel_pads, GroupLayout.PREFERRED_SIZE, 490, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(13, Short.MAX_VALUE))
+					.addContainerGap(21, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
 						.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 382, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, 272, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_pads, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(panel_pads, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap())
 		);
+		panel_misc.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),}));
+		
+		miscControls = new MiscControls();
+		panel_misc.add(miscControls, "1, 2");
+		misc_btn_get = miscControls.getBtnGet();
+		misc_btn_get.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.clear_midi_input();
+				midi_handler.request_config_misc();				
+			}
+		});
+		misc_btn_send = miscControls.getBtnSend();
+		misc_btn_send.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.config_misc = miscControls.getConfig();
+				midi_handler.send_config_misc();
+			}
+		});
+		
 		panel_pads.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
@@ -288,168 +305,10 @@ public class Main_window {
 				RowSpec.decode("default:grow"),}));
 		PedalControls pedalControls = new PedalControls();
 		panel_pedal.add(pedalControls, "1, 1");
-		panel_misc.setLayout(null);
-		
-		JPanel panel_misc_noteoff = new JPanel();
-		panel_misc_noteoff.setBounds(6, 22, 168, 30);
-		panel_misc.add(panel_misc_noteoff);
-		panel_misc_noteoff.setLayout(null);
-		
-		JLabel lblNoteoffDelay = new JLabel("NoteOff delay");
-		lblNoteoffDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		lblNoteoffDelay.setBounds(13, 7, 74, 16);
-		panel_misc_noteoff.add(lblNoteoffDelay);
-		
-		spinner_noteoff = new JSpinner();
-		spinner_noteoff.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_noteoff.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				short value = ((Short)spinner_noteoff.getValue()).shortValue();
-				midi_handler.config_misc.note_off = (short)(value/10);
-				if (midi_handler.config_misc.note_off < midi_handler.config_misc.pressroll) {
-					midi_handler.config_misc.pressroll = midi_handler.config_misc.note_off; 
-				}
-				spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (midi_handler.config_misc.pressroll*10)), new Short((short) 0), new Short((short) (midi_handler.config_misc.note_off*10)), new Short((short) 10)));
-			}
-		});
-		spinner_noteoff.setBounds(92, 5, 52, 20);
-		spinner_noteoff.setModel(new SpinnerNumberModel(new Short((short) 200), new Short((short) 100), new Short((short) 2000), new Short((short) 10)));
-		panel_misc_noteoff.add(spinner_noteoff);
-		
-		JPanel panel_misc_pressroll = new JPanel();
-		panel_misc_pressroll.setLayout(null);
-		panel_misc_pressroll.setBounds(6, 51, 168, 30);
-		panel_misc.add(panel_misc_pressroll);
-		
-		JLabel lblPressrollTime = new JLabel("PressRoll");
-		lblPressrollTime.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		lblPressrollTime.setBounds(13, 7, 74, 16);
-		panel_misc_pressroll.add(lblPressrollTime);
-		
-		spinner_pressroll = new JSpinner();
-		spinner_pressroll.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_pressroll.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				short value = ((Short)spinner_pressroll.getValue()).shortValue();
-				midi_handler.config_misc.pressroll = (short)(value/10);
-			}
-		});
-		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 2000), new Short((short) 10)));
-		spinner_pressroll.setBounds(92, 5, 52, 20);
-		panel_misc_pressroll.add(spinner_pressroll);
-		
-		JPanel panel_misc_latency = new JPanel();
-		panel_misc_latency.setLayout(null);
-		panel_misc_latency.setBounds(6, 79, 168, 30);
-		panel_misc.add(panel_misc_latency);
-		
-		JLabel lblLatency = new JLabel("Latency");
-		lblLatency.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		lblLatency.setBounds(13, 7, 74, 16);
-		panel_misc_latency.add(lblLatency);
-		
-		spinner_latency = new JSpinner();
-		spinner_latency.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner_latency.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				short value = ((Short)spinner_latency.getValue()).shortValue();
-				midi_handler.config_misc.latency = (short)value;
-			}
-		});
-		spinner_latency.setModel(new SpinnerNumberModel(new Short((short) 40), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
-		spinner_latency.setBounds(92, 5, 52, 20);
-		panel_misc_latency.add(spinner_latency);
-		
-		JPanel panel_misc_flags = new JPanel();
-		panel_misc_flags.setBounds(6, 109, 105, 115);
-		panel_misc.add(panel_misc_flags);
-		panel_misc_flags.setLayout(null);
-		
-		chckbxBigVuMeter = new JCheckBox("Big VU meter");
-		chckbxBigVuMeter.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		chckbxBigVuMeter.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.big_vu_meter = chckbxBigVuMeter.isSelected();
-			}
-		});
-		chckbxBigVuMeter.setBounds(0, 0, 105, 25);
-		panel_misc_flags.add(chckbxBigVuMeter);
-		
-		chckbxQuickAccess = new JCheckBox("Quick Access");
-		chckbxQuickAccess.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		chckbxQuickAccess.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.quick_access = chckbxQuickAccess.isSelected();
-			}
-		});
-		chckbxQuickAccess.setBounds(0, 21, 105, 25);
-		panel_misc_flags.add(chckbxQuickAccess);
-		
-		chckbxAltFalseTrig = new JCheckBox("Alt False Trig");
-		chckbxAltFalseTrig.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		chckbxAltFalseTrig.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.alt_false_tr_supp = chckbxAltFalseTrig.isSelected();
-			}
-		});
-		chckbxAltFalseTrig.setBounds(0, 43, 105, 25);
-		panel_misc_flags.add(chckbxAltFalseTrig);
-		
-		chckbxInputsPriority = new JCheckBox("Inputs Priority");
-		chckbxInputsPriority.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		chckbxInputsPriority.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.inputs_priority = chckbxInputsPriority.isSelected();
-			}
-		});
-		chckbxInputsPriority.setBounds(0, 65, 105, 25);
-		panel_misc_flags.add(chckbxInputsPriority);
-		
-		chckbxAllGainsLow = new JCheckBox("All Gains Low");
-		chckbxAllGainsLow.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		chckbxAllGainsLow.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				midi_handler.config_misc.all_gains_low = chckbxAllGainsLow.isSelected();
-			}
-		});
-		chckbxAllGainsLow.setBounds(0, 87, 105, 25);
-		panel_misc_flags.add(chckbxAllGainsLow);
-		
-		JButton btnGet_misc = new JButton("Get");
-		btnGet_misc.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		btnGet_misc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.clear_midi_input();
-				midi_handler.request_config_misc();
-			}
-		});
-		btnGet_misc.setBounds(52, 243, 59, 25);
-		panel_misc.add(btnGet_misc);
-		
-		JButton btnSend_misc = new JButton("Send");
-		btnSend_misc.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		btnSend_misc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.send_config_misc();
-			}
-		});
-		btnSend_misc.setBounds(115, 243, 59, 25);
-		panel_misc.add(btnSend_misc);
 
 		frmMegadrummanager.getContentPane().setLayout(groupLayout);
 		
-		update_misc_config_controls();
 	}
 	
-	public void update_misc_config_controls() {
-		spinner_noteoff.setValue((short)(midi_handler.config_misc.note_off*10));
-		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (midi_handler.config_misc.pressroll*10)), new Short((short) 0), new Short((short) (midi_handler.config_misc.note_off*10)), new Short((short) 10)));
-		spinner_latency.setValue((short)(midi_handler.config_misc.latency));
-		chckbxBigVuMeter.setSelected(midi_handler.config_misc.big_vu_meter);
-		chckbxQuickAccess.setSelected(midi_handler.config_misc.quick_access);
-		chckbxAltFalseTrig.setSelected(midi_handler.config_misc.alt_false_tr_supp);
-		chckbxInputsPriority.setSelected(midi_handler.config_misc.inputs_priority);
-		chckbxAllGainsLow.setSelected(midi_handler.config_misc.all_gains_low);
-	}
 }
 
