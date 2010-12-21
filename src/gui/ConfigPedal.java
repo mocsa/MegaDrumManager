@@ -43,7 +43,8 @@ public class ConfigPedal {
 	public ConfigPedal (){
 		changed = false;
 		sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-
+		sysex_byte = new byte[2];
+		sysex_short = new byte[4];
 	}
 	
 	public byte [] getSysex(int chain_id) {
@@ -165,14 +166,14 @@ public class ConfigPedal {
 			sysex_byte[1] = sx[i++];
 			cc = Utils.sysex2byte(sysex_byte);
 			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
+			sysex_short[1] = sx[i++];
+			sysex_short[2] = sx[i++];
+			sysex_short[3] = sx[i++];
 			lowLevel = Utils.sysex2short(sysex_short);
 			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
+			sysex_short[1] = sx[i++];
+			sysex_short[2] = sx[i++];
+			sysex_short[3] = sx[i++];
 			highLevel = Utils.sysex2short(sysex_short);
 			sysex_byte[0] = sx[i++];
 			sysex_byte[1] = sx[i++];

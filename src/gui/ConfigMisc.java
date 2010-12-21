@@ -73,9 +73,9 @@ public class ConfigMisc {
 			sysex_byte[1] = sx[i++];
 			latency = Utils.sysex2byte(sysex_byte);
 			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
+			sysex_short[1] = sx[i++];
+			sysex_short[2] = sx[i++];
+			sysex_short[3] = sx[i++];
 			flags = Utils.sysex2short(sysex_short);
 			sysex_byte[0] = sx[i++];
 			sysex_byte[1] = sx[i++];

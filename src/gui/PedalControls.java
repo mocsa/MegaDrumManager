@@ -110,8 +110,8 @@ public class PedalControls extends JPanel {
 			}
 		});
 		comboBox_type.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		comboBox_type.addItem("FootContr");
 		comboBox_type.addItem("Pot");		
+		comboBox_type.addItem("FootContr");
 		panel_misc.add(comboBox_type, "3, 1, fill, default");
 		
 		JLabel lblCurve = new JLabel("Curve");
@@ -140,6 +140,9 @@ public class PedalControls extends JPanel {
 				configPedal.hhInput = (short)comboBox_input.getSelectedIndex();
 			}
 		});
+        for(int i=0; i<56; i++){
+        	comboBox_input.addItem(((Integer)i).toString());
+        }
 		comboBox_input.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(comboBox_input, "3, 3, fill, default");
 		
@@ -202,7 +205,7 @@ public class PedalControls extends JPanel {
 		spin127Control_chickDelay = new Spin127Control();
 		spin127Control_chickDelay.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configPedal.chickDelay = ((Integer)spin127Control_chickDelay.getSpinner().getValue()).shortValue();
+				configPedal.chickDelay = ((Short)spin127Control_chickDelay.getSpinner().getValue()).shortValue();
 			}
 		});
 		panel_misc.add(spin127Control_chickDelay, "3, 8, fill, fill");
@@ -542,15 +545,15 @@ public class PedalControls extends JPanel {
 		checkBox_softChicks.setSelected(configPedal.softChicks);
 		checkBox_autoLevels.setSelected(configPedal.autoLevels);
 		spin127Control_chickDelay.getSpinner().setValue(configPedal.chickDelay);
-		spin127Control_cc.getSpinner().setValue(configPedal.cc);
+		spin127Control_cc.getSpinner().setValue((int)configPedal.cc);
 		spin1023Control_lowLevel.getSpinner().setValue(configPedal.lowLevel);
 		spin1023Control_highLevel.getSpinner().setValue(configPedal.highLevel);
-		spin127Control_openLevel.getSpinner().setValue(configPedal.openLevel);
-		spin127Control_semiOpen.getSpinner().setValue(configPedal.semiOpenLevel);
-		spin127Control_halfOpen.getSpinner().setValue(configPedal.halfOpenLevel);
-		spin127Control_closed.getSpinner().setValue(configPedal.closedLevel);
-		spin127Control_shortThres.getSpinner().setValue(configPedal.shortThres);
-		spin127Control_longThres.getSpinner().setValue(configPedal.longThres);
+		spin127Control_openLevel.getSpinner().setValue((int)configPedal.openLevel);
+		spin127Control_semiOpen.getSpinner().setValue((int)configPedal.semiOpenLevel);
+		spin127Control_halfOpen.getSpinner().setValue((int)configPedal.halfOpenLevel);
+		spin127Control_closed.getSpinner().setValue((int)configPedal.closedLevel);
+		spin127Control_shortThres.getSpinner().setValue((int)configPedal.shortThres);
+		spin127Control_longThres.getSpinner().setValue((int)configPedal.longThres);
 		noteSpinControl_bowSemiOpen.getSpinner().setValue(configPedal.bowSemiOpenNote);
 		noteSpinControl_edgeSemiOpen.getSpinner().setValue(configPedal.edgeSemiOpenNote);
 		noteSpinControl_bellSemiOpen.getSpinner().setValue(configPedal.bellSemiOpenNote);

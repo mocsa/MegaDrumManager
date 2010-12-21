@@ -110,9 +110,9 @@ public class ConfigPad {
 			sysex_byte[1] = sx[i++];
 			retrigger = Utils.sysex2byte(sysex_byte);
 			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
-			sysex_short[0] = sx[i++];
+			sysex_short[1] = sx[i++];
+			sysex_short[2] = sx[i++];
+			sysex_short[3] = sx[i++];
 			levelMax = Utils.sysex2short(sysex_short);
 			sysex_byte[0] = sx[i++];
 			sysex_byte[1] = sx[i++];
