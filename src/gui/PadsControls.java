@@ -28,14 +28,17 @@ public class PadsControls extends JPanel {
 	private ThirdZoneControls panel_3rd_zone;
 	
 	private ConfigPad [] configPads;
+	private Config3rd [] config3rds;
 	private int padPointer;
 	private int prevPadPointer;
+	private int thirdPointer;
+	private int prevThirdPointer;
 	private JButton btnFirst;
 	private JButton btnPrev;
 	private JButton btnNext;
 	private JButton btnLast;
 
-	private boolean head_pad_type;
+	//private boolean head_pad_type;
 	private static final boolean head_pad = true;
 	private static final boolean rim_pad = false;
 
@@ -50,13 +53,20 @@ public class PadsControls extends JPanel {
         }
         padPointer = 0;
         prevPadPointer = 0;
-		
+
+		config3rds = new Config3rd[27];
+        for(int i=0; i<27; i++){
+        	config3rds[i] = new Config3rd();
+        }
+        thirdPointer = 0;
+        prevThirdPointer = 0;
+        
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("max(62dlu;default):grow"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),
 				RowSpec.decode("max(256dlu;default)"),
-				RowSpec.decode("56dlu"),
+				RowSpec.decode("66dlu"),
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JPanel panel_input_selection = new JPanel();
@@ -232,18 +242,41 @@ public class PadsControls extends JPanel {
 		panel_head.getComboBox_type().setEnabled((padPointer != 0));
 	}
 
+	public Config3rd getConfig3rd(int third_id) {
+		if (third_id == thirdPointer) {
+			config3rds[thirdPointer] = panel_3rd_zone.getConfig();			
+		}
+		return config3rds[third_id];
+	}
+
+	public void setConfig3rd(Config3rd config) {
+		int third_id;
+		int index = comboBox_padSelection.getSelectedIndex();
+		if (index > 0 ) {
+			third_id = index - 1;
+			config3rds[third_id] = config;
+			if (third_id == thirdPointer) {
+				panel_3rd_zone.setConfig(config);
+			}
+			thirdPointer = third_id;
+		}
+	}
+
 	private void switch_to_pad(int pad_id) {
 		int comboBox_pointer = 0;
 		
 		configPads[prevPadPointer] = panel_head.getConfig();
 		if (prevPadPointer > 0 ) {
 			configPads[prevPadPointer+1] = panel_rim.getConfig();
+			config3rds[prevThirdPointer] = panel_3rd_zone.getConfig();
 		}
 		if (pad_id > 0 ) {
 			padPointer = ((pad_id - 1)&0xfffffe) + 1;
+			thirdPointer = (pad_id - 1)/2;
 			panel_rim.setVisible(true);
 			panel_3rd_zone.setVisible(true);
 			panel_rim.setConfig(configPads[padPointer+1], rim_pad);
+			panel_3rd_zone.setConfig(config3rds[thirdPointer]);
 			comboBox_pointer = ((pad_id - 1)>>1) + 1;
 		} else {
 			padPointer = 0;
@@ -251,6 +284,7 @@ public class PadsControls extends JPanel {
 			panel_3rd_zone.setVisible(false);
 		}
 		prevPadPointer = padPointer;
+		prevThirdPointer = thirdPointer;
 		panel_head.setConfig(configPads[padPointer], head_pad);
 		panel_head.getComboBox_type().setEnabled((padPointer != 0));
 		comboBox_padSelection.setSelectedIndex(comboBox_pointer);
