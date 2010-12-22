@@ -41,7 +41,9 @@ public class PadCommonControls extends JPanel {
 	private JComboBox comboBox_dynTime;
 	private JSpinner spinner_minScan;
 	private JComboBox comboBox_type;
-	
+	private boolean head_rim_pad;
+	private static final boolean head_pad = true;
+	private static final boolean rim_pad = false;
 	
 	private ConfigPad configPad;
 
@@ -296,6 +298,24 @@ public class PadCommonControls extends JPanel {
 		spinner_minScan.setValue(configPad.minScan);
 		//TO-DO piezo/switch, 3way type, dual and etc
 		//comboBox_type.setSelectedIndex(configPad.type?1:0);
+		comboBox_type.removeAllItems();
+		if (head_rim_pad == head_pad) {
+			comboBox_type.addItem("Single");
+			comboBox_type.addItem("Dual or 3way Ymaha");
+			comboBox_type.addItem("3way Roland");
+			if (configPad.dual) {
+				comboBox_type.setSelectedIndex(1);
+			}
+			if (configPad.threeWay) {
+				comboBox_type.setSelectedIndex(2);
+			}			
+		} else {
+			comboBox_type.addItem("Piezo");
+			comboBox_type.addItem("Switch");
+			if (configPad.type) {
+				comboBox_type.setSelectedIndex(1);
+			}
+		}
 	}
 	
 	private void updateConfig() {
@@ -320,9 +340,33 @@ public class PadCommonControls extends JPanel {
 		configPad.minScan = (Short)spinner_minScan.getValue();
 		//TO-DO piezo/switch, 3way type, dual and etc
 		// configPad.type = (comboBox_type.getSelectedIndex() != 0);
+		if (head_rim_pad == head_pad) {
+			configPad.type = false;
+			switch (comboBox_type.getSelectedIndex()) {
+			case 1:
+				configPad.dual = true;
+				configPad.threeWay = false;
+				break;
+			case 2:
+				configPad.dual = false;
+				configPad.threeWay = true;
+				break;
+			default:
+				configPad.dual = false;
+				configPad.threeWay = false;
+				break;
+			}
+		} else {
+			if (comboBox_type.getSelectedIndex() == 0) {
+				configPad.type = false;
+			} else {
+				configPad.type = true;
+			}
+		}
 	}
 	
-	public void setConfig(ConfigPad config) {
+	public void setConfig(ConfigPad config, boolean pad_type) {
+		head_rim_pad = pad_type;
 		configPad = config;
 		updateControls();
 	}

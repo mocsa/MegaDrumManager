@@ -35,6 +35,10 @@ public class PadsControls extends JPanel {
 	private JButton btnNext;
 	private JButton btnLast;
 
+	private boolean head_pad_type;
+	private static final boolean head_pad = true;
+	private static final boolean rim_pad = false;
+
 
 	/**
 	 * Create the panel.
@@ -174,7 +178,8 @@ public class PadsControls extends JPanel {
 		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnSendall);
 
-		panel_head.setConfig(configPads[0]);
+		//panel_head.setConfig(configPads[0], head_pad);
+		switch_to_pad(0);
 
 	}
 
@@ -214,16 +219,17 @@ public class PadsControls extends JPanel {
 		}
 		configPads[padPointer] = config;
 		if ((pad_id == padPointer) && (pad_id == 0)) {
-			panel_head.setConfig(configPads[0]);
+			panel_head.setConfig(configPads[0], head_pad);
 		} else {
 			if (pad_id == padPointer) {
-				panel_head.setConfig(configPads[padPointer]);
+				panel_head.setConfig(configPads[padPointer],head_pad);
 			}
 			if ((pad_id + 1) == padPointer) {
-				panel_rim.setConfig(configPads[padPointer]);
+				panel_rim.setConfig(configPads[padPointer], rim_pad);
 			}
 		}
 		padPointer = pad_id;
+		panel_head.getComboBox_type().setEnabled((padPointer != 0));
 	}
 
 	private void switch_to_pad(int pad_id) {
@@ -237,7 +243,7 @@ public class PadsControls extends JPanel {
 			padPointer = ((pad_id - 1)&0xfffffe) + 1;
 			panel_rim.setVisible(true);
 			panel_3rd_zone.setVisible(true);
-			panel_rim.setConfig(configPads[padPointer+1]);
+			panel_rim.setConfig(configPads[padPointer+1], rim_pad);
 			comboBox_pointer = ((pad_id - 1)>>1) + 1;
 		} else {
 			padPointer = 0;
@@ -245,7 +251,8 @@ public class PadsControls extends JPanel {
 			panel_3rd_zone.setVisible(false);
 		}
 		prevPadPointer = padPointer;
-		panel_head.setConfig(configPads[padPointer]);
+		panel_head.setConfig(configPads[padPointer], head_pad);
+		panel_head.getComboBox_type().setEnabled((padPointer != 0));
 		comboBox_padSelection.setSelectedIndex(comboBox_pointer);
 	}
 	
