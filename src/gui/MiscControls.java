@@ -92,7 +92,7 @@ public class MiscControls extends JPanel {
 				configMisc.pressroll = (short)(value/10);
 			}
 		});
-		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 2000), new Short((short) 10)));
+		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 200), new Short((short) 10)));
 		panel.add(spinner_pressroll, "3, 2");
 		
 		JLabel lblLatency = new JLabel("Latency");

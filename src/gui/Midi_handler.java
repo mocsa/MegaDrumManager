@@ -29,6 +29,7 @@ public class Midi_handler {
 	public int config_chain_id;
 	public ConfigMisc config_misc;
 	public ConfigPedal config_pedal;
+	public ConfigPad config_pad;
 
 	public Midi_handler () {
 		midiin = null;
@@ -40,6 +41,7 @@ public class Midi_handler {
 		config_chain_id = 0;
 		config_misc = new ConfigMisc();
 		config_pedal = new ConfigPedal();
+		config_pad = new ConfigPad();
 		dump_receiver = new DumpReceiver();
 	}
 	
@@ -85,6 +87,14 @@ public class Midi_handler {
 		}
 	}
 	
+	public void send_config_pad(int pad_id) {
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				send_sysex(config_pad.getSysex(config_chain_id, pad_id));
+			}
+		}
+	}
+
 	public void request_config_misc() {
 		byte [] sx = new byte[5];
 		
@@ -115,6 +125,22 @@ public class Midi_handler {
 		}
 	}
 	
+	public void request_config_pad(int pad_id) {
+		byte [] sx = new byte[6];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)config_chain_id;
+		sx[3] = Constants.MD_SYSEX_PAD;
+		sx[4] = (byte)pad_id;
+		sx[5] = Constants.SYSEX_END;
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				send_sysex(sx);
+			}
+		}
+	}
+
 	public void clear_midi_input() {
 		byte [] result;
 		result = null;
@@ -159,6 +185,9 @@ public class Midi_handler {
 									break;
 								case Constants.MD_SYSEX_PEDAL:
 									config_pedal.setFromSysex(buffer);
+									break;
+								case Constants.MD_SYSEX_PAD:
+									config_pad.setFromSysex(buffer);
 									break;
 								default:
 									break;

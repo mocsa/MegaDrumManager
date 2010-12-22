@@ -63,6 +63,7 @@ public class Main_window {
 	private Timer timer_midi;
 	private MiscControls miscControls;
 	private PedalControls pedalControls;
+	private PadsControls padsControls;
 
 
 	/**
@@ -132,6 +133,11 @@ public class Main_window {
 						if (midi_handler.config_pedal.changed) {
 							midi_handler.config_pedal.changed = false;
 							pedalControls.setConfig(midi_handler.config_pedal);
+						}
+						if (midi_handler.config_pad.changed_pad > 0) {
+							padsControls.setPadPointer(midi_handler.config_pad.changed_pad - 1);
+							padsControls.setConfig(midi_handler.config_pad);
+							midi_handler.config_pad.changed_pad = 0;
 						}
 					}
 				}
@@ -296,12 +302,41 @@ public class Main_window {
 			new RowSpec[] {
 				RowSpec.decode("default:grow"),}));
 		
-		PadsControls padsControls = new PadsControls();
+		padsControls = new PadsControls();
 		panel_pads.add(padsControls, "1, 1");
 		panel_pedal.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("default:grow"),}));
+		padsControls.getBtnGet().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int index;
+				midi_handler.clear_midi_input();
+				index = padsControls.getPadPointer();
+				if (index > 0 ) {
+					midi_handler.request_config_pad(index + 1);
+					midi_handler.request_config_pad(index + 2);
+				} else {
+					midi_handler.request_config_pad(1);
+				}
+			}
+		});
+		padsControls.getBtnSend().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int index;
+				midi_handler.clear_midi_input();
+				index = padsControls.getPadPointer();
+				if (index > 0 ) {
+					midi_handler.config_pad = padsControls.getConfig(index);
+					midi_handler.send_config_pad(index + 1);
+					midi_handler.config_pad = padsControls.getConfig(index+1);
+					midi_handler.send_config_pad(index + 2);
+				} else {
+					midi_handler.config_pad = padsControls.getConfig(0);
+					midi_handler.send_config_pad(1);
+				}
+			}
+		});
 
 		pedalControls = new PedalControls();
 		panel_pedal.add(pedalControls, "1, 1");
