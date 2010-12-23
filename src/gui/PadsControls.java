@@ -95,13 +95,14 @@ public class PadsControls extends JPanel {
 		panel_input_selection.add(label, "2, 1, right, default");
 		
 		comboBox_padSelection = new JComboBox();
-		comboBox_padSelection.addItem("1(" + Constants.PADS_NAMES_LIST[0] + ")");
+		comboBox_padSelection.addItem("");
+		updatePadsSelection(0);
         for(int i=1; i<55; i++){
-    		//comboBox_padSelection.addItem(((Integer)(i + 1)).toString());
-    		comboBox_padSelection.addItem(((Integer)(i + 1)).toString() + "("+ Constants.PADS_NAMES_LIST[i]+"/" + Constants.PADS_NAMES_LIST[i + 1]+")");
+    		comboBox_padSelection.addItem("");
+    		updatePadsSelection(i);
     		i++;
         }
-         
+        comboBox_padSelection.setSelectedIndex(0); 
 		comboBox_padSelection.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -287,7 +288,7 @@ public class PadsControls extends JPanel {
 			index = ((pad_id - 1)>>1) + 1;
 			head_str = getPadName(pad_id);
 			rim_str = getPadName(pad_id + 1);
-			padString = ((Integer)(pad_id + 1)).toString() + "(" + head_str + "/" + rim_str + ")";
+			padString = ((Integer)(pad_id + 1)).toString() + " " +  head_str + "/" + ((Integer)(pad_id + 2)).toString() + " " + rim_str;
 		} else {
 			index = 0;
 			head_str = getPadName(0);
