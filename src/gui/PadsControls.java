@@ -55,7 +55,7 @@ public class PadsControls extends JPanel {
         	configPads[i] = new ConfigPad();
         }
         padPointer = 0;
-        prevPadPointer = 0;
+        prevPadPointer = 1;
 
 		config3rds = new Config3rd[27];
         for(int i=0; i<27; i++){
@@ -78,14 +78,14 @@ public class PadsControls extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu"),
+				ColumnSpec.decode("86dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.PREF_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
@@ -106,7 +106,7 @@ public class PadsControls extends JPanel {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					padSelection = comboBox_padSelection.getSelectedIndex();
-					if (padSelection != prevPadSelection) {
+					//if (padSelection != prevPadSelection) {
 						prevPadSelection = padSelection;						
 						if (padSelection > 0 ) {
 							padSelection = ((padSelection - 1)*2) + 1;
@@ -114,7 +114,7 @@ public class PadsControls extends JPanel {
 						} else {
 							switch_to_pad(0);
 						}
-					}
+					//}
 		        }
 			}
 		});
@@ -270,11 +270,8 @@ public class PadsControls extends JPanel {
 		String head_rim = ((pad_id&0x01) > 0)?"H":"R";
 		if (configPads[pad_id].name > 0) {
 			result = Constants.CUSTOM_PADS_NAMES_LIST[configPads[pad_id].name - 1] + head_rim;
-			System.out.printf("Custom name for pad name %d\n", pad_id);
-			
 		} else {
 			result = Constants.PADS_NAMES_LIST[pad_id];
-			System.out.printf("Default name for pad name %d\n", pad_id);
 		}
 		
 		return result;
@@ -286,7 +283,6 @@ public class PadsControls extends JPanel {
 		String rim_str;
 		String padString;
 		
-		System.out.printf("updated pad name %d\n", pad_id);
 		if (pad_id > 0) {
 			index = ((pad_id - 1)>>1) + 1;
 			head_str = getPadName(pad_id);
@@ -306,7 +302,6 @@ public class PadsControls extends JPanel {
 		
 		configPads[prevPadPointer].copyVarsFrom(panel_head.getConfig());
 
-		updatePadsSelection(prevPadPointer);
 		if (prevPadPointer > 0 ) {
 			configPads[prevPadPointer+1].copyVarsFrom(panel_rim.getConfig());
 			config3rds[prevThirdPointer].copyVarsFrom(panel_3rd_zone.getConfig());
@@ -324,6 +319,7 @@ public class PadsControls extends JPanel {
 			panel_rim.setVisible(false);
 			panel_3rd_zone.setVisible(false);
 		}
+		updatePadsSelection(prevPadPointer);
 		prevPadPointer = padPointer;
 		prevThirdPointer = thirdPointer;
 		panel_head.setConfig(configPads[padPointer], head_pad, padPointer);
