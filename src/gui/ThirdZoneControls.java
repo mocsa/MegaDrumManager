@@ -141,7 +141,7 @@ public class ThirdZoneControls extends JPanel {
 	}
 	
 	public void setConfig(Config3rd config) {
-		config3rd = config;
+		config3rd.copyVarsFrom(config);
 		updateControls();
 	}
 	

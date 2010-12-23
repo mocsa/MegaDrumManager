@@ -188,7 +188,7 @@ public class PadsControls extends JPanel {
 		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnSendall);
 
-		//panel_head.setConfig(configPads[0], head_pad);
+		panel_head.setConfig(configPads[0], head_pad);
 		switch_to_pad(0);
 
 	}
@@ -210,65 +210,62 @@ public class PadsControls extends JPanel {
 	}
 	
 	public ConfigPad getConfig(int pad_id) {
-		if (pad_id == padPointer) {
-			configPads[padPointer] = panel_head.getConfig();			
-			if (padPointer > 0 ) {
-				configPads[padPointer+1] = panel_rim.getConfig();
+		if (pad_id > 0) {
+			if (pad_id == padPointer) {
+				configPads[pad_id].copyVarsFrom(panel_head.getConfig());
 			}
-		}
+			if (pad_id == (padPointer + 1)) {
+				configPads[pad_id].copyVarsFrom(panel_rim.getConfig());
+			}
+		} else {
+			if (padPointer == 0) {
+				configPads[pad_id].copyVarsFrom(panel_head.getConfig());
+			}
+		}		
 		return configPads[pad_id];
 	}
 
-	public void setConfig(ConfigPad config) {
-		int pad_id;
-		int index = comboBox_padSelection.getSelectedIndex();
-		if (index > 0 ) {
-			pad_id = ((index - 1)*2) + 1;
-		} else {
-			pad_id = 0;
-		}
-		configPads[padPointer] = config;
-		if ((pad_id == padPointer) && (pad_id == 0)) {
-			panel_head.setConfig(configPads[0], head_pad);
+	public void setConfig(ConfigPad config,int pad_id) {
+		configPads[pad_id].copyVarsFrom(config);
+		if (pad_id > 0) {
+			if (pad_id == padPointer) {
+				panel_head.setConfig(config, head_pad);				
+			}
+			if (pad_id == (padPointer + 1)) {
+				panel_rim.setConfig(config, rim_pad);				
+			}
 		} else {
 			if (pad_id == padPointer) {
-				panel_head.setConfig(configPads[padPointer],head_pad);
-			}
-			if ((pad_id + 1) == padPointer) {
-				panel_rim.setConfig(configPads[padPointer], rim_pad);
+				panel_head.setConfig(config, head_pad);
 			}
 		}
-		padPointer = pad_id;
-		panel_head.getComboBox_type().setEnabled((padPointer != 0));
 	}
+
 
 	public Config3rd getConfig3rd(int third_id) {
 		if (third_id == thirdPointer) {
-			config3rds[thirdPointer] = panel_3rd_zone.getConfig();			
+			config3rds[thirdPointer].copyVarsFrom(panel_3rd_zone.getConfig());			
 		}
 		return config3rds[third_id];
 	}
 
-	public void setConfig3rd(Config3rd config) {
-		int third_id;
-		int index = comboBox_padSelection.getSelectedIndex();
-		if (index > 0 ) {
-			third_id = index - 1;
-			config3rds[third_id] = config;
+	public void setConfig3rd(Config3rd config, int third_id) {
+		config3rds[third_id].copyVarsFrom(config);
+		if (padPointer > 0 ) {
 			if (third_id == thirdPointer) {
 				panel_3rd_zone.setConfig(config);
 			}
-			thirdPointer = third_id;
 		}
 	}
 
 	private void switch_to_pad(int pad_id) {
 		int comboBox_pointer = 0;
 		
-		configPads[prevPadPointer] = panel_head.getConfig();
+		configPads[prevPadPointer].copyVarsFrom(panel_head.getConfig());
+
 		if (prevPadPointer > 0 ) {
-			configPads[prevPadPointer+1] = panel_rim.getConfig();
-			config3rds[prevThirdPointer] = panel_3rd_zone.getConfig();
+			configPads[prevPadPointer+1].copyVarsFrom(panel_rim.getConfig());
+			config3rds[prevThirdPointer].copyVarsFrom(panel_3rd_zone.getConfig());
 		}
 		if (pad_id > 0 ) {
 			padPointer = ((pad_id - 1)&0xfffffe) + 1;

@@ -39,6 +39,31 @@ public class ConfigPad {
 
 	}
 	
+	public void copyVarsFrom(ConfigPad source) {
+		note = source.note;
+		channel = source.channel;
+		curve = source.curve;
+		threshold =  source.threshold;
+		retrigger = source.retrigger;
+		levelMax = source.levelMax;
+		minScan =  source.minScan;
+		type = source.type;
+		autoLevel = source.autoLevel;
+		dual = source.dual;
+		threeWay = source.threeWay;
+		special = source.special;
+		gain = source.gain;
+		xtalkLevel = source.xtalkLevel;
+		xtalkGroup = source.xtalkGroup;
+		dynTime = source.dynTime;
+		dynLevel = source.dynLevel;
+		compression = source.compression;
+		shift = source.shift;
+		name = source.name;
+		altNote = source.altNote;
+		pressrollNote = source.pressrollNote;
+	}
+	
 	public byte [] getSysex(int chain_id, int pad_id) {
 		int i = 0;
 

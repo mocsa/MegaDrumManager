@@ -30,6 +30,7 @@ public class Midi_handler {
 	public ConfigMisc config_misc;
 	public ConfigPedal config_pedal;
 	public ConfigPad config_pad;
+	public Config3rd config_3rd;
 
 	public Midi_handler () {
 		midiin = null;
@@ -42,6 +43,7 @@ public class Midi_handler {
 		config_misc = new ConfigMisc();
 		config_pedal = new ConfigPedal();
 		config_pad = new ConfigPad();
+		config_3rd = new Config3rd();
 		dump_receiver = new DumpReceiver();
 	}
 	
@@ -95,6 +97,14 @@ public class Midi_handler {
 		}
 	}
 
+	public void send_config_3rd(int third_id) {
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				send_sysex(config_3rd.getSysex(config_chain_id, third_id));
+			}
+		}
+	}
+	
 	public void request_config_misc() {
 		byte [] sx = new byte[5];
 		
@@ -133,6 +143,22 @@ public class Midi_handler {
 		sx[2] = (byte)config_chain_id;
 		sx[3] = Constants.MD_SYSEX_PAD;
 		sx[4] = (byte)pad_id;
+		sx[5] = Constants.SYSEX_END;
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				send_sysex(sx);
+			}
+		}
+	}
+
+	public void request_config_3rd(int third_id) {
+		byte [] sx = new byte[6];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)config_chain_id;
+		sx[3] = Constants.MD_SYSEX_3RD;
+		sx[4] = (byte)third_id;
 		sx[5] = Constants.SYSEX_END;
 		if (midiout != null) {
 			if (midiout.isOpen()) {
@@ -188,6 +214,9 @@ public class Midi_handler {
 									break;
 								case Constants.MD_SYSEX_PAD:
 									config_pad.setFromSysex(buffer);
+									break;
+								case Constants.MD_SYSEX_3RD:
+									config_3rd.setFromSysex(buffer);
 									break;
 								default:
 									break;

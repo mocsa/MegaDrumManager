@@ -367,7 +367,7 @@ public class PadCommonControls extends JPanel {
 	
 	public void setConfig(ConfigPad config, boolean pad_type) {
 		head_rim_pad = pad_type;
-		configPad = config;
+		configPad.copyVarsFrom(config);
 		updateControls();
 	}
 	

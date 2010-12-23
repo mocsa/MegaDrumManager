@@ -135,9 +135,12 @@ public class Main_window {
 							pedalControls.setConfig(midi_handler.config_pedal);
 						}
 						if (midi_handler.config_pad.changed_pad > 0) {
-							padsControls.setPadPointer(midi_handler.config_pad.changed_pad - 1);
-							padsControls.setConfig(midi_handler.config_pad);
+							padsControls.setConfig(midi_handler.config_pad, midi_handler.config_pad.changed_pad - 1);
 							midi_handler.config_pad.changed_pad = 0;
+						}
+						if (midi_handler.config_3rd.changed_3rd > 0) {
+							padsControls.setConfig3rd(midi_handler.config_3rd, midi_handler.config_3rd.changed_3rd - 1);
+							midi_handler.config_3rd.changed_3rd = 0;
 						}
 					}
 				}
@@ -315,6 +318,12 @@ public class Main_window {
 				index = padsControls.getPadPointer();
 				if (index > 0 ) {
 					midi_handler.request_config_pad(index + 1);
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					midi_handler.request_config_pad(index + 2);
 				} else {
 					midi_handler.request_config_pad(1);
@@ -327,12 +336,15 @@ public class Main_window {
 				midi_handler.clear_midi_input();
 				index = padsControls.getPadPointer();
 				if (index > 0 ) {
-					midi_handler.config_pad = padsControls.getConfig(index);
+					midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(index));
 					midi_handler.send_config_pad(index + 1);
-					midi_handler.config_pad = padsControls.getConfig(index+1);
+					midi_handler.config_pad .copyVarsFrom(padsControls.getConfig(index+1));
 					midi_handler.send_config_pad(index + 2);
+					index = (index - 1)/2;
+					midi_handler.config_3rd .copyVarsFrom(padsControls.getConfig3rd(index));
+					midi_handler.send_config_3rd(index);
 				} else {
-					midi_handler.config_pad = padsControls.getConfig(0);
+					midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(0));
 					midi_handler.send_config_pad(1);
 				}
 			}
