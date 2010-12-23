@@ -325,6 +325,13 @@ public class Main_window {
 						e.printStackTrace();
 					}
 					midi_handler.request_config_pad(index + 2);
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					midi_handler.request_config_3rd((index - 1)/2);
 				} else {
 					midi_handler.request_config_pad(1);
 				}
