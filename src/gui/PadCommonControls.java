@@ -85,9 +85,10 @@ public class PadCommonControls extends JPanel {
 		add(lblName, "1, 1, right, center");
 		
 		comboBox_name = new JComboBox();
-        for(int i=0; i<70; i++){
-    		comboBox_name.addItem(((Integer)i).toString());
-        }		
+		comboBox_name.addItem("");
+		for (String string : Constants.CUSTOM_PADS_NAMES_LIST) {
+			comboBox_name.addItem(string);
+			}
 		comboBox_name.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_name, "3, 1, fill, center");
 		
@@ -365,9 +366,11 @@ public class PadCommonControls extends JPanel {
 		}
 	}
 	
-	public void setConfig(ConfigPad config, boolean pad_type) {
+	public void setConfig(ConfigPad config, boolean pad_type, int pad_id) {
 		head_rim_pad = pad_type;
 		configPad.copyVarsFrom(config);
+		comboBox_name.removeItemAt(0);
+		comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[pad_id], 0);
 		updateControls();
 	}
 	

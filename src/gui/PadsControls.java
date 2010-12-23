@@ -9,6 +9,8 @@ import java.awt.GridLayout;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import java.awt.event.ItemListener;
@@ -37,11 +39,12 @@ public class PadsControls extends JPanel {
 	private JButton btnPrev;
 	private JButton btnNext;
 	private JButton btnLast;
+	private int padSelection;
+	private int prevPadSelection;
 
 	//private boolean head_pad_type;
 	private static final boolean head_pad = true;
 	private static final boolean rim_pad = false;
-
 
 	/**
 	 * Create the panel.
@@ -92,22 +95,25 @@ public class PadsControls extends JPanel {
 		panel_input_selection.add(label, "2, 1, right, default");
 		
 		comboBox_padSelection = new JComboBox();
-		comboBox_padSelection.addItem("1");
+		comboBox_padSelection.addItem("1(" + Constants.PADS_NAMES_LIST[0] + ")");
         for(int i=1; i<55; i++){
-    		comboBox_padSelection.addItem(((Integer)(i + 1)).toString());
+    		//comboBox_padSelection.addItem(((Integer)(i + 1)).toString());
+    		comboBox_padSelection.addItem(((Integer)(i + 1)).toString() + "("+ Constants.PADS_NAMES_LIST[i]+"/" + Constants.PADS_NAMES_LIST[i + 1]+")");
     		i++;
         }
- 
+         
 		comboBox_padSelection.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					int index = comboBox_padSelection.getSelectedIndex();
-					
-					if (index > 0 ) {
-						index = ((index - 1)*2) + 1;
-						switch_to_pad(index);
-					} else {
-						switch_to_pad(0);
+					padSelection = comboBox_padSelection.getSelectedIndex();
+					if (padSelection != prevPadSelection) {
+						prevPadSelection = padSelection;						
+						if (padSelection > 0 ) {
+							padSelection = ((padSelection - 1)*2) + 1;
+							switch_to_pad(padSelection);
+						} else {
+							switch_to_pad(0);
+						}
 					}
 		        }
 			}
@@ -188,8 +194,9 @@ public class PadsControls extends JPanel {
 		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnSendall);
 
-		panel_head.setConfig(configPads[0], head_pad);
+		panel_head.setConfig(configPads[0], head_pad, 0);
 		switch_to_pad(0);
+		comboBox_padSelection.setSelectedIndex(0);
 
 	}
 
@@ -229,14 +236,14 @@ public class PadsControls extends JPanel {
 		configPads[pad_id].copyVarsFrom(config);
 		if (pad_id > 0) {
 			if (pad_id == padPointer) {
-				panel_head.setConfig(config, head_pad);				
+				panel_head.setConfig(config, head_pad, pad_id);				
 			}
 			if (pad_id == (padPointer + 1)) {
-				panel_rim.setConfig(config, rim_pad);				
+				panel_rim.setConfig(config, rim_pad, pad_id);				
 			}
 		} else {
 			if (pad_id == padPointer) {
-				panel_head.setConfig(config, head_pad);
+				panel_head.setConfig(config, head_pad, pad_id);
 			}
 		}
 	}
@@ -257,12 +264,49 @@ public class PadsControls extends JPanel {
 			}
 		}
 	}
+	
+	private String getPadName(int pad_id) {
+		String result;
+		String head_rim = ((pad_id&0x01) > 0)?"H":"R";
+		if (configPads[pad_id].name > 0) {
+			result = Constants.CUSTOM_PADS_NAMES_LIST[configPads[pad_id].name - 1] + head_rim;
+			System.out.printf("Custom name for pad name %d\n", pad_id);
+			
+		} else {
+			result = Constants.PADS_NAMES_LIST[pad_id];
+			System.out.printf("Default name for pad name %d\n", pad_id);
+		}
+		
+		return result;
+	}
+	
+	private void updatePadsSelection(int pad_id) {
+		int index;
+		String head_str;
+		String rim_str;
+		String padString;
+		
+		System.out.printf("updated pad name %d\n", pad_id);
+		if (pad_id > 0) {
+			index = ((pad_id - 1)>>1) + 1;
+			head_str = getPadName(pad_id);
+			rim_str = getPadName(pad_id + 1);
+			padString = ((Integer)(pad_id + 1)).toString() + "(" + head_str + "/" + rim_str + ")";
+		} else {
+			index = 0;
+			head_str = getPadName(0);
+			padString = ((Integer)(1)).toString() + "(" + head_str + ")";			
+		}
+		comboBox_padSelection.removeItemAt(index);
+		comboBox_padSelection.insertItemAt(padString, index);
+	}
 
 	private void switch_to_pad(int pad_id) {
 		int comboBox_pointer = 0;
 		
 		configPads[prevPadPointer].copyVarsFrom(panel_head.getConfig());
 
+		updatePadsSelection(prevPadPointer);
 		if (prevPadPointer > 0 ) {
 			configPads[prevPadPointer+1].copyVarsFrom(panel_rim.getConfig());
 			config3rds[prevThirdPointer].copyVarsFrom(panel_3rd_zone.getConfig());
@@ -272,7 +316,7 @@ public class PadsControls extends JPanel {
 			thirdPointer = (pad_id - 1)/2;
 			panel_rim.setVisible(true);
 			panel_3rd_zone.setVisible(true);
-			panel_rim.setConfig(configPads[padPointer+1], rim_pad);
+			panel_rim.setConfig(configPads[padPointer+1], rim_pad, padPointer+1);
 			panel_3rd_zone.setConfig(config3rds[thirdPointer]);
 			comboBox_pointer = ((pad_id - 1)>>1) + 1;
 		} else {
@@ -282,9 +326,11 @@ public class PadsControls extends JPanel {
 		}
 		prevPadPointer = padPointer;
 		prevThirdPointer = thirdPointer;
-		panel_head.setConfig(configPads[padPointer], head_pad);
+		panel_head.setConfig(configPads[padPointer], head_pad, padPointer);
 		panel_head.getComboBox_type().setEnabled((padPointer != 0));
-		comboBox_padSelection.setSelectedIndex(comboBox_pointer);
+		if (comboBox_pointer != prevPadSelection ) {
+			//comboBox_padSelection.setSelectedIndex(comboBox_pointer);
+		}
 	}
 	
 }
