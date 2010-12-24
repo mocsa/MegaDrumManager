@@ -19,12 +19,16 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.FlowLayout;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class PadCommonControls extends JPanel {
 	private JComboBox comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
+	private JCheckBox checkBox_altLinked;
 	private NoteSpinControl noteSpinControl_pressrollNote;
+	private JCheckBox checkBox_pressrollLinked;
 	private JSpinner spinner_channel;
 	private JCheckBox checkBox_special;
 	private JComboBox comboBox_curve;
@@ -53,10 +57,10 @@ public class PadCommonControls extends JPanel {
 	public PadCommonControls() {
 		configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("82px"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("97px"),
-				ColumnSpec.decode("1dlu"),},
+				ColumnSpec.decode("78px"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("65dlu"),
+				ColumnSpec.decode("12dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
@@ -107,12 +111,30 @@ public class PadCommonControls extends JPanel {
 		noteSpinControl_altNote = new NoteSpinControl();
 		add(noteSpinControl_altNote, "3, 3, left, fill");
 		
+		checkBox_altLinked = new JCheckBox("");
+		checkBox_altLinked.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				noteSpinControl_altNote.getSpinner().setEnabled(!checkBox_altLinked.isSelected());
+			}
+		});
+		checkBox_altLinked.setToolTipText("Linked to Note");
+		add(checkBox_altLinked, "4, 3");
+		
 		JLabel lblPressrollNote = new JLabel("Pressroll Note");
 		lblPressrollNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblPressrollNote, "1, 4, right, center");
 		
 		noteSpinControl_pressrollNote = new NoteSpinControl();
 		add(noteSpinControl_pressrollNote, "3, 4, left, fill");
+		
+		checkBox_pressrollLinked = new JCheckBox("");
+		checkBox_pressrollLinked.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				noteSpinControl_pressrollNote.getSpinner().setEnabled(!checkBox_pressrollLinked.isSelected());
+			}
+		});
+		checkBox_pressrollLinked.setToolTipText("Linked to Note");
+		add(checkBox_pressrollLinked, "4, 4");
 		
 		JLabel lblCurve = new JLabel("Channel");
 		lblCurve.setFont(new Font("Segoe UI", Font.PLAIN, 10));

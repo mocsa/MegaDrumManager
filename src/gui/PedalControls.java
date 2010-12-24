@@ -73,26 +73,25 @@ public class PedalControls extends JPanel {
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("206px:grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("12dlu"),
 				RowSpec.decode("310px"),}));
 		
 		JPanel panel_buttons = new JPanel();
 		panel.add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("47px"),
+				ColumnSpec.decode("28dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("55px"),
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("28dlu"),},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),}));
+				RowSpec.decode("fill:12dlu"),}));
 		
 		btnGet = new JButton("Get");
 		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnGet, "1, 1, left, top");
+		panel_buttons.add(btnGet, "1, 1, fill, fill");
 		
 		btnSend = new JButton("Send");
 		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnSend, "3, 1, left, top");
+		panel_buttons.add(btnSend, "3, 1, fill, fill");
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panel.add(tabbedPane, "1, 2, left, top");
