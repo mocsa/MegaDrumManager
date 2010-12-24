@@ -199,7 +199,7 @@ public class PadCommonControls extends JPanel {
 		
 		comboBox_gain = new JComboBox();
 		comboBox_gain.setMaximumRowCount(10);
-        for(int i=0; i<16; i++){
+        for(int i=0; i<9; i++){
     		comboBox_gain.addItem(((Integer)i).toString());
         }		
 		comboBox_gain.setFont(new Font("Segoe UI", Font.PLAIN, 10));
