@@ -85,6 +85,7 @@ public class PadCommonControls extends JPanel {
 		add(lblName, "1, 1, right, center");
 		
 		comboBox_name = new JComboBox();
+		comboBox_name.setMaximumRowCount(30);
 		comboBox_name.addItem("");
 		for (String string : Constants.CUSTOM_PADS_NAMES_LIST) {
 			comboBox_name.addItem(string);
@@ -133,6 +134,7 @@ public class PadCommonControls extends JPanel {
 		add(lblCurve_1, "1, 7, right, center");
 		
 		comboBox_curve = new JComboBox();
+		comboBox_curve.setMaximumRowCount(16);
 		for (String string : Constants.CURVES_LIST) {
 			comboBox_curve.addItem(string);
 			}
@@ -156,7 +158,7 @@ public class PadCommonControls extends JPanel {
 		
 		comboBox_shift = new JComboBox();
         for(int i=0; i<8; i++){
-    		comboBox_shift.addItem(((Integer)i).toString());
+    		comboBox_shift.addItem(((Integer)(i*8)).toString());
         }		
 		comboBox_shift.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_shift, "3, 9, fill, center");
@@ -196,6 +198,7 @@ public class PadCommonControls extends JPanel {
 		add(lblGain, "1, 13, right, center");
 		
 		comboBox_gain = new JComboBox();
+		comboBox_gain.setMaximumRowCount(10);
         for(int i=0; i<16; i++){
     		comboBox_gain.addItem(((Integer)i).toString());
         }		
@@ -240,6 +243,7 @@ public class PadCommonControls extends JPanel {
 		add(lblDyn, "1, 17, right, center");
 		
 		comboBox_dynLevel = new JComboBox();
+		comboBox_dynLevel.setMaximumRowCount(16);
         for(int i=0; i<16; i++){
     		comboBox_dynLevel.addItem(((Integer)i).toString());
         }		
@@ -252,8 +256,9 @@ public class PadCommonControls extends JPanel {
 		add(lblDyntime, "1, 18, right, center");
 		
 		comboBox_dynTime = new JComboBox();
+		comboBox_dynTime.setMaximumRowCount(16);
         for(int i=0; i<16; i++){
-    		comboBox_dynTime.addItem(((Integer)i).toString());
+    		comboBox_dynTime.addItem(((Integer)(i*4)).toString());
         }		
 		comboBox_dynTime.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_dynTime, "3, 18, fill, center");
