@@ -204,4 +204,13 @@ public class MiscControls extends JPanel {
 	public JButton getBtnSend() {
 		return btnSend;
 	}
+
+	public void copyToConfigFull (ConfigFull config, int chain_id) {
+		config.sysex_misc = configMisc.getSysex(chain_id);
+	}
+	
+	public void loadFromConfigFull (ConfigFull config) {
+		configMisc.setFromSysex(config.sysex_misc);
+		updateControls();
+	}
 }

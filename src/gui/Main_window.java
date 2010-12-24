@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.EventQueue;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -33,6 +34,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.filechooser.FileFilter;
+
 import java.awt.Font;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,7 +67,8 @@ public class Main_window {
 	private MiscControls miscControls;
 	private PedalControls pedalControls;
 	private PadsControls padsControls;
-
+	private ConfigFull configFull;
+	private FileManager fileManager;
 
 	/**
 	 * Launch the application.
@@ -119,6 +123,8 @@ public class Main_window {
 		frmMegadrummanager.setBounds(100, 100, 971, 656);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		configFull = new ConfigFull();
+		fileManager = new FileManager(frmMegadrummanager);
 		dialog_options = new Options();
 		midi_handler = new Midi_handler();
 		timer_midi = new Timer();
@@ -165,6 +171,11 @@ public class Main_window {
 		mnLoad.add(mntmLoadFromFile);
 		
 		JMenuItem mntmSaveToFile = new JMenuItem("Save to file");
+		mntmSaveToFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				fileManager.save_all(configFull);
+			}
+		});
 		mnLoad.add(mntmSaveToFile);
 		
 		JMenuItem mntmSaveToMd = new JMenuItem("Save to MD slot 1");

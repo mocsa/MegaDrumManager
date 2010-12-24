@@ -119,6 +119,7 @@ public class PedalControls extends JPanel {
 		panel_misc.add(lblCurve, "1, 2, right, default");
 		
 		comboBox_curve = new JComboBox();
+		comboBox_curve.setMaximumRowCount(16);
 		comboBox_curve.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				configPedal.curve = (short)comboBox_curve.getSelectedIndex();
@@ -135,13 +136,15 @@ public class PedalControls extends JPanel {
 		panel_misc.add(lblHihatInput, "1, 3, right, default");
 		
 		comboBox_input = new JComboBox();
+		comboBox_input.setMaximumRowCount(20);
 		comboBox_input.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				configPedal.hhInput = (short)comboBox_input.getSelectedIndex();
+				configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
 			}
 		});
-        for(int i=0; i<56; i++){
+        for(int i=2; i<Constants.PADS_COUNT; i++){
         	comboBox_input.addItem(((Integer)i).toString());
+        	i++;
         }
 		comboBox_input.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(comboBox_input, "3, 3, fill, default");
@@ -539,7 +542,7 @@ public class PedalControls extends JPanel {
 	private void updateControls() {
 		comboBox_type.setSelectedIndex(configPedal.type?1:0);
 		comboBox_curve.setSelectedIndex(configPedal.curve);
-		comboBox_input.setSelectedIndex(configPedal.hhInput);
+		comboBox_input.setSelectedIndex((configPedal.hhInput-2)/2);
 		checkBox_altInput.setSelected(configPedal.altIn);
 		checkBox_reverseLevels.setSelected(configPedal.reverseLevels);
 		checkBox_softChicks.setSelected(configPedal.softChicks);

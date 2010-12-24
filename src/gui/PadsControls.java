@@ -50,15 +50,15 @@ public class PadsControls extends JPanel {
 	 * Create the panel.
 	 */
 	public PadsControls() {
-		configPads = new ConfigPad[55];
-        for(int i=0; i<55; i++){
+		configPads = new ConfigPad[Constants.PADS_COUNT];
+        for(int i=0; i<Constants.PADS_COUNT; i++){
         	configPads[i] = new ConfigPad();
         }
         padPointer = 0;
         prevPadPointer = 1;
 
-		config3rds = new Config3rd[27];
-        for(int i=0; i<27; i++){
+		config3rds = new Config3rd[(Constants.PADS_COUNT - 1)/2];
+        for(int i=0; i<((Constants.PADS_COUNT - 1)/2); i++){
         	config3rds[i] = new Config3rd();
         }
         thirdPointer = 0;
@@ -97,7 +97,7 @@ public class PadsControls extends JPanel {
 		comboBox_padSelection = new JComboBox();
 		comboBox_padSelection.addItem("");
 		updatePadsSelection(0);
-        for(int i=1; i<55; i++){
+        for(int i=1; i<Constants.PADS_COUNT; i++){
     		comboBox_padSelection.addItem("");
     		updatePadsSelection(i);
     		i++;
