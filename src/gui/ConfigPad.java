@@ -24,6 +24,8 @@ public class ConfigPad {
 	public short name;
 	public short altNote;
 	public short pressrollNote;
+	public boolean altNote_linked;
+	public boolean pressrollNote_linked;
 	
 	private byte [] sysex_byte;
 	private byte [] sysex_short;
@@ -62,6 +64,8 @@ public class ConfigPad {
 		name = source.name;
 		altNote = source.altNote;
 		pressrollNote = source.pressrollNote;
+		altNote_linked = source.altNote_linked;
+		pressrollNote_linked = source.pressrollNote_linked;
 	}
 	
 	public byte [] getSysex(int chain_id, int pad_id) {

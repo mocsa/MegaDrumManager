@@ -69,14 +69,13 @@ public class FileManager {
 				file = new File(file.getAbsolutePath() + ".mds");
 			}
 			if (file.exists()) {
-				
-			} else {
-				try {
-					file.createNewFile();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				file.delete();
+			}
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 			try {
 				FileOutputStream fos = new FileOutputStream(file);

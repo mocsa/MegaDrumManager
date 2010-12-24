@@ -102,6 +102,16 @@ public class PadCommonControls extends JPanel {
 		add(lblNote, "1, 2, right, center");
 		
 		noteSpinControl_note = new NoteSpinControl();
+		noteSpinControl_note.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				if (checkBox_altLinked.isSelected()) {
+					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+				}
+				if (checkBox_pressrollLinked.isSelected()) {
+					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+				}
+			}
+		});
 		add(noteSpinControl_note, "3, 2, left, center");
 		
 		JLabel lblAltNote = new JLabel("Alt Note");
@@ -308,7 +318,9 @@ public class PadCommonControls extends JPanel {
 		comboBox_name.setSelectedIndex(configPad.name);
 		noteSpinControl_note.getSpinner().setValue(configPad.note);
 		noteSpinControl_altNote.getSpinner().setValue(configPad.altNote);
+		checkBox_altLinked.setSelected(configPad.altNote_linked);
 		noteSpinControl_pressrollNote.getSpinner().setValue(configPad.pressrollNote);
+		checkBox_pressrollLinked.setSelected(configPad.pressrollNote_linked);
 		spinner_channel.setValue(configPad.channel + 1);
 		checkBox_special.setSelected(configPad.special);
 		comboBox_curve.setSelectedIndex(configPad.curve);
@@ -350,7 +362,9 @@ public class PadCommonControls extends JPanel {
 		configPad.name = (short)comboBox_name.getSelectedIndex();
 		configPad.note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
 		configPad.altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
+		configPad.altNote_linked = checkBox_altLinked.isSelected();
 		configPad.pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
+		configPad.pressrollNote_linked = checkBox_pressrollLinked.isSelected();
 		configPad.channel = (short)(((Integer)spinner_channel.getValue()).shortValue() - 1);
 		configPad.special = checkBox_special.isSelected();
 		configPad.curve = (short)comboBox_curve.getSelectedIndex();
