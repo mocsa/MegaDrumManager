@@ -1,6 +1,6 @@
 package gui;
 
-public class ConfigFull {
+public class ConfigFull implements java.io.Serializable {
 	public byte [] sysex_misc;
 	public byte [] sysex_pedal;
 	public byte [][] sysex_pads;

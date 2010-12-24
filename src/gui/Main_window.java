@@ -168,6 +168,11 @@ public class Main_window {
 		mnLoad.add(mntmSendToMd);
 		
 		JMenuItem mntmLoadFromFile = new JMenuItem("Load from file");
+		mntmLoadFromFile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				configFull = fileManager.load_all();
+			}
+		});
 		mnLoad.add(mntmLoadFromFile);
 		
 		JMenuItem mntmSaveToFile = new JMenuItem("Save to file");
