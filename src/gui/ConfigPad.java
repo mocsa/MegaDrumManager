@@ -68,6 +68,16 @@ public class ConfigPad {
 		pressrollNote_linked = source.pressrollNote_linked;
 	}
 	
+	public void copyFromConfigFull(ConfigFull config, int pad_id) {
+		altNote_linked = config.altNote_linked[pad_id];
+		pressrollNote_linked = config.pressrollNote_linked[pad_id];
+	}
+	
+	public void copyToConfigFull(ConfigFull config, int pad_id) {
+		config.altNote_linked[pad_id] = altNote_linked;
+		config.pressrollNote_linked[pad_id] = pressrollNote_linked;
+	}
+
 	public byte [] getSysex(int chain_id, int pad_id) {
 		int i = 0;
 

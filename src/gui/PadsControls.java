@@ -307,8 +307,8 @@ public class PadsControls extends JPanel {
 			head_str = getPadName(0);
 			padString = ((Integer)(1)).toString() + "(" + head_str + ")";			
 		}
-		comboBox_padSelection.removeItemAt(index);
 		comboBox_padSelection.insertItemAt(padString, index);
+		comboBox_padSelection.removeItemAt(index+1);
 	}
 
 	private void switch_to_pad(int pad_id) {
@@ -349,8 +349,10 @@ public class PadsControls extends JPanel {
 
 	public void copyToConfigFull (ConfigFull config, int chain_id) {
 		int i;
+		switch_to_pad(padPointer);
 		for (i = 0; i<Constants.PADS_COUNT; i++) {
 			config.sysex_pads[i] = configPads[i].getSysex(chain_id, i);
+			configPads[i].copyToConfigFull(config, i);
 		}
 		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
 			config.sysex_3rds[i] = config3rds[i].getSysex(chain_id, i);
@@ -361,6 +363,7 @@ public class PadsControls extends JPanel {
 		int i;
 		for (i = 0; i<Constants.PADS_COUNT; i++) {
 			configPads[i].setFromSysex(config.sysex_pads[i]);
+			configPads[i].copyFromConfigFull(config, i);
 		}
 		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
 			config3rds[i].setFromSysex(config.sysex_3rds[i]);
