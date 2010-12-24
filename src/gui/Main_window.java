@@ -69,6 +69,7 @@ public class Main_window {
 	private PadsControls padsControls;
 	private ConfigFull configFull;
 	private FileManager fileManager;
+	private int chainId;
 
 	/**
 	 * Launch the application.
@@ -123,10 +124,12 @@ public class Main_window {
 		frmMegadrummanager.setBounds(100, 100, 971, 656);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		chainId = 0;
 		configFull = new ConfigFull();
 		fileManager = new FileManager(frmMegadrummanager);
 		dialog_options = new Options();
 		midi_handler = new Midi_handler();
+		midi_handler.config_chain_id = chainId;
 		timer_midi = new Timer();
 		timer_midi.scheduleAtFixedRate(
 				new TimerTask() {
@@ -171,6 +174,9 @@ public class Main_window {
 		mntmLoadFromFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				configFull = fileManager.load_all();
+				miscControls.loadFromConfigFull(configFull);
+				pedalControls.loadFromConfigFull(configFull);
+				padsControls.loadFromConfigFull(configFull);
 			}
 		});
 		mnLoad.add(mntmLoadFromFile);
@@ -178,6 +184,9 @@ public class Main_window {
 		JMenuItem mntmSaveToFile = new JMenuItem("Save to file");
 		mntmSaveToFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				miscControls.copyToConfigFull(configFull, chainId);
+				pedalControls.copyToConfigFull(configFull, chainId);
+				padsControls.copyToConfigFull(configFull, chainId);
 				fileManager.save_all(configFull);
 			}
 		});

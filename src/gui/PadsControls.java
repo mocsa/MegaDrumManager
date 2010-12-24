@@ -55,14 +55,14 @@ public class PadsControls extends JPanel {
         	configPads[i] = new ConfigPad();
         }
         padPointer = 0;
-        prevPadPointer = 1;
+        prevPadPointer = -1;
 
 		config3rds = new Config3rd[(Constants.PADS_COUNT - 1)/2];
         for(int i=0; i<((Constants.PADS_COUNT - 1)/2); i++){
         	config3rds[i] = new Config3rd();
         }
         thirdPointer = 0;
-        prevThirdPointer = 0;
+        prevThirdPointer = -1;
         
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("max(62dlu;default):grow"),},
@@ -301,7 +301,9 @@ public class PadsControls extends JPanel {
 	private void switch_to_pad(int pad_id) {
 		int comboBox_pointer = 0;
 		
-		configPads[prevPadPointer].copyVarsFrom(panel_head.getConfig());
+		if (prevPadPointer >= 0) {
+			configPads[prevPadPointer].copyVarsFrom(panel_head.getConfig());			
+		}
 
 		if (prevPadPointer > 0 ) {
 			configPads[prevPadPointer+1].copyVarsFrom(panel_rim.getConfig());
@@ -320,7 +322,9 @@ public class PadsControls extends JPanel {
 			panel_rim.setVisible(false);
 			panel_3rd_zone.setVisible(false);
 		}
-		updatePadsSelection(prevPadPointer);
+		if (prevPadPointer >= 0) {
+			updatePadsSelection(prevPadPointer);
+		}
 		prevPadPointer = padPointer;
 		prevThirdPointer = thirdPointer;
 		panel_head.setConfig(configPads[padPointer], head_pad, padPointer);
@@ -329,5 +333,27 @@ public class PadsControls extends JPanel {
 			//comboBox_padSelection.setSelectedIndex(comboBox_pointer);
 		}
 	}
+
+	public void copyToConfigFull (ConfigFull config, int chain_id) {
+		int i;
+		for (i = 0; i<Constants.PADS_COUNT; i++) {
+			config.sysex_pads[i] = configPads[i].getSysex(chain_id, i);
+		}
+		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
+			config.sysex_3rds[i] = config3rds[i].getSysex(chain_id, i);
+		}
+	}
 	
+	public void loadFromConfigFull (ConfigFull config) {
+		int i;
+		for (i = 0; i<Constants.PADS_COUNT; i++) {
+			configPads[i].setFromSysex(config.sysex_pads[i]);
+		}
+		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
+			config3rds[i].setFromSysex(config.sysex_3rds[i]);
+		}
+		prevPadPointer = -1;
+		switch_to_pad(padPointer);
+	}
+
 }

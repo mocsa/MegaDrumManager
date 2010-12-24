@@ -588,4 +588,14 @@ public class PedalControls extends JPanel {
 	public JButton getBtnSend() {
 		return btnSend;
 	}
+	
+	public void copyToConfigFull (ConfigFull config, int chain_id) {
+		config.sysex_pedal = configPedal.getSysex(chain_id);
+	}
+	
+	public void loadFromConfigFull (ConfigFull config) {
+		configPedal.setFromSysex(config.sysex_pedal);
+		updateControls();
+	}
+
 }

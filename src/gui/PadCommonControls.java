@@ -119,7 +119,7 @@ public class PadCommonControls extends JPanel {
 		add(lblCurve, "1, 5, right, center");
 		
 		spinner_channel = new JSpinner();
-		spinner_channel.setModel(new SpinnerNumberModel(10, 1, 16, 1));
+		spinner_channel.setModel(new SpinnerNumberModel(1, 1, 16, 1));
 		add(spinner_channel, "3, 5, left, center");
 		
 		JLabel lblSpecialFunction = new JLabel("Special Function");
@@ -190,7 +190,7 @@ public class PadCommonControls extends JPanel {
 		add(lblThreshold, "1, 12, right, center");
 		
 		spinner_threshold = new JSpinner();
-		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 30), null, new Short((short) 127), new Short((short) 1)));
+		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_threshold, "3, 12, left, center");
 		
 		JLabel lblGain = new JLabel("Gain");
@@ -268,7 +268,7 @@ public class PadCommonControls extends JPanel {
 		add(lblMinscan, "1, 19, right, center");
 		
 		spinner_minScan = new JSpinner();
-		spinner_minScan.setModel(new SpinnerNumberModel(new Short((short) 20), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
+		spinner_minScan.setModel(new SpinnerNumberModel(new Short((short) 10), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
 		add(spinner_minScan, "3, 19, left, center");
 		
 		JLabel lblType = new JLabel("Type");
