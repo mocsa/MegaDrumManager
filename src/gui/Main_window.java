@@ -307,11 +307,10 @@ public class Main_window {
 		panel_misc.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),}));
 		
 		miscControls = new MiscControls();
-		panel_misc.add(miscControls, "1, 2");
+		panel_misc.add(miscControls, "1, 1");
 		miscControls.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				midi_handler.clear_midi_input();

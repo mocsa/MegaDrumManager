@@ -45,12 +45,29 @@ public class MiscControls extends JPanel {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("max(89dlu;default):grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				RowSpec.decode("1dlu"),
-				RowSpec.decode("max(8dlu;default)"),}));
+				RowSpec.decode("top:12dlu"),
+				RowSpec.decode("default:grow"),
+				RowSpec.decode("1dlu"),}));
+		
+		JPanel panel_buttons = new JPanel();
+		add(panel_buttons, "1, 1, fill, fill");
+		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("50px"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("57px"),},
+			new RowSpec[] {
+				RowSpec.decode("12dlu"),}));
+		
+		btnGet = new JButton("Get");
+		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnGet, "1, 1, fill, fill");
+		
+		btnSend = new JButton("Send");
+		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnSend, "3, 1, fill, fill");
 		
 		JPanel panel = new JPanel();
-		add(panel, "1, 1, fill, fill");
+		add(panel, "1, 2, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:56dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -160,18 +177,6 @@ public class MiscControls extends JPanel {
 				configMisc.all_gains_low = checkBox_allGainsLow.isSelected();			}
 		});
 		panel.add(checkBox_allGainsLow, "3, 8");
-		
-		JPanel panel_buttons = new JPanel();
-		add(panel_buttons, "1, 3, fill, fill");
-		panel_buttons.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		
-		btnGet = new JButton("Get");
-		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnGet);
-		
-		btnSend = new JButton("Send");
-		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnSend);
 
 	}
 	
