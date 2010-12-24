@@ -71,16 +71,31 @@ public class PedalControls extends JPanel {
 		JPanel panel = new JPanel();
 		add(panel);
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("220px"),},
+				ColumnSpec.decode("206px:grow"),},
 			new RowSpec[] {
-				FormFactory.LINE_GAP_ROWSPEC,
-				RowSpec.decode("310px"),
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("max(20dlu;default)"),}));
+				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("310px"),}));
+		
+		JPanel panel_buttons = new JPanel();
+		panel.add(panel_buttons, "1, 1, fill, fill");
+		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("47px"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("55px"),
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				RowSpec.decode("12dlu"),}));
+		
+		btnGet = new JButton("Get");
+		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnGet, "1, 1, left, top");
+		
+		btnSend = new JButton("Send");
+		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnSend, "3, 1, left, top");
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		panel.add(tabbedPane, "2, 2, left, top");
+		panel.add(tabbedPane, "1, 2, left, top");
 		
 		JPanel panel_misc = new JPanel();
 		tabbedPane.addTab("Misc", null, panel_misc, null);
@@ -526,17 +541,6 @@ public class PedalControls extends JPanel {
 			}
 		});
 		panel_notes.add(noteSpinControl_splash, "3, 14, left, center");
-		
-		JPanel panel_buttons = new JPanel();
-		panel.add(panel_buttons, "2, 4, fill, fill");
-		
-		btnGet = new JButton("Get");
-		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnGet);
-		
-		btnSend = new JButton("Send");
-		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnSend);
 
 	}
 	private void updateControls() {

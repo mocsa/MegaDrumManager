@@ -68,12 +68,44 @@ public class PadsControls extends JPanel {
 				ColumnSpec.decode("max(62dlu;default):grow"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),
+				RowSpec.decode("1dlu"),
+				RowSpec.decode("12dlu"),
 				RowSpec.decode("max(256dlu;default)"),
-				RowSpec.decode("66dlu"),
-				FormFactory.DEFAULT_ROWSPEC,}));
+				RowSpec.decode("max(3dlu;min):grow"),}));
+		
+		JPanel panel_buttons = new JPanel();
+		add(panel_buttons, "1, 1, fill, fill");
+		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("50px"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("57px"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("67px"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("65px"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("default:grow"),},
+			new RowSpec[] {
+				RowSpec.decode("12dlu"),}));
+		
+		btnGet = new JButton("Get");
+		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnGet, "1, 1, fill, fill");
+		
+		btnSend = new JButton("Send");
+		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnSend, "3, 1, fill, fill");
+		
+		JButton btnGetall = new JButton("GetAll");
+		btnGetall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnGetall, "5, 1, fill, fill");
+		
+		JButton btnSendall = new JButton("SendAll");
+		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnSendall, "7, 1, fill, fill");
 		
 		JPanel panel_input_selection = new JPanel();
-		add(panel_input_selection, "1, 1, fill, fill");
+		add(panel_input_selection, "1, 3, fill, fill");
 		panel_input_selection.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -120,7 +152,7 @@ public class PadsControls extends JPanel {
 			}
 		});
 		comboBox_padSelection.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_input_selection.add(comboBox_padSelection, "4, 1, fill, default");
+		panel_input_selection.add(comboBox_padSelection, "4, 1, fill, fill");
 		
 		btnFirst = new JButton("first");
 		btnFirst.addActionListener(new ActionListener() {
@@ -159,7 +191,7 @@ public class PadsControls extends JPanel {
 		panel_input_selection.add(btnLast, "12, 1");
 		
 		JPanel panel_head_rim = new JPanel();
-		add(panel_head_rim, "1, 2, fill, fill");
+		add(panel_head_rim, "1, 4, fill, fill");
 		panel_head_rim.setLayout(new GridLayout(1, 2, 0, 0));
 		
 		panel_head = new PadCommonControls();
@@ -173,27 +205,8 @@ public class PadsControls extends JPanel {
 		
 		panel_3rd_zone = new ThirdZoneControls();
 		panel_3rd_zone.setVisible(false);
-		add(panel_3rd_zone, "1, 3");
+		add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		
-		JPanel panel_buttons = new JPanel();
-		add(panel_buttons, "1, 4, fill, fill");
-		
-		btnGet = new JButton("Get");
-		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnGet);
-		
-		btnSend = new JButton("Send");
-		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnSend);
-		
-		JButton btnGetall = new JButton("GetAll");
-		btnGetall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnGetall);
-		
-		JButton btnSendall = new JButton("SendAll");
-		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_buttons.add(btnSendall);
 
 		panel_head.setConfig(configPads[0], head_pad, 0);
 		switch_to_pad(0);
