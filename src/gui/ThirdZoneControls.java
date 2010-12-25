@@ -25,6 +25,8 @@ public class ThirdZoneControls extends JPanel {
 	private JSlider slider_midPoint;
 
 	private Config3rd config3rd;
+	private boolean inUpdate = false;
+	private boolean allInitialized = false;
 
 	/**
 	 * Create the panel.
@@ -60,7 +62,7 @@ public class ThirdZoneControls extends JPanel {
 		slider_midPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				config3rd.threshold = (short)((config3rd.threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4));
-				//updateControls();
+				updateControls();
 			}
 		});
 		slider_midPoint.setPaintLabels(true);
@@ -85,8 +87,8 @@ public class ThirdZoneControls extends JPanel {
 		spinner_midPointWidth = new JSpinner();
 		spinner_midPointWidth.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				config3rd.threshold = (short)((config3rd.threshold&0xf0)|((((Integer)spinner_midPointWidth.getValue())&0x0f)));
-				//updateControls();
+				config3rd.threshold = (short)((config3rd.threshold&0xf0)|((Short)spinner_midPointWidth.getValue()&0x0f));
+				updateControls();
 			}
 		});
 		spinner_midPointWidth.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 15), new Short((short) 1)));
@@ -106,11 +108,11 @@ public class ThirdZoneControls extends JPanel {
 		spinner_threshold = new JSpinner();
 		spinner_threshold.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				config3rd.threshold = (Short)spinner_threshold.getValue();
-				//updateControls();
+				config3rd.threshold = (short)(Short)(spinner_threshold.getValue());
+				updateControls();
 		}
 		});
-		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
+		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 255), new Short((short) 1)));
 		add(spinner_threshold, "7, 3, left, fill");
 		
 		JLabel lblDampenedNote = new JLabel("Dampened Note");
@@ -119,16 +121,24 @@ public class ThirdZoneControls extends JPanel {
 		
 		noteSpinControl_dampenedNote = new NoteSpinControl();
 		add(noteSpinControl_dampenedNote, "3, 4, fill, fill");
-
+		
+		allInitialized = true;
 	}
+	
 	private void updateControls() {
-		noteSpinControl_note.getSpinner().setValue(config3rd.note);
-		noteSpinControl_altNote.getSpinner().setValue(config3rd.altNote);
-		noteSpinControl_pressrollNote.getSpinner().setValue(config3rd.pressrollNote);
-		noteSpinControl_dampenedNote.getSpinner().setValue(config3rd.dampenedNote);
-		spinner_threshold.setValue(config3rd.threshold);
-		spinner_midPointWidth.setValue(config3rd.threshold&0x0f);
-		slider_midPoint.setValue((config3rd.threshold&0xf0)>>4);
+		if (allInitialized) {
+			if (!inUpdate) {
+				inUpdate = true;
+				noteSpinControl_note.getSpinner().setValue(config3rd.note);
+				noteSpinControl_altNote.getSpinner().setValue(config3rd.altNote);
+				noteSpinControl_pressrollNote.getSpinner().setValue(config3rd.pressrollNote);
+				noteSpinControl_dampenedNote.getSpinner().setValue(config3rd.dampenedNote);
+				spinner_threshold.setValue(config3rd.threshold);
+				spinner_midPointWidth.setValue((short)(config3rd.threshold&0x0f));
+				slider_midPoint.setValue((short)((config3rd.threshold&0xf0)>>4));
+				inUpdate = false;
+			}
+		}
 	}
 	
 	private void updateConfig() {
@@ -138,6 +148,12 @@ public class ThirdZoneControls extends JPanel {
 		config3rd.dampenedNote = ((Short)noteSpinControl_dampenedNote.getSpinner().getValue()).shortValue();
 		config3rd.threshold = (Short)spinner_threshold.getValue();
 		//config3rd.threshold = (short)((Integer)spinner_threshold.getValue()).shortValue();
+	}
+	
+	public void setAsSwitch(boolean switch_pad) {
+		spinner_threshold.setEnabled(switch_pad);
+		spinner_midPointWidth.setEnabled(!switch_pad);
+		slider_midPoint.setEnabled(!switch_pad);
 	}
 	
 	public void setConfig(Config3rd config) {

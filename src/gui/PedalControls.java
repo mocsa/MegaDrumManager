@@ -79,9 +79,9 @@ public class PedalControls extends JPanel {
 		JPanel panel_buttons = new JPanel();
 		panel.add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("28dlu"),
+				ColumnSpec.decode("32dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("28dlu"),},
+				ColumnSpec.decode("34dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("fill:12dlu"),}));
 		

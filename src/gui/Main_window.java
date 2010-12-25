@@ -121,7 +121,7 @@ public class Main_window {
 		});
 		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.setTitle("MegaDrumManager");
-		frmMegadrummanager.setBounds(100, 100, 971, 656);
+		frmMegadrummanager.setBounds(100, 100, 929, 705);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		chainId = 0;
@@ -173,10 +173,7 @@ public class Main_window {
 		JMenuItem mntmLoadFromFile = new JMenuItem("Load from file");
 		mntmLoadFromFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				configFull = fileManager.load_all();
-				miscControls.loadFromConfigFull(configFull);
-				pedalControls.loadFromConfigFull(configFull);
-				padsControls.loadFromConfigFull(configFull);
+				load_all();
 			}
 		});
 		mnLoad.add(mntmLoadFromFile);
@@ -184,10 +181,7 @@ public class Main_window {
 		JMenuItem mntmSaveToFile = new JMenuItem("Save to file");
 		mntmSaveToFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				miscControls.copyToConfigFull(configFull, chainId);
-				pedalControls.copyToConfigFull(configFull, chainId);
-				padsControls.copyToConfigFull(configFull, chainId);
-				fileManager.save_all(configFull);
+				save_all();
 			}
 		});
 		mnLoad.add(mntmSaveToFile);
@@ -275,42 +269,18 @@ public class Main_window {
 		});
 		mnMain.add(mntmExit);
 		
-		JPanel panel_pedal = new JPanel();
-		panel_pedal.setBorder(new TitledBorder(null, "HiHat Pedal/Controller", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		
-		JPanel panel_pads = new JPanel();
-		panel_pads.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		
-		JPanel panel_misc = new JPanel();
-		panel_misc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		GroupLayout groupLayout = new GroupLayout(frmMegadrummanager.getContentPane());
-		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(7)
-					.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 226, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(panel_pads, GroupLayout.PREFERRED_SIZE, 502, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(64, Short.MAX_VALUE))
-		);
-		groupLayout.setVerticalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(panel_pedal, GroupLayout.PREFERRED_SIZE, 355, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_misc, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(panel_pads, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
-		);
-		panel_misc.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("default:grow"),},
+		JPanel panel_main = new JPanel();
+		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("default:grow"),}));
+				FormFactory.LINE_GAP_ROWSPEC,
+				RowSpec.decode("fill:498px:grow"),}));
 		
 		miscControls = new MiscControls();
-		panel_misc.add(miscControls, "1, 1");
+		miscControls.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_main.add(miscControls, "1, 2, default, top");
 		miscControls.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				midi_handler.clear_midi_input();
@@ -324,17 +294,25 @@ public class Main_window {
 			}
 		});
 		
-		panel_pads.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("default:grow"),},
-			new RowSpec[] {
-				RowSpec.decode("default:grow"),}));
+				pedalControls = new PedalControls();
+				pedalControls.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				panel_main.add(pedalControls, "2, 2, default, top");
+				pedalControls.getBtnGet().addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						midi_handler.clear_midi_input();
+						midi_handler.request_config_pedal();				
+					}
+				});
+				pedalControls.getBtnSend().addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						midi_handler.config_pedal = pedalControls.getConfig();
+						midi_handler.send_config_pedal();
+					}
+				});
 		
 		padsControls = new PadsControls();
-		panel_pads.add(padsControls, "1, 1");
-		panel_pedal.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("default:grow"),},
-			new RowSpec[] {
-				RowSpec.decode("max(203dlu;default):grow"),}));
+		padsControls.setBorder(new TitledBorder(null, "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_main.add(padsControls, "3, 2, default, top");
 		padsControls.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int index;
@@ -380,24 +358,64 @@ public class Main_window {
 				}
 			}
 		});
-
-		pedalControls = new PedalControls();
-		panel_pedal.add(pedalControls, "1, 1, fill, fill");
-		pedalControls.getBtnGet().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.clear_midi_input();
-				midi_handler.request_config_pedal();				
-			}
-		});
-		pedalControls.getBtnSend().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.config_pedal = pedalControls.getConfig();
-				midi_handler.send_config_pedal();
-			}
-		});
-
-		frmMegadrummanager.getContentPane().setLayout(groupLayout);
+		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("757px:grow"),},
+			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("1dlu"),
+				RowSpec.decode("417px:grow"),}));
 		
+		JPanel panel = new JPanel();
+		frmMegadrummanager.getContentPane().add(panel, "1, 1, fill, fill");
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
+			new RowSpec[] {
+				RowSpec.decode("12dlu"),}));
+		
+		JButton btnGetAll = new JButton("Get All");
+		panel.add(btnGetAll, "2, 1");
+		
+		JButton btnSendAll = new JButton("Send All");
+		panel.add(btnSendAll, "4, 1");
+		
+		JButton btnLoadAll = new JButton("Load All");
+		btnLoadAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				load_all();
+			}
+		});
+		panel.add(btnLoadAll, "6, 1");
+		
+		JButton btnSaveAll = new JButton("Save All");
+		btnSaveAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				save_all();
+			}
+		});
+		panel.add(btnSaveAll, "8, 1");
+		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
+		
+	}
+	
+	public void load_all() {
+		configFull = fileManager.load_all();
+		miscControls.loadFromConfigFull(configFull);
+		pedalControls.loadFromConfigFull(configFull);
+		padsControls.loadFromConfigFull(configFull);		
+	}
+	
+	public void save_all() {
+		miscControls.copyToConfigFull(configFull, chainId);
+		pedalControls.copyToConfigFull(configFull, chainId);
+		padsControls.copyToConfigFull(configFull, chainId);
+		fileManager.save_all(configFull);
 	}
 	
 }

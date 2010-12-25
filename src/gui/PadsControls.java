@@ -76,32 +76,32 @@ public class PadsControls extends JPanel {
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("50px"),
+				ColumnSpec.decode("42dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("57px"),
+				ColumnSpec.decode("42dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("67px"),
+				ColumnSpec.decode("42dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("65px"),
+				ColumnSpec.decode("42dlu"),
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
 		
 		btnGet = new JButton("Get");
-		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnGet, "1, 1, fill, fill");
 		
 		btnSend = new JButton("Send");
-		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnSend, "3, 1, fill, fill");
 		
 		JButton btnGetall = new JButton("GetAll");
-		btnGetall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		btnGetall.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnGetall, "5, 1, fill, fill");
 		
 		JButton btnSendall = new JButton("SendAll");
-		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnSendall, "7, 1, fill, fill");
 		
 		JPanel panel_input_selection = new JPanel();
@@ -195,10 +195,25 @@ public class PadsControls extends JPanel {
 		panel_head_rim.setLayout(new GridLayout(1, 2, 0, 0));
 		
 		panel_head = new PadCommonControls();
+		panel_head.getComboBox_type().addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
+					panel_rim.getComboBox_type().setEnabled(panel_head.getComboBox_type().getSelectedIndex() > 0);
+		        }
+			}
+		});
 		panel_head_rim.add(panel_head);
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		panel_rim = new PadCommonControls();
+		panel_rim.getComboBox_type().addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					panel_3rd_zone.setAsSwitch(panel_rim.getComboBox_type().getSelectedIndex() > 0);
+		        }
+			}
+		});
 		panel_rim.setVisible(false);
 		panel_head_rim.add(panel_rim);
 		panel_rim.setBorder(new TitledBorder(null, "Rim/Edge", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -253,7 +268,7 @@ public class PadsControls extends JPanel {
 				panel_head.setConfig(config, head_pad, pad_id);				
 			}
 			if (pad_id == (padPointer + 1)) {
-				panel_rim.setConfig(config, rim_pad, pad_id);				
+				panel_rim.setConfig(config, rim_pad, pad_id);
 			}
 		} else {
 			if (pad_id == padPointer) {
@@ -329,6 +344,7 @@ public class PadsControls extends JPanel {
 			panel_3rd_zone.setVisible(true);
 			panel_rim.setConfig(configPads[padPointer+1], rim_pad, padPointer+1);
 			panel_3rd_zone.setConfig(config3rds[thirdPointer]);
+			panel_3rd_zone.setAsSwitch(configPads[padPointer+1].type);
 			comboBox_pointer = ((pad_id - 1)>>1) + 1;
 		} else {
 			padPointer = 0;
@@ -342,6 +358,8 @@ public class PadsControls extends JPanel {
 		prevThirdPointer = thirdPointer;
 		panel_head.setConfig(configPads[padPointer], head_pad, padPointer);
 		panel_head.getComboBox_type().setEnabled((padPointer != 0));
+		panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
+		panel_rim.getComboBox_type().setEnabled(panel_head.getComboBox_type().getSelectedIndex() > 0);
 		if (comboBox_pointer != prevPadSelection ) {
 			//comboBox_padSelection.setSelectedIndex(comboBox_pointer);
 		}
