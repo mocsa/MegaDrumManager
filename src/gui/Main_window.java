@@ -338,14 +338,12 @@ public class Main_window {
 		panel_main.add(miscControls, "1, 2, default, top");
 		miscControls.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.clear_midi_input();
-				midi_handler.request_config_misc();				
+				getMisc();
 			}
 		});
 		miscControls.getBtnSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.config_misc = miscControls.getConfig();
-				midi_handler.send_config_misc();
+				sendMisc();
 			}
 		});
 		
@@ -354,14 +352,12 @@ public class Main_window {
 				panel_main.add(pedalControls, "2, 2, default, top");
 				pedalControls.getBtnGet().addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						midi_handler.clear_midi_input();
-						midi_handler.request_config_pedal();				
+						getPedal();
 					}
 				});
 				pedalControls.getBtnSend().addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						midi_handler.config_pedal = pedalControls.getConfig();
-						midi_handler.send_config_pedal();
+						sendPedal();
 					}
 				});
 		
@@ -383,25 +379,7 @@ public class Main_window {
 				int index;
 				midi_handler.clear_midi_input();
 				index = padsControls.getPadPointer();
-				if (index > 0 ) {
-					midi_handler.request_config_pad(index + 1);
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					midi_handler.request_config_pad(index + 2);
-					try {
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					midi_handler.request_config_3rd((index - 1)/2);
-				} else {
-					midi_handler.request_config_pad(1);
-				}
+				getPad(index);
 			}
 		});
 		padsControls.getBtnSend().addActionListener(new ActionListener() {
@@ -409,18 +387,7 @@ public class Main_window {
 				int index;
 				midi_handler.clear_midi_input();
 				index = padsControls.getPadPointer();
-				if (index > 0 ) {
-					midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(index));
-					midi_handler.send_config_pad(index + 1);
-					midi_handler.config_pad .copyVarsFrom(padsControls.getConfig(index+1));
-					midi_handler.send_config_pad(index + 2);
-					index = (index - 1)/2;
-					midi_handler.config_3rd .copyVarsFrom(padsControls.getConfig3rd(index));
-					midi_handler.send_config_3rd(index);
-				} else {
-					midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(0));
-					midi_handler.send_config_pad(1);
-				}
+				sendPad(index);
 			}
 		});
 		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
@@ -447,11 +414,17 @@ public class Main_window {
 		JButton btnGetAll = new JButton("Get All");
 		btnGetAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				getAll();
 			}
 		});
 		panel.add(btnGetAll, "2, 1");
 		
 		JButton btnSendAll = new JButton("Send All");
+		btnSendAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendAll();
+			}
+		});
 		panel.add(btnSendAll, "4, 1");
 		
 		JButton btnLoadAll = new JButton("Load All");
@@ -473,52 +446,98 @@ public class Main_window {
 		
 	}
 	
+	private void delayMs(int delay) {
+		try {
+			Thread.sleep(delay);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void getPedal() {
+		midi_handler.clear_midi_input();
+		midi_handler.request_config_pedal();
+		delayMs(30);
+	}
+	
+	private void sendPedal() {
+		midi_handler.config_pedal = pedalControls.getConfig();
+		midi_handler.send_config_pedal();
+		delayMs(30);
+	}
+	
+	private void getMisc() {
+		midi_handler.clear_midi_input();
+		midi_handler.request_config_misc();					
+		delayMs(30);
+	}
+	
+	private void sendMisc() {
+		midi_handler.config_misc = miscControls.getConfig();
+		midi_handler.send_config_misc();	
+		delayMs(30);
+	}
+	
+	private void getPad(int pad_id) {
+		if ( pad_id > 0 ) {
+			midi_handler.request_config_pad(pad_id + 1);
+			delayMs(30);
+			midi_handler.request_config_pad(pad_id + 2);
+			delayMs(30);
+			midi_handler.request_config_3rd((pad_id - 1)/2);
+			delayMs(30);
+		} else {
+			midi_handler.request_config_pad(1);
+			delayMs(30);
+		}
+	}
+	
+	private void sendPad(int pad_id) {
+		if (pad_id > 0 ) {
+			midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(pad_id));
+			midi_handler.send_config_pad(pad_id + 1);
+			delayMs(30);
+			midi_handler.config_pad .copyVarsFrom(padsControls.getConfig(pad_id+1));
+			midi_handler.send_config_pad(pad_id + 2);
+			delayMs(30);
+			pad_id = (pad_id - 1)/2;
+			midi_handler.config_3rd .copyVarsFrom(padsControls.getConfig3rd(pad_id));
+			midi_handler.send_config_3rd(pad_id);
+			delayMs(30);
+		} else {
+			midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(0));
+			midi_handler.send_config_pad(1);
+			delayMs(30);
+		}
+		
+	}
+	
 	private void getAllPads() {
 		int i;
 		for (i = 0; i<Constants.PADS_COUNT;i++) {
-			midi_handler.request_config_pad(i + 1);
-			try {
-				Thread.sleep(30);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if ((i&0x01)>0) {
-				midi_handler.request_config_3rd(i>>1);				
-				try {
-					Thread.sleep(30);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			getPad(i);
 		}
 	}
 	
 	private void sendAllPads() {
 		int i;
 		for (i = 0; i<Constants.PADS_COUNT;i++) {
-			midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(i));
-			midi_handler.send_config_pad(i + 1);
-			try {
-				Thread.sleep(30);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if ((i&0x01)>0) {
-				midi_handler.config_3rd .copyVarsFrom(padsControls.getConfig3rd(i>>1));
-				midi_handler.send_config_3rd(i>>1);
-				try {
-					Thread.sleep(30);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+			sendPad(i);
 		}
 	}
 	
+	private void getAll() {
+		getMisc();
+		getPedal();
+		getAllPads();
+	}
+	
+	private void sendAll() {
+		sendMisc();
+		sendPedal();
+		sendAllPads();
+	}
 
 	private void load_all() {
 		configFull = fileManager.load_all();
