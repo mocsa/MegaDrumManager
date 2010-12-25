@@ -340,7 +340,7 @@ public class PadCommonControls extends JPanel {
 		//comboBox_type.setSelectedIndex(configPad.type?1:0);
 		comboBox_type.removeAllItems();
 		if (head_rim_pad == head_pad) {
-			comboBox_type.addItem("Single");
+			comboBox_type.addItem("Single Piezo");
 			comboBox_type.addItem("Dual or 3way Ymaha");
 			comboBox_type.addItem("3way Roland");
 			if (configPad.dual) {
