@@ -45,6 +45,8 @@ public class PadsControls extends JPanel {
 	//private boolean head_pad_type;
 	private static final boolean head_pad = true;
 	private static final boolean rim_pad = false;
+	private JButton btnGetall;
+	private JButton btnSendall;
 
 	/**
 	 * Create the panel.
@@ -96,11 +98,11 @@ public class PadsControls extends JPanel {
 		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnSend, "3, 1, fill, fill");
 		
-		JButton btnGetall = new JButton("GetAll");
+		btnGetall = new JButton("GetAll");
 		btnGetall.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnGetall, "5, 1, fill, fill");
 		
-		JButton btnSendall = new JButton("SendAll");
+		btnSendall = new JButton("SendAll");
 		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnSendall, "7, 1, fill, fill");
 		
@@ -390,4 +392,10 @@ public class PadsControls extends JPanel {
 		switch_to_pad(padPointer);
 	}
 
+	public JButton getBtnGetall() {
+		return btnGetall;
+	}
+	public JButton getBtnSendall() {
+		return btnSendall;
+	}
 }

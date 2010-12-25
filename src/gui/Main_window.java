@@ -57,6 +57,8 @@ import java.awt.Insets;
 import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.SpringLayout;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class Main_window {
 
@@ -70,6 +72,11 @@ public class Main_window {
 	private ConfigFull configFull;
 	private FileManager fileManager;
 	private int chainId;
+	private JCheckBox chckbxShowMisc;
+	private JCheckBox chckbxShowHihatPedal;
+	private JCheckBox chckbxShowPads;
+	private JMenuItem menuItem;
+	private JMenu mnView;
 
 	/**
 	 * Launch the application.
@@ -113,15 +120,16 @@ public class Main_window {
 	 */
 	private void initialize() {
 		frmMegadrummanager = new JFrame();
+		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				midi_handler.Close_all_ports();
 			}
 		});
-		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.setTitle("MegaDrumManager");
 		frmMegadrummanager.setBounds(100, 100, 929, 705);
+		frmMegadrummanager.setLocation(10, 10);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		chainId = 0;
@@ -269,6 +277,53 @@ public class Main_window {
 		});
 		mnMain.add(mntmExit);
 		
+		mnView = new JMenu("View");
+		menuBar.add(mnView);
+		
+		chckbxShowMisc = new JCheckBox("Show Misc");
+		chckbxShowMisc.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (miscControls != null) {
+					miscControls.setVisible(chckbxShowMisc.isSelected());
+				}
+			}
+		});
+		chckbxShowMisc.setSelected(true);
+		mnView.add(chckbxShowMisc);
+		
+		chckbxShowHihatPedal = new JCheckBox("Show HiHat Pedal");
+		chckbxShowHihatPedal.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (pedalControls != null) {
+					pedalControls.setVisible(chckbxShowHihatPedal.isSelected());
+				}
+			}
+		});
+		chckbxShowHihatPedal.setSelected(true);
+		mnView.add(chckbxShowHihatPedal);
+		
+		chckbxShowPads = new JCheckBox("Show Pads");
+		chckbxShowPads.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (padsControls != null) {
+					padsControls.setVisible(chckbxShowPads.isSelected());
+				}
+			}
+		});
+		chckbxShowPads.setSelected(true);
+		mnView.add(chckbxShowPads);
+		
+//		menuItem = new JMenuItem("New menu item");
+//		menuItem.setSelected(true);
+//		menuItem.addItemListener(new ItemListener() {
+//			public void itemStateChanged(ItemEvent e) {
+//				if (miscControls != null) {
+//					miscControls.setVisible(menuItem.isSelected());
+//				}
+//			}
+//		});
+//		mnView.add(menuItem);
+		
 		JPanel panel_main = new JPanel();
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
@@ -311,6 +366,16 @@ public class Main_window {
 				});
 		
 		padsControls = new PadsControls();
+		padsControls.getBtnSendall().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendAllPads();
+			}
+		});
+		padsControls.getBtnGetall().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getAllPads();
+			}
+		});
 		padsControls.setBorder(new TitledBorder(null, "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_main.add(padsControls, "3, 2, default, top");
 		padsControls.getBtnGet().addActionListener(new ActionListener() {
@@ -380,6 +445,10 @@ public class Main_window {
 				RowSpec.decode("12dlu"),}));
 		
 		JButton btnGetAll = new JButton("Get All");
+		btnGetAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		panel.add(btnGetAll, "2, 1");
 		
 		JButton btnSendAll = new JButton("Send All");
@@ -404,14 +473,61 @@ public class Main_window {
 		
 	}
 	
-	public void load_all() {
+	private void getAllPads() {
+		int i;
+		for (i = 0; i<Constants.PADS_COUNT;i++) {
+			midi_handler.request_config_pad(i + 1);
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if ((i&0x01)>0) {
+				midi_handler.request_config_3rd(i>>1);				
+				try {
+					Thread.sleep(30);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	private void sendAllPads() {
+		int i;
+		for (i = 0; i<Constants.PADS_COUNT;i++) {
+			midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(i));
+			midi_handler.send_config_pad(i + 1);
+			try {
+				Thread.sleep(30);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if ((i&0x01)>0) {
+				midi_handler.config_3rd .copyVarsFrom(padsControls.getConfig3rd(i>>1));
+				midi_handler.send_config_3rd(i>>1);
+				try {
+					Thread.sleep(30);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+
+	private void load_all() {
 		configFull = fileManager.load_all();
 		miscControls.loadFromConfigFull(configFull);
 		pedalControls.loadFromConfigFull(configFull);
 		padsControls.loadFromConfigFull(configFull);		
 	}
 	
-	public void save_all() {
+	private void save_all() {
 		miscControls.copyToConfigFull(configFull, chainId);
 		pedalControls.copyToConfigFull(configFull, chainId);
 		padsControls.copyToConfigFull(configFull, chainId);
