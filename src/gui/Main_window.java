@@ -173,9 +173,19 @@ public class Main_window {
 		mnMain.add(mnLoad);
 		
 		JMenuItem mntmLoadFromMd = new JMenuItem("Load from MD");
+		mntmLoadFromMd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getAll();
+			}
+		});
 		mnLoad.add(mntmLoadFromMd);
 		
 		JMenuItem mntmSendToMd = new JMenuItem("Send to MD");
+		mntmSendToMd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendAll();
+			}
+		});
 		mnLoad.add(mntmSendToMd);
 		
 		JMenuItem mntmLoadFromFile = new JMenuItem("Load from file");
@@ -203,8 +213,7 @@ public class Main_window {
 		JMenuItem mntmLoadFromMd_1 = new JMenuItem("Load from MD");
 		mntmLoadFromMd_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.clear_midi_input();
-				midi_handler.request_config_misc();
+				getMisc();
 			}
 		});
 		mnMiscSettings.add(mntmLoadFromMd_1);
@@ -212,8 +221,7 @@ public class Main_window {
 		JMenuItem mntmSendToMd_1 = new JMenuItem("Send to MD");
 		mntmSendToMd_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.config_misc = miscControls.getConfig();
-				midi_handler.send_config_misc();
+				sendMisc();
 			}
 		});
 		mnMiscSettings.add(mntmSendToMd_1);
@@ -223,27 +231,57 @@ public class Main_window {
 		mnMain.add(mnHihatPedalSettings);
 		
 		JMenuItem mntmLoadFromMd_2 = new JMenuItem("Load from MD");
+		mntmLoadFromMd_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getPedal();
+			}
+		});
 		mnHihatPedalSettings.add(mntmLoadFromMd_2);
 		
 		JMenuItem mntmSendToMd_2 = new JMenuItem("Send to MD");
+		mntmSendToMd_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendPedal();
+			}
+		});
 		mnHihatPedalSettings.add(mntmSendToMd_2);
 		
 		JMenu mnAllPadsSettings = new JMenu("All pads settings");
 		mnMain.add(mnAllPadsSettings);
 		
 		JMenuItem mntmLoadFromMd_3 = new JMenuItem("Load from MD");
+		mntmLoadFromMd_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getAllPads();
+			}
+		});
 		mnAllPadsSettings.add(mntmLoadFromMd_3);
 		
 		JMenuItem mntmSendToMd_3 = new JMenuItem("Send to MD");
+		mntmSendToMd_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendAllPads();
+			}
+		});
 		mnAllPadsSettings.add(mntmSendToMd_3);
 		
 		JMenu mnSelectedPadSettings = new JMenu("Selected pad settings");
 		mnMain.add(mnSelectedPadSettings);
 		
 		JMenuItem mntmLoadFromMd_4 = new JMenuItem("Load from MD");
+		mntmLoadFromMd_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				getPad(padsControls.getPadPointer());
+			}
+		});
 		mnSelectedPadSettings.add(mntmLoadFromMd_4);
 		
 		JMenuItem mntmSendToMd_4 = new JMenuItem("Send to MD");
+		mntmSendToMd_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendPad(padsControls.getPadPointer());
+			}
+		});
 		mnSelectedPadSettings.add(mntmSendToMd_4);
 		
 		JMenu mnCustomCurves = new JMenu("Custom curves");
@@ -376,18 +414,12 @@ public class Main_window {
 		panel_main.add(padsControls, "3, 2, default, top");
 		padsControls.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int index;
-				midi_handler.clear_midi_input();
-				index = padsControls.getPadPointer();
-				getPad(index);
+				getPad(padsControls.getPadPointer());
 			}
 		});
 		padsControls.getBtnSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				int index;
-				midi_handler.clear_midi_input();
-				index = padsControls.getPadPointer();
-				sendPad(index);
+				sendPad(padsControls.getPadPointer());
 			}
 		});
 		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
@@ -480,6 +512,7 @@ public class Main_window {
 	}
 	
 	private void getPad(int pad_id) {
+		midi_handler.clear_midi_input();
 		if ( pad_id > 0 ) {
 			midi_handler.request_config_pad(pad_id + 1);
 			delayMs(30);
