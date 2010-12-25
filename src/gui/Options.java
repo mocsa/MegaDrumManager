@@ -26,13 +26,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.RowSpec;
+import com.jgoodies.forms.factories.FormFactory;
+import java.awt.Font;
 
 public class Options extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	
+	private JCheckBox chckbx_samePort;
 	public JComboBox comboBox_MIDI_In;
 	public JComboBox comboBox_MIDI_Out;
+	private JCheckBox checkBox_Thru;
+	public JComboBox comboBox_MIDI_Thru;
 	public int midi_port_out;
 	public int midi_port_in;
 	public boolean config_applied; 
@@ -49,45 +57,85 @@ public class Options extends JDialog {
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(null);
+		contentPanel.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("261px"),},
+			new RowSpec[] {
+				RowSpec.decode("135px"),}));
 		
 		JPanel panel_midi = new JPanel();
 		panel_midi.setBorder(new TitledBorder(null, "MIDI Ports", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_midi.setBounds(0, 0, 269, 144);
-		contentPanel.add(panel_midi);
-		panel_midi.setLayout(null);
+		contentPanel.add(panel_midi, "1, 1, fill, fill");
 		
 		comboBox_MIDI_Out = new JComboBox();
+		comboBox_MIDI_Out.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		comboBox_MIDI_Out.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				midi_port_out = comboBox_MIDI_Out.getSelectedIndex();
 			}
 		});
-		comboBox_MIDI_Out.setBounds(62, 73, 197, 20);
-		panel_midi.add(comboBox_MIDI_Out);
+		panel_midi.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("right:101px"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("left:144px"),},
+			new RowSpec[] {
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("fill:default"),}));
+		
+		JLabel lblUseSameInout = new JLabel("Use same In/Out");
+		lblUseSameInout.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(lblUseSameInout, "1, 1");
+		
+		chckbx_samePort = new JCheckBox("");
+		chckbx_samePort.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				comboBox_MIDI_Out.setEnabled(!chckbx_samePort.isSelected());
+			}
+		});
+		panel_midi.add(chckbx_samePort, "3, 1, default, fill");
+		chckbx_samePort.setHorizontalTextPosition(SwingConstants.LEADING);
+		chckbx_samePort.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		panel_midi.add(comboBox_MIDI_Out, "3, 3, fill, fill");
 		
 		comboBox_MIDI_In = new JComboBox();
+		comboBox_MIDI_In.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		comboBox_MIDI_In.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				midi_port_in = comboBox_MIDI_In.getSelectedIndex();
 			}
 		});
-		comboBox_MIDI_In.setBounds(62, 48, 197, 20);
-		panel_midi.add(comboBox_MIDI_In);
-		
-		JCheckBox chckbxUseSameInout = new JCheckBox("Use same In/Out port");
-		chckbxUseSameInout.setBounds(6, 18, 145, 23);
-		panel_midi.add(chckbxUseSameInout);
-		chckbxUseSameInout.setHorizontalTextPosition(SwingConstants.LEADING);
-		chckbxUseSameInout.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+		panel_midi.add(comboBox_MIDI_In, "3, 2, fill, fill");
 		
 		JLabel lblMidiIn = new JLabel("Midi In");
-		lblMidiIn.setBounds(6, 51, 46, 14);
-		panel_midi.add(lblMidiIn);
+		lblMidiIn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(lblMidiIn, "1, 2, default, center");
 		
 		JLabel lblMidiOut = new JLabel("Midi Out");
-		lblMidiOut.setBounds(6, 76, 46, 14);
-		panel_midi.add(lblMidiOut);
+		lblMidiOut.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(lblMidiOut, "1, 3, default, center");
+		
+		JLabel lblEnableMidiThru = new JLabel("Enable MIDI Thru");
+		lblEnableMidiThru.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(lblEnableMidiThru, "1, 4");
+		
+		checkBox_Thru = new JCheckBox("");
+		checkBox_Thru.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				comboBox_MIDI_Thru.setEnabled(checkBox_Thru.isSelected());
+			}
+		});
+		checkBox_Thru.setHorizontalTextPosition(SwingConstants.LEADING);
+		panel_midi.add(checkBox_Thru, "3, 4, default, fill");
+		
+		JLabel lblMidiThru = new JLabel("Midi Thru");
+		lblMidiThru.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(lblMidiThru, "1, 5, right, default");
+		
+		comboBox_MIDI_Thru = new JComboBox();
+		comboBox_MIDI_Thru.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		panel_midi.add(comboBox_MIDI_Thru, "3, 5, fill, fill");
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));

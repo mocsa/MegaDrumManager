@@ -83,6 +83,7 @@ public class MiscControls extends JPanel {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblNoteOffDelay = new JLabel("Note Off Delay");
+		lblNoteOffDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblNoteOffDelay, "1, 1");
 		
 		spinner_noteoff = new JSpinner();
@@ -100,6 +101,7 @@ public class MiscControls extends JPanel {
 		panel.add(spinner_noteoff, "3, 1");
 		
 		JLabel lblPressrollTimeout = new JLabel("Pressroll timeout");
+		lblPressrollTimeout.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblPressrollTimeout, "1, 2");
 		
 		spinner_pressroll = new JSpinner();
@@ -113,6 +115,7 @@ public class MiscControls extends JPanel {
 		panel.add(spinner_pressroll, "3, 2");
 		
 		JLabel lblLatency = new JLabel("Latency");
+		lblLatency.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblLatency, "1, 3");
 		
 		spinner_latency = new JSpinner();
@@ -126,6 +129,7 @@ public class MiscControls extends JPanel {
 		panel.add(spinner_latency, "3, 3");
 		
 		JLabel lblBigVuMeter = new JLabel("Big VU meter");
+		lblBigVuMeter.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblBigVuMeter, "1, 4");
 		
 		checkBox_bigVuMeter = new JCheckBox("");
@@ -137,6 +141,7 @@ public class MiscControls extends JPanel {
 		panel.add(checkBox_bigVuMeter, "3, 4");
 		
 		JLabel lblQuickAccess = new JLabel("Quick Access");
+		lblQuickAccess.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblQuickAccess, "1, 5");
 		
 		checkBox_quickAccess = new JCheckBox("");
@@ -148,6 +153,7 @@ public class MiscControls extends JPanel {
 		panel.add(checkBox_quickAccess, "3, 5");
 		
 		JLabel lblAltFalsetrsuppression = new JLabel("AltFalseTrSupp");
+		lblAltFalsetrsuppression.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblAltFalsetrsuppression, "1, 6");
 		
 		checkBox_altFalseTrSupp = new JCheckBox("");
@@ -159,6 +165,7 @@ public class MiscControls extends JPanel {
 		panel.add(checkBox_altFalseTrSupp, "3, 6");
 		
 		JLabel lblInputsPriority = new JLabel("Inputs Priority");
+		lblInputsPriority.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblInputsPriority, "1, 7");
 		
 		checkBox_inputsPriority = new JCheckBox("");
@@ -169,6 +176,7 @@ public class MiscControls extends JPanel {
 		panel.add(checkBox_inputsPriority, "3, 7");
 		
 		JLabel lblAllGainsLow = new JLabel("All Gains Low");
+		lblAllGainsLow.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblAllGainsLow, "1, 8");
 		
 		checkBox_allGainsLow = new JCheckBox("");
