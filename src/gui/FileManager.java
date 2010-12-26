@@ -73,11 +73,6 @@ public class FileManager {
 			}
 			try {
 				file.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			try {
 				FileOutputStream fos = new FileOutputStream(file);
 				ObjectOutputStream oos = new ObjectOutputStream(fos);
 				oos.writeObject(config);
@@ -110,10 +105,53 @@ public class FileManager {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}				
-			} else {
 			}
 		}
 		return config;
+	}
+	
+	public void loadLastOptions(ConfigOptions config) {
+		file = new File(Constants.MD_MANAGER_CONFIG);	
+		try {
+			if (file.exists()) {
+				FileInputStream fis = new FileInputStream(file);
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				try {
+					config = (ConfigOptions)ois.readObject();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				file.createNewFile();
+				FileOutputStream fos = new FileOutputStream(file);
+				ObjectOutputStream oos = new ObjectOutputStream(fos);
+				oos.writeObject(config);
+				oos.flush();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
+			
+	}
+	
+	public void saveLastOptions(ConfigOptions config) {
+		file = new File(Constants.MD_MANAGER_CONFIG);	
+		try {
+			if (file.exists()) {
+				file.delete();
+			}
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			oos.writeObject(config);
+			oos.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
+		
 	}
 
 }

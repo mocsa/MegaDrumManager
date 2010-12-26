@@ -70,6 +70,7 @@ public class Main_window {
 	private PedalControls pedalControls;
 	private PadsControls padsControls;
 	private ConfigFull configFull;
+	private ConfigOptions configOptions;
 	private FileManager fileManager;
 	private int chainId;
 	private JCheckBox chckbxShowMisc;
@@ -101,6 +102,7 @@ public class Main_window {
 	public Main_window() {
 		
 		initialize();
+		loadConfig();
 	}
 	
 	private void open_options_dialog() {
@@ -124,7 +126,7 @@ public class Main_window {
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				midi_handler.Close_all_ports();
+				saveAndExit();
 			}
 		});
 		frmMegadrummanager.setTitle("MegaDrumManager");
@@ -310,7 +312,7 @@ public class Main_window {
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mntmExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
+				saveAndExit();
 			}
 		});
 		mnMain.add(mntmExit);
@@ -584,6 +586,21 @@ public class Main_window {
 		pedalControls.copyToConfigFull(configFull, chainId);
 		padsControls.copyToConfigFull(configFull, chainId);
 		fileManager.save_all(configFull);
+	}
+	
+	private void loadConfig() {
+		configOptions = new ConfigOptions(); // default options loaded with new
+		fileManager.loadLastOptions(configOptions);
+		dialog_options.loadOptionsFrom(configOptions);
+	}
+	
+	private void saveAndExit() {
+		midi_handler.Close_all_ports();
+		dialog_options.saveOptionsTo(configOptions);
+		if (configOptions.saveOnExit) {
+			fileManager.saveLastOptions(configOptions);
+		}
+		System.exit(0);
 	}
 	
 }

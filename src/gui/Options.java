@@ -41,6 +41,9 @@ public class Options extends JDialog {
 	public JComboBox comboBox_MIDI_Out;
 	private JCheckBox checkBox_Thru;
 	public JComboBox comboBox_MIDI_Thru;
+	private JCheckBox checkBox_saveOnClose;
+	private ConfigOptions configOptions;
+	JCheckBox checkBox_autoOpen;
 	public int midi_port_out;
 	public int midi_port_in;
 	public boolean config_applied; 
@@ -49,6 +52,8 @@ public class Options extends JDialog {
 	 * Create the dialog.
 	 */
 	public Options() {
+		
+		configOptions = new ConfigOptions();
 		setResizable(false);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setName("dialog_options");
@@ -60,7 +65,7 @@ public class Options extends JDialog {
 		contentPanel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("261px"),},
 			new RowSpec[] {
-				RowSpec.decode("135px"),}));
+				RowSpec.decode("173px"),}));
 		
 		JPanel panel_midi = new JPanel();
 		panel_midi.setBorder(new TitledBorder(null, "MIDI Ports", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -82,7 +87,9 @@ public class Options extends JDialog {
 				RowSpec.decode("fill:12dlu"),
 				RowSpec.decode("fill:12dlu"),
 				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("fill:default"),}));
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("12dlu"),
+				RowSpec.decode("fill:12dlu"),}));
 		
 		JLabel lblUseSameInout = new JLabel("Use same In/Out");
 		lblUseSameInout.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -136,6 +143,27 @@ public class Options extends JDialog {
 		comboBox_MIDI_Thru = new JComboBox();
 		comboBox_MIDI_Thru.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panel_midi.add(comboBox_MIDI_Thru, "3, 5, fill, fill");
+		
+		JLabel lblSaveOptionsOn = new JLabel("Save Options on Exit");
+		lblSaveOptionsOn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(lblSaveOptionsOn, "1, 6");
+		
+		checkBox_saveOnClose = new JCheckBox("");
+		checkBox_saveOnClose.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				checkBox_autoOpen.setEnabled(checkBox_saveOnClose.isSelected());
+			}
+		});
+		checkBox_saveOnClose.setHorizontalTextPosition(SwingConstants.LEADING);
+		panel_midi.add(checkBox_saveOnClose, "3, 6");
+		
+		JLabel lblOpenOnStartup = new JLabel("Init Ports on Startup");
+		lblOpenOnStartup.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(lblOpenOnStartup, "1, 7");
+		
+		checkBox_autoOpen = new JCheckBox("");
+		checkBox_autoOpen.setHorizontalTextPosition(SwingConstants.LEADING);
+		panel_midi.add(checkBox_autoOpen, "3, 7");
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -164,5 +192,47 @@ public class Options extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	
+	private void updateConfig() {
+		configOptions.useSamePort = chckbx_samePort.isSelected();
+		configOptions.MidiInName = (String)comboBox_MIDI_In.getSelectedItem();
+		configOptions.MidiOutName = (String)comboBox_MIDI_Out.getSelectedItem();
+		configOptions.MidiThruName = (String)comboBox_MIDI_Thru.getSelectedItem();
+		configOptions.useThruPort = checkBox_Thru.isSelected();
+		configOptions.saveOnExit = checkBox_saveOnClose.isSelected();
+		configOptions.autoOpenPorts = checkBox_autoOpen.isSelected();
+	}
+	
+	private void updateControls() {
+		chckbx_samePort.setSelected(configOptions.useSamePort);
+		comboBox_MIDI_In.setSelectedItem(configOptions.MidiInName);
+		comboBox_MIDI_Out.setSelectedItem(configOptions.MidiOutName);
+		comboBox_MIDI_Thru.setSelectedItem(configOptions.MidiThruName);
+		checkBox_Thru.setSelected(configOptions.useThruPort);
+		checkBox_saveOnClose.setSelected(configOptions.saveOnExit);
+		checkBox_autoOpen.setSelected(configOptions.autoOpenPorts);
+	}
+	
+	public void loadOptionsFrom(ConfigOptions options) {
+		configOptions.autoOpenPorts = options.autoOpenPorts;
+		configOptions.saveOnExit = options.saveOnExit;
+		configOptions.useSamePort = options.useSamePort;
+		configOptions.useThruPort = options.useThruPort;
+		configOptions.MidiInName = options.MidiInName;
+		configOptions.MidiOutName = options.MidiOutName;
+		configOptions.MidiThruName = options.MidiThruName;
+		updateControls();
+	}
+	
+	public void saveOptionsTo(ConfigOptions options) {
+		updateConfig();
+		options.autoOpenPorts = configOptions.autoOpenPorts;
+		options.saveOnExit = configOptions.saveOnExit;
+		options.useSamePort = configOptions.useSamePort;		
+		options.useThruPort = configOptions.useThruPort;
+		options.MidiInName = configOptions.MidiInName;
+		options.MidiOutName = configOptions.MidiOutName;
+		options.MidiThruName = configOptions.MidiThruName;
 	}
 }
