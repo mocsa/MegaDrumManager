@@ -590,7 +590,7 @@ public class Main_window {
 	
 	private void loadConfig() {
 		configOptions = new ConfigOptions(); // default options loaded with new
-		fileManager.loadLastOptions(configOptions);
+		configOptions  = fileManager.loadLastOptions(configOptions);
 		dialog_options.loadOptionsFrom(configOptions);
 	}
 	

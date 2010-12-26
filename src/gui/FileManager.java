@@ -110,7 +110,7 @@ public class FileManager {
 		return config;
 	}
 	
-	public void loadLastOptions(ConfigOptions config) {
+	public ConfigOptions loadLastOptions(ConfigOptions config) {
 		file = new File(Constants.MD_MANAGER_CONFIG);	
 		try {
 			if (file.exists()) {
@@ -133,7 +133,7 @@ public class FileManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}				
-			
+		return config;
 	}
 	
 	public void saveLastOptions(ConfigOptions config) {
