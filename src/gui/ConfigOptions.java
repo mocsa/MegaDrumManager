@@ -10,6 +10,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public String MidiInName = "";
 	public String MidiOutName = "";
 	public String MidiThruName = "";
+	public int inputCount = 55;
 	
 	public ConfigOptions() {
 		

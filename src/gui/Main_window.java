@@ -8,6 +8,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
@@ -43,6 +44,8 @@ import javax.swing.JComboBox;
 import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.Rectangle;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.factories.FormFactory;
@@ -59,6 +62,7 @@ import javax.swing.Box;
 import javax.swing.SpringLayout;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import javax.swing.JProgressBar;
 
 public class Main_window {
 
@@ -78,6 +82,7 @@ public class Main_window {
 	private JCheckBox chckbxShowPads;
 	private JMenuItem menuItem;
 	private JMenu mnView;
+	private JProgressBar progressBar;
 
 	/**
 	 * Launch the application.
@@ -446,6 +451,12 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
@@ -481,6 +492,10 @@ public class Main_window {
 			}
 		});
 		panel.add(btnSaveAll, "8, 1");
+		
+		progressBar = new JProgressBar();
+		progressBar.setStringPainted(true);
+		panel.add(progressBar, "14, 1");
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
 		
 	}
@@ -553,18 +568,64 @@ public class Main_window {
 		
 	}
 	
-	private void getAllPads() {
-		int i;
-		for (i = 0; i<Constants.PADS_COUNT;i++) {
-			getPad(i);
-		}
+	private void sendAllPads() {
+//		progressBar.setVisible(true);
+		Thread t2 = new Thread(new Runnable() {
+            public void run() {
+                // since we're not on the EDT,
+                // let's put the setVisible-code
+                // into the Event Dispatching Queue
+                SwingUtilities.invokeLater( new Runnable() {
+                    public void run() {
+                		int i;
+                		progressBar.setMinimum(0);
+                		progressBar.setMaximum(configOptions.inputCount - 1);
+                		for (i = 0; i<configOptions.inputCount;i++) {
+                			progressBar.setValue(i);
+                			Rectangle progressRect = progressBar.getBounds();
+                			progressRect.x = 0;
+                			progressRect.y = 0;
+                			progressBar.paintImmediately( progressRect );
+                			sendPad(i);
+                		}
+//                		progressBar.setVisible(false);
+                   }
+                });
+            }
+
+		});
+        t2.setPriority( Thread.NORM_PRIORITY );
+        t2.start();
 	}
 	
-	private void sendAllPads() {
-		int i;
-		for (i = 0; i<Constants.PADS_COUNT;i++) {
-			sendPad(i);
-		}
+	private void getAllPads() {
+//		progressBar.setVisible(true);
+		Thread t = new Thread(new Runnable() {
+            public void run() {
+                // since we're not on the EDT,
+                // let's put the setVisible-code
+                // into the Event Dispatching Queue
+                SwingUtilities.invokeLater( new Runnable() {
+                    public void run() {
+                		int i;
+                		progressBar.setMinimum(0);
+                		progressBar.setMaximum(configOptions.inputCount - 1);
+                		for (i = 0; i<configOptions.inputCount;i++) {
+                			progressBar.setValue(i);
+                			Rectangle progressRect = progressBar.getBounds();
+                			progressRect.x = 0;
+                			progressRect.y = 0;
+                			progressBar.paintImmediately( progressRect );
+                			getPad(i);
+                		}
+//                		progressBar.setVisible(false);
+                   }
+                });
+            }
+
+		});
+        t.setPriority( Thread.NORM_PRIORITY );
+        t.start();
 	}
 	
 	private void getAll() {
