@@ -209,6 +209,8 @@ public class Options extends JDialog {
 		comboBox_MIDI_In.setSelectedItem(configOptions.MidiInName);
 		comboBox_MIDI_Out.setSelectedItem(configOptions.MidiOutName);
 		comboBox_MIDI_Thru.setSelectedItem(configOptions.MidiThruName);
+		comboBox_MIDI_Out.setEnabled(!configOptions.useSamePort);
+		comboBox_MIDI_Thru.setEnabled(configOptions.useThruPort);
 		checkBox_Thru.setSelected(configOptions.useThruPort);
 		checkBox_saveOnClose.setSelected(configOptions.saveOnExit);
 		checkBox_autoOpen.setSelected(configOptions.autoOpenPorts);

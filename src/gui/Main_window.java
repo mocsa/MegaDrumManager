@@ -110,6 +110,7 @@ public class Main_window {
 		dialog_options.config_applied = false;
 		dialog_options.setVisible(true);
 		if (dialog_options.config_applied) {
+			dialog_options.saveOptionsTo(configOptions);
 			midi_handler.initPorts(configOptions);
 		}
 	}
