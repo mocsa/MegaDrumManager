@@ -649,9 +649,9 @@ public class Main_window {
 	}
 	
 	private void save_all() {
-		miscControls.copyToConfigFull(configFull, chainId);
-		pedalControls.copyToConfigFull(configFull, chainId);
-		padsControls.copyToConfigFull(configFull, chainId);
+		miscControls.copyToConfigFull(configFull, configOptions.chainId);
+		pedalControls.copyToConfigFull(configFull, configOptions.chainId);
+		padsControls.copyToConfigFull(configFull, configOptions.chainId);
 		fileManager.save_all(configFull);
 	}
 	

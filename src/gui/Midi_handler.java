@@ -332,6 +332,7 @@ public class Midi_handler {
 
 		closeAllPorts();
 		
+		config_chain_id = options.chainId;
  		if (!options.MidiInName.equals("")) {
 			try
 			{
