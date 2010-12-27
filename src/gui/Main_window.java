@@ -103,19 +103,15 @@ public class Main_window {
 		
 		initialize();
 		loadConfig();
-		System.out.printf("\nMIDI In ports:\n");
-		for (String string : midi_handler.getMidiInList()) {
-			System.out.printf("%s\n", string);
-			}
-		System.out.printf("\nMIDI Out ports:\n");
-		for (String string : midi_handler.getMidiOutList()) {
-			System.out.printf("%s\n", string);
-			}
 	}
 	
 	private void open_options_dialog() {
 		
-		midi_handler.Init_options(dialog_options);
+		dialog_options.config_applied = false;
+		dialog_options.setVisible(true);
+		if (dialog_options.config_applied) {
+			midi_handler.initPorts(configOptions);
+		}
 	}
 	
 	public static void show_error(String msg) {
@@ -599,7 +595,13 @@ public class Main_window {
 	private void loadConfig() {
 		configOptions = new ConfigOptions(); // default options loaded with new
 		configOptions  = fileManager.loadLastOptions(configOptions);
+		dialog_options.fillInPorts(midi_handler.getMidiInList());
+		dialog_options.fillOutPorts(midi_handler.getMidiOutList());
+		dialog_options.fillThruPorts(midi_handler.getMidiOutList());
 		dialog_options.loadOptionsFrom(configOptions);
+		if (configOptions.autoOpenPorts) {
+			midi_handler.initPorts(configOptions);
+		}
 	}
 	
 	private void saveAndExit() {

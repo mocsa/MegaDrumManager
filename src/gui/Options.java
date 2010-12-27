@@ -235,4 +235,26 @@ public class Options extends JDialog {
 		options.MidiOutName = configOptions.MidiOutName;
 		options.MidiThruName = configOptions.MidiThruName;
 	}
+	
+	public void fillInPorts(String[] list) {
+		comboBox_MIDI_In.removeAllItems();
+		for (String string : list) {
+			comboBox_MIDI_In.addItem(string);
+		}		
+	}
+
+	public void fillOutPorts(String[] list) {
+		comboBox_MIDI_Out.removeAllItems();	
+		for (String string : list) {
+			comboBox_MIDI_Out.addItem(string);
+		}		
+	}
+
+	public void fillThruPorts(String[] list) {
+		comboBox_MIDI_Thru.removeAllItems();
+		for (String string : list) {
+			comboBox_MIDI_Thru.addItem(string);
+		}		
+	}
+
 }

@@ -14,18 +14,15 @@ import javax.sound.midi.SysexMessage;
 
 public class Midi_handler {
 
-	private int nPorts;
-	private int port;
-	private int port_in;
-	private int port_out;
-	private int port_thru;
-	private String [] MidiInList;
-	private String [] MidiOutList;
+	//private int nPorts;
+	//private int port;
 
-	private MidiDevice midiout;
 	private MidiDevice midiin;
+	private MidiDevice midiout;
+	private MidiDevice midithru;
 	private MidiDevice.Info[]	aInfos;
 	private Receiver receiver;
+	private Receiver thruReceiver;
 	private DumpReceiver dump_receiver;
 	private Transmitter	transmitter;
 	
@@ -38,10 +35,10 @@ public class Midi_handler {
 	public Midi_handler () {
 		midiin = null;
 		midiout = null;
+		midithru = null;
 		receiver = null;
+		thruReceiver = null;
 		transmitter = null;
-		port_in = 0;
-		port_out = 0;
 		config_chain_id = 0;
 		config_misc = new ConfigMisc();
 		config_pedal = new ConfigPedal();
@@ -51,14 +48,19 @@ public class Midi_handler {
 	}
 	
 	public void Close_all_ports() {
+		if (midiin != null) {
+			if (midiin.isOpen()) {
+				midiin.close();
+			}
+		}
 		if (midiout != null) {
 			if (midiout.isOpen()) {
 				midiout.close();
 			}
 		}
-		if (midiin != null) {
-			if (midiin.isOpen()) {
-				midiin.close();
+		if (midithru != null) {
+			if (midithru.isOpen()) {
+				midithru.close();
 			}
 		}
 	}
@@ -236,6 +238,8 @@ public class Midi_handler {
 	
 	public String [] getMidiInList() {
 		String [] list;
+		int nPorts;
+		int port;
 		aInfos = MidiSystem.getMidiDeviceInfo(); 
 		nPorts = aInfos.length;
 		int[] table = new int[nPorts];
@@ -267,6 +271,8 @@ public class Midi_handler {
 	
 	public String [] getMidiOutList() {
 		String [] list;
+		int nPorts;
+		int port;
 		aInfos = MidiSystem.getMidiDeviceInfo(); 
 		nPorts = aInfos.length;
 		int[] table = new int[nPorts];
@@ -296,87 +302,160 @@ public class Midi_handler {
 		return list;		
 	}
 	
-	public void Init_options (Options dialog_options) {
+	public void initPorts(ConfigOptions options) {
 		aInfos = MidiSystem.getMidiDeviceInfo(); 
+		int nPorts;
 		nPorts = aInfos.length;
-		int[] table_in = new int[nPorts];
-		int[] table_out = new int[nPorts];
 
-		dialog_options.comboBox_MIDI_In.removeAllItems();
-		dialog_options.comboBox_MIDI_Out.removeAllItems();
+		Close_all_ports();
 		
- 		port = 0;
-		for (int i = 0; i < nPorts; i++)
-		{
+ 		if (!options.MidiInName.equals("")) {
 			try
 			{
-				midiin = MidiSystem.getMidiDevice(aInfos[i]);
-				if (midiin.getMaxTransmitters() != 0)
-				{
-					table_in[port] = i;
-					dialog_options.comboBox_MIDI_In.addItem(aInfos[i].getName());
-					port++;
+				for (int i = 0; i < nPorts; i++) {
+					midiin = MidiSystem.getMidiDevice(aInfos[i]);
+					if (midiin.getMaxTransmitters() != 0) {
+						if (aInfos[i].getName().equals(options.MidiInName)) {
+					    	midiin = MidiSystem.getMidiDevice(aInfos[i]);
+					    	midiin.open();
+					    	System.out.printf("Opened In port: %s\n", options.MidiInName);
+							transmitter = midiin.getTransmitter();
+							transmitter.setReceiver(dump_receiver);		
+							break;
+						}
+					}
 				}
-			}
-			catch (MidiUnavailableException e)
+			} catch (MidiUnavailableException e)
 			{
-				Main_window.show_error("Error trying to list MIDI In devices");
+				Main_window.show_error("Error trying to open MIDI In device");
 			}
-		}
-		port = 0;		
-		for (int i = 0; i < nPorts; i++)
-		{
+ 		}
+
+ 		if (!options.MidiOutName.equals("")) {
 			try
 			{
-				midiout = MidiSystem.getMidiDevice(aInfos[i]);
-				if (midiout.getMaxReceivers() != 0)
-				{
-					table_out[port] = i;
-					dialog_options.comboBox_MIDI_Out.addItem(aInfos[i].getName());
-					port++;
+				for (int i = 0; i < nPorts; i++) {
+					midiout = MidiSystem.getMidiDevice(aInfos[i]);
+					if (midiout.getMaxReceivers() != 0) {
+						if (aInfos[i].getName().equals(options.MidiOutName)) {
+					    	midiout = MidiSystem.getMidiDevice(aInfos[i]);
+					    	midiout.open();
+					    	System.out.printf("Opened Out port: %s\n", options.MidiOutName);
+					    	receiver = midiout.getReceiver();
+							break;
+						}
+					}
 				}
-			}
-			catch (MidiUnavailableException e)
+			} catch (MidiUnavailableException e)
 			{
-				Main_window.show_error("Error trying to list MIDI Out devices");
+				Main_window.show_error("Error trying to open MIDI Out device");
 			}
-		}
-		
-		dialog_options.comboBox_MIDI_In.setSelectedIndex(port_in);
-		dialog_options.comboBox_MIDI_Out.setSelectedIndex(port_out);
-		dialog_options.config_applied = false;
+ 		}
 
-		dialog_options.setVisible(true);
-
-		if (dialog_options.config_applied) {
-			port_in = dialog_options.midi_port_in;
-			port_out = dialog_options.midi_port_out;
-			midiout.close();
-			midiin.close();
-		    try {
-		    	if (midiin.isOpen()) {
-		    		midiin.close();
-		    	}
-		    	midiin = MidiSystem.getMidiDevice(aInfos[table_in[port_in]]);
-		    	midiin.open();
-				transmitter = midiin.getTransmitter();
-				transmitter.setReceiver(dump_receiver);		    	
-				//System.out.printf("\nOpened MIDI In port %d (%d) - %s.\n", port_in,table_in[port_in],aInfos[table_in[port_in]].getName());
-		    } catch (MidiUnavailableException e) {
-		    	Main_window.show_error("Cannot open MIDI In port");
-		    }		    		    
-		    try {
-		    	if (midiout.isOpen()) {
-		    		midiout.close();
-		    	}
-		    	midiout = MidiSystem.getMidiDevice(aInfos[table_out[port_out]]);
-		    	midiout.open();
-		    	receiver = midiout.getReceiver();
-				//System.out.printf("\nOpened MIDI Out port %d (%d) - %s.\n", port_out,table_out[port_out],aInfos[table_out[port_out]].getName());
-		    } catch (MidiUnavailableException e) {
-		    	Main_window.show_error("Cannot open MIDI Out port");
-		    }
-		}
-
+ 		if ((!options.MidiThruName.equals("")) && (options.useThruPort)) {
+			try
+			{
+				for (int i = 0; i < nPorts; i++) {
+					midithru = MidiSystem.getMidiDevice(aInfos[i]);
+					if (midithru.getMaxReceivers() != 0) {
+						if (aInfos[i].getName().equals(options.MidiThruName)) {
+					    	midithru = MidiSystem.getMidiDevice(aInfos[i]);
+					    	midithru.open();
+					    	System.out.printf("Opened Thru port: %s\n", options.MidiThruName);
+					    	thruReceiver = midithru.getReceiver();
+							break;
+						}
+					}
+				}
+			} catch (MidiUnavailableException e)
+			{
+				Main_window.show_error("Error trying to open MIDI Out device");
+			}
+ 		}
+ 		
 	}
+	
+//	public void Init_options (Options dialog_options) {
+//		aInfos = MidiSystem.getMidiDeviceInfo(); 
+//		nPorts = aInfos.length;
+//		int[] table_in = new int[nPorts];
+//		int[] table_out = new int[nPorts];
+//
+//		dialog_options.comboBox_MIDI_In.removeAllItems();
+//		dialog_options.comboBox_MIDI_Out.removeAllItems();
+//		
+// 		port = 0;
+//		for (int i = 0; i < nPorts; i++)
+//		{
+//			try
+//			{
+//				midiin = MidiSystem.getMidiDevice(aInfos[i]);
+//				if (midiin.getMaxTransmitters() != 0)
+//				{
+//					table_in[port] = i;
+//					dialog_options.comboBox_MIDI_In.addItem(aInfos[i].getName());
+//					port++;
+//				}
+//			}
+//			catch (MidiUnavailableException e)
+//			{
+//				Main_window.show_error("Error trying to list MIDI In devices");
+//			}
+//		}
+//		port = 0;		
+//		for (int i = 0; i < nPorts; i++)
+//		{
+//			try
+//			{
+//				midiout = MidiSystem.getMidiDevice(aInfos[i]);
+//				if (midiout.getMaxReceivers() != 0)
+//				{
+//					table_out[port] = i;
+//					dialog_options.comboBox_MIDI_Out.addItem(aInfos[i].getName());
+//					port++;
+//				}
+//			}
+//			catch (MidiUnavailableException e)
+//			{
+//				Main_window.show_error("Error trying to list MIDI Out devices");
+//			}
+//		}
+//		
+//		dialog_options.comboBox_MIDI_In.setSelectedIndex(port_in);
+//		dialog_options.comboBox_MIDI_Out.setSelectedIndex(port_out);
+//		dialog_options.config_applied = false;
+//
+//		dialog_options.setVisible(true);
+//
+//		if (dialog_options.config_applied) {
+//			port_in = dialog_options.midi_port_in;
+//			port_out = dialog_options.midi_port_out;
+//			midiout.close();
+//			midiin.close();
+//		    try {
+//		    	if (midiin.isOpen()) {
+//		    		midiin.close();
+//		    	}
+//		    	midiin = MidiSystem.getMidiDevice(aInfos[table_in[port_in]]);
+//		    	midiin.open();
+//				transmitter = midiin.getTransmitter();
+//				transmitter.setReceiver(dump_receiver);		    	
+//				//System.out.printf("\nOpened MIDI In port %d (%d) - %s.\n", port_in,table_in[port_in],aInfos[table_in[port_in]].getName());
+//		    } catch (MidiUnavailableException e) {
+//		    	Main_window.show_error("Cannot open MIDI In port");
+//		    }		    		    
+//		    try {
+//		    	if (midiout.isOpen()) {
+//		    		midiout.close();
+//		    	}
+//		    	midiout = MidiSystem.getMidiDevice(aInfos[table_out[port_out]]);
+//		    	midiout.open();
+//		    	receiver = midiout.getReceiver();
+//				//System.out.printf("\nOpened MIDI Out port %d (%d) - %s.\n", port_out,table_out[port_out],aInfos[table_out[port_out]].getName());
+//		    } catch (MidiUnavailableException e) {
+//		    	Main_window.show_error("Cannot open MIDI Out port");
+//		    }
+//		}
+//
+//	}
 }
