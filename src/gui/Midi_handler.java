@@ -318,7 +318,6 @@ public class Midi_handler {
 						if (aInfos[i].getName().equals(options.MidiInName)) {
 					    	midiin = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midiin.open();
-					    	System.out.printf("Opened In port: %s\n", options.MidiInName);
 							transmitter = midiin.getTransmitter();
 							transmitter.setReceiver(dump_receiver);		
 							break;
@@ -340,7 +339,6 @@ public class Midi_handler {
 						if (aInfos[i].getName().equals(options.MidiOutName)) {
 					    	midiout = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midiout.open();
-					    	System.out.printf("Opened Out port: %s\n", options.MidiOutName);
 					    	receiver = midiout.getReceiver();
 							break;
 						}
@@ -361,7 +359,6 @@ public class Midi_handler {
 						if (aInfos[i].getName().equals(options.MidiThruName)) {
 					    	midithru = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midithru.open();
-					    	System.out.printf("Opened Thru port: %s\n", options.MidiThruName);
 					    	thruReceiver = midithru.getReceiver();
 							break;
 						}
