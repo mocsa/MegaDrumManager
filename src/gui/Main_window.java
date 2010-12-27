@@ -494,6 +494,7 @@ public class Main_window {
 		panel.add(btnSaveAll, "8, 1");
 		
 		progressBar = new JProgressBar();
+		progressBar.setVisible(false);
 		progressBar.setStringPainted(true);
 		panel.add(progressBar, "14, 1");
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
@@ -568,38 +569,8 @@ public class Main_window {
 		
 	}
 	
-	private void sendAllPads() {
-//		progressBar.setVisible(true);
-		Thread t2 = new Thread(new Runnable() {
-            public void run() {
-                // since we're not on the EDT,
-                // let's put the setVisible-code
-                // into the Event Dispatching Queue
-                SwingUtilities.invokeLater( new Runnable() {
-                    public void run() {
-                		int i;
-                		progressBar.setMinimum(0);
-                		progressBar.setMaximum(configOptions.inputCount - 1);
-                		for (i = 0; i<configOptions.inputCount;i++) {
-                			progressBar.setValue(i);
-                			Rectangle progressRect = progressBar.getBounds();
-                			progressRect.x = 0;
-                			progressRect.y = 0;
-                			progressBar.paintImmediately( progressRect );
-                			sendPad(i);
-                		}
-//                		progressBar.setVisible(false);
-                   }
-                });
-            }
-
-		});
-        t2.setPriority( Thread.NORM_PRIORITY );
-        t2.start();
-	}
-	
 	private void getAllPads() {
-//		progressBar.setVisible(true);
+		progressBar.setVisible(true);
 		Thread t = new Thread(new Runnable() {
             public void run() {
                 // since we're not on the EDT,
@@ -609,8 +580,8 @@ public class Main_window {
                     public void run() {
                 		int i;
                 		progressBar.setMinimum(0);
-                		progressBar.setMaximum(configOptions.inputCount - 1);
-                		for (i = 0; i<configOptions.inputCount;i++) {
+                		progressBar.setMaximum(configOptions.inputCount - 2);
+                		for (i = 0; i<(configOptions.inputCount - 1); i++) {
                 			progressBar.setValue(i);
                 			Rectangle progressRect = progressBar.getBounds();
                 			progressRect.x = 0;
@@ -618,16 +589,46 @@ public class Main_window {
                 			progressBar.paintImmediately( progressRect );
                 			getPad(i);
                 		}
-//                		progressBar.setVisible(false);
+                		progressBar.setVisible(false);
                    }
                 });
             }
 
 		});
         t.setPriority( Thread.NORM_PRIORITY );
-        t.start();
+        t.run();
 	}
-	
+		
+	private void sendAllPads() {
+		progressBar.setVisible(true);
+		Thread t = new Thread(new Runnable() {
+            public void run() {
+                // since we're not on the EDT,
+                // let's put the setVisible-code
+                // into the Event Dispatching Queue
+                SwingUtilities.invokeLater( new Runnable() {
+                    public void run() {
+                		int i;
+                		progressBar.setMinimum(0);
+                		progressBar.setMaximum(configOptions.inputCount - 2);
+                		for (i = 0; i<(configOptions.inputCount - 1); i++) {
+                			progressBar.setValue(i);
+                			Rectangle progressRect = progressBar.getBounds();
+                			progressRect.x = 0;
+                			progressRect.y = 0;
+                			progressBar.paintImmediately( progressRect );
+                			sendPad(i);
+                		}
+                		progressBar.setVisible(false);
+                   }
+                });
+            }
+
+		});
+        t.setPriority( Thread.NORM_PRIORITY );
+        t.run();
+	}
+
 	private void getAll() {
 		getMisc();
 		getPedal();
