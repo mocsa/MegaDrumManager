@@ -197,7 +197,11 @@ public class Options extends JDialog {
 	private void updateConfig() {
 		configOptions.useSamePort = chckbx_samePort.isSelected();
 		configOptions.MidiInName = (String)comboBox_MIDI_In.getSelectedItem();
-		configOptions.MidiOutName = (String)comboBox_MIDI_Out.getSelectedItem();
+		if (chckbx_samePort.isSelected()) {
+			configOptions.MidiOutName = (String)comboBox_MIDI_In.getSelectedItem();			
+		} else {
+			configOptions.MidiOutName = (String)comboBox_MIDI_Out.getSelectedItem();
+		}
 		configOptions.MidiThruName = (String)comboBox_MIDI_Thru.getSelectedItem();
 		configOptions.useThruPort = checkBox_Thru.isSelected();
 		configOptions.saveOnExit = checkBox_saveOnClose.isSelected();

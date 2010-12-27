@@ -668,7 +668,7 @@ public class Main_window {
 	}
 	
 	private void saveAndExit() {
-		midi_handler.Close_all_ports();
+		midi_handler.closeAllPorts();
 		dialog_options.saveOptionsTo(configOptions);
 		if (configOptions.saveOnExit) {
 			fileManager.saveLastOptions(configOptions);

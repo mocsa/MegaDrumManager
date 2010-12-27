@@ -1,6 +1,7 @@
 package gui;
 
 import javax.sound.midi.MidiDevice;
+import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Transmitter;
 import javax.sound.midi.Receiver;
 import	javax.sound.midi.Sequence;
@@ -47,7 +48,7 @@ public class Midi_handler {
 		dump_receiver = new DumpReceiver();
 	}
 	
-	public void Close_all_ports() {
+	public void closeAllPorts() {
 		if (midiin != null) {
 			if (midiin.isOpen()) {
 				midiin.close();
@@ -64,8 +65,28 @@ public class Midi_handler {
 			}
 		}
 	}
+
+	public void sendMidiShort(byte [] buf) {
+		ShortMessage shortMessage = new ShortMessage();
+		try {
+			switch (buf.length) {
+			case 1:
+				shortMessage.setMessage(buf[0]);
+				break;
+			case 2:
+				shortMessage.setMessage(buf[0], buf[1],0);
+				break;
+			default:
+				shortMessage.setMessage(buf[0], buf[1],buf[2]);
+				break;
+			}
+			thruReceiver.send(shortMessage, -1);
+		} catch (InvalidMidiDataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
-//	public void send_sysex(Receiver rr, byte [] buf, int size) {
 	public void send_sysex(byte [] buf) {
 		SysexMessage	sysexMessage = new SysexMessage();
 
@@ -77,6 +98,7 @@ public class Midi_handler {
 			e.printStackTrace();
 		}		
 	}
+	
 	
 	public void send_config_misc() {
 		if (midiout != null) {
@@ -230,6 +252,7 @@ public class Midi_handler {
 						}
 					} else {
 						// TO-DO
+						sendMidiShort(buffer);
 					}
 				}
 			}
@@ -307,7 +330,7 @@ public class Midi_handler {
 		int nPorts;
 		nPorts = aInfos.length;
 
-		Close_all_ports();
+		closeAllPorts();
 		
  		if (!options.MidiInName.equals("")) {
 			try
