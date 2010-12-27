@@ -103,6 +103,14 @@ public class Main_window {
 		
 		initialize();
 		loadConfig();
+		System.out.printf("\nMIDI In ports:\n");
+		for (String string : midi_handler.getMidiInList()) {
+			System.out.printf("%s\n", string);
+			}
+		System.out.printf("\nMIDI Out ports:\n");
+		for (String string : midi_handler.getMidiOutList()) {
+			System.out.printf("%s\n", string);
+			}
 	}
 	
 	private void open_options_dialog() {

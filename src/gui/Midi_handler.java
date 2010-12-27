@@ -18,6 +18,9 @@ public class Midi_handler {
 	private int port;
 	private int port_in;
 	private int port_out;
+	private int port_thru;
+	private String [] MidiInList;
+	private String [] MidiOutList;
 
 	private MidiDevice midiout;
 	private MidiDevice midiin;
@@ -229,6 +232,68 @@ public class Midi_handler {
 				}
 			}
 		}
+	}
+	
+	public String [] getMidiInList() {
+		String [] list;
+		aInfos = MidiSystem.getMidiDeviceInfo(); 
+		nPorts = aInfos.length;
+		int[] table = new int[nPorts];
+		
+		port = 0;		
+		for (int i = 0; i < nPorts; i++) {
+			try
+			{
+				midiin = MidiSystem.getMidiDevice(aInfos[i]);
+				if (midiin.getMaxTransmitters() != 0)
+				{
+					table[port] = i;
+					port++;
+				}
+			}
+			catch (MidiUnavailableException e)
+			{
+				Main_window.show_error("Error trying to list MIDI In devices");
+			}
+			
+		}
+		list = new String[port];
+		for (int i = 0; i < port; i++) {
+			list[i] = aInfos[table[i]].getName();
+		}
+		
+		return list;
+	}
+	
+	public String [] getMidiOutList() {
+		String [] list;
+		aInfos = MidiSystem.getMidiDeviceInfo(); 
+		nPorts = aInfos.length;
+		int[] table = new int[nPorts];
+		
+		port = 0;		
+		for (int i = 0; i < nPorts; i++) {
+			try
+			{
+				midiout = MidiSystem.getMidiDevice(aInfos[i]);
+				if (midiout.getMaxReceivers() != 0)
+				{
+					table[port] = i;
+					port++;
+				}
+			}
+			catch (MidiUnavailableException e)
+			{
+				Main_window.show_error("Error trying to list MIDI In devices");
+			}
+			
+		}
+		list = new String[port];
+		for (int i = 0; i < port; i++) {
+			list[i] = aInfos[table[i]].getName();
+		}
+		
+		return list;		
 	}
 	
 	public void Init_options (Options dialog_options) {
