@@ -56,16 +56,16 @@ public class FileManager {
 	public void save_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
 		fileChooser.setFileFilter(configFileFilter);
-		if (!options.lastDir.equals("")) {
-			fileChooser.setCurrentDirectory(new File(options.lastDir));
+		if (!options.lastFullPathConfig.equals("")) {
+			fileChooser.setCurrentDirectory(new File(options.lastFullPathConfig));
 		}
 		returnVal = fileChooser.showSaveDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			options.lastDir = fileChooser.getSelectedFile().getAbsolutePath();
 			file = fileChooser.getSelectedFile();
 			if (!(file.getName().toLowerCase().endsWith(".mds"))) {
 				file = new File(file.getAbsolutePath() + ".mds");
 			}
+			options.lastFullPathConfig = file.getAbsolutePath();
 			if (file.exists()) {
 				file.delete();
 			}
@@ -85,14 +85,14 @@ public class FileManager {
 	public ConfigFull load_all(ConfigFull configOld, ConfigOptions options) {
 		ConfigFull config = new ConfigFull();
 		int returnVal;
-		if (!options.lastDir.equals("")) {
-			fileChooser.setCurrentDirectory(new File(options.lastDir));
+		if (!options.lastFullPathConfig.equals("")) {
+			fileChooser.setCurrentDirectory(new File(options.lastFullPathConfig));
 		}
 		fileChooser.setFileFilter(configFileFilter);
 		returnVal = fileChooser.showOpenDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			options.lastDir = fileChooser.getSelectedFile().getAbsolutePath();
 			file = fileChooser.getSelectedFile();
+			options.lastFullPathConfig = file.getAbsolutePath();
 			if (file.exists()) {
 				try {
 					FileInputStream fis = new FileInputStream(file);
@@ -114,6 +114,30 @@ public class FileManager {
 		}
 	}
 	
+	public ConfigFull loadAllSilent(ConfigFull configOld, ConfigOptions options) {
+		ConfigFull config = new ConfigFull();
+		file = new File(options.lastFullPathConfig);
+		options.lastFullPathConfig = file.getAbsolutePath();
+		if (file.exists()) {
+			try {
+				FileInputStream fis = new FileInputStream(file);
+				ObjectInputStream ois = new ObjectInputStream(fis);
+				try {
+					config = (ConfigFull)ois.readObject();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+			return config;
+		} else {
+			return configOld;
+		}
+	}
+
 	public ConfigOptions loadLastOptions(ConfigOptions config) {
 		file = new File(Constants.MD_MANAGER_CONFIG);	
 		try {

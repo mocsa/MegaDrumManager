@@ -668,6 +668,12 @@ public class Main_window {
 		miscControls.copyToConfigFull(configFull, configOptions.chainId);
 		pedalControls.copyToConfigFull(configFull, configOptions.chainId);
 		padsControls.copyToConfigFull(configFull, configOptions.chainId);
+		if (!configOptions.lastFullPathConfig.equals("")) {
+			configFull = fileManager.loadAllSilent(configFull, configOptions);
+			miscControls.loadFromConfigFull(configFull);
+			pedalControls.loadFromConfigFull(configFull);
+			padsControls.loadFromConfigFull(configFull);		
+		}
 	}
 	
 	private void saveAndExit() {
