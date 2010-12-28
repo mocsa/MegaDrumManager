@@ -45,8 +45,10 @@ public class NoteSpinControl extends JPanel {
 					note_pointer = note_number - base;
 					note_text = note_names[note_pointer] + " " + Integer.toString(octave - 1);
 					lblNoteName.setText(note_text);
+					lblNoteName.setToolTipText("Note = " + note_text);
 				} else {
-					lblNoteName.setText("Disabled");
+					lblNoteName.setText("Disbld");
+					lblNoteName.setToolTipText("Note Disabled");
 				}
 			}
 		});
@@ -59,7 +61,8 @@ public class NoteSpinControl extends JPanel {
 		spinner.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner, "1, 1, fill, fill");
 		
-		lblNoteName = new JLabel("Disabled");
+		lblNoteName = new JLabel("Disbld");
+		lblNoteName.setToolTipText("Note Disabled");
 		lblNoteName.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		add(lblNoteName, "2, 1, fill, fill");
 	}

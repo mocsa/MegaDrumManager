@@ -26,6 +26,8 @@ public class ConfigPad {
 	public short pressrollNote;
 	public boolean altNote_linked;
 	public boolean pressrollNote_linked;
+	private static final boolean head_pad = true;
+	private static final boolean rim_pad = false;
 	
 	private byte [] sysex_byte;
 	private byte [] sysex_short;
