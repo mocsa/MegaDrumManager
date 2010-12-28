@@ -40,12 +40,6 @@ public class FileManager {
 	private JFileChooser fileChooser;
 	private JFrame parent;
 	private File file = null;
-	//private FileInputStream fis = null;
-	//private BufferedInputStream bis = null;
-	//private DataInputStream dis = null;
-	//private FileOutputStream fos = null;
-	//private BufferedOutputStream bos = null;
-	//private DataOutputStream dos = null;
 	private ConfigFileFilter configFileFilter;
 	private SysexFileFilter sysexFileFilter;
 
@@ -59,11 +53,15 @@ public class FileManager {
 		//file = new File();
 	}
 	
-	public void save_all(ConfigFull config) {
+	public void save_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
 		fileChooser.setFileFilter(configFileFilter);
+		if (!options.lastDir.equals("")) {
+			fileChooser.setCurrentDirectory(new File(options.lastDir));
+		}
 		returnVal = fileChooser.showSaveDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			options.lastDir = fileChooser.getSelectedFile().getAbsolutePath();
 			file = fileChooser.getSelectedFile();
 			if (!(file.getName().toLowerCase().endsWith(".mds"))) {
 				file = new File(file.getAbsolutePath() + ".mds");
@@ -84,12 +82,16 @@ public class FileManager {
 		}
 	}
 
-	public ConfigFull load_all() {
+	public ConfigFull load_all(ConfigFull configOld, ConfigOptions options) {
 		ConfigFull config = new ConfigFull();
 		int returnVal;
+		if (!options.lastDir.equals("")) {
+			fileChooser.setCurrentDirectory(new File(options.lastDir));
+		}
 		fileChooser.setFileFilter(configFileFilter);
 		returnVal = fileChooser.showOpenDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			options.lastDir = fileChooser.getSelectedFile().getAbsolutePath();
 			file = fileChooser.getSelectedFile();
 			if (file.exists()) {
 				try {
@@ -106,8 +108,10 @@ public class FileManager {
 					e.printStackTrace();
 				}				
 			}
+			return config;
+		} else {
+			return configOld;			
 		}
-		return config;
 	}
 	
 	public ConfigOptions loadLastOptions(ConfigOptions config) {

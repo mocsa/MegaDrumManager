@@ -642,7 +642,7 @@ public class Main_window {
 	}
 
 	private void load_all() {
-		configFull = fileManager.load_all();
+		configFull = fileManager.load_all(configFull, configOptions);
 		miscControls.loadFromConfigFull(configFull);
 		pedalControls.loadFromConfigFull(configFull);
 		padsControls.loadFromConfigFull(configFull);		
@@ -652,7 +652,7 @@ public class Main_window {
 		miscControls.copyToConfigFull(configFull, configOptions.chainId);
 		pedalControls.copyToConfigFull(configFull, configOptions.chainId);
 		padsControls.copyToConfigFull(configFull, configOptions.chainId);
-		fileManager.save_all(configFull);
+		fileManager.save_all(configFull, configOptions);
 	}
 	
 	private void loadConfig() {
@@ -665,6 +665,9 @@ public class Main_window {
 		if (configOptions.autoOpenPorts) {
 			midi_handler.initPorts(configOptions);
 		}
+		miscControls.copyToConfigFull(configFull, configOptions.chainId);
+		pedalControls.copyToConfigFull(configFull, configOptions.chainId);
+		padsControls.copyToConfigFull(configFull, configOptions.chainId);
 	}
 	
 	private void saveAndExit() {
