@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Insets;
 
 public class MiscControls extends JPanel {
 
@@ -52,17 +53,19 @@ public class MiscControls extends JPanel {
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("50px"),
+				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("57px"),},
+				ColumnSpec.decode("24dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
 		
 		btnGet = new JButton("Get");
+		btnGet.setMargin(new Insets(1, 4, 1, 4));
 		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnGet, "1, 1, fill, fill");
 		
 		btnSend = new JButton("Send");
+		btnSend.setMargin(new Insets(1, 4, 1, 4));
 		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnSend, "3, 1, fill, fill");
 		

@@ -141,7 +141,7 @@ public class Main_window {
 			}
 		});
 		frmMegadrummanager.setTitle("MegaDrumManager");
-		frmMegadrummanager.setBounds(100, 100, 929, 705);
+		frmMegadrummanager.setBounds(100, 100, 991, 705);
 		frmMegadrummanager.setLocation(10, 10);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

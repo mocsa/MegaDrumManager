@@ -20,6 +20,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Insets;
 
 public class PadsControls extends JPanel {
 	private JButton btnGet;
@@ -47,6 +48,10 @@ public class PadsControls extends JPanel {
 	private static final boolean rim_pad = false;
 	private JButton btnGetall;
 	private JButton btnSendall;
+	private JButton btnCopyPad;
+	private JButton btnCopyHead;
+	private JButton btnCopyRim;
+	private JButton btnCopyrd;
 
 	/**
 	 * Create the panel.
@@ -78,33 +83,64 @@ public class PadsControls extends JPanel {
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("42dlu"),
+				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("42dlu"),
+				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("42dlu"),
+				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("42dlu"),
+				ColumnSpec.decode("24dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("26dlu"),
 				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("26dlu"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("26dlu"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("26dlu"),
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
 		
 		btnGet = new JButton("Get");
+		btnGet.setMargin(new Insets(1, 4, 1, 4));
 		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnGet, "1, 1, fill, fill");
 		
 		btnSend = new JButton("Send");
+		btnSend.setMargin(new Insets(1, 4, 1, 4));
 		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnSend, "3, 1, fill, fill");
 		
 		btnGetall = new JButton("GetAll");
+		btnGetall.setMargin(new Insets(1, 4, 1, 4));
 		btnGetall.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnGetall, "5, 1, fill, fill");
 		
 		btnSendall = new JButton("SendAll");
+		btnSendall.setMargin(new Insets(1, 4, 1, 4));
 		btnSendall.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnSendall, "7, 1, fill, fill");
+		
+		btnCopyPad = new JButton("CopyPad");
+		btnCopyPad.setMargin(new Insets(1, 2, 1, 2));
+		btnCopyPad.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel_buttons.add(btnCopyPad, "9, 1");
+		
+		btnCopyHead = new JButton("CopyHead");
+		btnCopyHead.setMargin(new Insets(1, 2, 1, 2));
+		btnCopyHead.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel_buttons.add(btnCopyHead, "11, 1");
+		
+		btnCopyRim = new JButton("CopyRim");
+		btnCopyRim.setMargin(new Insets(1, 2, 1, 2));
+		btnCopyRim.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel_buttons.add(btnCopyRim, "13, 1");
+		
+		btnCopyrd = new JButton("Copy3rd");
+		btnCopyrd.setMargin(new Insets(1, 2, 1, 2));
+		btnCopyrd.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel_buttons.add(btnCopyrd, "15, 1");
 		
 		JPanel panel_input_selection = new JPanel();
 		add(panel_input_selection, "1, 3, fill, fill");

@@ -21,6 +21,15 @@ import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PadCommonControls extends JPanel {
 	private JComboBox comboBox_name;
@@ -172,7 +181,7 @@ public class PadCommonControls extends JPanel {
 			}
 		comboBox_curve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_curve, "3, 7, fill, center");
-		
+				
 		JLabel lblCompression = new JLabel("Compression");
 		lblCompression.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblCompression, "1, 8, right, center");
@@ -310,8 +319,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_type = new JComboBox();
 		comboBox_type.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_type, "3, 20, fill, center");
-		
-
+				
 	}
 
 	private void updateControls() {
