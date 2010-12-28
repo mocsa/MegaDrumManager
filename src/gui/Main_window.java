@@ -63,6 +63,7 @@ import javax.swing.SpringLayout;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.JProgressBar;
+import javax.swing.JCheckBoxMenuItem;
 
 public class Main_window {
 
@@ -77,9 +78,9 @@ public class Main_window {
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
 	private int chainId;
-	private JCheckBox chckbxShowMisc;
-	private JCheckBox chckbxShowHihatPedal;
-	private JCheckBox chckbxShowPads;
+	private JCheckBoxMenuItem chckbxmntmShowMisc;
+	private JCheckBoxMenuItem chckbxmntmShowHihatPedal;
+	private JCheckBoxMenuItem chckbxmntmShowPads;
 	private JMenuItem menuItem;
 	private JMenu mnView;
 	private JProgressBar progressBar;
@@ -330,38 +331,38 @@ public class Main_window {
 		mnView = new JMenu("View");
 		menuBar.add(mnView);
 		
-		chckbxShowMisc = new JCheckBox("Show Misc");
-		chckbxShowMisc.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
+		chckbxmntmShowMisc = new JCheckBoxMenuItem("Show Misc");
+		chckbxmntmShowMisc.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
 				if (miscControls != null) {
-					miscControls.setVisible(chckbxShowMisc.isSelected());
+					miscControls.setVisible(chckbxmntmShowMisc.isSelected());
 				}
 			}
 		});
-		chckbxShowMisc.setSelected(true);
-		mnView.add(chckbxShowMisc);
+		chckbxmntmShowMisc.setSelected(true);
+		mnView.add(chckbxmntmShowMisc);
 		
-		chckbxShowHihatPedal = new JCheckBox("Show HiHat Pedal");
-		chckbxShowHihatPedal.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
+		chckbxmntmShowHihatPedal = new JCheckBoxMenuItem("Show HiHat Pedal");
+		chckbxmntmShowHihatPedal.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
 				if (pedalControls != null) {
-					pedalControls.setVisible(chckbxShowHihatPedal.isSelected());
+					pedalControls.setVisible(chckbxmntmShowHihatPedal.isSelected());
 				}
 			}
 		});
-		chckbxShowHihatPedal.setSelected(true);
-		mnView.add(chckbxShowHihatPedal);
+		chckbxmntmShowHihatPedal.setSelected(true);
+		mnView.add(chckbxmntmShowHihatPedal);
 		
-		chckbxShowPads = new JCheckBox("Show Pads");
-		chckbxShowPads.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
+		chckbxmntmShowPads = new JCheckBoxMenuItem("Show Pads");
+		chckbxmntmShowPads.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
 				if (padsControls != null) {
-					padsControls.setVisible(chckbxShowPads.isSelected());
+					padsControls.setVisible(chckbxmntmShowPads.isSelected());
 				}
 			}
 		});
-		chckbxShowPads.setSelected(true);
-		mnView.add(chckbxShowPads);
+		chckbxmntmShowPads.setSelected(true);
+		mnView.add(chckbxmntmShowPads);
 		
 //		menuItem = new JMenuItem("New menu item");
 //		menuItem.setSelected(true);
