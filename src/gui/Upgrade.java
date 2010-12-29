@@ -11,6 +11,9 @@ import javax.swing.JTextPane;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.SwingUtilities;
+
+import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
@@ -27,6 +30,8 @@ public class Upgrade extends JDialog {
 	private JButton btnCancel;
 	private JButton btnClose;
 	private Upgrade mySelf;
+	private JProgressBar progressBar;
+	private Thread midiThread;
 	
 	/**
 	 * Create the panel.
@@ -40,14 +45,14 @@ public class Upgrade extends JDialog {
 		setResizable(false);
 		setName("upgradeDialog");
 		setTitle("MegaDrum Firmware Upgrade");
-		setBounds(100, 100, 495, 254);
+		setBounds(100, 100, 495, 280);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("default:grow"),
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -91,7 +96,8 @@ public class Upgrade extends JDialog {
 		});
 		panel_1.add(btnOpen, "6, 2");
 		
-		JProgressBar progressBar = new JProgressBar();
+		progressBar = new JProgressBar();
+		progressBar.setStringPainted(true);
 		getContentPane().add(progressBar, "2, 6");
 		
 		JPanel panel = new JPanel();
@@ -102,14 +108,7 @@ public class Upgrade extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				btnCancel.setEnabled(true);
 				btnStart.setEnabled(false);
-				try {
-					midi_handler.doFirmwareUpgrade(mySelf, configOptions, file);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				btnStart.setEnabled(true);
-				btnCancel.setEnabled(false);				
+				callUpgradeThread();
 			}
 		});
 		btnStart.setEnabled(false);
@@ -118,8 +117,9 @@ public class Upgrade extends JDialog {
 		btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				midi_handler.upgradeCancelled = true;
 				btnStart.setEnabled(true);
-				btnCancel.setEnabled(false);				
+				btnCancel.setEnabled(false);
 			}
 		});
 		btnCancel.setEnabled(false);
@@ -136,8 +136,55 @@ public class Upgrade extends JDialog {
 		panel.add(btnClose);
 	}
 	
+	private void callUpgradeThread() {
+		midiThread = new Thread(new Runnable() {
+            public void run() {
+                // since we're not on the EDT,
+                // let's put the setVisible-code
+                // into the Event Dispatching Queue
+                SwingUtilities.invokeLater( new Runnable() {
+                    public void run() {
+        				try {
+        					midi_handler.upgradeCancelled = false;
+        					midi_handler.doFirmwareUpgrade(mySelf, configOptions, file);
+        				} catch (IOException e1) {
+        					// TODO Auto-generated catch block
+        					e1.printStackTrace();
+        				}
+                   }
+                });
+            }
+
+		});
+		midiThread.setPriority( Thread.NORM_PRIORITY );
+		midiThread.run();
+	}
+	
+	public void midiFinished(int i) {
+		btnStart.setEnabled(true);
+		btnCancel.setEnabled(false);	
+	}
+	
+	public void setProgressBar(int v) {
+		progressBar.setValue(v);
+		Rectangle progressRect = progressBar.getBounds();
+		progressRect.x = 0;
+		progressRect.y = 0;
+		progressBar.paintImmediately( progressRect );		
+	}
+
+	
 	public void setConfigOptions(ConfigOptions config) {
 		configOptions = config;
 	}
 
+	public JProgressBar getProgressBar() {
+		return progressBar;
+	}
+	public JButton getBtnCancel() {
+		return btnCancel;
+	}
+	public JButton getBtnStart() {
+		return btnStart;
+	}
 }

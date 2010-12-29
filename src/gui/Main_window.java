@@ -728,6 +728,7 @@ public class Main_window {
 				comboBox_inputsCount.setSelectedIndex(4);
 				break;
 		}
+		updateInputsCountControls();
 		miscControls.copyToConfigFull(configFull, configOptions.chainId);
 		pedalControls.copyToConfigFull(configFull, configOptions.chainId);
 		padsControls.copyToConfigFull(configFull, configOptions.chainId);

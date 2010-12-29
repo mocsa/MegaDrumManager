@@ -40,6 +40,7 @@ public class Midi_handler {
 	public ConfigPad config_pad;
 	public Config3rd config_3rd;
 	public boolean getMidiBlocked;
+	public boolean upgradeCancelled = false;
 
 	public Midi_handler () {
 		midiin = null;
@@ -76,23 +77,25 @@ public class Midi_handler {
 	}
 
 	public void sendMidiShort(byte [] buf) {
-		ShortMessage shortMessage = new ShortMessage();
-		try {
-			switch (buf.length) {
-			case 1:
-				shortMessage.setMessage(buf[0]);
-				break;
-			case 2:
-				shortMessage.setMessage(buf[0], buf[1],0);
-				break;
-			default:
-				shortMessage.setMessage(buf[0], buf[1],buf[2]);
-				break;
+		if ((midithru != null) && (midithru.isOpen())) {
+			ShortMessage shortMessage = new ShortMessage();
+			try {
+				switch (buf.length) {
+				case 1:
+					shortMessage.setMessage(buf[0]);
+					break;
+				case 2:
+					shortMessage.setMessage(buf[0], buf[1],0);
+					break;
+				default:
+					shortMessage.setMessage(buf[0], buf[1],buf[2]);
+					break;
+				}
+				thruReceiver.send(shortMessage, -1);
+			} catch (InvalidMidiDataException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			thruReceiver.send(shortMessage, -1);
-		} catch (InvalidMidiDataException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
@@ -232,7 +235,6 @@ public class Midi_handler {
 			byte [] buffer;
 			buffer = null;
 			int size = 0;
-			
 			if (midiin != null) {
 				if (midiin.isOpen()) {
 					buffer = dump_receiver.getByteMessage();
@@ -468,8 +470,7 @@ public class Midi_handler {
 		}
 	}
 	
-	public int doFirmwareUpgrade (Upgrade parent, ConfigOptions options, File file) throws IOException {		
-		int returnval = 0;
+	public void doFirmwareUpgrade (Upgrade parent, ConfigOptions options, File file) throws IOException {		
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
 		DataInputStream dis = null;
@@ -485,6 +486,7 @@ public class Midi_handler {
 		int bytesSent = 0;			// Number of bytes sent so far
 		int nBytes;
 		int inDelay;
+		int upgradeError = 0;
 
 		closeAllPorts();
 		try {
@@ -503,6 +505,8 @@ public class Midi_handler {
 			buffer[bufferSize] = readHex(dis);
 			bufferSize++;
 		}
+		parent.getProgressBar().setMinimum(0);
+		parent.getProgressBar().setMaximum(bufferSize);
 		dis.close();
 		bis.close();
 		fis.close();
@@ -530,6 +534,8 @@ public class Midi_handler {
 				       "Transferring.. %c %d%% done.",
 					progressChars.charAt(progressCharP),
 					100 * bytesSent / bufferSize);
+			parent.setProgressBar(bytesSent);
+
 			progressCharP++;
 			if(progressCharP >= progressChars.length())  progressCharP = 0;
 			System.out.flush();	
@@ -548,7 +554,7 @@ public class Midi_handler {
  				if (receivedBuffer != null)
  				{
  					nBytes = receivedBuffer.length;
- 					System.out.printf("!!! %d !!!!!!!!!\n", nBytes);
+ 					System.out.printf("Received %d bytes\n", nBytes);
  				}
 			    inDelay--;
 			    try {
@@ -595,7 +601,7 @@ public class Midi_handler {
 						else 
 						{
 							System.out.println("\nCRC error. File damaged.\n");
-							returnval = 1;
+							upgradeError = 1;
 						}
 						break;
 				}
@@ -603,15 +609,23 @@ public class Midi_handler {
 			else
 			{
 				System.out.println("\nFailed: MegaDrum is not responding.\n");
-				returnval = 1;
+				upgradeError = 1;
 			}			
-			
+			if (upgradeCancelled) {
+				System.out.println("Upgrade cancelled\n");
+				upgradeError = 1;
+			}
+			if (upgradeError > 0) {
+				break;
+			}
 		}
-		System.out.println("\rTransferring.. 100%% done.  \n");
-		System.out.println("MegaDrum updated successfully.\n");
+		if (upgradeError == 0) {
+			System.out.println("\rTransferring.. 100%% done.  \n");
+			System.out.println("MegaDrum updated successfully.\n");
+		}
 		
 		
-		return returnval;
+		parent.midiFinished(upgradeError);
 	}
 	
 }

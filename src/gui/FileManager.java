@@ -42,7 +42,7 @@ class BinFileFilter extends javax.swing.filechooser.FileFilter {
     }
     
     public String getDescription() {
-        return "Sysex files (*.bin)";
+        return "Firmware files (*.bin)";
     }
 }
 
