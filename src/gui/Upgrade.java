@@ -13,11 +13,15 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.awt.Dialog.ModalityType;
 
 public class Upgrade extends JDialog {
@@ -31,7 +35,12 @@ public class Upgrade extends JDialog {
 	private JButton btnClose;
 	private Upgrade mySelf;
 	private JProgressBar progressBar;
+	private Color pbBgColor;
+	private Color pbFgColor;
 	private Thread midiThread;
+	ExecutorService backgroundExec = Executors.newCachedThreadPool();
+	Future<?>  midiTask = null;
+	
 	
 	/**
 	 * Create the panel.
@@ -98,6 +107,8 @@ public class Upgrade extends JDialog {
 		
 		progressBar = new JProgressBar();
 		progressBar.setStringPainted(true);
+		pbBgColor = progressBar.getBackground();
+		pbFgColor = progressBar.getForeground();
 		getContentPane().add(progressBar, "2, 6");
 		
 		JPanel panel = new JPanel();
@@ -108,6 +119,9 @@ public class Upgrade extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				btnCancel.setEnabled(true);
 				btnStart.setEnabled(false);
+				progressBar.setString(null);
+				progressBar.setBackground(pbBgColor);
+				progressBar.setForeground(pbFgColor);
 				callUpgradeThread();
 			}
 		});
@@ -137,30 +151,74 @@ public class Upgrade extends JDialog {
 	}
 	
 	private void callUpgradeThread() {
-		midiThread = new Thread(new Runnable() {
-            public void run() {
-                // since we're not on the EDT,
-                // let's put the setVisible-code
-                // into the Event Dispatching Queue
-                SwingUtilities.invokeLater( new Runnable() {
-                    public void run() {
-        				try {
-        					midi_handler.upgradeCancelled = false;
-        					midi_handler.doFirmwareUpgrade(mySelf, configOptions, file);
-        				} catch (IOException e1) {
-        					// TODO Auto-generated catch block
-        					e1.printStackTrace();
-        				}
-                   }
-                });
-            }
+            midiTask = backgroundExec.submit(new Runnable() {
+                public void run() {
+                   //while (true) {
+                       //if (Thread.currentThread().isInterrupted()) {
+                       //    break;
+                       //}
+   						try {
+   							midi_handler.upgradeCancelled = false;
+							midi_handler.doFirmwareUpgrade(mySelf, configOptions, file);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+                   //}
+                }
+            });
+            
 
-		});
-		midiThread.setPriority( Thread.NORM_PRIORITY );
-		midiThread.run();
+//            backgroundExec.execute(new Runnable() {
+//            public void run() {
+//                try {
+//					midi_handler.doFirmwareUpgrade(mySelf, configOptions, file);
+//                } finally {
+//                    GuiExecutor.instance().execute(new Runnable() {
+//                        public void run() {
+//                            btnStart.setEnabled(true);
+//                            btnCancel.setEnabled(true);
+//                        }
+//                    });
+//                }
+//            }
+//        });
+
 	}
 	
-	public void midiFinished(int i) {
+//	private void callUpgradeThread() {
+//        midiThread = new Thread(new Runnable() {
+//            public void run() {
+//                // since we're not on the EDT,
+//                // let's put the setVisible-code
+//                // into the Event Dispatching Queue
+//                SwingUtilities.invokeLater( new Runnable() {
+//                    public void run() {
+//        				try {
+//        					midi_handler.upgradeCancelled = false;
+//        					midi_handler.doFirmwareUpgrade(mySelf, configOptions, file);
+//        				} catch (IOException e1) {
+//        					// TODO Auto-generated catch block
+//        					e1.printStackTrace();
+//        				}
+//                   }
+//                });
+//            }
+//
+//		});
+//		midiThread.setPriority( Thread.NORM_PRIORITY );
+//		midiThread.run();
+//	}
+
+	public void midiFinished(int result, String resultString) {
+		if (result > 0) {
+			progressBar.setBackground(Color.YELLOW);
+			progressBar.setForeground(Color.RED);
+		} else {
+			progressBar.setBackground(pbBgColor);
+			progressBar.setForeground(pbFgColor);
+		}
+		progressBar.setString(resultString);
 		btnStart.setEnabled(true);
 		btnCancel.setEnabled(false);	
 	}

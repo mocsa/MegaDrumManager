@@ -474,8 +474,9 @@ public class Midi_handler {
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
 		DataInputStream dis = null;
+		String resultString = "Upgrade completed successufully";
 		int[] buffer = new int[0x40000];	// Data buffer for sending the data
-		String	progressChars = "--\\\\||//";
+		//String	progressChars = "--\\\\||//";
 
 		byte[] receivedBuffer;
 		int receivedByte;		// One byte received from COM port
@@ -510,10 +511,10 @@ public class Midi_handler {
 		dis.close();
 		bis.close();
 		fis.close();
-		System.out.printf("Firmware file is loaded\n");
-		System.out.printf("Firmware size is %d bytes\n", bufferSize);
+		//System.out.printf("Firmware file is loaded\n");
+		//System.out.printf("Firmware size is %d bytes\n", bufferSize);
 		
-		int progressCharP = 0;	
+		//int progressCharP = 0;	
 		for(index = 0; index < bufferSize; index += frameSize)
 		{
 			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
@@ -530,17 +531,17 @@ public class Midi_handler {
 					nBytes = receivedBuffer.length;
 				}
 			}
-			System.out.printf("\r                        \r" + 
-				       "Transferring.. %c %d%% done.",
-					progressChars.charAt(progressCharP),
-					100 * bytesSent / bufferSize);
+//			System.out.printf("\r                        \r" + 
+//				       "Transferring.. %c %d%% done.",
+//					progressChars.charAt(progressCharP),
+//					100 * bytesSent / bufferSize);
 			parent.setProgressBar(bytesSent);
 
-			progressCharP++;
-			if(progressCharP >= progressChars.length())  progressCharP = 0;
-			System.out.flush();	
-
-			System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
+//			progressCharP++;
+//			if(progressCharP >= progressChars.length())  progressCharP = 0;
+//			System.out.flush();	
+//
+//			System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
 			writeMid(receiver, buffer, index, frameSize);
 
@@ -554,7 +555,7 @@ public class Midi_handler {
  				if (receivedBuffer != null)
  				{
  					nBytes = receivedBuffer.length;
- 					System.out.printf("Received %d bytes\n", nBytes);
+// 					System.out.printf("Received %d bytes\n", nBytes);
  				}
 			    inDelay--;
 			    try {
@@ -567,13 +568,13 @@ public class Midi_handler {
  			
  
  			receivedByte = 0;
-			if (nBytes > 2)
-			{
+			if (nBytes > 2) {
 				receivedByte = receivedBuffer[1]<<4;
 				receivedByte = receivedBuffer[2]|receivedByte;
-				System.out.println(String.valueOf((int)receivedByte));
+				//System.out.println(String.valueOf((int)receivedByte));
 			} else {
-				System.out.println("Read error\n");
+				//System.out.println("Read error\n");
+				//if (nByte)
 				nBytes = 1;
 				receivedByte = Constants.Error_CRC;
 			}
@@ -590,7 +591,7 @@ public class Midi_handler {
 					default: // Error_CRC:
 						if (++retries < 4) {
 							index -= frameSize;
-							System.out.println("Retrying on CRC error\n");
+							//System.out.println("Retrying on CRC error\n");
 							try {
 								Thread.sleep(10);
 							} catch (InterruptedException e) {
@@ -600,32 +601,35 @@ public class Midi_handler {
 						}
 						else 
 						{
-							System.out.println("\nCRC error. File damaged.\n");
+							//System.out.println("\nCRC error. File damaged.\n");
 							upgradeError = 1;
+							resultString = "CRC error. File damaged";
 						}
 						break;
 				}
 			}
 			else
 			{
-				System.out.println("\nFailed: MegaDrum is not responding.\n");
+				//System.out.println("\nFailed: MegaDrum is not responding.\n");
 				upgradeError = 1;
+				resultString = "Failed: MegaDrum is not responding";
 			}			
 			if (upgradeCancelled) {
-				System.out.println("Upgrade cancelled\n");
+				//System.out.println("Upgrade cancelled\n");
 				upgradeError = 1;
+				resultString = "Upgrade cancelled";
 			}
 			if (upgradeError > 0) {
 				break;
 			}
 		}
-		if (upgradeError == 0) {
-			System.out.println("\rTransferring.. 100%% done.  \n");
-			System.out.println("MegaDrum updated successfully.\n");
-		}
+//		if (upgradeError == 0) {
+//			System.out.println("\rTransferring.. 100%% done.  \n");
+//			System.out.println("MegaDrum updated successfully.\n");
+//		}
 		
 		
-		parent.midiFinished(upgradeError);
+		parent.midiFinished(upgradeError, resultString);
 	}
 	
 }
