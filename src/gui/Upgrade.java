@@ -14,6 +14,7 @@ import javax.swing.JProgressBar;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.IOException;
 import java.awt.Dialog.ModalityType;
 
 public class Upgrade extends JDialog {
@@ -25,11 +26,13 @@ public class Upgrade extends JDialog {
 	private JButton btnStart;
 	private JButton btnCancel;
 	private JButton btnClose;
+	private Upgrade mySelf;
 	
 	/**
 	 * Create the panel.
 	 */
 	public Upgrade(Midi_handler mh, FileManager fm) {
+		mySelf = this;
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		midi_handler = mh;
 		fileManager = fm;
@@ -95,10 +98,30 @@ public class Upgrade extends JDialog {
 		getContentPane().add(panel, "2, 8, fill, fill");
 		
 		btnStart = new JButton("Start");
+		btnStart.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnCancel.setEnabled(true);
+				btnStart.setEnabled(false);
+				try {
+					midi_handler.doFirmwareUpgrade(mySelf, configOptions, file);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				btnStart.setEnabled(true);
+				btnCancel.setEnabled(false);				
+			}
+		});
 		btnStart.setEnabled(false);
 		panel.add(btnStart);
 		
 		btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				btnStart.setEnabled(true);
+				btnCancel.setEnabled(false);				
+			}
+		});
 		btnCancel.setEnabled(false);
 		panel.add(btnCancel);
 		

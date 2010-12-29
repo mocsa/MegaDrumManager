@@ -317,9 +317,9 @@ public class Main_window {
 		mntmFirmwareUpgrade.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				upgradeDialog.setConfigOptions(configOptions);
-				timer_midi.cancel();
+				midi_handler.getMidiBlocked = true;
 				upgradeDialog.setVisible(true);
-				timer_midi.scheduleAtFixedRate(midi_in_task, 1000, 1);
+				midi_handler.getMidiBlocked = false;
 			}
 		});
 		mnMain.add(mntmFirmwareUpgrade);

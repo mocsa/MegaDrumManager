@@ -39,6 +39,7 @@ public class Midi_handler {
 	public ConfigPedal config_pedal;
 	public ConfigPad config_pad;
 	public Config3rd config_3rd;
+	public boolean getMidiBlocked;
 
 	public Midi_handler () {
 		midiin = null;
@@ -53,6 +54,7 @@ public class Midi_handler {
 		config_pad = new ConfigPad();
 		config_3rd = new Config3rd();
 		dump_receiver = new DumpReceiver();
+		getMidiBlocked = false;
 	}
 	
 	public void closeAllPorts() {
@@ -226,40 +228,42 @@ public class Midi_handler {
 	}
 	
 	public void get_midi() {
-		byte [] buffer;
-		buffer = null;
-		int size = 0;
-		
-		if (midiin != null) {
-			if (midiin.isOpen()) {
-				buffer = dump_receiver.getByteMessage();
-				
-				if (buffer != null) {
-					size = buffer.length;
-					if (( buffer[0] == Constants.SYSEX_START) && (buffer[size-1] == Constants.SYSEX_END)) {
-						if (buffer[1] == Constants.MD_SYSEX) {
-							if (buffer[2] == (byte) config_chain_id) {
-								switch(buffer[3]) {
-								case Constants.MD_SYSEX_MISC:
-									config_misc.setFromSysex(buffer);
-									break;
-								case Constants.MD_SYSEX_PEDAL:
-									config_pedal.setFromSysex(buffer);
-									break;
-								case Constants.MD_SYSEX_PAD:
-									config_pad.setFromSysex(buffer);
-									break;
-								case Constants.MD_SYSEX_3RD:
-									config_3rd.setFromSysex(buffer);
-									break;
-								default:
-									break;
+		if (!getMidiBlocked) {
+			byte [] buffer;
+			buffer = null;
+			int size = 0;
+			
+			if (midiin != null) {
+				if (midiin.isOpen()) {
+					buffer = dump_receiver.getByteMessage();
+					
+					if (buffer != null) {
+						size = buffer.length;
+						if (( buffer[0] == Constants.SYSEX_START) && (buffer[size-1] == Constants.SYSEX_END)) {
+							if (buffer[1] == Constants.MD_SYSEX) {
+								if (buffer[2] == (byte) config_chain_id) {
+									switch(buffer[3]) {
+									case Constants.MD_SYSEX_MISC:
+										config_misc.setFromSysex(buffer);
+										break;
+									case Constants.MD_SYSEX_PEDAL:
+										config_pedal.setFromSysex(buffer);
+										break;
+									case Constants.MD_SYSEX_PAD:
+										config_pad.setFromSysex(buffer);
+										break;
+									case Constants.MD_SYSEX_3RD:
+										config_3rd.setFromSysex(buffer);
+										break;
+									default:
+										break;
+									}
 								}
 							}
+						} else {
+							// TO-DO
+							sendMidiShort(buffer);
 						}
-					} else {
-						// TO-DO
-						sendMidiShort(buffer);
 					}
 				}
 			}
@@ -464,7 +468,7 @@ public class Midi_handler {
 		}
 	}
 	
-	public int doUpgrade (Upgrade parent, ConfigOptions options, File file) throws IOException {
+	public int doFirmwareUpgrade (Upgrade parent, ConfigOptions options, File file) throws IOException {		
 		int returnval = 0;
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
