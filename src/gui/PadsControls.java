@@ -166,13 +166,7 @@ public class PadsControls extends JPanel {
 		panel_input_selection.add(label, "2, 1, right, default");
 		
 		comboBox_padSelection = new JComboBox();
-		comboBox_padSelection.addItem("");
-		updatePadsSelection(0);
-        for(int i=1; i<Constants.PADS_COUNT; i++){
-    		comboBox_padSelection.addItem("");
-    		updatePadsSelection(i);
-    		i++;
-        }
+		updateInputCountsControls(Constants.PADS_COUNT);
         comboBox_padSelection.setSelectedIndex(0); 
 		comboBox_padSelection.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -240,7 +234,7 @@ public class PadsControls extends JPanel {
 				copyPadVarToAll(varName, head_rim);
 			}
 		};
-		panel_head = new PadCommonControls(this);
+		panel_head = new PadCommonControls();
 		
 		panel_head.getPadButton_name().addActionListener(padButtonActionListener);
 		panel_head.getPadButton_note().addActionListener(padButtonActionListener);
@@ -274,7 +268,7 @@ public class PadsControls extends JPanel {
 		panel_head_rim.add(panel_head);
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		panel_rim = new PadCommonControls(this);
+		panel_rim = new PadCommonControls();
 		panel_rim.getComboBox_type().addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -544,6 +538,21 @@ public class PadsControls extends JPanel {
 		} else {
 			setConfig(configPads[padPointer],padPointer);
 		}
+	}
+	
+	public void updateInputCountsControls(int count) {
+		if (panel_head != null) {
+			switch_to_pad(0);
+		}
+		comboBox_padSelection.setMaximumRowCount((count+1)/2);
+		comboBox_padSelection.removeAllItems();
+		comboBox_padSelection.addItem("");
+		updatePadsSelection(0);
+        for(int i=1; i<count; i++){
+    		comboBox_padSelection.addItem("");
+    		updatePadsSelection(i);
+    		i++;
+        }
 	}
 	
 	public JButton getBtnGetall() {

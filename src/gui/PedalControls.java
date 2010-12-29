@@ -159,10 +159,7 @@ public class PedalControls extends JPanel {
 				configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
 			}
 		});
-        for(int i=2; i<Constants.PADS_COUNT; i++){
-        	comboBox_input.addItem(((Integer)i).toString());
-        	i++;
-        }
+		updateInputCountsControls(Constants.PADS_COUNT);
 		comboBox_input.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(comboBox_input, "3, 3, fill, default");
 		
@@ -602,6 +599,14 @@ public class PedalControls extends JPanel {
 	public void loadFromConfigFull (ConfigFull config) {
 		configPedal.setFromSysex(config.sysex_pedal);
 		updateControls();
+	}
+	
+	public void updateInputCountsControls(int count) {
+		comboBox_input.removeAllItems();
+        for(int i=2; i<count; i++){
+        	comboBox_input.addItem(((Integer)i).toString());
+        	i++;
+        }
 	}
 
 }

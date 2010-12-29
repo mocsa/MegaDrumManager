@@ -84,6 +84,7 @@ public class Main_window {
 	private JMenuItem menuItem;
 	private JMenu mnView;
 	private JProgressBar progressBar;
+	private JComboBox comboBox_inputsCount;
 
 	/**
 	 * Launch the application.
@@ -364,17 +365,6 @@ public class Main_window {
 		chckbxmntmShowPads.setSelected(true);
 		mnView.add(chckbxmntmShowPads);
 		
-//		menuItem = new JMenuItem("New menu item");
-//		menuItem.setSelected(true);
-//		menuItem.addItemListener(new ItemListener() {
-//			public void itemStateChanged(ItemEvent e) {
-//				if (miscControls != null) {
-//					miscControls.setVisible(menuItem.isSelected());
-//				}
-//			}
-//		});
-//		mnView.add(menuItem);
-		
 		JPanel panel_main = new JPanel();
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
@@ -456,7 +446,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("36dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
@@ -496,6 +486,44 @@ public class Main_window {
 		
 		progressBar = new JProgressBar();
 		progressBar.setVisible(false);
+		
+		JLabel lblInputs = new JLabel("Inputs:");
+		panel.add(lblInputs, "10, 1, right, default");
+		
+		comboBox_inputsCount = new JComboBox();
+		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		comboBox_inputsCount.removeAllItems();
+		comboBox_inputsCount.addItem("22");
+		comboBox_inputsCount.addItem("32");
+		comboBox_inputsCount.addItem("40");
+		comboBox_inputsCount.addItem("48");
+		comboBox_inputsCount.addItem("56");
+		comboBox_inputsCount.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
+		        	switch (comboBox_inputsCount.getSelectedIndex()) {
+		        	case 0:
+		        		configOptions.inputsCount = 21;
+		        		break;
+		        	case 1:
+		        		configOptions.inputsCount = 31;
+		        		break;
+		        	case 2:
+		        		configOptions.inputsCount = 39;
+		        		break;
+		        	case 3:
+		        		configOptions.inputsCount = 47;
+		        		break;
+		        	default:
+		        		configOptions.inputsCount = 55;
+		        		break;
+		        	}
+		        	updateInputsCountControls();
+		        }
+			}
+		});
+		panel.add(comboBox_inputsCount, "12, 1, left, fill");
+		
 		progressBar.setStringPainted(true);
 		panel.add(progressBar, "14, 1");
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
@@ -581,8 +609,8 @@ public class Main_window {
                     public void run() {
                 		int i;
                 		progressBar.setMinimum(0);
-                		progressBar.setMaximum(configOptions.inputCount - 2);
-                		for (i = 0; i<(configOptions.inputCount - 1); i++) {
+                		progressBar.setMaximum(configOptions.inputsCount - 2);
+                		for (i = 0; i<(configOptions.inputsCount - 1); i++) {
                 			progressBar.setValue(i);
                 			Rectangle progressRect = progressBar.getBounds();
                 			progressRect.x = 0;
@@ -611,8 +639,8 @@ public class Main_window {
                     public void run() {
                 		int i;
                 		progressBar.setMinimum(0);
-                		progressBar.setMaximum(configOptions.inputCount - 2);
-                		for (i = 0; i<(configOptions.inputCount - 1); i++) {
+                		progressBar.setMaximum(configOptions.inputsCount - 2);
+                		for (i = 0; i<(configOptions.inputsCount - 1); i++) {
                 			progressBar.setValue(i);
                 			Rectangle progressRect = progressBar.getBounds();
                 			progressRect.x = 0;
@@ -666,6 +694,23 @@ public class Main_window {
 		if (configOptions.autoOpenPorts) {
 			midi_handler.initPorts(configOptions);
 		}
+		switch (configOptions.inputsCount) {
+			case 21:
+				comboBox_inputsCount.setSelectedIndex(0);
+				break;
+			case 31:
+				comboBox_inputsCount.setSelectedIndex(1);
+				break;
+			case 39:
+				comboBox_inputsCount.setSelectedIndex(2);
+				break;
+			case 47:
+				comboBox_inputsCount.setSelectedIndex(3);
+				break;
+			default:
+				comboBox_inputsCount.setSelectedIndex(4);
+				break;
+		}
 		miscControls.copyToConfigFull(configFull, configOptions.chainId);
 		pedalControls.copyToConfigFull(configFull, configOptions.chainId);
 		padsControls.copyToConfigFull(configFull, configOptions.chainId);
@@ -684,6 +729,11 @@ public class Main_window {
 			fileManager.saveLastOptions(configOptions);
 		}
 		System.exit(0);
+	}
+	
+	private void updateInputsCountControls() {
+		pedalControls.updateInputCountsControls(configOptions.inputsCount);
+		padsControls.updateInputCountsControls(configOptions.inputsCount);
 	}
 	
 }

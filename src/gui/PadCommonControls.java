@@ -34,7 +34,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class PadCommonControls extends JPanel {
-	private PadsControls parent;
 	private JComboBox comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
@@ -88,8 +87,7 @@ public class PadCommonControls extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PadCommonControls(PadsControls p) {
-		parent = p;
+	public PadCommonControls() {
 		configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("78px"),
@@ -532,7 +530,7 @@ public class PadCommonControls extends JPanel {
 		updateConfig();
 		return configPad;
 	}
-	
+		
 	public boolean getHeadRim() {
 		return head_rim_pad;
 	}
