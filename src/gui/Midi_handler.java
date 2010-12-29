@@ -567,22 +567,20 @@ public class Midi_handler {
 			}
  			
  
- 			receivedByte = 0;
+ 			receivedByte = Constants.Error_NoResponse;
 			if (nBytes > 2) {
 				receivedByte = receivedBuffer[1]<<4;
 				receivedByte = receivedBuffer[2]|receivedByte;
 				//System.out.println(String.valueOf((int)receivedByte));
 			} else {
 				//System.out.println("Read error\n");
-				//if (nByte)
-				nBytes = 1;
-				receivedByte = Constants.Error_CRC;
+				if (nBytes > 0) {
+					receivedByte = Constants.Error_Read;
+				}
 			}
-			//receivedByte = Error_OK;
-			if (nBytes > 0)
-			{
-				switch (receivedByte)
-				{
+
+//			if (nBytes > 0) {
+				switch (receivedByte) {
 					case Constants.Error_OK:
 						bytesSent += frameSize;
 						retries = 0;
@@ -598,22 +596,36 @@ public class Midi_handler {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}
-						else 
-						{
+						} else {
 							//System.out.println("\nCRC error. File damaged.\n");
-							upgradeError = 1;
-							resultString = "CRC error. File damaged";
+							switch (receivedByte) {
+							case Constants.Error_CRC:
+								upgradeError = 2;
+								resultString = "CRC error. File damaged?";
+								break;
+							case Constants.Error_NoResponse:
+								upgradeError = 3;
+								resultString = "MegaDrum is not responding";
+								break;
+							case Constants.Error_Read:
+								upgradeError = 4;
+								resultString = "Read error. Bad communication?";
+								break;
+							default:
+								upgradeError = 99;
+								resultString = "Unknown error";
+								break;
+							}
 						}
 						break;
 				}
-			}
-			else
-			{
-				//System.out.println("\nFailed: MegaDrum is not responding.\n");
-				upgradeError = 1;
-				resultString = "Failed: MegaDrum is not responding";
-			}			
+//			}
+//			else
+//			{
+//				//System.out.println("\nFailed: MegaDrum is not responding.\n");
+//				upgradeError = 1;
+//				resultString = "Failed: MegaDrum is not responding";
+//			}			
 			if (upgradeCancelled) {
 				//System.out.println("Upgrade cancelled\n");
 				upgradeError = 1;
