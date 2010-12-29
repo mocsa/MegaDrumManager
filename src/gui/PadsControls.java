@@ -269,6 +269,28 @@ public class PadsControls extends JPanel {
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		panel_rim = new PadCommonControls();
+		
+		panel_rim.getPadButton_name().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_note().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_altNote().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_pressrollNote().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_channel().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_special().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_curve().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_compression().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_shift().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_xtalkLevel().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_xtalkGroup().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_threshold().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_gain().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_autoLevel().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_highLevel().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_retrigger().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_dynLevel().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_dynTime().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_minScan().addActionListener(padButtonActionListener);
+		panel_rim.getPadButton_type().addActionListener(padButtonActionListener);
+		
 		panel_rim.getComboBox_type().addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -488,7 +510,9 @@ public class PadsControls extends JPanel {
 			configPads[pad_id].minScan = config.minScan;	
 		}
 		if (varName.equals("type")) {
-			//configPads[pad_id].channel = config.channel;	
+			configPads[pad_id].type = config.type;	
+			configPads[pad_id].dual = config.dual;	
+			configPads[pad_id].threeWay = config.threeWay;	
 		}
 		if (varName.equals("autoLevel")) {
 			configPads[pad_id].autoLevel = config.autoLevel;	
@@ -521,21 +545,26 @@ public class PadsControls extends JPanel {
 	
 	private void copyPadVarToAll(String varName, boolean head_rim) {
 		int input = padPointer;
+		configPads[padPointer].copyVarsFrom(panel_head.getConfig());
 		if (head_rim == head_pad) {
-			configPads[padPointer].copyVarsFrom(panel_head.getConfig());
+			for (int i = 0; i<Constants.PADS_COUNT;i++) {
+				if (i != input) {
+					copyPadVar(varName, i, configPads[input]);
+				}
+		
+			}
 		} else {
 			configPads[padPointer + 1].copyVarsFrom(panel_rim.getConfig());
-			input++;
-		}
-		for (int i = 0; i<Constants.PADS_COUNT;i++) {
-			if (i != input) {
-				copyPadVar(varName, i, configPads[input]);
+			for (int i = 1; i<Constants.PADS_COUNT - 1;i++) {
+				if (i != input) {
+					copyPadVar(varName, i, configPads[input]);
+					copyPadVar(varName, i+1, configPads[input+1]);
+				}
+				i++;
 			}
-	
 		}
-		if (head_rim == head_pad) {
-			setConfig(configPads[padPointer+1],padPointer+1);
-		} else {
+		setConfig(configPads[padPointer+1],padPointer+1);
+		if (head_rim != head_pad) {
 			setConfig(configPads[padPointer],padPointer);
 		}
 	}
