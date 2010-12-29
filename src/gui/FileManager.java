@@ -36,12 +36,23 @@ class SysexFileFilter extends javax.swing.filechooser.FileFilter {
     }
 }
 
+class BinFileFilter extends javax.swing.filechooser.FileFilter {
+    public boolean accept(File f) {
+        return f.isDirectory() || f.getName().toLowerCase().endsWith(".bin");
+    }
+    
+    public String getDescription() {
+        return "Sysex files (*.bin)";
+    }
+}
+
 public class FileManager {
 	private JFileChooser fileChooser;
 	private JFrame parent;
 	private File file = null;
 	private ConfigFileFilter configFileFilter;
 	private SysexFileFilter sysexFileFilter;
+	private BinFileFilter binFileFilter;
 
 	
 	public FileManager (JFrame parentFrame) {
@@ -49,6 +60,7 @@ public class FileManager {
 		parent = parentFrame;
 		configFileFilter = new ConfigFileFilter();
 		sysexFileFilter = new SysexFileFilter();
+		binFileFilter = new BinFileFilter();
 		
 		//file = new File();
 	}
@@ -114,6 +126,21 @@ public class FileManager {
 		}
 	}
 	
+	public File selectFirmwareFile(ConfigOptions options) {
+		int returnVal;
+		file = null;
+		if (!options.lastFullPathConfig.equals("")) {
+			fileChooser.setCurrentDirectory(new File(options.lastFullPathConfig));
+		}
+		fileChooser.setFileFilter(binFileFilter);
+		returnVal = fileChooser.showOpenDialog(parent);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			file = fileChooser.getSelectedFile();
+			options.lastFullPathConfig = file.getAbsolutePath();
+		}
+		return file;
+	}
+
 	public ConfigFull loadAllSilent(ConfigFull configOld, ConfigOptions options) {
 		ConfigFull config = new ConfigFull();
 		file = new File(options.lastFullPathConfig);

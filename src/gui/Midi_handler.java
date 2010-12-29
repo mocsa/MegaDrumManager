@@ -1,5 +1,12 @@
 package gui;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Transmitter;
@@ -394,6 +401,213 @@ public class Midi_handler {
 			}
  		}
  		
+	}
+	
+	private static int readHex(DataInputStream d) throws IOException {
+		StringBuffer curr;
+		int result;
+
+		curr = new StringBuffer("");
+		
+		curr.append(String.format("%c", d.readByte()).toUpperCase());
+		curr.append(String.format("%c", d.readByte()).toUpperCase());
+		
+		result = Integer.parseInt(curr.toString(),16);
+		//out(String.valueOf(result));
+		//System.out.printf("%h\n", result);
+		return result;
+	}
+
+	public static void write(Receiver rr, int[] buf, int ind, int size)
+	{
+		byte[] ba = new byte[(size*2) + 2];
+		int p = 0;
+		ba[p++] =(byte) 0xf0;
+		while (size > 0)
+		{
+			//System.out.printf("%h\n", buf[ind]);
+			ba[p++] = (byte) ((byte) (buf[ind]>>4) & 0x0f);
+			//System.out.printf("%h\n", ba[p-1]);
+			ba[p++] = (byte) ((byte) (buf[ind]) & 0x0f);
+			//System.out.printf("%h\n", ba[p-1]);
+			size --;
+			ind++;
+		}
+		ba[p++] = (byte) 0xf7;
+		SysexMessage msg = new SysexMessage();
+		try {
+			msg.setMessage(ba, p);
+			rr.send(msg, -1);
+		} catch (InvalidMidiDataException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static final int Block_size = 22; // Doesn't work if more than 22
+
+	public static void writeMid(Receiver rr, int[] buf, int ind, int size)
+	{
+		int p = 0;
+		boolean running = true;
+		while (running) {
+			if ((p + Block_size) < size)
+			{
+				write(rr,buf,ind + p, Block_size);
+				p += Block_size;
+			}
+			else
+			{
+				write(rr,buf,ind + p, size - p);
+				running = false;
+			}
+		}
+	}
+	
+	public int doUpgrade (Upgrade parent, ConfigOptions options, File file) throws IOException {
+		int returnval = 0;
+		FileInputStream fis = null;
+		BufferedInputStream bis = null;
+		DataInputStream dis = null;
+		int[] buffer = new int[0x40000];	// Data buffer for sending the data
+		String	progressChars = "--\\\\||//";
+
+		byte[] receivedBuffer;
+		int receivedByte;		// One byte received from COM port
+		int retries = 0;		// Number of tries so far
+		int index;				// Index in the data buffer
+		int frameSize;				// Number of bytes in the current frame
+		int bufferSize = 0;			// Total number of bytes in the buffer
+		int bytesSent = 0;			// Number of bytes sent so far
+		int nBytes;
+		int inDelay;
+
+		closeAllPorts();
+		try {
+			fis = new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		bis = new BufferedInputStream(fis);
+		dis = new DataInputStream(bis);
+
+		initPorts(options);
+
+		while (dis.available() > 1)
+		{
+			buffer[bufferSize] = readHex(dis);
+			bufferSize++;
+		}
+		dis.close();
+		bis.close();
+		fis.close();
+		System.out.printf("Firmware file is loaded\n");
+		System.out.printf("Firmware size is %d bytes\n", bufferSize);
+		
+		int progressCharP = 0;	
+		for(index = 0; index < bufferSize; index += frameSize)
+		{
+			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
+			nBytes = 1;
+			while (nBytes > 0) {
+				receivedBuffer = dump_receiver.getByteMessage();
+				if (receivedBuffer == null)
+				{
+					nBytes = 0;
+					//out("input buffer cleared");
+				}
+				else
+				{
+					nBytes = receivedBuffer.length;
+				}
+			}
+			System.out.printf("\r                        \r" + 
+				       "Transferring.. %c %d%% done.",
+					progressChars.charAt(progressCharP),
+					100 * bytesSent / bufferSize);
+			progressCharP++;
+			if(progressCharP >= progressChars.length())  progressCharP = 0;
+			System.out.flush();	
+
+			System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
+
+			writeMid(receiver, buffer, index, frameSize);
+
+			nBytes = 0;
+			//nBytes = 2;
+			inDelay = 40;
+			receivedBuffer = null;	
+ 			while ((nBytes == 0) && (inDelay > 0)) {
+
+ 				receivedBuffer = dump_receiver.getByteMessage();
+ 				if (receivedBuffer != null)
+ 				{
+ 					nBytes = receivedBuffer.length;
+ 					System.out.printf("!!! %d !!!!!!!!!\n", nBytes);
+ 				}
+			    inDelay--;
+			    try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+ 			
+ 
+ 			receivedByte = 0;
+			if (nBytes > 2)
+			{
+				receivedByte = receivedBuffer[1]<<4;
+				receivedByte = receivedBuffer[2]|receivedByte;
+				System.out.println(String.valueOf((int)receivedByte));
+			} else {
+				System.out.println("Read error\n");
+				nBytes = 1;
+				receivedByte = Constants.Error_CRC;
+			}
+			//receivedByte = Error_OK;
+			if (nBytes > 0)
+			{
+				switch (receivedByte)
+				{
+					case Constants.Error_OK:
+						bytesSent += frameSize;
+						retries = 0;
+						break;
+
+					default: // Error_CRC:
+						if (++retries < 4) {
+							index -= frameSize;
+							System.out.println("Retrying on CRC error\n");
+							try {
+								Thread.sleep(10);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						else 
+						{
+							System.out.println("\nCRC error. File damaged.\n");
+							returnval = 1;
+						}
+						break;
+				}
+			}
+			else
+			{
+				System.out.println("\nFailed: MegaDrum is not responding.\n");
+				returnval = 1;
+			}			
+			
+		}
+		System.out.println("\rTransferring.. 100%% done.  \n");
+		System.out.println("MegaDrum updated successfully.\n");
+		
+		
+		return returnval;
 	}
 	
 }

@@ -69,8 +69,10 @@ public class Main_window {
 
 	private JFrame frmMegadrummanager;
 	private Options dialog_options;
+	private Upgrade upgradeDialog;
 	private Midi_handler midi_handler;
 	private Timer timer_midi;
+	private TimerTask midi_in_task;
 	private MiscControls miscControls;
 	private PedalControls pedalControls;
 	private PadsControls padsControls;
@@ -151,31 +153,32 @@ public class Main_window {
 		fileManager = new FileManager(frmMegadrummanager);
 		dialog_options = new Options();
 		midi_handler = new Midi_handler();
+		upgradeDialog = new Upgrade(midi_handler, fileManager);
 		midi_handler.config_chain_id = chainId;
 		timer_midi = new Timer();
-		timer_midi.scheduleAtFixedRate(
-				new TimerTask() {
-					public void run() {
-						midi_handler.get_midi();
-						if (midi_handler.config_misc.changed) {
-							midi_handler.config_misc.changed = false;
-							miscControls.setConfig(midi_handler.config_misc);
-						}
-						if (midi_handler.config_pedal.changed) {
-							midi_handler.config_pedal.changed = false;
-							pedalControls.setConfig(midi_handler.config_pedal);
-						}
-						if (midi_handler.config_pad.changed_pad > 0) {
-							padsControls.setConfig(midi_handler.config_pad, midi_handler.config_pad.changed_pad - 1);
-							midi_handler.config_pad.changed_pad = 0;
-						}
-						if (midi_handler.config_3rd.changed_3rd > 0) {
-							padsControls.setConfig3rd(midi_handler.config_3rd, midi_handler.config_3rd.changed_3rd - 1);
-							midi_handler.config_3rd.changed_3rd = 0;
-						}
-					}
+		midi_in_task = new TimerTask() {
+			public void run() {
+				midi_handler.get_midi();
+				if (midi_handler.config_misc.changed) {
+					midi_handler.config_misc.changed = false;
+					miscControls.setConfig(midi_handler.config_misc);
 				}
-				, 1000, 1);
+				if (midi_handler.config_pedal.changed) {
+					midi_handler.config_pedal.changed = false;
+					pedalControls.setConfig(midi_handler.config_pedal);
+				}
+				if (midi_handler.config_pad.changed_pad > 0) {
+					padsControls.setConfig(midi_handler.config_pad, midi_handler.config_pad.changed_pad - 1);
+					midi_handler.config_pad.changed_pad = 0;
+				}
+				if (midi_handler.config_3rd.changed_3rd > 0) {
+					padsControls.setConfig3rd(midi_handler.config_3rd, midi_handler.config_3rd.changed_3rd - 1);
+					midi_handler.config_3rd.changed_3rd = 0;
+				}
+			}
+		};
+
+		timer_midi.scheduleAtFixedRate(midi_in_task, 1000, 1);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmMegadrummanager.setJMenuBar(menuBar);
@@ -306,6 +309,20 @@ public class Main_window {
 		
 		JMenuItem mntmSendToMd_5 = new JMenuItem("Send to MD");
 		mnCustomCurves.add(mntmSendToMd_5);
+		
+		JSeparator separator_2 = new JSeparator();
+		mnMain.add(separator_2);
+		
+		JMenuItem mntmFirmwareUpgrade = new JMenuItem("Firmware upgrade");
+		mntmFirmwareUpgrade.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				upgradeDialog.setConfigOptions(configOptions);
+				timer_midi.cancel();
+				upgradeDialog.setVisible(true);
+				timer_midi.scheduleAtFixedRate(midi_in_task, 1000, 1);
+			}
+		});
+		mnMain.add(mntmFirmwareUpgrade);
 		
 		JSeparator separator_1 = new JSeparator();
 		mnMain.add(separator_1);
