@@ -87,7 +87,8 @@ public class PadCommonControls extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PadCommonControls() {
+	public PadCommonControls(boolean pad_type) {
+		head_rim_pad = pad_type;
 		configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("78px"),
@@ -131,7 +132,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_name.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_name, "3, 1, fill, center");
 		
-		padButton__name = new PadButton("name");
+		padButton__name = new PadButton("name",head_rim_pad);
 		add(padButton__name, "5, 1, fill, center");
 		
 		JLabel lblNote = new JLabel("Note");
@@ -152,7 +153,7 @@ public class PadCommonControls extends JPanel {
 		});
 		add(noteSpinControl_note, "3, 2, left, center");
 		
-		padButton__note = new PadButton("note");
+		padButton__note = new PadButton("note", head_rim_pad);
 		add(padButton__note, "5, 2, default, fill");
 		
 		
@@ -180,7 +181,7 @@ public class PadCommonControls extends JPanel {
 		});
 		checkBox_altLinked.setToolTipText("Linked to Note");
 		
-		padButton_altNote = new PadButton("altNote");
+		padButton_altNote = new PadButton("altNote", head_rim_pad);
 		add(padButton_altNote, "5, 3");
 		
 		JLabel lblPressrollNote = new JLabel("Pressroll Note");
@@ -207,7 +208,7 @@ public class PadCommonControls extends JPanel {
 		});
 		checkBox_pressrollLinked.setToolTipText("Linked to Note");
 		
-		padButton_pressrollNote = new PadButton("pressrollNote");
+		padButton_pressrollNote = new PadButton("pressrollNote", head_rim_pad);
 		add(padButton_pressrollNote, "5, 4");
 		
 		JLabel lblCurve = new JLabel("Channel");
@@ -218,7 +219,7 @@ public class PadCommonControls extends JPanel {
 		spinner_channel.setModel(new SpinnerNumberModel(1, 1, 16, 1));
 		add(spinner_channel, "3, 5, left, center");
 		
-		padButton_channel = new PadButton("channel");
+		padButton_channel = new PadButton("channel", head_rim_pad);
 		add(padButton_channel, "5, 5");
 		
 		JLabel lblSpecialFunction = new JLabel("Special Function");
@@ -228,7 +229,7 @@ public class PadCommonControls extends JPanel {
 		checkBox_special = new JCheckBox("");
 		add(checkBox_special, "3, 6");
 		
-		padButton_special = new PadButton("special");
+		padButton_special = new PadButton("special", head_rim_pad);
 		add(padButton_special, "5, 6");
 		
 		JLabel lblCurve_1 = new JLabel("Curve");
@@ -243,7 +244,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_curve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_curve, "3, 7, fill, center");
 		
-		padButton_curve = new PadButton("curve");
+		padButton_curve = new PadButton("curve", head_rim_pad);
 		add(padButton_curve, "5, 7");
 				
 		JLabel lblCompression = new JLabel("Compression");
@@ -257,7 +258,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_compression.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_compression, "3, 8, fill, center");
 		
-		padButton_compression = new PadButton("compression");
+		padButton_compression = new PadButton("compression", head_rim_pad);
 		add(padButton_compression, "5, 8");
 		
 		JLabel lblShift = new JLabel("Level Shift");
@@ -271,7 +272,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_shift.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_shift, "3, 9, fill, center");
 		
-		padButton_shift = new PadButton("shift");
+		padButton_shift = new PadButton("shift", head_rim_pad);
 		add(padButton_shift, "5, 9");
 		
 		JLabel lblXtalkLevel = new JLabel("XTalk Level");
@@ -285,7 +286,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_xtalkLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_xtalkLevel, "3, 10, fill, center");
 		
-		padButton_xtalkLevel = new PadButton("xtalkLevel");
+		padButton_xtalkLevel = new PadButton("xtalkLevel", head_rim_pad);
 		add(padButton_xtalkLevel, "5, 10");
 		
 		JLabel lblXtalkGroup = new JLabel("XTalk Group");
@@ -299,7 +300,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_xtalkGroup.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_xtalkGroup, "3, 11, fill, center");
 		
-		padButton_xtalkGroup = new PadButton("xtalkGroup");
+		padButton_xtalkGroup = new PadButton("xtalkGroup", head_rim_pad);
 		add(padButton_xtalkGroup, "5, 11");
 		
 		JLabel lblThreshold = new JLabel("Threshold");
@@ -310,7 +311,7 @@ public class PadCommonControls extends JPanel {
 		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_threshold, "3, 12, left, center");
 		
-		padButton_threshold = new PadButton("threshold");
+		padButton_threshold = new PadButton("threshold", head_rim_pad);
 		add(padButton_threshold, "5, 12");
 		
 		JLabel lblGain = new JLabel("Gain");
@@ -325,7 +326,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_gain.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_gain, "3, 13, fill, center");
 		
-		padButton_gain = new PadButton("gain");
+		padButton_gain = new PadButton("gain", head_rim_pad);
 		add(padButton_gain, "5, 13");
 		
 		JLabel lblHighlevelAuto = new JLabel("HighLevel Auto");
@@ -335,7 +336,7 @@ public class PadCommonControls extends JPanel {
 		checkBox_autoLevel = new JCheckBox("");
 		add(checkBox_autoLevel, "3, 14, left, center");
 		
-		padButton_autoLevel = new PadButton("autoLevel");
+		padButton_autoLevel = new PadButton("autoLevel", head_rim_pad);
 		add(padButton_autoLevel, "5, 14");
 		
 		JLabel lblHighlevel = new JLabel("HighLevel");
@@ -355,7 +356,7 @@ public class PadCommonControls extends JPanel {
 		spinner_highLevel.setEditor(jsne_spinner_highLevel);
 		panel.add(spinner_highLevel, "1, 1, fill, top");
 		
-		padButton_highLevel = new PadButton("highLevel");
+		padButton_highLevel = new PadButton("highLevel", head_rim_pad);
 		add(padButton_highLevel, "5, 15");
 		
 		JLabel lblRetriggerMask = new JLabel("Retrigger Mask");
@@ -366,7 +367,7 @@ public class PadCommonControls extends JPanel {
 		spinner_retrigger.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_retrigger, "3, 16, left, center");
 		
-		padButton_retrigger = new PadButton("retrigger");
+		padButton_retrigger = new PadButton("retrigger", head_rim_pad);
 		add(padButton_retrigger, "5, 16");
 		
 		JLabel lblDyn = new JLabel(" DynLevel");
@@ -382,7 +383,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_dynLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_dynLevel, "3, 17, fill, center");
 		
-		padButton_dynLevel = new PadButton("dynLevel");
+		padButton_dynLevel = new PadButton("dynLevel", head_rim_pad);
 		add(padButton_dynLevel, "5, 17");
 		
 		JLabel lblDyntime = new JLabel("DynTime");
@@ -398,7 +399,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_dynTime.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_dynTime, "3, 18, fill, center");
 		
-		padButton_dynTime = new PadButton("dynTime");
+		padButton_dynTime = new PadButton("dynTime", head_rim_pad);
 		add(padButton_dynTime, "5, 18");
 		
 		JLabel lblMinscan = new JLabel("MinScan");
@@ -409,7 +410,7 @@ public class PadCommonControls extends JPanel {
 		spinner_minScan.setModel(new SpinnerNumberModel(new Short((short) 10), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
 		add(spinner_minScan, "3, 19, left, center");
 		
-		padButton_minScan = new PadButton("minScan");
+		padButton_minScan = new PadButton("minScan", head_rim_pad);
 		add(padButton_minScan, "5, 19");
 		
 		JLabel lblType = new JLabel("Type");
@@ -420,7 +421,7 @@ public class PadCommonControls extends JPanel {
 		comboBox_type.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_type, "3, 20, fill, center");
 		
-		padButton_type = new PadButton("type");
+		padButton_type = new PadButton("type", head_rim_pad);
 		add(padButton_type, "5, 20");
 				
 	}

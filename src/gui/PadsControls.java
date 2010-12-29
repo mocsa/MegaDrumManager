@@ -234,7 +234,7 @@ public class PadsControls extends JPanel {
 				copyPadVarToAll(varName, head_rim);
 			}
 		};
-		panel_head = new PadCommonControls();
+		panel_head = new PadCommonControls(head_pad);
 		
 		panel_head.getPadButton_name().addActionListener(padButtonActionListener);
 		panel_head.getPadButton_note().addActionListener(padButtonActionListener);
@@ -268,7 +268,7 @@ public class PadsControls extends JPanel {
 		panel_head_rim.add(panel_head);
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		panel_rim = new PadCommonControls();
+		panel_rim = new PadCommonControls(rim_pad);
 		
 		panel_rim.getPadButton_name().addActionListener(padButtonActionListener);
 		panel_rim.getPadButton_note().addActionListener(padButtonActionListener);

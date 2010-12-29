@@ -11,9 +11,14 @@ public class PadButton extends JButton {
 	/**
 	 * Create the panel.
 	 */
-	public PadButton(String text) {
+	public PadButton(String text, boolean pad_type) {
 		name = text;
 		setIcon(new ImageIcon(PadCommonControls.class.getResource("/com/sun/java/swing/plaf/motif/icons/ScrollRightArrowActive.gif")));
+		if (pad_type) {
+			setToolTipText("Copy this input setting to All inputs");
+		} else {
+			setToolTipText("Copy head/rim setting to All pads");
+		}
 	}
 
 	public String getName() {
