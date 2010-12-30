@@ -151,8 +151,8 @@ public class Main_window {
 		chainId = 0;
 		configFull = new ConfigFull();
 		fileManager = new FileManager(frmMegadrummanager);
-		dialog_options = new Options();
 		midi_handler = new Midi_handler();
+		dialog_options = new Options(midi_handler);
 		upgradeDialog = new Upgrade(midi_handler, fileManager);
 		midi_handler.config_chain_id = chainId;
 		timer_midi = new Timer();
@@ -559,39 +559,39 @@ public class Main_window {
 	private void getPedal() {
 		midi_handler.clear_midi_input();
 		midi_handler.request_config_pedal();
-		delayMs(Constants.SYSEX_DELAY);
+		delayMs(configOptions.sysexDelay);
 	}
 	
 	private void sendPedal() {
 		midi_handler.config_pedal = pedalControls.getConfig();
 		midi_handler.send_config_pedal();
-		delayMs(Constants.SYSEX_DELAY);
+		delayMs(configOptions.sysexDelay);
 	}
 	
 	private void getMisc() {
 		midi_handler.clear_midi_input();
 		midi_handler.request_config_misc();					
-		delayMs(Constants.SYSEX_DELAY);
+		delayMs(configOptions.sysexDelay);
 	}
 	
 	private void sendMisc() {
 		midi_handler.config_misc = miscControls.getConfig();
 		midi_handler.send_config_misc();	
-		delayMs(Constants.SYSEX_DELAY);
+		delayMs(configOptions.sysexDelay);
 	}
 	
 	private void getPad(int pad_id) {
 		midi_handler.clear_midi_input();
 		if ( pad_id > 0 ) {
 			midi_handler.request_config_pad(pad_id + 1);
-			delayMs(Constants.SYSEX_DELAY);
+			delayMs(configOptions.sysexDelay);
 			midi_handler.request_config_pad(pad_id + 2);
-			delayMs(Constants.SYSEX_DELAY);
+			delayMs(configOptions.sysexDelay);
 			midi_handler.request_config_3rd((pad_id - 1)/2);
-			delayMs(Constants.SYSEX_DELAY);
+			delayMs(configOptions.sysexDelay);
 		} else {
 			midi_handler.request_config_pad(1);
-			delayMs(Constants.SYSEX_DELAY);
+			delayMs(configOptions.sysexDelay);
 		}
 	}
 	
@@ -599,18 +599,18 @@ public class Main_window {
 		if (pad_id > 0 ) {
 			midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(pad_id));
 			midi_handler.send_config_pad(pad_id + 1);
-			delayMs(Constants.SYSEX_DELAY);
+			delayMs(configOptions.sysexDelay);
 			midi_handler.config_pad .copyVarsFrom(padsControls.getConfig(pad_id+1));
 			midi_handler.send_config_pad(pad_id + 2);
-			delayMs(Constants.SYSEX_DELAY);
+			delayMs(configOptions.sysexDelay);
 			pad_id = (pad_id - 1)/2;
 			midi_handler.config_3rd .copyVarsFrom(padsControls.getConfig3rd(pad_id));
 			midi_handler.send_config_3rd(pad_id);
-			delayMs(Constants.SYSEX_DELAY);
+			delayMs(configOptions.sysexDelay);
 		} else {
 			midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(0));
 			midi_handler.send_config_pad(1);
-			delayMs(Constants.SYSEX_DELAY);
+			delayMs(configOptions.sysexDelay);
 		}
 		
 	}

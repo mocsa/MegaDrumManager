@@ -12,6 +12,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public String MidiThruName = "";
 	public int chainId = 0;
 	public int inputsCount = 55;
+	public int sysexDelay = 30;
 	
 	public ConfigOptions() {
 		

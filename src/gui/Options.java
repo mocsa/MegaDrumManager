@@ -31,11 +31,14 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import java.awt.Font;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 
 public class Options extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	
+	private Midi_handler midi_handler;
 	private JCheckBox chckbx_samePort;
 	private JComboBox comboBox_MIDI_In;
 	private JComboBox comboBox_MIDI_Out;
@@ -44,7 +47,8 @@ public class Options extends JDialog {
 	public JComboBox comboBox_MIDI_Thru;
 	private JCheckBox checkBox_saveOnClose;
 	private ConfigOptions configOptions;
-	JCheckBox checkBox_autoOpen;
+	private JCheckBox checkBox_autoOpen;
+	private JSpinner spinner_sysexDelay;
 	public int midi_port_out;
 	public int midi_port_in;
 	public boolean config_applied; 
@@ -52,21 +56,21 @@ public class Options extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Options() {
-		
+	public Options(Midi_handler mh) {
+		midi_handler = mh;
 		configOptions = new ConfigOptions();
 		setResizable(false);
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setName("dialog_options");
 		setTitle("Options");
-		setBounds(100, 100, 495, 317);
+		setBounds(100, 100, 495, 347);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("261px"),},
 			new RowSpec[] {
-				RowSpec.decode("188px"),}));
+				RowSpec.decode("276px"),}));
 		
 		JPanel panel_midi = new JPanel();
 		panel_midi.setBorder(new TitledBorder(null, "MIDI Ports", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -91,7 +95,11 @@ public class Options extends JDialog {
 				RowSpec.decode("fill:12dlu"),
 				RowSpec.decode("fill:default"),
 				RowSpec.decode("12dlu"),
-				RowSpec.decode("fill:12dlu"),}));
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("12dlu"),
+				RowSpec.decode("12dlu"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("12dlu"),}));
 		
 		JLabel lblUseSameInout = new JLabel("Use same In/Out");
 		lblUseSameInout.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -177,6 +185,35 @@ public class Options extends JDialog {
 		checkBox_autoOpen = new JCheckBox("");
 		checkBox_autoOpen.setHorizontalTextPosition(SwingConstants.LEADING);
 		panel_midi.add(checkBox_autoOpen, "3, 8");
+		
+		JLabel lblSysexDelay = new JLabel("SysEx delay");
+		lblSysexDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(lblSysexDelay, "1, 9");
+		
+		JPanel panel = new JPanel();
+		panel_midi.add(panel, "3, 9, fill, fill");
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("40px"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("46px"),},
+			new RowSpec[] {
+				RowSpec.decode("fill:20px"),}));
+		
+		spinner_sysexDelay = new JSpinner();
+		spinner_sysexDelay.setModel(new SpinnerNumberModel(10, 10, 100, 1));
+		panel.add(spinner_sysexDelay, "1, 1, fill, fill");
+		
+		JLabel lblMs = new JLabel("ms");
+		panel.add(lblMs, "3, 1, left, center");
+		
+		JButton btnRescanMidiPorts = new JButton("Rescan MIDI ports");
+		btnRescanMidiPorts.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				rescanMidiPorts();
+			}
+		});
+		btnRescanMidiPorts.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_midi.add(btnRescanMidiPorts, "3, 12, default, fill");
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -220,6 +257,7 @@ public class Options extends JDialog {
 		configOptions.useThruPort = checkBox_Thru.isSelected();
 		configOptions.saveOnExit = checkBox_saveOnClose.isSelected();
 		configOptions.autoOpenPorts = checkBox_autoOpen.isSelected();
+		configOptions.sysexDelay = (Integer)spinner_sysexDelay.getValue();
 	}
 	
 	private void updateControls() {
@@ -233,6 +271,7 @@ public class Options extends JDialog {
 		checkBox_Thru.setSelected(configOptions.useThruPort);
 		checkBox_saveOnClose.setSelected(configOptions.saveOnExit);
 		checkBox_autoOpen.setSelected(configOptions.autoOpenPorts);
+		spinner_sysexDelay.setValue(configOptions.sysexDelay);
 	}
 	
 	public void loadOptionsFrom(ConfigOptions options) {
@@ -278,6 +317,12 @@ public class Options extends JDialog {
 		for (String string : list) {
 			comboBox_MIDI_Thru.addItem(string);
 		}		
+	}
+	
+	public void rescanMidiPorts() {
+		fillInPorts(midi_handler.getMidiInList());
+		fillOutPorts(midi_handler.getMidiOutList());
+		fillThruPorts(midi_handler.getMidiOutList());		
 	}
 
 }
