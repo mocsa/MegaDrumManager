@@ -154,10 +154,15 @@ public class FileManager {
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					System.out.printf("Error reading config from file\n");
+					return configOld;
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
+				System.out.println("Error reading file\n");
 				e.printStackTrace();
+				file.delete();
+				return configOld;
 			}				
 			return config;
 		} else {
