@@ -12,7 +12,6 @@ public class CSpinner extends JSpinner {
 	 */
 	public CSpinner(int i) {
 		index = i;
-		setModel(new SpinnerNumberModel(2, 2, 255, 1));
 		setFont(new Font("Segoe UI", Font.PLAIN, 10));
 	}
 	

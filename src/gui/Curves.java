@@ -14,11 +14,15 @@ import java.awt.Font;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 public class Curves extends JPanel {
 	private CurvesPaint paintPanel;
 	private int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
 	private ChangeListener spinnerChangeListener;
+	private JSpinner [] spinners;
 
 	/**
 	 * Create the panel.
@@ -32,6 +36,19 @@ public class Curves extends JPanel {
 				RowSpec.decode("12dlu:grow"),}));
 		
 		paintPanel = new CurvesPaint();
+		paintPanel.yValues = yValues;
+		paintPanel.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent arg0) {
+				updateYvalues();
+			}
+		});
+		paintPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				updateYvalues();
+			}
+		});
 		add(paintPanel, "1, 1, left, fill");
 		
 		JPanel panelControls = new JPanel();
@@ -58,36 +75,21 @@ public class Curves extends JPanel {
 				paintPanel.repaint();
 			}
 		};
-		CSpinner spinner_0 = new CSpinner(0);
-		spinner_0.addChangeListener(spinnerChangeListener);
-		panelControls.add(spinner_0, "1, 1");
 		
-		CSpinner spinner_1 = new CSpinner(1);
-		spinner_1.addChangeListener(spinnerChangeListener);
-		panelControls.add(spinner_1, "2, 1");
-
-		CSpinner spinner_2 = new CSpinner(2);
-		spinner_2.addChangeListener(spinnerChangeListener);
-		panelControls.add(spinner_2, "3, 1");
-		
-		CSpinner spinner_3 = new CSpinner(3);
-		panelControls.add(spinner_3, "4, 1");
-
-		CSpinner spinner_4 = new CSpinner(4);
-		panelControls.add(spinner_4, "5, 1");
-
-		CSpinner spinner_5 = new CSpinner(5);
-		panelControls.add(spinner_5, "6, 1");
-		
-		CSpinner spinner_6 = new CSpinner(6);
-		panelControls.add(spinner_6, "7, 1");
-
-		CSpinner spinner_7 = new CSpinner(7);
-		panelControls.add(spinner_7, "8, 1");
-		
-		CSpinner spinner_8 = new CSpinner(8);
-		panelControls.add(spinner_8, "9, 1");
+		spinners = new CSpinner[9];
+		for (int i = 0; i < 9; i++ ) {
+			spinners[i] = new CSpinner(i);
+			spinners[i].setModel(new SpinnerNumberModel(yValues[i], 2, 255, 1));
+			spinners[i].addChangeListener(spinnerChangeListener);
+			panelControls.add(spinners[i], ((Integer)(i+1)).toString() + ", 1");
+		}
 		
 	}    
-	
+
+	private void updateYvalues() {
+		yValues = paintPanel.yValues;
+		for (int i = 0; i < 9; i++) {
+			spinners[i].setValue(yValues[i]);
+		}
+	}
 }
