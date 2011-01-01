@@ -76,6 +76,7 @@ public class Main_window {
 	private MiscControls miscControls;
 	private PedalControls pedalControls;
 	private PadsControls padsControls;
+	private Curves panelCurves;
 	private ConfigFull configFull;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
@@ -144,7 +145,7 @@ public class Main_window {
 			}
 		});
 		frmMegadrummanager.setTitle("MegaDrumManager");
-		frmMegadrummanager.setBounds(100, 100, 991, 705);
+		frmMegadrummanager.setBounds(100, 100, 1218, 705);
 		frmMegadrummanager.setLocation(10, 10);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -386,7 +387,8 @@ public class Main_window {
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("max(361px;pref):grow"),},
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
 				RowSpec.decode("fill:498px:grow"),}));
@@ -449,9 +451,9 @@ public class Main_window {
 				RowSpec.decode("1dlu"),
 				RowSpec.decode("417px:grow"),}));
 		
-		JPanel panel = new JPanel();
-		frmMegadrummanager.getContentPane().add(panel, "1, 1, fill, fill");
-		panel.setLayout(new FormLayout(new ColumnSpec[] {
+		JPanel panel_top = new JPanel();
+		frmMegadrummanager.getContentPane().add(panel_top, "1, 1, fill, fill");
+		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -475,7 +477,7 @@ public class Main_window {
 				getAll();
 			}
 		});
-		panel.add(btnGetAll, "2, 1");
+		panel_top.add(btnGetAll, "2, 1");
 		
 		JButton btnSendAll = new JButton("Send All");
 		btnSendAll.addActionListener(new ActionListener() {
@@ -483,7 +485,7 @@ public class Main_window {
 				sendAll();
 			}
 		});
-		panel.add(btnSendAll, "4, 1");
+		panel_top.add(btnSendAll, "4, 1");
 		
 		JButton btnLoadAll = new JButton("Load All");
 		btnLoadAll.addActionListener(new ActionListener() {
@@ -491,7 +493,7 @@ public class Main_window {
 				load_all();
 			}
 		});
-		panel.add(btnLoadAll, "6, 1");
+		panel_top.add(btnLoadAll, "6, 1");
 		
 		JButton btnSaveAll = new JButton("Save All");
 		btnSaveAll.addActionListener(new ActionListener() {
@@ -499,13 +501,13 @@ public class Main_window {
 				save_all();
 			}
 		});
-		panel.add(btnSaveAll, "8, 1");
+		panel_top.add(btnSaveAll, "8, 1");
 		
 		progressBar = new JProgressBar();
 		progressBar.setVisible(false);
 		
 		JLabel lblInputs = new JLabel("Inputs:");
-		panel.add(lblInputs, "10, 1, right, default");
+		panel_top.add(lblInputs, "10, 1, right, default");
 		
 		comboBox_inputsCount = new JComboBox();
 		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -539,11 +541,14 @@ public class Main_window {
 		        }
 			}
 		});
-		panel.add(comboBox_inputsCount, "12, 1, left, fill");
+		panel_top.add(comboBox_inputsCount, "12, 1, left, fill");
 		
 		progressBar.setStringPainted(true);
-		panel.add(progressBar, "14, 1");
+		panel_top.add(progressBar, "14, 1");
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
+		
+		panelCurves = new Curves();
+		panel_main.add(panelCurves, "4, 2, fill, top");
 		
 	}
 	
