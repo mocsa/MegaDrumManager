@@ -45,6 +45,9 @@ public class ConfigCurve {
 				sysex_byte[0] = sx[i++];
 				sysex_byte[1] = sx[i++];
 				yValues[p] = Utils.sysex2byte(sysex_byte);
+				if (yValues[p]<0) {
+					yValues[p] += 256;
+				}
 			}
 		}
 	}

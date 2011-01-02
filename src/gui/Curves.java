@@ -142,9 +142,7 @@ public class Curves extends JPanel {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
 		        	prevCurvePointer = curvePointer;
 		        	curvePointer = comboBox_curveNumber.getSelectedIndex();
-		        	paintPanel.yValues = configCurves[curvePointer].yValues;
-		        	updateYvalues();
-		        	paintPanel.repaint();
+		        	updateControls();
 		        }
 			}
 		});
@@ -161,9 +159,7 @@ public class Curves extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 	        	prevCurvePointer = curvePointer;
 	        	curvePointer = 0;
-	        	paintPanel.yValues = configCurves[curvePointer].yValues;
-	        	updateYvalues();
-	        	paintPanel.repaint();
+	        	updateControls();
 			}
 		});
 		button_first.setMargin(new Insets(1, 10, 1, 10));
@@ -177,9 +173,7 @@ public class Curves extends JPanel {
 	        	if (curvePointer > 0) {
 	        		curvePointer--;
 	        	}
-	        	paintPanel.yValues = configCurves[curvePointer].yValues;
-	        	updateYvalues();
-	        	paintPanel.repaint();
+	        	updateControls();
 			}
 		});
 		button_prev.setMargin(new Insets(1, 8, 1, 8));
@@ -193,9 +187,7 @@ public class Curves extends JPanel {
 	        	if (curvePointer < (Constants.CURVES_COUNT - 1)) {
 	        		curvePointer++;
 	        	}
-	        	paintPanel.yValues = configCurves[curvePointer].yValues;
-	        	updateYvalues();
-	        	paintPanel.repaint();
+	        	updateControls();
 			}
 		});
 		button_next.setMargin(new Insets(1, 8, 1, 8));
@@ -207,9 +199,7 @@ public class Curves extends JPanel {
 			public void actionPerformed(ActionEvent arg0) {
 	        	prevCurvePointer = curvePointer;
 	        	curvePointer = Constants.CURVES_COUNT - 1;
-	        	paintPanel.yValues = configCurves[curvePointer].yValues;
-	        	updateYvalues();
-	        	paintPanel.repaint();
+	        	updateControls();
 			}
 		});
 		button_last.setMargin(new Insets(1, 8, 1, 8));
@@ -252,6 +242,13 @@ public class Curves extends JPanel {
 		
 	}    
 
+	private void updateControls() {
+    	paintPanel.yValues = configCurves[curvePointer].yValues;
+    	comboBox_curveNumber.setSelectedIndex(curvePointer);
+    	updateYvalues();
+    	paintPanel.repaint();
+	}
+	
 	private void updateYvalues() {
 		//yValues = paintPanel.yValues;
 		if (spinners != null) {

@@ -177,7 +177,7 @@ public class Main_window {
 					midi_handler.config_3rd.changed_3rd = 0;
 				}
 				if (midi_handler.config_curve.changed_curve > -1) {
-					panelCurves.setConfigCurve(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
+					panelCurves.setConfig(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
 					midi_handler.config_curve.changed_curve = -1;
 				}
 			}
