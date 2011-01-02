@@ -76,7 +76,7 @@ public class Main_window {
 	private MiscControls miscControls;
 	private PedalControls pedalControls;
 	private PadsControls padsControls;
-	private Curves panelCurves;
+	private Curves curvesControls;
 	private ConfigFull configFull;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
@@ -84,6 +84,7 @@ public class Main_window {
 	private JCheckBoxMenuItem chckbxmntmShowMisc;
 	private JCheckBoxMenuItem chckbxmntmShowHihatPedal;
 	private JCheckBoxMenuItem chckbxmntmShowPads;
+	private JCheckBoxMenuItem chckbxmntmShowCurves;
 	private JMenuItem menuItem;
 	private JMenu mnView;
 	private JProgressBar progressBar;
@@ -177,7 +178,7 @@ public class Main_window {
 					midi_handler.config_3rd.changed_3rd = 0;
 				}
 				if (midi_handler.config_curve.changed_curve > -1) {
-					panelCurves.setConfig(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
+					curvesControls.setConfig(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
 					midi_handler.config_curve.changed_curve = -1;
 				}
 			}
@@ -387,12 +388,23 @@ public class Main_window {
 		chckbxmntmShowPads.setSelected(true);
 		mnView.add(chckbxmntmShowPads);
 		
+		chckbxmntmShowCurves = new JCheckBoxMenuItem("Show Curves");
+		chckbxmntmShowCurves.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (curvesControls != null) {
+					curvesControls.setVisible(chckbxmntmShowCurves.isSelected());
+				}
+			}
+		});
+		chckbxmntmShowCurves.setSelected(true);
+		mnView.add(chckbxmntmShowCurves);
+		
 		JPanel panel_main = new JPanel();
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("max(361px;pref):grow"),},
+				ColumnSpec.decode("max(318px;pref):grow"),},
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
 				RowSpec.decode("fill:498px:grow"),}));
@@ -551,28 +563,29 @@ public class Main_window {
 		panel_top.add(progressBar, "14, 1");
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
 		
-		panelCurves = new Curves();
-		panelCurves.getButton_get().addActionListener(new ActionListener() {
+		curvesControls = new Curves();
+		curvesControls.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		curvesControls.getButton_get().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				getCurve(panelCurves.getCurvePointer());
+				getCurve(curvesControls.getCurvePointer());
 			}
 		});
-		panelCurves.getButton_send().addActionListener(new ActionListener() {
+		curvesControls.getButton_send().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendCurve(panelCurves.getCurvePointer());
+				sendCurve(curvesControls.getCurvePointer());
 			}
 		});
-		panelCurves.getButton_getAll().addActionListener(new ActionListener() {
+		curvesControls.getButton_getAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getAllCurves();
 			}
 		});
-		panelCurves.getButton_sendAll().addActionListener(new ActionListener() {
+		curvesControls.getButton_sendAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				sendAllCurves();
 			}
 		});
-		panel_main.add(panelCurves, "4, 2, fill, top");
+		panel_main.add(curvesControls, "4, 2, fill, top");
 		
 	}
 	
@@ -711,7 +724,7 @@ public class Main_window {
 	}
 	
 	private void sendCurve(int curve_id) {
-		midi_handler.config_curve.copyVarsFrom(panelCurves.getConfig(curve_id));
+		midi_handler.config_curve.copyVarsFrom(curvesControls.getConfig(curve_id));
 		midi_handler.send_config_curve(curve_id);
 		delayMs(configOptions.sysexDelay);		
 	}
