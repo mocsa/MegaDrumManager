@@ -26,7 +26,6 @@ public class ControlsMisc extends JPanel {
 	private static final long serialVersionUID = 8689919340566654881L;
 
 	private ConfigMisc configMisc;
-	
 	private JSpinner spinner_noteoff;
 	private JSpinner spinner_pressroll;
 	private JSpinner spinner_latency;

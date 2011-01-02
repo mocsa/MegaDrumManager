@@ -90,6 +90,7 @@ public class Main_window {
 	private JProgressBar progressBar;
 	private JComboBox comboBox_inputsCount;
 
+	
 	/**
 	 * Launch the application.
 	 */

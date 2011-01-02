@@ -44,7 +44,6 @@ public class ControlsCurves extends JPanel {
 	private JButton button_getAll;
 	private JButton button_sendAll;
 	
-
 	/**
 	 * Create the panel.
 	 */
