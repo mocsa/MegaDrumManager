@@ -20,13 +20,14 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JButton;
 import java.awt.Insets;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Curves extends JPanel {
+public class ControlsCurves extends JDialog {
 	private CurvesPaint paintPanel;
 	//private int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
 	private ChangeListener spinnerChangeListener;
@@ -48,7 +49,9 @@ public class Curves extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public Curves() {
+	public ControlsCurves() {
+		setTitle("Curves");
+		setResizable(false);
 		configCurves = new ConfigCurve[Constants.CURVES_COUNT];
         for(int i=0; i<Constants.CURVES_COUNT; i++){
         	configCurves[i] = new ConfigCurve();
@@ -56,7 +59,7 @@ public class Curves extends JPanel {
         curvePointer = 0;
         prevCurvePointer = -1;
         
-		setLayout(new FormLayout(new ColumnSpec[] {
+		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("left:281px:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),
@@ -82,7 +85,7 @@ public class Curves extends JPanel {
 		});
 		
 		JPanel panel = new JPanel();
-		add(panel, "1, 1, fill, fill");
+		getContentPane().add(panel, "1, 1, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("1dlu"),
@@ -115,7 +118,7 @@ public class Curves extends JPanel {
 		panel.add(button_sendAll, "7, 1");
 		
 		JPanel panel_1 = new JPanel();
-		add(panel_1, "1, 3, fill, fill");
+		getContentPane().add(panel_1, "1, 3, fill, fill");
 		panel_1.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -205,10 +208,10 @@ public class Curves extends JPanel {
 		button_last.setMargin(new Insets(1, 8, 1, 8));
 		button_last.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_1.add(button_last, "12, 1");
-		add(paintPanel, "1, 4, left, fill");
+		getContentPane().add(paintPanel, "1, 4, left, fill");
 		
 		JPanel panelControls = new JPanel();
-		add(panelControls, "1, 6, fill, fill");
+		getContentPane().add(panelControls, "1, 6, fill, fill");
 		panelControls.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("17dlu"),
 				ColumnSpec.decode("17dlu"),
@@ -239,6 +242,7 @@ public class Curves extends JPanel {
 			spinners[i].addChangeListener(spinnerChangeListener);
 			panelControls.add(spinners[i], ((Integer)(i+1)).toString() + ", 1");
 		}
+		setSize(new Dimension(316, 386));
 		
 	}    
 

@@ -13,6 +13,8 @@ import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.util.BitSet;
@@ -21,13 +23,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Insets;
+import java.awt.Dimension;
 
-public class PadsControls extends JPanel {
+public class ControlsPads extends JDialog {
 	private JButton btnGet;
 	private JButton btnSend;
 	private JComboBox comboBox_padSelection;
-	private PadCommonControls panel_head;
-	private PadCommonControls panel_rim;
+	private ControlsPadCommon panel_head;
+	private ControlsPadCommon panel_rim;
 	private ThirdZoneControls panel_3rd_zone;
 	
 	private ConfigPad [] configPads;
@@ -57,7 +60,10 @@ public class PadsControls extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PadsControls() {
+	public ControlsPads() {
+		setSize(new Dimension(497, 622));
+		setTitle("Pads");
+		setResizable(false);
 		configPads = new ConfigPad[Constants.PADS_COUNT];
         for(int i=0; i<Constants.PADS_COUNT; i++){
         	configPads[i] = new ConfigPad();
@@ -72,7 +78,7 @@ public class PadsControls extends JPanel {
         thirdPointer = 0;
         prevThirdPointer = -1;
         
-		setLayout(new FormLayout(new ColumnSpec[] {
+		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("max(62dlu;default):grow"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),
@@ -82,7 +88,7 @@ public class PadsControls extends JPanel {
 				RowSpec.decode("max(3dlu;min):grow"),}));
 		
 		JPanel panel_buttons = new JPanel();
-		add(panel_buttons, "1, 1, fill, fill");
+		getContentPane().add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("1dlu"),
@@ -144,7 +150,7 @@ public class PadsControls extends JPanel {
 		panel_buttons.add(btnCopyrd, "15, 1");
 		
 		JPanel panel_input_selection = new JPanel();
-		add(panel_input_selection, "1, 3, fill, fill");
+		getContentPane().add(panel_input_selection, "1, 3, fill, fill");
 		panel_input_selection.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -224,17 +230,17 @@ public class PadsControls extends JPanel {
 		panel_input_selection.add(btnLast, "12, 1");
 		
 		JPanel panel_head_rim = new JPanel();
-		add(panel_head_rim, "1, 4, fill, fill");
+		getContentPane().add(panel_head_rim, "1, 4, fill, fill");
 		panel_head_rim.setLayout(new GridLayout(1, 2, 0, 0));
 		
 		padButtonActionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String varName = ((PadButton)arg0.getSource()).getName();
-				boolean head_rim = ((PadCommonControls)((PadButton)arg0.getSource()).getParent()).getHeadRim();
+				boolean head_rim = ((ControlsPadCommon)((PadButton)arg0.getSource()).getParent()).getHeadRim();
 				copyPadVarToAll(varName, head_rim);
 			}
 		};
-		panel_head = new PadCommonControls(head_pad);
+		panel_head = new ControlsPadCommon(head_pad);
 		
 		panel_head.getPadButton_name().addActionListener(padButtonActionListener);
 		panel_head.getPadButton_note().addActionListener(padButtonActionListener);
@@ -268,7 +274,7 @@ public class PadsControls extends JPanel {
 		panel_head_rim.add(panel_head);
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		panel_rim = new PadCommonControls(rim_pad);
+		panel_rim = new ControlsPadCommon(rim_pad);
 		
 		panel_rim.getPadButton_name().addActionListener(padButtonActionListener);
 		panel_rim.getPadButton_note().addActionListener(padButtonActionListener);
@@ -304,7 +310,7 @@ public class PadsControls extends JPanel {
 		
 		panel_3rd_zone = new ThirdZoneControls();
 		panel_3rd_zone.setVisible(false);
-		add(panel_3rd_zone, "1, 5, fill, fill");
+		getContentPane().add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		panel_head.setConfig(configPads[0], head_pad, 0);

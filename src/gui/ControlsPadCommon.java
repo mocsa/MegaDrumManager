@@ -33,7 +33,7 @@ import javax.swing.JMenu;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class PadCommonControls extends JPanel {
+public class ControlsPadCommon extends JPanel {
 	private JComboBox comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
@@ -87,7 +87,7 @@ public class PadCommonControls extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PadCommonControls(boolean pad_type) {
+	public ControlsPadCommon(boolean pad_type) {
 		head_rim_pad = pad_type;
 		configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {

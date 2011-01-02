@@ -9,6 +9,8 @@ import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.Font;
+
+import javax.swing.JDialog;
 import javax.swing.JSpinner;
 import javax.swing.JCheckBox;
 import javax.swing.SpinnerNumberModel;
@@ -17,8 +19,9 @@ import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Insets;
+import java.awt.Dimension;
 
-public class MiscControls extends JPanel {
+public class ControlsMisc extends JDialog {
 
 	/**
 	 * 
@@ -41,9 +44,12 @@ public class MiscControls extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public MiscControls() {
+	public ControlsMisc() {
+		setSize(new Dimension(196, 222));
+		setTitle("Misc");
+		setResizable(false);
 		configMisc = new ConfigMisc();
-		setLayout(new FormLayout(new ColumnSpec[] {
+		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("max(89dlu;default):grow"),},
 			new RowSpec[] {
 				RowSpec.decode("top:12dlu"),
@@ -51,7 +57,7 @@ public class MiscControls extends JPanel {
 				RowSpec.decode("1dlu"),}));
 		
 		JPanel panel_buttons = new JPanel();
-		add(panel_buttons, "1, 1, fill, fill");
+		getContentPane().add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("1dlu"),
@@ -70,7 +76,7 @@ public class MiscControls extends JPanel {
 		panel_buttons.add(btnSend, "3, 1, fill, fill");
 		
 		JPanel panel = new JPanel();
-		add(panel, "1, 2, fill, fill");
+		getContentPane().add(panel, "1, 2, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:56dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,

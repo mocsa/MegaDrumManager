@@ -9,6 +9,7 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import java.awt.Component;
 import javax.swing.Box;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import net.miginfocom.swing.MigLayout;
@@ -23,8 +24,9 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.event.ChangeEvent;
 import java.awt.Insets;
+import java.awt.Dimension;
 
-public class PedalControls extends JPanel {
+public class ControlsPedal extends JDialog {
 	private JButton btnGet;
 	private JButton btnSend;
 	private JComboBox comboBox_type;
@@ -66,11 +68,14 @@ public class PedalControls extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PedalControls() {
+	public ControlsPedal() {
+		setTitle("Pedal");
+		setSize(new Dimension(228, 362));
+		setResizable(false);
 		configPedal = new ConfigPedal();
-		setLayout(new GridLayout(1, 0, 0, 0));		
+		getContentPane().setLayout(new GridLayout(1, 0, 0, 0));		
 		JPanel panel = new JPanel();
-		add(panel);
+		getContentPane().add(panel);
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("206px:grow"),},
 			new RowSpec[] {
