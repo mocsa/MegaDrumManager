@@ -73,10 +73,10 @@ public class Main_window {
 	private Midi_handler midi_handler;
 	private Timer timer_midi;
 	private TimerTask midi_in_task;
-	private MiscControls miscControls;
-	private PedalControls pedalControls;
-	private PadsControls padsControls;
-	private Curves curvesControls;
+	private ControlsMisc controlsMisc;
+	private ControlsPedal controlsPedal;
+	private ControlsPads controlsPads;
+	private ControlsCurves controlsCurves;
 	private ConfigFull configFull;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
@@ -163,22 +163,22 @@ public class Main_window {
 				midi_handler.get_midi();
 				if (midi_handler.config_misc.changed) {
 					midi_handler.config_misc.changed = false;
-					miscControls.setConfig(midi_handler.config_misc);
+					controlsMisc.setConfig(midi_handler.config_misc);
 				}
 				if (midi_handler.config_pedal.changed) {
 					midi_handler.config_pedal.changed = false;
-					pedalControls.setConfig(midi_handler.config_pedal);
+					controlsPedal.setConfig(midi_handler.config_pedal);
 				}
 				if (midi_handler.config_pad.changed_pad > 0) {
-					padsControls.setConfig(midi_handler.config_pad, midi_handler.config_pad.changed_pad - 1);
+					controlsPads.setConfig(midi_handler.config_pad, midi_handler.config_pad.changed_pad - 1);
 					midi_handler.config_pad.changed_pad = 0;
 				}
 				if (midi_handler.config_3rd.changed_3rd > 0) {
-					padsControls.setConfig3rd(midi_handler.config_3rd, midi_handler.config_3rd.changed_3rd - 1);
+					controlsPads.setConfig3rd(midi_handler.config_3rd, midi_handler.config_3rd.changed_3rd - 1);
 					midi_handler.config_3rd.changed_3rd = 0;
 				}
 				if (midi_handler.config_curve.changed_curve > -1) {
-					curvesControls.setConfig(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
+					controlsCurves.setConfig(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
 					midi_handler.config_curve.changed_curve = -1;
 				}
 			}
@@ -294,7 +294,7 @@ public class Main_window {
 		JMenuItem mntmLoadFromMd_4 = new JMenuItem("Load from MD");
 		mntmLoadFromMd_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getPad(padsControls.getPadPointer());
+				getPad(controlsPads.getPadPointer());
 			}
 		});
 		mnSelectedPadSettings.add(mntmLoadFromMd_4);
@@ -302,7 +302,7 @@ public class Main_window {
 		JMenuItem mntmSendToMd_4 = new JMenuItem("Send to MD");
 		mntmSendToMd_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sendPad(padsControls.getPadPointer());
+				sendPad(controlsPads.getPadPointer());
 			}
 		});
 		mnSelectedPadSettings.add(mntmSendToMd_4);
@@ -358,8 +358,8 @@ public class Main_window {
 		chckbxmntmShowMisc = new JCheckBoxMenuItem("Show Misc");
 		chckbxmntmShowMisc.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				if (miscControls != null) {
-					miscControls.setVisible(chckbxmntmShowMisc.isSelected());
+				if (controlsMisc != null) {
+					controlsMisc.setVisible(chckbxmntmShowMisc.isSelected());
 				}
 			}
 		});
@@ -369,8 +369,8 @@ public class Main_window {
 		chckbxmntmShowHihatPedal = new JCheckBoxMenuItem("Show HiHat Pedal");
 		chckbxmntmShowHihatPedal.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				if (pedalControls != null) {
-					pedalControls.setVisible(chckbxmntmShowHihatPedal.isSelected());
+				if (controlsPedal != null) {
+					controlsPedal.setVisible(chckbxmntmShowHihatPedal.isSelected());
 				}
 			}
 		});
@@ -380,8 +380,8 @@ public class Main_window {
 		chckbxmntmShowPads = new JCheckBoxMenuItem("Show Pads");
 		chckbxmntmShowPads.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				if (padsControls != null) {
-					padsControls.setVisible(chckbxmntmShowPads.isSelected());
+				if (controlsPads != null) {
+					controlsPads.setVisible(chckbxmntmShowPads.isSelected());
 				}
 			}
 		});
@@ -391,8 +391,8 @@ public class Main_window {
 		chckbxmntmShowCurves = new JCheckBoxMenuItem("Show Curves");
 		chckbxmntmShowCurves.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				if (curvesControls != null) {
-					curvesControls.setVisible(chckbxmntmShowCurves.isSelected());
+				if (controlsCurves != null) {
+					controlsCurves.setVisible(chckbxmntmShowCurves.isSelected());
 				}
 			}
 		});
@@ -409,55 +409,55 @@ public class Main_window {
 				FormFactory.LINE_GAP_ROWSPEC,
 				RowSpec.decode("fill:498px:grow"),}));
 		
-		miscControls = new MiscControls();
-		miscControls.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_main.add(miscControls, "1, 2, default, top");
-		miscControls.getBtnGet().addActionListener(new ActionListener() {
+		controlsMisc = new ControlsMisc();
+		controlsMisc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_main.add(controlsMisc, "1, 2, default, top");
+		controlsMisc.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getMisc();
 			}
 		});
-		miscControls.getBtnSend().addActionListener(new ActionListener() {
+		controlsMisc.getBtnSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				sendMisc();
 			}
 		});
 		
-				pedalControls = new PedalControls();
-				pedalControls.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-				panel_main.add(pedalControls, "2, 2, default, top");
-				pedalControls.getBtnGet().addActionListener(new ActionListener() {
+				controlsPedal = new ControlsPedal();
+				controlsPedal.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				panel_main.add(controlsPedal, "2, 2, default, top");
+				controlsPedal.getBtnGet().addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						getPedal();
 					}
 				});
-				pedalControls.getBtnSend().addActionListener(new ActionListener() {
+				controlsPedal.getBtnSend().addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						sendPedal();
 					}
 				});
 		
-		padsControls = new PadsControls();
-		padsControls.getBtnSendall().addActionListener(new ActionListener() {
+		controlsPads = new ControlsPads();
+		controlsPads.getBtnSendall().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendAllPads();
 			}
 		});
-		padsControls.getBtnGetall().addActionListener(new ActionListener() {
+		controlsPads.getBtnGetall().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getAllPads();
 			}
 		});
-		padsControls.setBorder(new TitledBorder(null, "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_main.add(padsControls, "3, 2, default, top");
-		padsControls.getBtnGet().addActionListener(new ActionListener() {
+		controlsPads.setBorder(new TitledBorder(null, "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_main.add(controlsPads, "3, 2, default, top");
+		controlsPads.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				getPad(padsControls.getPadPointer());
+				getPad(controlsPads.getPadPointer());
 			}
 		});
-		padsControls.getBtnSend().addActionListener(new ActionListener() {
+		controlsPads.getBtnSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendPad(padsControls.getPadPointer());
+				sendPad(controlsPads.getPadPointer());
 			}
 		});
 		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
@@ -563,29 +563,29 @@ public class Main_window {
 		panel_top.add(progressBar, "14, 1");
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
 		
-		curvesControls = new Curves();
-		curvesControls.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		curvesControls.getButton_get().addActionListener(new ActionListener() {
+		controlsCurves = new ControlsCurves();
+		controlsCurves.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		controlsCurves.getButton_get().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				getCurve(curvesControls.getCurvePointer());
+				getCurve(controlsCurves.getCurvePointer());
 			}
 		});
-		curvesControls.getButton_send().addActionListener(new ActionListener() {
+		controlsCurves.getButton_send().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendCurve(curvesControls.getCurvePointer());
+				sendCurve(controlsCurves.getCurvePointer());
 			}
 		});
-		curvesControls.getButton_getAll().addActionListener(new ActionListener() {
+		controlsCurves.getButton_getAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getAllCurves();
 			}
 		});
-		curvesControls.getButton_sendAll().addActionListener(new ActionListener() {
+		controlsCurves.getButton_sendAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				sendAllCurves();
 			}
 		});
-		panel_main.add(curvesControls, "4, 2, fill, top");
+		panel_main.add(controlsCurves, "4, 2, fill, top");
 		
 	}
 	
@@ -605,7 +605,7 @@ public class Main_window {
 	}
 	
 	private void sendPedal() {
-		midi_handler.config_pedal = pedalControls.getConfig();
+		midi_handler.config_pedal = controlsPedal.getConfig();
 		midi_handler.send_config_pedal();
 		delayMs(configOptions.sysexDelay);
 	}
@@ -617,7 +617,7 @@ public class Main_window {
 	}
 	
 	private void sendMisc() {
-		midi_handler.config_misc = miscControls.getConfig();
+		midi_handler.config_misc = controlsMisc.getConfig();
 		midi_handler.send_config_misc();	
 		delayMs(configOptions.sysexDelay);
 	}
@@ -639,18 +639,18 @@ public class Main_window {
 	
 	private void sendPad(int pad_id) {
 		if (pad_id > 0 ) {
-			midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(pad_id));
+			midi_handler.config_pad.copyVarsFrom(controlsPads.getConfig(pad_id));
 			midi_handler.send_config_pad(pad_id + 1);
 			delayMs(configOptions.sysexDelay);
-			midi_handler.config_pad .copyVarsFrom(padsControls.getConfig(pad_id+1));
+			midi_handler.config_pad .copyVarsFrom(controlsPads.getConfig(pad_id+1));
 			midi_handler.send_config_pad(pad_id + 2);
 			delayMs(configOptions.sysexDelay);
 			pad_id = (pad_id - 1)/2;
-			midi_handler.config_3rd .copyVarsFrom(padsControls.getConfig3rd(pad_id));
+			midi_handler.config_3rd .copyVarsFrom(controlsPads.getConfig3rd(pad_id));
 			midi_handler.send_config_3rd(pad_id);
 			delayMs(configOptions.sysexDelay);
 		} else {
-			midi_handler.config_pad.copyVarsFrom(padsControls.getConfig(0));
+			midi_handler.config_pad.copyVarsFrom(controlsPads.getConfig(0));
 			midi_handler.send_config_pad(1);
 			delayMs(configOptions.sysexDelay);
 		}
@@ -724,7 +724,7 @@ public class Main_window {
 	}
 	
 	private void sendCurve(int curve_id) {
-		midi_handler.config_curve.copyVarsFrom(curvesControls.getConfig(curve_id));
+		midi_handler.config_curve.copyVarsFrom(controlsCurves.getConfig(curve_id));
 		midi_handler.send_config_curve(curve_id);
 		delayMs(configOptions.sysexDelay);		
 	}
@@ -757,15 +757,15 @@ public class Main_window {
 
 	private void load_all() {
 		configFull = fileManager.load_all(configFull, configOptions);
-		miscControls.loadFromConfigFull(configFull);
-		pedalControls.loadFromConfigFull(configFull);
-		padsControls.loadFromConfigFull(configFull);		
+		controlsMisc.loadFromConfigFull(configFull);
+		controlsPedal.loadFromConfigFull(configFull);
+		controlsPads.loadFromConfigFull(configFull);		
 	}
 	
 	private void save_all() {
-		miscControls.copyToConfigFull(configFull, configOptions.chainId);
-		pedalControls.copyToConfigFull(configFull, configOptions.chainId);
-		padsControls.copyToConfigFull(configFull, configOptions.chainId);
+		controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
+		controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
+		controlsPads.copyToConfigFull(configFull, configOptions.chainId);
 		fileManager.save_all(configFull, configOptions);
 	}
 	
@@ -797,14 +797,14 @@ public class Main_window {
 				break;
 		}
 		updateInputsCountControls();
-		miscControls.copyToConfigFull(configFull, configOptions.chainId);
-		pedalControls.copyToConfigFull(configFull, configOptions.chainId);
-		padsControls.copyToConfigFull(configFull, configOptions.chainId);
+		controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
+		controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
+		controlsPads.copyToConfigFull(configFull, configOptions.chainId);
 		if (!configOptions.lastFullPathConfig.equals("")) {
 			configFull = fileManager.loadAllSilent(configFull, configOptions);
-			miscControls.loadFromConfigFull(configFull);
-			pedalControls.loadFromConfigFull(configFull);
-			padsControls.loadFromConfigFull(configFull);		
+			controlsMisc.loadFromConfigFull(configFull);
+			controlsPedal.loadFromConfigFull(configFull);
+			controlsPads.loadFromConfigFull(configFull);		
 		}
 	}
 	
@@ -818,8 +818,8 @@ public class Main_window {
 	}
 	
 	private void updateInputsCountControls() {
-		pedalControls.updateInputCountsControls(configOptions.inputsCount);
-		padsControls.updateInputCountsControls(configOptions.inputsCount);
+		controlsPedal.updateInputCountsControls(configOptions.inputsCount);
+		controlsPads.updateInputCountsControls(configOptions.inputsCount);
 	}
 	
 }
