@@ -44,7 +44,7 @@ public class ControlsMisc extends JPanel {
 	public ControlsMisc() {
 		configMisc = new ConfigMisc();
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("max(89dlu;default):grow"),},
+				ColumnSpec.decode("max(111dlu;default):grow"),},
 			new RowSpec[] {
 				RowSpec.decode("top:12dlu"),
 				RowSpec.decode("default:grow"),

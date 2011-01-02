@@ -146,7 +146,7 @@ public class Main_window {
 			}
 		});
 		frmMegadrummanager.setTitle("MegaDrumManager");
-		frmMegadrummanager.setBounds(100, 100, 592, 87);
+		frmMegadrummanager.setBounds(100, 100, 1218, 705);
 		frmMegadrummanager.setLocation(10, 10);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -402,14 +402,16 @@ public class Main_window {
 		JPanel panel_main = new JPanel();
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("max(318px;pref):grow"),},
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
 				RowSpec.decode("fill:498px:grow"),}));
 		
 		controlsMisc = new ControlsMisc();
-		//controlsMisc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		//panel_main.add(controlsMisc, "1, 2, default, top");
+		controlsMisc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_main.add(controlsMisc, "1, 2, default, top");
 		controlsMisc.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getMisc();
@@ -420,23 +422,20 @@ public class Main_window {
 				sendMisc();
 			}
 		});
-		controlsMisc.setVisible(true);
 		
-		controlsPedal = new ControlsPedal();
-		//controlsPedal.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		//panel_main.add(controlsPedal, "2, 2, default, top");
-		controlsPedal.getBtnGet().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				getPedal();
-			}
-		});
-		controlsPedal.getBtnSend().addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				sendPedal();
-			}
-		});
-		
-		controlsPedal.setVisible(true);
+				controlsPedal = new ControlsPedal();
+				controlsPedal.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				panel_main.add(controlsPedal, "2, 2, default, top");
+				controlsPedal.getBtnGet().addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						getPedal();
+					}
+				});
+				controlsPedal.getBtnSend().addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						sendPedal();
+					}
+				});
 		
 		controlsPads = new ControlsPads();
 		controlsPads.getBtnSendall().addActionListener(new ActionListener() {
@@ -449,8 +448,8 @@ public class Main_window {
 				getAllPads();
 			}
 		});
-		//controlsPads.setBorder(new TitledBorder(null, "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		//panel_main.add(controlsPads, "3, 2, default, top");
+		controlsPads.setBorder(new TitledBorder(null, "Pads", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_main.add(controlsPads, "3, 2, default, top");
 		controlsPads.getBtnGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getPad(controlsPads.getPadPointer());
@@ -461,13 +460,12 @@ public class Main_window {
 				sendPad(controlsPads.getPadPointer());
 			}
 		});
-		controlsPads.setVisible(true);
 		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("572px:grow"),},
+				ColumnSpec.decode("757px:grow"),},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				RowSpec.decode("28px:grow"),}));
+				RowSpec.decode("417px:grow"),}));
 		
 		JPanel panel_top = new JPanel();
 		frmMegadrummanager.getContentPane().add(panel_top, "1, 1, fill, fill");
@@ -566,7 +564,7 @@ public class Main_window {
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
 		
 		controlsCurves = new ControlsCurves();
-		//controlsCurves.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		controlsCurves.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		controlsCurves.getButton_get().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getCurve(controlsCurves.getCurvePointer());
@@ -587,8 +585,7 @@ public class Main_window {
 				sendAllCurves();
 			}
 		});
-		controlsCurves.setVisible(true);
-		//panel_main.add(controlsCurves, "4, 2, fill, top");
+		panel_main.add(controlsCurves, "4, 2, fill, top");
 		
 	}
 	

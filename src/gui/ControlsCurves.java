@@ -162,7 +162,7 @@ public class ControlsCurves extends JPanel {
 	        	updateControls();
 			}
 		});
-		button_first.setMargin(new Insets(1, 10, 1, 10));
+		button_first.setMargin(new Insets(1, 8, 1, 8));
 		button_first.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_1.add(button_first, "6, 1");
 		
@@ -176,7 +176,7 @@ public class ControlsCurves extends JPanel {
 	        	updateControls();
 			}
 		});
-		button_prev.setMargin(new Insets(1, 8, 1, 8));
+		button_prev.setMargin(new Insets(1, 6, 1, 6));
 		button_prev.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_1.add(button_prev, "8, 1");
 		
@@ -190,7 +190,7 @@ public class ControlsCurves extends JPanel {
 	        	updateControls();
 			}
 		});
-		button_next.setMargin(new Insets(1, 8, 1, 8));
+		button_next.setMargin(new Insets(1, 6, 1, 6));
 		button_next.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_1.add(button_next, "10, 1");
 		
