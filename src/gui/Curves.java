@@ -39,6 +39,10 @@ public class Curves extends JPanel {
 	private JButton button_prev;
 	private JButton button_next;
 	private JButton button_last;
+	private JButton button_get;
+	private JButton button_send;
+	private JButton button_getAll;
+	private JButton button_sendAll;
 	
 
 	/**
@@ -90,22 +94,22 @@ public class Curves extends JPanel {
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
 		
-		JButton button_get = new JButton("Get");
+		button_get = new JButton("Get");
 		button_get.setMargin(new Insets(1, 4, 1, 4));
 		button_get.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel.add(button_get, "1, 1");
 		
-		JButton button_send = new JButton("Send");
+		button_send = new JButton("Send");
 		button_send.setMargin(new Insets(1, 4, 1, 4));
 		button_send.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel.add(button_send, "3, 1");
 		
-		JButton button_getAll = new JButton("GetAll");
+		button_getAll = new JButton("GetAll");
 		button_getAll.setMargin(new Insets(1, 4, 1, 4));
 		button_getAll.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel.add(button_getAll, "5, 1");
 		
-		JButton button_sendAll = new JButton("SendAll");
+		button_sendAll = new JButton("SendAll");
 		button_sendAll.setMargin(new Insets(1, 4, 1, 4));
 		button_sendAll.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel.add(button_sendAll, "7, 1");
@@ -255,5 +259,32 @@ public class Curves extends JPanel {
 				spinners[i].setValue(configCurves[curvePointer].yValues[i]);
 			}
 		}
+	}
+	
+	public ConfigCurve getConfig(int curve_id) {
+		return configCurves[curve_id];
+	}
+	
+	public void setConfig(ConfigCurve config,int curve_id) {
+		configCurves[curve_id].copyVarsFrom(config);
+		updateYvalues();
+		paintPanel.repaint();
+	}
+
+	
+	public int getCurvePointer() {
+		return curvePointer;
+	}
+	public JButton getButton_get() {
+		return button_get;
+	}
+	public JButton getButton_send() {
+		return button_send;
+	}
+	public JButton getButton_getAll() {
+		return button_getAll;
+	}
+	public JButton getButton_sendAll() {
+		return button_sendAll;
 	}
 }

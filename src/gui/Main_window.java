@@ -176,6 +176,10 @@ public class Main_window {
 					padsControls.setConfig3rd(midi_handler.config_3rd, midi_handler.config_3rd.changed_3rd - 1);
 					midi_handler.config_3rd.changed_3rd = 0;
 				}
+				if (midi_handler.config_curve.changed_curve > -1) {
+					panelCurves.setConfigCurve(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
+					midi_handler.config_curve.changed_curve = -1;
+				}
 			}
 		};
 
@@ -548,6 +552,26 @@ public class Main_window {
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
 		
 		panelCurves = new Curves();
+		panelCurves.getButton_get().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getCurve(panelCurves.getCurvePointer());
+			}
+		});
+		panelCurves.getButton_send().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendCurve(panelCurves.getCurvePointer());
+			}
+		});
+		panelCurves.getButton_getAll().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getAllCurves();
+			}
+		});
+		panelCurves.getButton_sendAll().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendAllCurves();
+			}
+		});
 		panel_main.add(panelCurves, "4, 2, fill, top");
 		
 	}
@@ -680,16 +704,42 @@ public class Main_window {
         t.run();
 	}
 
+	private void getCurve(int curve_id) {
+		midi_handler.clear_midi_input();
+		midi_handler.request_config_curve(curve_id);
+		delayMs(configOptions.sysexDelay);
+	}
+	
+	private void sendCurve(int curve_id) {
+		midi_handler.config_curve.copyVarsFrom(panelCurves.getConfig(curve_id));
+		midi_handler.send_config_curve(curve_id);
+		delayMs(configOptions.sysexDelay);		
+	}
+	
+	private void getAllCurves() {
+		for (int i = 0; i<Constants.CURVES_COUNT; i++) {
+			getCurve(i);
+		}
+	}
+		
+	private void sendAllCurves() {
+		for (int i = 0; i<Constants.CURVES_COUNT; i++) {
+			sendCurve(i);
+		}
+	}
+
 	private void getAll() {
 		getMisc();
 		getPedal();
 		getAllPads();
+		getAllCurves();
 	}
 	
 	private void sendAll() {
 		sendMisc();
 		sendPedal();
 		sendAllPads();
+		sendAllCurves();
 	}
 
 	private void load_all() {
