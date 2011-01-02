@@ -7,6 +7,7 @@ public interface Constants {
 	public static final int Error_Read = 0x23;
 	public static final String MD_MANAGER_CONFIG = System.getProperty("user.home") + System.getProperty("file.separator") + "megadrummanager.cfg";
 	public static final short PADS_COUNT = 55;
+	public static final short CURVES_COUNT = 4;
 	public static final short SYSEX_DELAY = 50;
 	public static final byte SYSEX_START = (byte)0xf0;
 	public static final byte SYSEX_END = (byte)0xf7;
@@ -19,6 +20,8 @@ public interface Constants {
 	public static final byte MD_SYSEX_PAD_SIZE = 34;
 	public static final byte MD_SYSEX_3RD = (byte)0x04;
 	public static final byte MD_SYSEX_3RD_SIZE = 16;
+	public static final byte MD_SYSEX_CURVE = (byte)0x06;
+	public static final byte MD_SYSEX_CURVE_SIZE = 24;
 	public static final String[] CURVES_LIST = { "Linear", "Log1", "Log2", "Log3", "Log4",
 		"Exp1", "Exp2", "S1", "S2", "Strong1", "Strong2", "Max",
 		"Custom1", "Custom2", "Custom3", "Custom4" };

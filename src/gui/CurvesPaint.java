@@ -108,15 +108,17 @@ public class CurvesPaint extends JPanel {
 				g2.drawString(((Integer)(255)).toString(), xShift - 20, (i*32) + yShift + 4);					
 			}
 		}
-		for (int i = 0; i < 9; i++) {
-			g2.setStroke(new BasicStroke(2));
-			g2.setColor(lineColor);
-			if (i < 8 ) {
-				g2.drawLine(xShift + (i*32), 256 -yValues[i] + yShift,xShift + ((i+1)*32), 256 -yValues[i + 1] + yShift);
+		if (yValues != null) {
+			for (int i = 0; i < 9; i++) {
+				g2.setStroke(new BasicStroke(2));
+				g2.setColor(lineColor);
+				if (i < 8 ) {
+					g2.drawLine(xShift + (i*32), 256 -yValues[i] + yShift,xShift + ((i+1)*32), 256 -yValues[i + 1] + yShift);
+				}
+				g2.setStroke(new BasicStroke(1));
+				g2.setColor(hookColor);			
+				g2.drawOval(xShift + (i*32) - 3, 256 -yValues[i] + yShift - 3, 6, 6);
 			}
-			g2.setStroke(new BasicStroke(1));
-			g2.setColor(hookColor);			
-			g2.drawOval(xShift + (i*32) - 3, 256 -yValues[i] + yShift - 3, 6, 6);
 		}
 	}
 

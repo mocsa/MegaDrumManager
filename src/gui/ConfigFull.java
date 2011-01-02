@@ -5,6 +5,7 @@ public class ConfigFull implements java.io.Serializable {
 	public byte [] sysex_pedal;
 	public byte [][] sysex_pads;
 	public byte [][] sysex_3rds;
+	public byte [][] sysex_curves;
 	public boolean [] altNote_linked;
 	public boolean [] pressrollNote_linked;
 
@@ -15,5 +16,6 @@ public class ConfigFull implements java.io.Serializable {
 		altNote_linked = new boolean[Constants.PADS_COUNT];
 		pressrollNote_linked = new boolean[Constants.PADS_COUNT];
 		sysex_3rds = new byte[(Constants.PADS_COUNT-1)/2][Constants.MD_SYSEX_3RD_SIZE];
+		sysex_curves = new byte[9][Constants.MD_SYSEX_CURVE_SIZE];
 	}
 }

@@ -20,14 +20,24 @@ import java.awt.event.MouseMotionAdapter;
 
 public class Curves extends JPanel {
 	private CurvesPaint paintPanel;
-	private int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
+	//private int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
 	private ChangeListener spinnerChangeListener;
 	private JSpinner [] spinners;
+	private ConfigCurve [] configCurves;
+	private int curvePointer;
+	private int prevCurvePointer;
 
 	/**
 	 * Create the panel.
 	 */
 	public Curves() {
+		configCurves = new ConfigCurve[Constants.CURVES_COUNT];
+        for(int i=0; i<Constants.CURVES_COUNT; i++){
+        	configCurves[i] = new ConfigCurve();
+        }
+        curvePointer = 0;
+        prevCurvePointer = -1;
+        
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("left:281px:grow"),},
 			new RowSpec[] {
@@ -36,7 +46,7 @@ public class Curves extends JPanel {
 				RowSpec.decode("12dlu:grow"),}));
 		
 		paintPanel = new CurvesPaint();
-		paintPanel.yValues = yValues;
+		paintPanel.yValues = configCurves[curvePointer].yValues;
 		paintPanel.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseDragged(MouseEvent arg0) {
@@ -70,8 +80,8 @@ public class Curves extends JPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				int id;
 				id = ((CSpinner)arg0.getSource()).getIndex();
-				yValues[id] = ((Integer)((CSpinner)arg0.getSource()).getValue());
-				paintPanel.yValues = yValues;
+				configCurves[curvePointer].yValues[id] = ((Integer)((CSpinner)arg0.getSource()).getValue());
+				//paintPanel.yValues = yValues;
 				paintPanel.repaint();
 			}
 		};
@@ -79,7 +89,7 @@ public class Curves extends JPanel {
 		spinners = new CSpinner[9];
 		for (int i = 0; i < 9; i++ ) {
 			spinners[i] = new CSpinner(i);
-			spinners[i].setModel(new SpinnerNumberModel(yValues[i], 2, 255, 1));
+			spinners[i].setModel(new SpinnerNumberModel(configCurves[curvePointer].yValues[i], 2, 255, 1));
 			spinners[i].addChangeListener(spinnerChangeListener);
 			panelControls.add(spinners[i], ((Integer)(i+1)).toString() + ", 1");
 		}
@@ -87,9 +97,9 @@ public class Curves extends JPanel {
 	}    
 
 	private void updateYvalues() {
-		yValues = paintPanel.yValues;
+		//yValues = paintPanel.yValues;
 		for (int i = 0; i < 9; i++) {
-			spinners[i].setValue(yValues[i]);
+			spinners[i].setValue(configCurves[curvePointer].yValues[i]);
 		}
 	}
 }
