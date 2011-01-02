@@ -23,6 +23,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Curves extends JPanel {
 	private CurvesPaint paintPanel;
@@ -33,6 +35,11 @@ public class Curves extends JPanel {
 	private int curvePointer;
 	private int prevCurvePointer;
 	private JComboBox comboBox_curveNumber;
+	private JButton button_first;
+	private JButton button_prev;
+	private JButton button_next;
+	private JButton button_last;
+	
 
 	/**
 	 * Create the panel.
@@ -83,25 +90,25 @@ public class Curves extends JPanel {
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
 		
-		JButton button = new JButton("Get");
-		button.setMargin(new Insets(1, 4, 1, 4));
-		button.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel.add(button, "1, 1");
+		JButton button_get = new JButton("Get");
+		button_get.setMargin(new Insets(1, 4, 1, 4));
+		button_get.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel.add(button_get, "1, 1");
 		
-		JButton button_1 = new JButton("Send");
-		button_1.setMargin(new Insets(1, 4, 1, 4));
-		button_1.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel.add(button_1, "3, 1");
+		JButton button_send = new JButton("Send");
+		button_send.setMargin(new Insets(1, 4, 1, 4));
+		button_send.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel.add(button_send, "3, 1");
 		
-		JButton button_2 = new JButton("GetAll");
-		button_2.setMargin(new Insets(1, 4, 1, 4));
-		button_2.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel.add(button_2, "5, 1");
+		JButton button_getAll = new JButton("GetAll");
+		button_getAll.setMargin(new Insets(1, 4, 1, 4));
+		button_getAll.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel.add(button_getAll, "5, 1");
 		
-		JButton button_3 = new JButton("SendAll");
-		button_3.setMargin(new Insets(1, 4, 1, 4));
-		button_3.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel.add(button_3, "7, 1");
+		JButton button_sendAll = new JButton("SendAll");
+		button_sendAll.setMargin(new Insets(1, 4, 1, 4));
+		button_sendAll.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel.add(button_sendAll, "7, 1");
 		
 		JPanel panel_1 = new JPanel();
 		add(panel_1, "1, 3, fill, fill");
@@ -109,7 +116,15 @@ public class Curves extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("20dlu"),},
+				ColumnSpec.decode("20dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("24dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("fill:12dlu"),}));
 		
@@ -136,6 +151,66 @@ public class Curves extends JPanel {
 		comboBox_curveNumber.setMaximumRowCount(28);
 		comboBox_curveNumber.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_1.add(comboBox_curveNumber, "4, 1, fill, fill");
+		
+		button_first = new JButton("first");
+		button_first.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+	        	prevCurvePointer = curvePointer;
+	        	curvePointer = 0;
+	        	paintPanel.yValues = configCurves[curvePointer].yValues;
+	        	updateYvalues();
+	        	paintPanel.repaint();
+			}
+		});
+		button_first.setMargin(new Insets(1, 10, 1, 10));
+		button_first.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel_1.add(button_first, "6, 1");
+		
+		button_prev = new JButton("prev");
+		button_prev.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+	        	prevCurvePointer = curvePointer;
+	        	if (curvePointer > 0) {
+	        		curvePointer--;
+	        	}
+	        	paintPanel.yValues = configCurves[curvePointer].yValues;
+	        	updateYvalues();
+	        	paintPanel.repaint();
+			}
+		});
+		button_prev.setMargin(new Insets(1, 8, 1, 8));
+		button_prev.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_1.add(button_prev, "8, 1");
+		
+		button_next = new JButton("next");
+		button_next.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+	        	prevCurvePointer = curvePointer;
+	        	if (curvePointer < (Constants.CURVES_COUNT - 1)) {
+	        		curvePointer++;
+	        	}
+	        	paintPanel.yValues = configCurves[curvePointer].yValues;
+	        	updateYvalues();
+	        	paintPanel.repaint();
+			}
+		});
+		button_next.setMargin(new Insets(1, 8, 1, 8));
+		button_next.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_1.add(button_next, "10, 1");
+		
+		button_last = new JButton("last");
+		button_last.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+	        	prevCurvePointer = curvePointer;
+	        	curvePointer = Constants.CURVES_COUNT - 1;
+	        	paintPanel.yValues = configCurves[curvePointer].yValues;
+	        	updateYvalues();
+	        	paintPanel.repaint();
+			}
+		});
+		button_last.setMargin(new Insets(1, 8, 1, 8));
+		button_last.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_1.add(button_last, "12, 1");
 		add(paintPanel, "1, 4, left, fill");
 		
 		JPanel panelControls = new JPanel();
