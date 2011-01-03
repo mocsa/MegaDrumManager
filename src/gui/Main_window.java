@@ -80,6 +80,7 @@ public class Main_window {
 	private Timer timer_midi;
 	private TimerTask midi_in_task;
 	private ControlsMisc controlsMisc;
+	private FrameMisc frameMisc;
 	private ControlsPedal controlsPedal;
 	private ControlsPads controlsPads;
 	private ControlsCurves controlsCurves;
@@ -419,19 +420,21 @@ public class Main_window {
 			}
 		});
 		
-				controlsPedal = new ControlsPedal();
-				controlsPedal.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-				panel_main.add(controlsPedal, "2, 2, default, top");
-				controlsPedal.getBtnGet().addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						getPedal();
-					}
-				});
-				controlsPedal.getBtnSend().addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent arg0) {
-						sendPedal();
-					}
-				});
+		frameMisc = new FrameMisc(controlsMisc);
+		
+		controlsPedal = new ControlsPedal();
+		controlsPedal.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_main.add(controlsPedal, "2, 2, default, top");
+		controlsPedal.getBtnGet().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getPedal();
+			}
+		});
+		controlsPedal.getBtnSend().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendPedal();
+			}
+		});
 		
 		controlsPads = new ControlsPads();
 		controlsPads.addPropertyChangeListener("resize", new PropertyChangeListener() {
@@ -834,10 +837,11 @@ public class Main_window {
 	
 	private void resizeMainWindow() {
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
-		controlsMisc.setVisible(configOptions.showPanels[0]>0);
-		controlsPedal.setVisible(configOptions.showPanels[1]>0);
-		controlsPads.setVisible(configOptions.showPanels[2]>0);
-		controlsCurves.setVisible(configOptions.showPanels[3]>0);
+		//controlsMisc.setVisible(configOptions.showPanels[0] == Constants.PANEL_SHOW);
+		frameMisc.setVisible(configOptions.showPanels[0] == Constants.PANEL_DETATCH);
+		controlsPedal.setVisible(configOptions.showPanels[1] == Constants.PANEL_SHOW);
+		controlsPads.setVisible(configOptions.showPanels[2] == Constants.PANEL_SHOW);
+		controlsCurves.setVisible(configOptions.showPanels[3] == Constants.PANEL_SHOW);
 		frmMegadrummanager.pack();
 	}
 }
