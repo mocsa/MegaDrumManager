@@ -10,6 +10,8 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import java.awt.event.WindowStateListener;
+import java.awt.Dialog.ModalExclusionType;
+import java.awt.Dialog.ModalityType;
 
 public class FrameMisc extends JDialog {
 	private ControlsMisc controlsMisc;
@@ -17,8 +19,7 @@ public class FrameMisc extends JDialog {
 	/**
 	 * Create the panel.
 	 */
-	public FrameMisc(ControlsMisc controls) {
-		controlsMisc = controls;
+	public FrameMisc() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent arg0) {
@@ -30,12 +31,8 @@ public class FrameMisc extends JDialog {
 			new RowSpec[] {
 				FormFactory.PREF_ROWSPEC,}));
 		
-		getContentPane().add(controlsMisc, "1, 1, fill, top");
-//		JPanel panel = new JPanel();
-//		getContentPane().add(panel, "1, 1, fill, top");
-//		panel.setVisible(true);
-//		panel.add(controlsMisc);
+		//getContentPane().add(controlsMisc, "1, 1, fill, top");
 		setTitle("Misc MegaDrum settings");
-	}
+	}	
 
 }
