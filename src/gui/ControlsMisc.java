@@ -43,10 +43,10 @@ public class ControlsMisc extends JPanel {
 	public ControlsMisc() {
 		configMisc = new ConfigMisc();
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("max(111dlu;default):grow"),},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("top:12dlu"),
-				RowSpec.decode("default:grow"),
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),}));
 		
 		JPanel panel_buttons = new JPanel();

@@ -64,10 +64,14 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.JProgressBar;
 import javax.swing.JCheckBoxMenuItem;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class Main_window {
 
 	private JFrame frmMegadrummanager;
+	private JPanel panel_main;
+	private JPanel panel_top;
 	private Options dialog_options;
 	private Upgrade upgradeDialog;
 	private Midi_handler midi_handler;
@@ -115,6 +119,7 @@ public class Main_window {
 		
 		initialize();
 		loadConfig();
+		resizeMainWindow();
 	}
 	
 	private void open_options_dialog() {
@@ -361,6 +366,7 @@ public class Main_window {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (controlsMisc != null) {
 					controlsMisc.setVisible(chckbxmntmShowMisc.isSelected());
+					resizeMainWindow();
 				}
 			}
 		});
@@ -372,6 +378,7 @@ public class Main_window {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (controlsPedal != null) {
 					controlsPedal.setVisible(chckbxmntmShowHihatPedal.isSelected());
+					resizeMainWindow();
 				}
 			}
 		});
@@ -383,6 +390,7 @@ public class Main_window {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (controlsPads != null) {
 					controlsPads.setVisible(chckbxmntmShowPads.isSelected());
+					resizeMainWindow();
 				}
 			}
 		});
@@ -394,21 +402,22 @@ public class Main_window {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (controlsCurves != null) {
 					controlsCurves.setVisible(chckbxmntmShowCurves.isSelected());
+					resizeMainWindow();
 				}
 			}
 		});
 		chckbxmntmShowCurves.setSelected(true);
 		mnView.add(chckbxmntmShowCurves);
 		
-		JPanel panel_main = new JPanel();
+		panel_main = new JPanel();
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.PREF_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("max(318px;pref):grow"),},
+				FormFactory.PREF_COLSPEC,
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
-				RowSpec.decode("fill:498px:grow"),}));
+				FormFactory.PREF_ROWSPEC,}));
 		
 		controlsMisc = new ControlsMisc();
 		controlsMisc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -439,6 +448,11 @@ public class Main_window {
 				});
 		
 		controlsPads = new ControlsPads();
+		controlsPads.addPropertyChangeListener("resize", new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				resizeMainWindow();
+			}
+		});
 		controlsPads.getBtnSendall().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendAllPads();
@@ -461,14 +475,15 @@ public class Main_window {
 				sendPad(controlsPads.getPadPointer());
 			}
 		});
+
 		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("757px:grow"),},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				RowSpec.decode("417px:grow"),}));
+				FormFactory.PREF_ROWSPEC,}));
 		
-		JPanel panel_top = new JPanel();
+		panel_top = new JPanel();
 		frmMegadrummanager.getContentPane().add(panel_top, "1, 1, fill, fill");
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -486,7 +501,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),}));
+				RowSpec.decode("12dlu:grow"),}));
 		
 		JButton btnGetAll = new JButton("Get All");
 		btnGetAll.addActionListener(new ActionListener() {
@@ -823,5 +838,11 @@ public class Main_window {
 		controlsPads.updateInputCountsControls(configOptions.inputsCount);
 	}
 	
+	private void resizeMainWindow() {
+		//frmMegadrummanager.setSize(frmMegadrummanager.getContentPane().getSize());
+		//frmMegadrummanager.setSize(frmMegadrummanager.getContentPane().getWidth() + 20, frmMegadrummanager.getContentPane().getHeight() + 20);
+		//panel_top.
+		frmMegadrummanager.pack();
+	}
 }
 

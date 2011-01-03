@@ -13,6 +13,8 @@ import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.util.BitSet;
@@ -73,13 +75,13 @@ public class ControlsPads extends JPanel {
         prevThirdPointer = -1;
         
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("max(62dlu;default):grow"),},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),
+				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("max(256dlu;default)"),
-				RowSpec.decode("max(3dlu;min):grow"),}));
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,}));
 		
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
@@ -262,6 +264,8 @@ public class ControlsPads extends JPanel {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
 					panel_rim.getComboBox_type().setEnabled(panel_head.getComboBox_type().getSelectedIndex() > 0);
+					repaint();
+					firePropertyChange("resize", false, true);
 		        }
 			}
 		});
@@ -583,7 +587,7 @@ public class ControlsPads extends JPanel {
     		i++;
         }
 	}
-	
+
 	public JButton getBtnGetall() {
 		return btnGetall;
 	}

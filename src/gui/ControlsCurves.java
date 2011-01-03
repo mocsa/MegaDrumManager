@@ -56,14 +56,14 @@ public class ControlsCurves extends JPanel {
         prevCurvePointer = -1;
         
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("left:281px:grow"),},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),
+				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("279px"),
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				RowSpec.decode("12dlu:grow"),}));
+				FormFactory.PREF_ROWSPEC,}));
 		
 		paintPanel = new CurvesPaint();
 		paintPanel.yValues = configCurves[curvePointer].yValues;
