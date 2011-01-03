@@ -15,6 +15,7 @@ public class ViewMenu extends JMenu {
 	private ConfigOptions configOptions;
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
 	private int panelPointer;
+	private int [] prevState = { -1, -1, -1, -1};
 	
 	/**
 	 * Create the panel.
@@ -32,28 +33,52 @@ public class ViewMenu extends JMenu {
 		updateControls();
 		radioHide.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
+					if (prevState[panelPointer] == Constants.PANEL_HIDE) {
+						radioHide.setSelected(true);
+					}
+				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configOptions.showPanels[panelPointer] = Constants.PANEL_HIDE;
-					updateControls();
-					firePropertyChange("resize", false, true);
+					if (prevState[panelPointer] != Constants.PANEL_HIDE) {
+						configOptions.showPanels[panelPointer] = Constants.PANEL_HIDE;
+						prevState[panelPointer] = Constants.PANEL_HIDE;
+						updateControls();
+						firePropertyChange("resize", false, true);
+					}
 				}
 			}
 		});
 		radioShow.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
+					if (prevState[panelPointer] == Constants.PANEL_SHOW) {
+						radioShow.setSelected(true);
+					}
+				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configOptions.showPanels[panelPointer] = Constants.PANEL_SHOW;
-					updateControls();
-					firePropertyChange("resize", false, true);
+					if (prevState[panelPointer] != Constants.PANEL_SHOW) {
+						configOptions.showPanels[panelPointer] = Constants.PANEL_SHOW;
+						prevState[panelPointer] = Constants.PANEL_SHOW;
+						updateControls();
+						firePropertyChange("resize", false, true);
+					}
 				}
 			}
 		});
 		radioDetatch.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
+					if (prevState[panelPointer] == Constants.PANEL_DETATCH) {
+						radioDetatch.setSelected(true);
+					}
+				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configOptions.showPanels[panelPointer] = Constants.PANEL_DETATCH;
-					updateControls();
-					firePropertyChange("resize", false, true);
+					if (prevState[panelPointer] != Constants.PANEL_DETATCH) {
+						configOptions.showPanels[panelPointer] = Constants.PANEL_DETATCH;
+						prevState[panelPointer] = Constants.PANEL_DETATCH;
+						updateControls();
+						firePropertyChange("resize", false, true);
+					}
 				}
 			}
 		});

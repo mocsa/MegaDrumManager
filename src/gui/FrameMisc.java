@@ -32,7 +32,7 @@ public class FrameMisc extends JDialog {
 				FormFactory.PREF_ROWSPEC,}));
 		
 		//getContentPane().add(controlsMisc, "1, 1, fill, top");
-		setTitle("Misc MegaDrum settings");
+		setTitle("Misc settings");
 	}	
 
 }

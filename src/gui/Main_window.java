@@ -837,14 +837,14 @@ public class Main_window {
 	
 	private void resizeMainWindow() {
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
-		controlsMisc.setVisible(configOptions.showPanels[0] == Constants.PANEL_SHOW);
+		controlsMisc.setVisible(configOptions.showPanels[0] != Constants.PANEL_HIDE);
 		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
-			//frameMisc = new FrameMisc();
-			//frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
+			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
 			frameMisc.setVisible(configOptions.showPanels[0] == Constants.PANEL_DETATCH);
 		} else {
 			frameMisc.getContentPane().remove(controlsMisc);
 			frameMisc.setVisible(configOptions.showPanels[0] == Constants.PANEL_DETATCH);
+			panel_main.add(controlsMisc, "1, 2, default, top");
 			//frameMisc = null;
 		}
 		controlsPedal.setVisible(configOptions.showPanels[1] == Constants.PANEL_SHOW);
