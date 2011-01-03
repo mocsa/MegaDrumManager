@@ -1,6 +1,9 @@
 package gui;
 
 public interface Constants {
+	public static final int PANEL_HIDE = 0;
+	public static final int PANEL_SHOW = 1;
+	public static final int PANEL_DETATCH = 2;
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
 	public static final int Error_CRC = 0x22;

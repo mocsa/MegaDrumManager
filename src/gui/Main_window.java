@@ -66,6 +66,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JCheckBoxMenuItem;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.DefaultComboBoxModel;
 
 public class Main_window {
 
@@ -85,14 +87,15 @@ public class Main_window {
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
 	private int chainId;
-	private JCheckBoxMenuItem chckbxmntmShowMisc;
-	private JCheckBoxMenuItem chckbxmntmShowHihatPedal;
-	private JCheckBoxMenuItem chckbxmntmShowPads;
-	private JCheckBoxMenuItem chckbxmntmShowCurves;
 	private JMenuItem menuItem;
 	private JMenu mnView;
 	private JProgressBar progressBar;
 	private JComboBox comboBox_inputsCount;
+	private ViewMenu viewMenuMisc;
+	private ViewMenu viewMenuPedal;
+	private ViewMenu viewMenuPads;
+	private ViewMenu viewMenuCurves;
+	
 
 	
 	/**
@@ -152,8 +155,6 @@ public class Main_window {
 			}
 		});
 		frmMegadrummanager.setTitle("MegaDrumManager");
-		frmMegadrummanager.setBounds(100, 100, 1218, 705);
-		frmMegadrummanager.setLocation(10, 10);
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		chainId = 0;
@@ -361,53 +362,38 @@ public class Main_window {
 		mnView = new JMenu("View");
 		menuBar.add(mnView);
 		
-		chckbxmntmShowMisc = new JCheckBoxMenuItem("Show Misc");
-		chckbxmntmShowMisc.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if (controlsMisc != null) {
-					controlsMisc.setVisible(chckbxmntmShowMisc.isSelected());
-					resizeMainWindow();
-				}
+		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
+		viewMenuMisc = new ViewMenu("Misc", 0);
+		viewMenuMisc.addPropertyChangeListener("resize", new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				resizeMainWindow();
 			}
 		});
-		chckbxmntmShowMisc.setSelected(true);
-		mnView.add(chckbxmntmShowMisc);
+		mnView.add(viewMenuMisc);
+
+		viewMenuPedal = new ViewMenu("Pedal", 1);
+		viewMenuPedal.addPropertyChangeListener("resize", new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				resizeMainWindow();
+			}
+		});
+		mnView.add(viewMenuPedal);
+
+		viewMenuPads = new ViewMenu("Pads", 2);
+		viewMenuPads.addPropertyChangeListener("resize", new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				resizeMainWindow();
+			}
+		});
+		mnView.add(viewMenuPads);
 		
-		chckbxmntmShowHihatPedal = new JCheckBoxMenuItem("Show HiHat Pedal");
-		chckbxmntmShowHihatPedal.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if (controlsPedal != null) {
-					controlsPedal.setVisible(chckbxmntmShowHihatPedal.isSelected());
-					resizeMainWindow();
-				}
+		viewMenuCurves = new ViewMenu("Curves", 3);
+		viewMenuCurves.addPropertyChangeListener("resize", new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				resizeMainWindow();
 			}
 		});
-		chckbxmntmShowHihatPedal.setSelected(true);
-		mnView.add(chckbxmntmShowHihatPedal);
-		
-		chckbxmntmShowPads = new JCheckBoxMenuItem("Show Pads");
-		chckbxmntmShowPads.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if (controlsPads != null) {
-					controlsPads.setVisible(chckbxmntmShowPads.isSelected());
-					resizeMainWindow();
-				}
-			}
-		});
-		chckbxmntmShowPads.setSelected(true);
-		mnView.add(chckbxmntmShowPads);
-		
-		chckbxmntmShowCurves = new JCheckBoxMenuItem("Show Curves");
-		chckbxmntmShowCurves.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if (controlsCurves != null) {
-					controlsCurves.setVisible(chckbxmntmShowCurves.isSelected());
-					resizeMainWindow();
-				}
-			}
-		});
-		chckbxmntmShowCurves.setSelected(true);
-		mnView.add(chckbxmntmShowCurves);
+		mnView.add(viewMenuCurves);
 		
 		panel_main = new JPanel();
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
@@ -822,10 +808,18 @@ public class Main_window {
 			controlsPedal.loadFromConfigFull(configFull);
 			controlsPads.loadFromConfigFull(configFull);		
 		}
+		frmMegadrummanager.setLocation(configOptions.mainWindowPosition);
+
+		viewMenuMisc.setConfigOptions(configOptions);
+		viewMenuPedal.setConfigOptions(configOptions);
+		viewMenuPads.setConfigOptions(configOptions);
+		viewMenuCurves.setConfigOptions(configOptions);
+		
 	}
 	
 	private void saveAndExit() {
 		midi_handler.closeAllPorts();
+		configOptions.mainWindowPosition = frmMegadrummanager.getLocation();
 		dialog_options.saveOptionsTo(configOptions);
 		if (configOptions.saveOnExit) {
 			fileManager.saveLastOptions(configOptions);
@@ -839,9 +833,11 @@ public class Main_window {
 	}
 	
 	private void resizeMainWindow() {
-		//frmMegadrummanager.setSize(frmMegadrummanager.getContentPane().getSize());
-		//frmMegadrummanager.setSize(frmMegadrummanager.getContentPane().getWidth() + 20, frmMegadrummanager.getContentPane().getHeight() + 20);
-		//panel_top.
+		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
+		controlsMisc.setVisible(configOptions.showPanels[0]>0);
+		controlsPedal.setVisible(configOptions.showPanels[1]>0);
+		controlsPads.setVisible(configOptions.showPanels[2]>0);
+		controlsCurves.setVisible(configOptions.showPanels[3]>0);
 		frmMegadrummanager.pack();
 	}
 }
