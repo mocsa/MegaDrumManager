@@ -27,6 +27,8 @@ import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
+
+import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
@@ -100,6 +102,7 @@ public class Main_window {
 	private JMenu mnView;
 	private JProgressBar progressBar;
 	private JComboBox comboBox_inputsCount;
+	private boolean localFocusLost = false;
 //	private ViewMenu viewMenuMisc;
 //	private ViewMenu viewMenuPedal;
 //	private ViewMenu viewMenuPads;
@@ -160,7 +163,7 @@ public class Main_window {
 			public void windowGainedFocus(WindowEvent arg0) {
 //				for (int i = 0; i<Constants.PANELS_COUNT;i++) {
 //					if (framesDetatched[i].isVisible()) {
-//						framesDetatched[i].toBack();
+//						framesDetatched[i].toFront();
 //					}
 //				}
 			}
@@ -595,17 +598,20 @@ public class Main_window {
 			});
 			mnView.add(viewMenus[i]);
 			framesDetatched[i] = new FrameDetatched(i);
+			framesDetatched[i].setTitle(Constants.PANELS_NAMES[i]);
 			framesDetatched[i].addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowActivated(WindowEvent arg0) {
 					((JDialog)arg0.getSource()).pack();
 				}
 				@Override
-				public void windowClosed(WindowEvent arg0) {
+				public void windowDeactivated (WindowEvent arg0) {
 					int id = ((FrameDetatched)arg0.getSource()).controlsId;
-					configOptions.showPanels[id] = Constants.PANEL_HIDE;
-					viewMenus[id].updateControls();
-					resizeMainWindow();
+					if (!framesDetatched[id].isVisible()) {
+						configOptions.showPanels[id] = Constants.PANEL_HIDE;
+						viewMenus[id].updateControls();
+						resizeMainWindow();
+					}
 				}
 			});
 		}
@@ -856,7 +862,6 @@ public class Main_window {
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
 		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
 			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
-			framesDetatched[i].pack();
 			if (configOptions.showPanels[i] == Constants.PANEL_DETATCH) {
 				framesDetatched[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
 				framesDetatched[i].setVisible(true);
@@ -864,6 +869,7 @@ public class Main_window {
 				framesDetatched[i].setVisible(false);
 				panel_main.add(controlsPanels[i], ((Integer)(i+1)).toString() +", 2, default, top");
 			}
+			framesDetatched[i].pack();
 		}
 		frmMegadrummanager.pack();
 	}
