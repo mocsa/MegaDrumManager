@@ -14,7 +14,7 @@ public class ViewMenu extends JMenu {
 	private String panelName;
 	private ConfigOptions configOptions;
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
-	private int panelPointer;
+	public int panelPointer;
 	private int [] prevState = { -1, -1, -1, -1};
 	
 	/**
@@ -90,7 +90,7 @@ public class ViewMenu extends JMenu {
 		updateControls();
 	}
 	
-	private void updateControls() {
+	public void updateControls() {
 		if (configOptions != null ) {
 			radioHide.setSelected(configOptions.showPanels[panelPointer] == Constants.PANEL_HIDE);
 			radioShow.setSelected(configOptions.showPanels[panelPointer] == Constants.PANEL_SHOW);

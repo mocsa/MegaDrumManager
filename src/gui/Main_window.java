@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.EventQueue;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -68,6 +69,7 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.WindowFocusListener;
 
 public class Main_window {
 
@@ -89,6 +91,7 @@ public class Main_window {
 	//private FrameDetatched frameCurves;
 	private FrameDetatched [] framesDetatched;
 	private JPanel [] controlsPanels;
+	private ViewMenu [] viewMenus;
 	private ConfigFull configFull;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
@@ -97,10 +100,10 @@ public class Main_window {
 	private JMenu mnView;
 	private JProgressBar progressBar;
 	private JComboBox comboBox_inputsCount;
-	private ViewMenu viewMenuMisc;
-	private ViewMenu viewMenuPedal;
-	private ViewMenu viewMenuPads;
-	private ViewMenu viewMenuCurves;
+//	private ViewMenu viewMenuMisc;
+//	private ViewMenu viewMenuPedal;
+//	private ViewMenu viewMenuPads;
+//	private ViewMenu viewMenuCurves;
 	
 
 	
@@ -153,6 +156,17 @@ public class Main_window {
 	 */
 	private void initialize() {
 		frmMegadrummanager = new JFrame();
+		frmMegadrummanager.addWindowFocusListener(new WindowFocusListener() {
+			public void windowGainedFocus(WindowEvent arg0) {
+//				for (int i = 0; i<Constants.PANELS_COUNT;i++) {
+//					if (framesDetatched[i].isVisible()) {
+//						framesDetatched[i].toBack();
+//					}
+//				}
+			}
+			public void windowLostFocus(WindowEvent arg0) {
+			}
+		});
 		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
@@ -368,38 +382,6 @@ public class Main_window {
 		mnView = new JMenu("View");
 		menuBar.add(mnView);
 		
-		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
-		viewMenuMisc = new ViewMenu("Misc", 0);
-		viewMenuMisc.addPropertyChangeListener("resize", new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent arg0) {
-				resizeMainWindow();
-			}
-		});
-		mnView.add(viewMenuMisc);
-
-		viewMenuPedal = new ViewMenu("Pedal", 1);
-		viewMenuPedal.addPropertyChangeListener("resize", new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent arg0) {
-				resizeMainWindow();
-			}
-		});
-		mnView.add(viewMenuPedal);
-
-		viewMenuPads = new ViewMenu("Pads", 2);
-		viewMenuPads.addPropertyChangeListener("resize", new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent arg0) {
-				resizeMainWindow();
-			}
-		});
-		mnView.add(viewMenuPads);
-		
-		viewMenuCurves = new ViewMenu("Curves", 3);
-		viewMenuCurves.addPropertyChangeListener("resize", new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent arg0) {
-				resizeMainWindow();
-			}
-		});
-		mnView.add(viewMenuCurves);
 		
 		panel_main = new JPanel();
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
@@ -595,20 +577,38 @@ public class Main_window {
 		});
 		panel_main.add(controlsCurves, "4, 2, fill, top");
 		
-//		frameMisc = new FrameDetatched();
-//		framePedal = new FrameDetatched();
-//		framePads = new FrameDetatched();
-//		frameCurves = new FrameDetatched();
-		framesDetatched = new FrameDetatched[4];
-		controlsPanels = new JPanel[4];
-		framesDetatched[0] = new FrameDetatched();
+
+		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
+		framesDetatched = new FrameDetatched[Constants.PANELS_COUNT];
+		controlsPanels = new JPanel[Constants.PANELS_COUNT];
+		viewMenus = new ViewMenu[Constants.PANELS_COUNT];
 		controlsPanels[0] = controlsMisc;
-		framesDetatched[1] = new FrameDetatched();
 		controlsPanels[1] = controlsPedal;
-		framesDetatched[2] = new FrameDetatched();
 		controlsPanels[2] = controlsPads;
-		framesDetatched[3] = new FrameDetatched();
 		controlsPanels[3] = controlsCurves;
+		for (int i=0;i<Constants.PANELS_COUNT;i++) {
+			viewMenus[i] = new ViewMenu(Constants.PANELS_NAMES[i], i);
+			viewMenus[i].addPropertyChangeListener("resize", new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					resizeMainWindow();
+				}
+			});
+			mnView.add(viewMenus[i]);
+			framesDetatched[i] = new FrameDetatched(i);
+			framesDetatched[i].addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowActivated(WindowEvent arg0) {
+					((JDialog)arg0.getSource()).pack();
+				}
+				@Override
+				public void windowClosed(WindowEvent arg0) {
+					int id = ((FrameDetatched)arg0.getSource()).controlsId;
+					configOptions.showPanels[id] = Constants.PANEL_HIDE;
+					viewMenus[id].updateControls();
+					resizeMainWindow();
+				}
+			});
+		}
 		
 	}
 	
@@ -831,10 +831,9 @@ public class Main_window {
 		}
 		frmMegadrummanager.setLocation(configOptions.mainWindowPosition);
 
-		viewMenuMisc.setConfigOptions(configOptions);
-		viewMenuPedal.setConfigOptions(configOptions);
-		viewMenuPads.setConfigOptions(configOptions);
-		viewMenuCurves.setConfigOptions(configOptions);
+		for (int i=0;i<Constants.PANELS_COUNT;i++) {
+			viewMenus[i].setConfigOptions(configOptions);
+		}
 		
 	}
 	
@@ -855,8 +854,9 @@ public class Main_window {
 	
 	private void resizeMainWindow() {
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
-		for (int i = 0; i< 4; i++) {
+		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
 			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
+			framesDetatched[i].pack();
 			if (configOptions.showPanels[i] == Constants.PANEL_DETATCH) {
 				framesDetatched[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
 				framesDetatched[i].setVisible(true);
@@ -865,38 +865,6 @@ public class Main_window {
 				panel_main.add(controlsPanels[i], ((Integer)(i+1)).toString() +", 2, default, top");
 			}
 		}
-//		controlsMisc.setVisible(configOptions.showPanels[0] != Constants.PANEL_HIDE);
-//		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
-//			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
-//			frameMisc.setVisible(true);
-//		} else {
-//			frameMisc.setVisible(false);
-//			panel_main.add(controlsMisc, "1, 2, default, top");
-//		}
-//		controlsPedal.setVisible(configOptions.showPanels[1] != Constants.PANEL_HIDE);
-//		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
-//			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
-//			frameMisc.setVisible(true);
-//		} else {
-//			frameMisc.setVisible(false);
-//			panel_main.add(controlsMisc, "1, 2, default, top");
-//		}
-//		controlsPads.setVisible(configOptions.showPanels[2] != Constants.PANEL_HIDE);
-//		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
-//			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
-//			frameMisc.setVisible(true);
-//		} else {
-//			frameMisc.setVisible(false);
-//			panel_main.add(controlsMisc, "1, 2, default, top");
-//		}
-//		controlsCurves.setVisible(configOptions.showPanels[3] != Constants.PANEL_HIDE);
-//		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
-//			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
-//			frameMisc.setVisible(true);
-//		} else {
-//			frameMisc.setVisible(false);
-//			panel_main.add(controlsMisc, "1, 2, default, top");
-//		}
 		frmMegadrummanager.pack();
 	}
 }
