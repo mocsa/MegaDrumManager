@@ -13,13 +13,13 @@ import java.awt.event.WindowStateListener;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.Dialog.ModalityType;
 
-public class FrameMisc extends JDialog {
+public class FrameDetatched extends JDialog {
 	private ControlsMisc controlsMisc;
 
 	/**
 	 * Create the panel.
 	 */
-	public FrameMisc() {
+	public FrameDetatched() {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowActivated(WindowEvent arg0) {
@@ -31,8 +31,6 @@ public class FrameMisc extends JDialog {
 			new RowSpec[] {
 				FormFactory.PREF_ROWSPEC,}));
 		
-		//getContentPane().add(controlsMisc, "1, 1, fill, top");
-		setTitle("Misc settings");
 	}	
 
 }

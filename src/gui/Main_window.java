@@ -80,10 +80,15 @@ public class Main_window {
 	private Timer timer_midi;
 	private TimerTask midi_in_task;
 	private ControlsMisc controlsMisc;
-	private FrameMisc frameMisc;
+	//private FrameDetatched frameMisc;
 	private ControlsPedal controlsPedal;
+	//private FrameDetatched framePedal;
 	private ControlsPads controlsPads;
+	//private FrameDetatched framePads;
 	private ControlsCurves controlsCurves;
+	//private FrameDetatched frameCurves;
+	private FrameDetatched [] framesDetatched;
+	private JPanel [] controlsPanels;
 	private ConfigFull configFull;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
@@ -420,8 +425,6 @@ public class Main_window {
 			}
 		});
 		
-		frameMisc = new FrameMisc();
-		
 		controlsPedal = new ControlsPedal();
 		controlsPedal.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_main.add(controlsPedal, "2, 2, default, top");
@@ -591,6 +594,21 @@ public class Main_window {
 			}
 		});
 		panel_main.add(controlsCurves, "4, 2, fill, top");
+		
+//		frameMisc = new FrameDetatched();
+//		framePedal = new FrameDetatched();
+//		framePads = new FrameDetatched();
+//		frameCurves = new FrameDetatched();
+		framesDetatched = new FrameDetatched[4];
+		controlsPanels = new JPanel[4];
+		framesDetatched[0] = new FrameDetatched();
+		controlsPanels[0] = controlsMisc;
+		framesDetatched[1] = new FrameDetatched();
+		controlsPanels[1] = controlsPedal;
+		framesDetatched[2] = new FrameDetatched();
+		controlsPanels[2] = controlsPads;
+		framesDetatched[3] = new FrameDetatched();
+		controlsPanels[3] = controlsCurves;
 		
 	}
 	
@@ -837,19 +855,48 @@ public class Main_window {
 	
 	private void resizeMainWindow() {
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
-		controlsMisc.setVisible(configOptions.showPanels[0] != Constants.PANEL_HIDE);
-		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
-			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
-			frameMisc.setVisible(configOptions.showPanels[0] == Constants.PANEL_DETATCH);
-		} else {
-			frameMisc.getContentPane().remove(controlsMisc);
-			frameMisc.setVisible(configOptions.showPanels[0] == Constants.PANEL_DETATCH);
-			panel_main.add(controlsMisc, "1, 2, default, top");
-			//frameMisc = null;
+		for (int i = 0; i< 4; i++) {
+			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
+			if (configOptions.showPanels[i] == Constants.PANEL_DETATCH) {
+				framesDetatched[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
+				framesDetatched[i].setVisible(true);
+			} else {
+				framesDetatched[i].setVisible(false);
+				panel_main.add(controlsPanels[i], ((Integer)(i+1)).toString() +", 2, default, top");
+			}
 		}
-		controlsPedal.setVisible(configOptions.showPanels[1] == Constants.PANEL_SHOW);
-		controlsPads.setVisible(configOptions.showPanels[2] == Constants.PANEL_SHOW);
-		controlsCurves.setVisible(configOptions.showPanels[3] == Constants.PANEL_SHOW);
+//		controlsMisc.setVisible(configOptions.showPanels[0] != Constants.PANEL_HIDE);
+//		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
+//			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
+//			frameMisc.setVisible(true);
+//		} else {
+//			frameMisc.setVisible(false);
+//			panel_main.add(controlsMisc, "1, 2, default, top");
+//		}
+//		controlsPedal.setVisible(configOptions.showPanels[1] != Constants.PANEL_HIDE);
+//		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
+//			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
+//			frameMisc.setVisible(true);
+//		} else {
+//			frameMisc.setVisible(false);
+//			panel_main.add(controlsMisc, "1, 2, default, top");
+//		}
+//		controlsPads.setVisible(configOptions.showPanels[2] != Constants.PANEL_HIDE);
+//		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
+//			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
+//			frameMisc.setVisible(true);
+//		} else {
+//			frameMisc.setVisible(false);
+//			panel_main.add(controlsMisc, "1, 2, default, top");
+//		}
+//		controlsCurves.setVisible(configOptions.showPanels[3] != Constants.PANEL_HIDE);
+//		if (configOptions.showPanels[0] == Constants.PANEL_DETATCH) {
+//			frameMisc.getContentPane().add(controlsMisc, "1, 1, fill, top");
+//			frameMisc.setVisible(true);
+//		} else {
+//			frameMisc.setVisible(false);
+//			panel_main.add(controlsMisc, "1, 2, default, top");
+//		}
 		frmMegadrummanager.pack();
 	}
 }
