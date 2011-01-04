@@ -673,4 +673,14 @@ public class Midi_handler {
 		parent.midiFinished(upgradeError, resultString);
 	}
 	
+	public boolean isMidiOpen() {
+		boolean result = false;
+		if ((midiin != null) && (midiout != null)) {
+			if (midiin.isOpen() && midiout.isOpen()) {
+				result = true;
+			}
+		}
+		return result;
+	}
+	
 }

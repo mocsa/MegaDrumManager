@@ -72,6 +72,7 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.WindowFocusListener;
+import javax.swing.JToggleButton;
 
 public class Main_window {
 
@@ -99,10 +100,7 @@ public class Main_window {
 	private JProgressBar progressBar;
 	private JComboBox comboBox_inputsCount;
 	private boolean localFocusLost = false;
-//	private ViewMenu viewMenuMisc;
-//	private ViewMenu viewMenuPedal;
-//	private ViewMenu viewMenuPads;
-//	private ViewMenu viewMenuCurves;
+	private JToggleButton tglbtnMidi;
 	
 
 	
@@ -140,6 +138,13 @@ public class Main_window {
 		if (dialog_options.config_applied) {
 			dialog_options.saveOptionsTo(configOptions);
 			midi_handler.initPorts(configOptions);
+		}
+		if (midi_handler.isMidiOpen()) {
+			tglbtnMidi.setText("Close MIDI");
+			tglbtnMidi.setSelected(true);
+		} else {
+			tglbtnMidi.setText("Open MIDI");
+			tglbtnMidi.setSelected(false);
 		}
 	}
 	
@@ -337,9 +342,19 @@ public class Main_window {
 		mnMain.add(mnCustomCurves);
 		
 		JMenuItem mntmLoadFromMd_5 = new JMenuItem("Load from MD");
+		mntmLoadFromMd_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getAllCurves();
+			}
+		});
 		mnCustomCurves.add(mntmLoadFromMd_5);
 		
 		JMenuItem mntmSendToMd_5 = new JMenuItem("Send to MD");
+		mntmSendToMd_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendAllCurves();
+			}
+		});
 		mnCustomCurves.add(mntmSendToMd_5);
 		
 		JSeparator separator_2 = new JSeparator();
@@ -470,7 +485,9 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("36dlu"),
+				ColumnSpec.decode("20dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("32dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
@@ -515,7 +532,7 @@ public class Main_window {
 		panel_top.add(lblInputs, "10, 1, right, default");
 		
 		comboBox_inputsCount = new JComboBox();
-		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		comboBox_inputsCount.removeAllItems();
 		comboBox_inputsCount.addItem("22");
 		comboBox_inputsCount.addItem("32");
@@ -548,8 +565,33 @@ public class Main_window {
 		});
 		panel_top.add(comboBox_inputsCount, "12, 1, left, fill");
 		
+		tglbtnMidi = new JToggleButton("Open MIDI");
+		tglbtnMidi.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		tglbtnMidi.setMargin(new Insets(1, 4, 1, 4));
+		tglbtnMidi.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
+					midi_handler.closeAllPorts();
+					if (!midi_handler.isMidiOpen()) {
+						tglbtnMidi.setText("Open MIDI");
+					} else {
+						tglbtnMidi.setSelected(true);
+					}
+				}
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					midi_handler.initPorts(configOptions);
+					if (midi_handler.isMidiOpen()) {
+						tglbtnMidi.setText("Close MIDI");
+					} else {
+						tglbtnMidi.setSelected(false);
+					}
+				}
+			}
+		});
+		panel_top.add(tglbtnMidi, "14, 1");
+		
 		progressBar.setStringPainted(true);
-		panel_top.add(progressBar, "14, 1");
+		panel_top.add(progressBar, "16, 1");
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
 		
 		controlsCurves = new ControlsCurves();
@@ -803,6 +845,7 @@ public class Main_window {
 		dialog_options.loadOptionsFrom(configOptions);
 		if (configOptions.autoOpenPorts) {
 			midi_handler.initPorts(configOptions);
+			tglbtnMidi.setSelected(midi_handler.isMidiOpen());
 		}
 		switch (configOptions.inputsCount) {
 			case 21:
@@ -834,9 +877,6 @@ public class Main_window {
 		frmMegadrummanager.setLocation(configOptions.mainWindowPosition);
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			framesDetached[i].setLocation(configOptions.framesPositions[i]);
-		}
-
-		for (int i=0;i<Constants.PANELS_COUNT;i++) {
 			viewMenus[i].setConfigOptions(configOptions);
 		}
 		
