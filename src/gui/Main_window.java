@@ -84,14 +84,10 @@ public class Main_window {
 	private Timer timer_midi;
 	private TimerTask midi_in_task;
 	private ControlsMisc controlsMisc;
-	//private FrameDetatched frameMisc;
 	private ControlsPedal controlsPedal;
-	//private FrameDetatched framePedal;
 	private ControlsPads controlsPads;
-	//private FrameDetatched framePads;
 	private ControlsCurves controlsCurves;
-	//private FrameDetatched frameCurves;
-	private FrameDetatched [] framesDetatched;
+	private FrameDetached [] framesDetached;
 	private JPanel [] controlsPanels;
 	private ViewMenu [] viewMenus;
 	private ConfigFull configFull;
@@ -582,7 +578,7 @@ public class Main_window {
 		
 
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
-		framesDetatched = new FrameDetatched[Constants.PANELS_COUNT];
+		framesDetached = new FrameDetached[Constants.PANELS_COUNT];
 		controlsPanels = new JPanel[Constants.PANELS_COUNT];
 		viewMenus = new ViewMenu[Constants.PANELS_COUNT];
 		controlsPanels[0] = controlsMisc;
@@ -597,17 +593,17 @@ public class Main_window {
 				}
 			});
 			mnView.add(viewMenus[i]);
-			framesDetatched[i] = new FrameDetatched(i);
-			framesDetatched[i].setTitle(Constants.PANELS_NAMES[i]);
-			framesDetatched[i].addWindowListener(new WindowAdapter() {
+			framesDetached[i] = new FrameDetached(i);
+			framesDetached[i].setTitle(Constants.PANELS_NAMES[i]);
+			framesDetached[i].addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowActivated(WindowEvent arg0) {
 					((JDialog)arg0.getSource()).pack();
 				}
 				@Override
 				public void windowDeactivated (WindowEvent arg0) {
-					int id = ((FrameDetatched)arg0.getSource()).controlsId;
-					if (!framesDetatched[id].isVisible()) {
+					int id = ((FrameDetached)arg0.getSource()).controlsId;
+					if (!framesDetached[id].isVisible()) {
 						configOptions.showPanels[id] = Constants.PANEL_HIDE;
 						viewMenus[id].updateControls();
 						resizeMainWindow();
@@ -862,14 +858,14 @@ public class Main_window {
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
 		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
 			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
-			if (configOptions.showPanels[i] == Constants.PANEL_DETATCH) {
-				framesDetatched[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
-				framesDetatched[i].setVisible(true);
+			if (configOptions.showPanels[i] == Constants.PANEL_DETACH) {
+				framesDetached[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
+				framesDetached[i].setVisible(true);
 			} else {
-				framesDetatched[i].setVisible(false);
+				framesDetached[i].setVisible(false);
 				panel_main.add(controlsPanels[i], ((Integer)(i+1)).toString() +", 2, default, top");
 			}
-			framesDetatched[i].pack();
+			framesDetached[i].pack();
 		}
 		frmMegadrummanager.pack();
 	}

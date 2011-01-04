@@ -3,7 +3,7 @@ package gui;
 public interface Constants {
 	public static final int PANEL_HIDE = 0;
 	public static final int PANEL_SHOW = 1;
-	public static final int PANEL_DETATCH = 2;
+	public static final int PANEL_DETACH = 2;
 	public static final int PANELS_COUNT = 4;
 	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Curve"};
 

@@ -10,13 +10,13 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 
-public class FrameDetatched extends JFrame {
+public class FrameDetached extends JFrame {
 	public int controlsId;
 	
 	/**
 	 * Create the panel.
 	 */
-	public FrameDetatched(int id) {
+	public FrameDetached(int id) {
 		setResizable(false);
 		controlsId = id;
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {

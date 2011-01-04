@@ -10,7 +10,7 @@ public class ViewMenu extends JMenu {
 
 	private JRadioButtonMenuItem radioHide;
 	private JRadioButtonMenuItem radioShow;
-	private JRadioButtonMenuItem radioDetatch;
+	private JRadioButtonMenuItem radioDetach;
 	private String panelName;
 	private ConfigOptions configOptions;
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
@@ -28,8 +28,8 @@ public class ViewMenu extends JMenu {
 		add(radioHide);
 		radioShow = new JRadioButtonMenuItem("Show");
 		add(radioShow);
-		radioDetatch = new JRadioButtonMenuItem("Detatch");
-		add(radioDetatch);
+		radioDetach = new JRadioButtonMenuItem("Detach");
+		add(radioDetach);
 		updateControls();
 		radioHide.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -65,17 +65,17 @@ public class ViewMenu extends JMenu {
 				}
 			}
 		});
-		radioDetatch.addItemListener(new ItemListener() {
+		radioDetach.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
-					if (prevState[panelPointer] == Constants.PANEL_DETATCH) {
-						radioDetatch.setSelected(true);
+					if (prevState[panelPointer] == Constants.PANEL_DETACH) {
+						radioDetach.setSelected(true);
 					}
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					if (prevState[panelPointer] != Constants.PANEL_DETATCH) {
-						configOptions.showPanels[panelPointer] = Constants.PANEL_DETATCH;
-						prevState[panelPointer] = Constants.PANEL_DETATCH;
+					if (prevState[panelPointer] != Constants.PANEL_DETACH) {
+						configOptions.showPanels[panelPointer] = Constants.PANEL_DETACH;
+						prevState[panelPointer] = Constants.PANEL_DETACH;
 						updateControls();
 						firePropertyChange("resize", false, true);
 					}
@@ -94,7 +94,7 @@ public class ViewMenu extends JMenu {
 		if (configOptions != null ) {
 			radioHide.setSelected(configOptions.showPanels[panelPointer] == Constants.PANEL_HIDE);
 			radioShow.setSelected(configOptions.showPanels[panelPointer] == Constants.PANEL_SHOW);
-			radioDetatch.setSelected(configOptions.showPanels[panelPointer] == Constants.PANEL_DETATCH);
+			radioDetach.setSelected(configOptions.showPanels[panelPointer] == Constants.PANEL_DETACH);
 		}
 	}
 
