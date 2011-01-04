@@ -598,7 +598,7 @@ public class Main_window {
 			framesDetached[i].addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowActivated(WindowEvent arg0) {
-					((JDialog)arg0.getSource()).pack();
+					((FrameDetached)arg0.getSource()).pack();
 				}
 				@Override
 				public void windowDeactivated (WindowEvent arg0) {
@@ -832,6 +832,9 @@ public class Main_window {
 			controlsPads.loadFromConfigFull(configFull);		
 		}
 		frmMegadrummanager.setLocation(configOptions.mainWindowPosition);
+		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
+			framesDetached[i].setLocation(configOptions.framesPositions[i]);
+		}
 
 		for (int i=0;i<Constants.PANELS_COUNT;i++) {
 			viewMenus[i].setConfigOptions(configOptions);
@@ -842,6 +845,9 @@ public class Main_window {
 	private void saveAndExit() {
 		midi_handler.closeAllPorts();
 		configOptions.mainWindowPosition = frmMegadrummanager.getLocation();
+		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
+			configOptions.framesPositions[i] = framesDetached[i].getLocation(); 
+		}
 		dialog_options.saveOptionsTo(configOptions);
 		if (configOptions.saveOnExit) {
 			fileManager.saveLastOptions(configOptions);
