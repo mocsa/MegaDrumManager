@@ -102,7 +102,7 @@ public class ControlsPadCommon extends JPanel {
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
-				RowSpec.decode("12dlu"),
+				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),

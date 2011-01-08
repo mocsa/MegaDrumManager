@@ -237,6 +237,16 @@ public class ControlsPads extends JPanel {
 			}
 		};
 		panel_head = new ControlsPadCommon(head_pad);
+		panel_head.getComboBox_name().addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					if (padPointer == prevPadPointer) {
+						//configPads[padPointer].copyVarsFrom(panel_head.getConfig());
+						//updatePadsSelection(padPointer);
+					}
+				}
+			}
+		});
 		
 		panel_head.getPadButton_name().addActionListener(padButtonActionListener);
 		panel_head.getPadButton_note().addActionListener(padButtonActionListener);
@@ -273,6 +283,16 @@ public class ControlsPads extends JPanel {
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		panel_rim = new ControlsPadCommon(rim_pad);
+		panel_rim.getComboBox_name().addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					if (padPointer == prevPadPointer) {
+						configPads[padPointer+1].copyVarsFrom(panel_rim.getConfig());
+						updatePadsSelection(padPointer);
+					}
+				}
+			}
+		});
 		
 		panel_rim.getPadButton_name().addActionListener(padButtonActionListener);
 		panel_rim.getPadButton_note().addActionListener(padButtonActionListener);
