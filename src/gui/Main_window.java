@@ -201,6 +201,7 @@ public class Main_window {
 					controlsPedal.setConfig(midi_handler.config_pedal);
 				}
 				if (midi_handler.config_pad.changed_pad > 0) {
+					System.out.printf("Set main config %d\n", 0);
 					controlsPads.setConfig(midi_handler.config_pad, midi_handler.config_pad.changed_pad - 1);
 					midi_handler.config_pad.changed_pad = 0;
 				}

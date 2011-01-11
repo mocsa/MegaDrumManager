@@ -125,7 +125,7 @@ public class ThirdZoneControls extends JPanel {
 		allInitialized = true;
 	}
 	
-	private void updateControls() {
+	public void updateControls() {
 		if (allInitialized) {
 			if (!inUpdate) {
 				inUpdate = true;
@@ -141,13 +141,12 @@ public class ThirdZoneControls extends JPanel {
 		}
 	}
 	
-	private void updateConfig() {
+	public void updateConfig() {
 		config3rd.note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
 		config3rd.altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
 		config3rd.pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
 		config3rd.dampenedNote = ((Short)noteSpinControl_dampenedNote.getSpinner().getValue()).shortValue();
 		config3rd.threshold = (Short)spinner_threshold.getValue();
-		//config3rd.threshold = (short)((Integer)spinner_threshold.getValue()).shortValue();
 	}
 	
 	public void setAsSwitch(boolean switch_pad) {
@@ -157,13 +156,8 @@ public class ThirdZoneControls extends JPanel {
 	}
 	
 	public void setConfig(Config3rd config) {
-		config3rd.copyVarsFrom(config);
+		config3rd = config;
 		updateControls();
 	}
 	
-	public Config3rd getConfig() {
-		updateConfig();
-		return config3rd;
-	}
-
 }

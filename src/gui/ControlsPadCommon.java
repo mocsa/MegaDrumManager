@@ -426,9 +426,10 @@ public class ControlsPadCommon extends JPanel {
 				
 	}
 
-	private void updateControls() {
+	public void updateControls() {
 		comboBox_name.setSelectedIndex(configPad.name);
 		noteSpinControl_note.getSpinner().setValue(configPad.note);
+		System.out.printf("Setting Note Spinner to %d\n", configPad.note);
 		noteSpinControl_altNote.getSpinner().setValue(configPad.altNote);
 		checkBox_altLinked.setSelected(configPad.altNote_linked);
 		noteSpinControl_pressrollNote.getSpinner().setValue(configPad.pressrollNote);
@@ -470,9 +471,10 @@ public class ControlsPadCommon extends JPanel {
 		}
 	}
 	
-	private void updateConfig() {
+	public void updateConfig() {
 		configPad.name = (short)comboBox_name.getSelectedIndex();
 		configPad.note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
+		System.out.printf("Setting Note to %d\n", configPad.note);
 		configPad.altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
 		configPad.altNote_linked = checkBox_altLinked.isSelected();
 		configPad.pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
@@ -492,8 +494,6 @@ public class ControlsPadCommon extends JPanel {
 		configPad.dynLevel = (short)comboBox_dynLevel.getSelectedIndex();
 		configPad.dynTime = (short)comboBox_dynTime.getSelectedIndex();
 		configPad.minScan = (Short)spinner_minScan.getValue();
-		//TO-DO piezo/switch, 3way type, dual and etc
-		// configPad.type = (comboBox_type.getSelectedIndex() != 0);
 		if (head_rim_pad == head_pad) {
 			configPad.type = false;
 			switch (comboBox_type.getSelectedIndex()) {
@@ -521,17 +521,12 @@ public class ControlsPadCommon extends JPanel {
 	
 	public void setConfig(ConfigPad config, boolean pad_type, int pad_id) {
 		head_rim_pad = pad_type;
-		configPad.copyVarsFrom(config);
-		comboBox_name.removeItemAt(0);
-		comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[pad_id], 0);
+		configPad = config;
 		updateControls();
+		comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[pad_id], 0);
+		comboBox_name.removeItemAt(1);
 	}
 	
-	public ConfigPad getConfig() {
-		updateConfig();
-		return configPad;
-	}
-		
 	public boolean getHeadRim() {
 		return head_rim_pad;
 	}
