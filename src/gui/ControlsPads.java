@@ -46,6 +46,7 @@ public class ControlsPads extends JPanel {
 	private int prevPadSelection;
 	private ActionListener padButtonActionListener;
 	private boolean switchingPad = false;
+	private boolean panel_3rd_zone_prevVisible = false;
 
 	//private boolean head_pad_type;
 	private static final boolean head_pad = true;
@@ -284,7 +285,10 @@ public class ControlsPads extends JPanel {
 					panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
 					panel_rim.getComboBox_type().setEnabled(panel_head.getComboBox_type().getSelectedIndex() > 0);
 					repaint();
-					firePropertyChange("resize", false, true);
+					if (panel_3rd_zone.isVisible() != panel_3rd_zone_prevVisible) {
+						firePropertyChange("resize", false, true);
+						panel_3rd_zone_prevVisible = panel_3rd_zone.isVisible(); 
+					}
 		        }
 			}
 		});

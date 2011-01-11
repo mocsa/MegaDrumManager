@@ -12,6 +12,7 @@ import com.jgoodies.forms.factories.FormFactory;
 
 public class FrameDetached extends JFrame {
 	public int controlsId;
+	public boolean isDetached;
 	
 	/**
 	 * Create the panel.
@@ -19,6 +20,7 @@ public class FrameDetached extends JFrame {
 	public FrameDetached(int id) {
 		setResizable(false);
 		controlsId = id;
+		isDetached = false;
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {

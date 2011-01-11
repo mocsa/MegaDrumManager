@@ -905,11 +905,17 @@ public class Main_window {
 		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
 			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
 			if (configOptions.showPanels[i] == Constants.PANEL_DETACH) {
-				framesDetached[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
-				framesDetached[i].setVisible(true);
+				if (!framesDetached[i].isDetached) {
+					framesDetached[i].isDetached = true;
+					framesDetached[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
+					framesDetached[i].setVisible(true);
+				}
 			} else {
-				framesDetached[i].setVisible(false);
-				panel_main.add(controlsPanels[i], ((Integer)(i+1)).toString() +", 2, default, top");
+				if (framesDetached[i].isDetached) {
+					framesDetached[i].isDetached = false;
+					framesDetached[i].setVisible(false);
+					panel_main.add(controlsPanels[i], ((Integer)(i+1)).toString() +", 2, default, top");
+				}
 			}
 			framesDetached[i].pack();
 		}
