@@ -37,11 +37,13 @@ public class Midi_handler {
 	public int config_chain_id;
 	public ConfigMisc config_misc;
 	public ConfigPedal config_pedal;
-	public ConfigPad config_pad;
+	//public ConfigPad config_pad;
 	public Config3rd config_3rd;
 	public ConfigCurve config_curve;
 	public boolean getMidiBlocked;
 	public boolean upgradeCancelled = false;
+	public byte [] bufferIn;
+	public short changedPad;
 
 	public Midi_handler () {
 		midiin = null;
@@ -53,11 +55,13 @@ public class Midi_handler {
 		config_chain_id = 0;
 		config_misc = new ConfigMisc();
 		config_pedal = new ConfigPedal();
-		config_pad = new ConfigPad();
+		//config_pad = new ConfigPad();
 		config_3rd = new Config3rd();
 		config_curve = new ConfigCurve();
 		dump_receiver = new DumpReceiver();
 		getMidiBlocked = false;
+		bufferIn = null;
+		changedPad = 0;
 	}
 	
 	public void closeAllPorts() {
@@ -130,10 +134,12 @@ public class Midi_handler {
 		}
 	}
 	
-	public void send_config_pad(int pad_id) {
+	public void send_config_pad(byte [] buffer, int pad_id) {
 		if (midiout != null) {
 			if (midiout.isOpen()) {
-				send_sysex(config_pad.getSysex(config_chain_id, pad_id));
+				buffer[2] = (byte)config_chain_id;
+				buffer[4] = (byte)(pad_id + 1);
+				send_sysex(buffer);
 			}
 		}
 	}
@@ -278,7 +284,9 @@ public class Midi_handler {
 										config_pedal.setFromSysex(buffer);
 										break;
 									case Constants.MD_SYSEX_PAD:
-										config_pad.setFromSysex(buffer);
+										//config_pad.setFromSysex(buffer);
+										changedPad = buffer[4];
+										bufferIn = buffer;
 										break;
 									case Constants.MD_SYSEX_3RD:
 										config_3rd.setFromSysex(buffer);

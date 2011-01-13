@@ -352,7 +352,6 @@ public class ControlsPads extends JPanel {
 		add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		System.out.printf("Set config %d\n", 0);
 		panel_head.setConfig(configPads[0], head_pad, 0);
 		comboBox_padSelection.setSelectedIndex(0);
 
@@ -397,11 +396,11 @@ public class ControlsPads extends JPanel {
 		return configPads;
 	}
 	
-	public void setConfig(ConfigPad config,int pad_id) {
-		configPads[pad_id].copyVarsFrom(config);
+	public void setConfig(byte[] buffer, int pad_id) {
+		//configPads[pad_id].copyVarsFrom(config);
+		configPads[pad_id].setFromSysex(buffer);
 		if (pad_id > 0) {
 			if (pad_id == padPointer) {
-				System.out.printf("Set config %d\n", 1);
 				panel_head.setConfig(configPads[pad_id], head_pad, pad_id);				
 			}
 			if (pad_id == (padPointer + 1)) {
@@ -409,7 +408,6 @@ public class ControlsPads extends JPanel {
 			}
 		} else {
 			if (pad_id == padPointer) {
-				System.out.printf("Set config %d\n", 2);
 				panel_head.setConfig(configPads[pad_id], head_pad, pad_id);
 			}
 		}
@@ -498,7 +496,6 @@ public class ControlsPads extends JPanel {
 		}
 		prevPadPointer = padPointer;
 		prevThirdPointer = thirdPointer;
-		System.out.printf("Set config %d\n", 3);
 		panel_head.setConfig(configPads[padPointer], head_pad, padPointer);
 		panel_head.getComboBox_type().setEnabled((padPointer != 0));
 		panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
@@ -623,9 +620,9 @@ public class ControlsPads extends JPanel {
 				i++;
 			}
 		}
-		setConfig(configPads[padPointer+1],padPointer+1);
+		setConfig(configPads[padPointer+1].getSysex(0, 0),padPointer+1);
 		if (head_rim != head_pad) {
-			setConfig(configPads[padPointer],padPointer);
+			setConfig(configPads[padPointer].getSysex(0, 0),padPointer);
 		}
 	}
 	

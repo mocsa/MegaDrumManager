@@ -429,7 +429,6 @@ public class ControlsPadCommon extends JPanel {
 	public void updateControls() {
 		comboBox_name.setSelectedIndex(configPad.name);
 		noteSpinControl_note.getSpinner().setValue(configPad.note);
-		System.out.printf("Setting Note Spinner to %d\n", configPad.note);
 		noteSpinControl_altNote.getSpinner().setValue(configPad.altNote);
 		checkBox_altLinked.setSelected(configPad.altNote_linked);
 		noteSpinControl_pressrollNote.getSpinner().setValue(configPad.pressrollNote);
@@ -474,7 +473,6 @@ public class ControlsPadCommon extends JPanel {
 	public void updateConfig() {
 		configPad.name = (short)comboBox_name.getSelectedIndex();
 		configPad.note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
-		System.out.printf("Setting Note to %d\n", configPad.note);
 		configPad.altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
 		configPad.altNote_linked = checkBox_altLinked.isSelected();
 		configPad.pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();

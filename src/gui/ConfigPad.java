@@ -1,7 +1,7 @@
 package gui;
 
 public class ConfigPad {
-	public short changed_pad;
+	//public short changed_pad;
 	public short note;
 	public short channel = 9;
 	public short curve;
@@ -36,7 +36,7 @@ public class ConfigPad {
 
 	
 	public ConfigPad (){
-		changed_pad = 0;
+		//changed_pad = 0;
 		sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];
 		sysex_byte = new byte[2];
 		sysex_short = new byte[4];
@@ -137,9 +137,9 @@ public class ConfigPad {
 	}
 
 	public void setFromSysex(byte [] sx) {
-		int i = 4;
+		int i = 5;
 		if (sx.length >= Constants.MD_SYSEX_PAD_SIZE) {
-			changed_pad = sx[i++];
+			//changed_pad = sx[i++];
 			sysex_byte[0] = sx[i++];
 			sysex_byte[1] = sx[i++];
 			note = Utils.sysex2byte(sysex_byte);
