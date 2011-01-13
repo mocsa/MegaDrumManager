@@ -415,17 +415,16 @@ public class ControlsPads extends JPanel {
 
 	public Config3rd getConfig3rd(int third_id) {
 		if (third_id == thirdPointer) {
-			//config3rds[thirdPointer].copyVarsFrom(panel_3rd_zone.getConfig());	
 			panel_3rd_zone.updateConfig();
 		}
 		return config3rds[third_id];
 	}
 
-	public void setConfig3rd(Config3rd config, int third_id) {
-		config3rds[third_id].copyVarsFrom(config);
+	public void setConfig3rd(byte [] buffer, int third_id) {
+		Utils.copySysexToConfig3rd(buffer, config3rds[third_id]);
 		if (padPointer > 0 ) {
 			if (third_id == thirdPointer) {
-				panel_3rd_zone.setConfig(config);
+				panel_3rd_zone.setConfig(config3rds[third_id]);
 			}
 		}
 	}
@@ -512,7 +511,7 @@ public class ControlsPads extends JPanel {
 			Utils.copyConfigPadToConfigFull(configPads, config, i);
 		}
 		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
-			config.sysex_3rds[i] = config3rds[i].getSysex(chain_id, i);
+			Utils.copyConfig3rdToSysex(config3rds[i], config.sysex_3rds[i]);
 		}
 	}
 	
@@ -523,7 +522,7 @@ public class ControlsPads extends JPanel {
 			Utils.copyConfigFullToConfigPad(config, configPads, i);
 		}
 		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
-			config3rds[i].setFromSysex(config.sysex_3rds[i]);
+			Utils.copySysexToConfig3rd(config.sysex_3rds[i], config3rds[i]);
 		}
 		prevPadPointer = -1;
 		switch_to_pad(padPointer);

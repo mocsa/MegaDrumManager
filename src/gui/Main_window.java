@@ -187,9 +187,9 @@ public class Main_window {
 					controlsPads.setConfig(midi_handler.bufferIn, midi_handler.changedPad - 1);
 					midi_handler.changedPad = 0;
 				}
-				if (midi_handler.config_3rd.changed_3rd > 0) {
-					controlsPads.setConfig3rd(midi_handler.config_3rd, midi_handler.config_3rd.changed_3rd - 1);
-					midi_handler.config_3rd.changed_3rd = 0;
+				if (midi_handler.changed3rd > -1) {
+					controlsPads.setConfig3rd(midi_handler.bufferIn, midi_handler.changed3rd);
+					midi_handler.changed3rd = -1;
 				}
 				if (midi_handler.config_curve.changed_curve > -1) {
 					controlsCurves.setConfig(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
@@ -670,7 +670,7 @@ public class Main_window {
 			delayMs(configOptions.sysexDelay);
 			midi_handler.requestConfigPad(pad_id + 2);
 			delayMs(configOptions.sysexDelay);
-			midi_handler.request_config_3rd((pad_id - 1)/2);
+			midi_handler.requestConfig3rd((pad_id - 1)/2);
 			delayMs(configOptions.sysexDelay);
 		} else {
 			midi_handler.requestConfigPad(1);
@@ -680,6 +680,7 @@ public class Main_window {
 	
 	private void sendPad(int pad_id) {
 		byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];
+		byte [] sysex_3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
 
 		if (pad_id > 0 ) {
 			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id), sysex);
@@ -689,8 +690,8 @@ public class Main_window {
 			midi_handler.sendConfigPad(sysex, pad_id+1);
 			delayMs(configOptions.sysexDelay);
 			pad_id = (pad_id - 1)/2;
-			midi_handler.config_3rd .copyVarsFrom(controlsPads.getConfig3rd(pad_id));
-			midi_handler.send_config_3rd(pad_id);
+			Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd(pad_id), sysex_3rd);
+			midi_handler.sendConfig3rd(sysex_3rd, pad_id);
 			delayMs(configOptions.sysexDelay);
 		} else {
 			Utils.copyConfigPadToSysex(controlsPads.getConfig(0), sysex);
