@@ -139,13 +139,7 @@ public class Main_window {
 			dialog_options.saveOptionsTo(configOptions);
 			midi_handler.initPorts(configOptions);
 		}
-		if (midi_handler.isMidiOpen()) {
-			tglbtnMidi.setText("Close MIDI");
-			tglbtnMidi.setSelected(true);
-		} else {
-			tglbtnMidi.setText("Open MIDI");
-			tglbtnMidi.setSelected(false);
-		}
+		toggleMidiOpenButton();
 	}
 	
 	public static void show_error(String msg) {
@@ -160,17 +154,6 @@ public class Main_window {
 	 */
 	private void initialize() {
 		frmMegadrummanager = new JFrame();
-		frmMegadrummanager.addWindowFocusListener(new WindowFocusListener() {
-			public void windowGainedFocus(WindowEvent arg0) {
-//				for (int i = 0; i<Constants.PANELS_COUNT;i++) {
-//					if (framesDetatched[i].isVisible()) {
-//						framesDetatched[i].toFront();
-//					}
-//				}
-			}
-			public void windowLostFocus(WindowEvent arg0) {
-			}
-		});
 		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
@@ -572,20 +555,11 @@ public class Main_window {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
 					midi_handler.closeAllPorts();
-					if (!midi_handler.isMidiOpen()) {
-						tglbtnMidi.setText("Open MIDI");
-					} else {
-						tglbtnMidi.setSelected(true);
-					}
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					midi_handler.initPorts(configOptions);
-					if (midi_handler.isMidiOpen()) {
-						tglbtnMidi.setText("Close MIDI");
-					} else {
-						tglbtnMidi.setSelected(false);
-					}
 				}
+				toggleMidiOpenButton();
 			}
 		});
 		panel_top.add(tglbtnMidi, "14, 1");
@@ -692,31 +666,35 @@ public class Main_window {
 	private void getPad(int pad_id) {
 		midi_handler.clear_midi_input();
 		if ( pad_id > 0 ) {
-			midi_handler.request_config_pad(pad_id + 1);
+			midi_handler.requestConfigPad(pad_id + 1);
 			delayMs(configOptions.sysexDelay);
-			midi_handler.request_config_pad(pad_id + 2);
+			midi_handler.requestConfigPad(pad_id + 2);
 			delayMs(configOptions.sysexDelay);
 			midi_handler.request_config_3rd((pad_id - 1)/2);
 			delayMs(configOptions.sysexDelay);
 		} else {
-			midi_handler.request_config_pad(1);
+			midi_handler.requestConfigPad(1);
 			delayMs(configOptions.sysexDelay);
 		}
 	}
 	
 	private void sendPad(int pad_id) {
+		byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];
+
 		if (pad_id > 0 ) {
-			//midi_handler.config_pad.copyVarsFrom(controlsPads.getConfig(pad_id));
-			midi_handler.send_config_pad(controlsPads.getConfig(pad_id).getSysex(chainId, pad_id), pad_id);
+			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id), sysex);
+			midi_handler.sendConfigPad(sysex, pad_id);
 			delayMs(configOptions.sysexDelay);
-			midi_handler.send_config_pad(controlsPads.getConfig(pad_id+1).getSysex(chainId, pad_id), pad_id+1);
+			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id + 1), sysex);
+			midi_handler.sendConfigPad(sysex, pad_id+1);
 			delayMs(configOptions.sysexDelay);
 			pad_id = (pad_id - 1)/2;
 			midi_handler.config_3rd .copyVarsFrom(controlsPads.getConfig3rd(pad_id));
 			midi_handler.send_config_3rd(pad_id);
 			delayMs(configOptions.sysexDelay);
 		} else {
-			midi_handler.send_config_pad(controlsPads.getConfig(0).getSysex(chainId, 0), 0);
+			Utils.copyConfigPadToSysex(controlsPads.getConfig(0), sysex);
+			midi_handler.sendConfigPad(sysex, 0);
 			delayMs(configOptions.sysexDelay);
 		}
 		
@@ -741,6 +719,9 @@ public class Main_window {
                 			progressRect.y = 0;
                 			progressBar.paintImmediately( progressRect );
                 			getPad(i);
+                			if (i>0) {
+                				i++;
+                			}
                 		}
                 		progressBar.setVisible(false);
                    }
@@ -771,6 +752,9 @@ public class Main_window {
                 			progressRect.y = 0;
                 			progressBar.paintImmediately( progressRect );
                 			sendPad(i);
+                			if (i>0) {
+                				i++;
+                			}
                 		}
                 		progressBar.setVisible(false);
                    }
@@ -918,6 +902,16 @@ public class Main_window {
 			framesDetached[i].pack();
 		}
 		frmMegadrummanager.pack();
+	}
+	
+	private void toggleMidiOpenButton() {
+		if (midi_handler.isMidiOpen()) {
+			tglbtnMidi.setText("Close MIDI");
+			tglbtnMidi.setSelected(true);
+		} else {
+			tglbtnMidi.setText("Open MIDI");
+			tglbtnMidi.setSelected(false);
+		}
 	}
 }
 

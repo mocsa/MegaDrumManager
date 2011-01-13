@@ -134,7 +134,7 @@ public class Midi_handler {
 		}
 	}
 	
-	public void send_config_pad(byte [] buffer, int pad_id) {
+	public void sendConfigPad(byte [] buffer, int pad_id) {
 		if (midiout != null) {
 			if (midiout.isOpen()) {
 				buffer[2] = (byte)config_chain_id;
@@ -190,7 +190,7 @@ public class Midi_handler {
 		}
 	}
 	
-	public void request_config_pad(int pad_id) {
+	public void requestConfigPad(int pad_id) {
 		byte [] sx = new byte[6];
 		
 		sx[0] = Constants.SYSEX_START;
@@ -284,7 +284,6 @@ public class Midi_handler {
 										config_pedal.setFromSysex(buffer);
 										break;
 									case Constants.MD_SYSEX_PAD:
-										//config_pad.setFromSysex(buffer);
 										changedPad = buffer[4];
 										bufferIn = buffer;
 										break;

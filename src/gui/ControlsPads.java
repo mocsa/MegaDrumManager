@@ -397,8 +397,7 @@ public class ControlsPads extends JPanel {
 	}
 	
 	public void setConfig(byte[] buffer, int pad_id) {
-		//configPads[pad_id].copyVarsFrom(config);
-		configPads[pad_id].setFromSysex(buffer);
+		Utils.copySysexToConfigPad(buffer, configPads[pad_id]);
 		if (pad_id > 0) {
 			if (pad_id == padPointer) {
 				panel_head.setConfig(configPads[pad_id], head_pad, pad_id);				
@@ -467,14 +466,11 @@ public class ControlsPads extends JPanel {
 		int comboBox_pointer = 0;
 		
 		if (prevPadPointer >= 0) {
-			//configPads[prevPadPointer].copyVarsFrom(panel_head.getConfig());
 			panel_head.updateConfig();
 		}
 
 		if (prevPadPointer > 0 ) {
-			//configPads[prevPadPointer+1].copyVarsFrom(panel_rim.getConfig());
 			panel_rim.updateConfig();
-			//config3rds[prevThirdPointer].copyVarsFrom(panel_3rd_zone.getConfig());
 			panel_3rd_zone.updateConfig();
 		}
 		if (pad_id > 0 ) {
@@ -512,8 +508,8 @@ public class ControlsPads extends JPanel {
 		int i;
 		switch_to_pad(padPointer);
 		for (i = 0; i<Constants.PADS_COUNT; i++) {
-			config.sysex_pads[i] = configPads[i].getSysex(chain_id, i);
-			configPads[i].copyToConfigFull(config, i);
+			Utils.copyConfigPadToSysex(configPads[i], config.sysex_pads[i]);
+			Utils.copyConfigPadToConfigFull(configPads, config, i);
 		}
 		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
 			config.sysex_3rds[i] = config3rds[i].getSysex(chain_id, i);
@@ -523,8 +519,8 @@ public class ControlsPads extends JPanel {
 	public void loadFromConfigFull (ConfigFull config) {
 		int i;
 		for (i = 0; i<Constants.PADS_COUNT; i++) {
-			configPads[i].setFromSysex(config.sysex_pads[i]);
-			configPads[i].copyFromConfigFull(config, i);
+			Utils.copySysexToConfigPad(config.sysex_pads[i], configPads[i]);
+			Utils.copyConfigFullToConfigPad(config, configPads, i);
 		}
 		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
 			config3rds[i].setFromSysex(config.sysex_3rds[i]);
@@ -600,7 +596,6 @@ public class ControlsPads extends JPanel {
 	
 	private void copyPadVarToAll(String varName, boolean head_rim) {
 		int input = padPointer;
-		//configPads[padPointer].copyVarsFrom(panel_head.getConfig());
 		panel_head.updateConfig();
 		if (head_rim == head_pad) {
 			for (int i = 0; i<Constants.PADS_COUNT;i++) {
@@ -610,7 +605,6 @@ public class ControlsPads extends JPanel {
 		
 			}
 		} else {
-			//configPads[padPointer + 1].copyVarsFrom(panel_rim.getConfig());
 			panel_rim.updateConfig();
 			for (int i = 1; i<Constants.PADS_COUNT - 1;i++) {
 				if (i != input) {
@@ -620,9 +614,9 @@ public class ControlsPads extends JPanel {
 				i++;
 			}
 		}
-		setConfig(configPads[padPointer+1].getSysex(0, 0),padPointer+1);
-		if (head_rim != head_pad) {
-			setConfig(configPads[padPointer].getSysex(0, 0),padPointer);
+
+		if ((padPointer > 0) && (head_rim = head_pad)) {
+			panel_rim.updateControls();
 		}
 	}
 	
