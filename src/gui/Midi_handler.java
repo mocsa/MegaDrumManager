@@ -34,8 +34,7 @@ public class Midi_handler {
 	private DumpReceiver dump_receiver;
 	private Transmitter	transmitter;
 	
-	public int config_chain_id;
-	public ConfigCurve config_curve;
+	public int chainId;
 	public boolean getMidiBlocked;
 	public boolean upgradeCancelled = false;
 	public byte [] bufferIn;
@@ -43,6 +42,7 @@ public class Midi_handler {
 	public boolean changedPedal;
 	public short changedPad;
 	public short changed3rd;
+	public short changedCurve;
 
 	public Midi_handler () {
 		midiin = null;
@@ -51,8 +51,7 @@ public class Midi_handler {
 		receiver = null;
 		thruReceiver = null;
 		transmitter = null;
-		config_chain_id = 0;
-		config_curve = new ConfigCurve();
+		chainId = 0;
 		dump_receiver = new DumpReceiver();
 		getMidiBlocked = false;
 		bufferIn = null;
@@ -60,6 +59,7 @@ public class Midi_handler {
 		changedPedal = false;
 		changedPad = 0;
 		changed3rd = -1;
+		changedCurve = -1;
 	}
 	
 	public void closeAllPorts() {
@@ -118,21 +118,13 @@ public class Midi_handler {
 			}
 		}
 	}
-			
-	public void send_config_curve(int curve_id) {
-		if (midiout != null) {
-			if (midiout.isOpen()) {
-				sendSysex(config_curve.getSysex(config_chain_id, curve_id));
-			}
-		}
-	}
 
 	public void requestConfigMisc() {
 		byte [] sx = new byte[5];
 		
 		sx[0] = Constants.SYSEX_START;
 		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)config_chain_id;
+		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_MISC;
 		sx[4] = Constants.SYSEX_END;
 		if (midiout != null) {
@@ -147,7 +139,7 @@ public class Midi_handler {
 		
 		sx[0] = Constants.SYSEX_START;
 		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)config_chain_id;
+		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_PEDAL;
 		sx[4] = Constants.SYSEX_END;
 		if (midiout != null) {
@@ -162,7 +154,7 @@ public class Midi_handler {
 		
 		sx[0] = Constants.SYSEX_START;
 		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)config_chain_id;
+		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_PAD;
 		sx[4] = (byte)pad_id;
 		sx[5] = Constants.SYSEX_END;
@@ -178,7 +170,7 @@ public class Midi_handler {
 		
 		sx[0] = Constants.SYSEX_START;
 		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)config_chain_id;
+		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_3RD;
 		sx[4] = (byte)third_id;
 		sx[5] = Constants.SYSEX_END;
@@ -194,7 +186,7 @@ public class Midi_handler {
 		
 		sx[0] = Constants.SYSEX_START;
 		sx[1] = Constants.MD_SYSEX;
-		sx[2] = (byte)config_chain_id;
+		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_CURVE;
 		sx[4] = (byte)curve_id;
 		sx[5] = Constants.SYSEX_END;
@@ -242,7 +234,7 @@ public class Midi_handler {
 						size = buffer.length;
 						if (( buffer[0] == Constants.SYSEX_START) && (buffer[size-1] == Constants.SYSEX_END)) {
 							if (buffer[1] == Constants.MD_SYSEX) {
-								if (buffer[2] == (byte) config_chain_id) {
+								if (buffer[2] == (byte) chainId) {
 									bufferIn = buffer;
 									switch(buffer[3]) {
 									case Constants.MD_SYSEX_MISC:
@@ -258,7 +250,7 @@ public class Midi_handler {
 										changed3rd = buffer[4];
 										break;
 									case Constants.MD_SYSEX_CURVE:
-										config_curve.setFromSysex(buffer);
+										changedCurve = buffer[4];
 										break;
 									default:
 										break;
@@ -348,7 +340,7 @@ public class Midi_handler {
 
 		closeAllPorts();
 		
-		config_chain_id = options.chainId;
+		chainId = options.chainId;
  		if (!options.MidiInName.equals("")) {
 			try
 			{

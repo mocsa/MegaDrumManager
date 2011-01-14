@@ -261,8 +261,8 @@ public class ControlsCurves extends JPanel {
 		return configCurves[curve_id];
 	}
 	
-	public void setConfig(ConfigCurve config,int curve_id) {
-		configCurves[curve_id].copyVarsFrom(config);
+	public void setConfig(byte [] buffer,int curveId) {
+		Utils.copySysexToConfigCurve(buffer, configCurves[curveId]);
 		updateYvalues();
 		paintPanel.repaint();
 	}

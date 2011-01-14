@@ -170,7 +170,7 @@ public class Main_window {
 		midi_handler = new Midi_handler();
 		dialog_options = new Options(midi_handler);
 		upgradeDialog = new Upgrade(midi_handler, fileManager);
-		midi_handler.config_chain_id = chainId;
+		midi_handler.chainId = chainId;
 		timer_midi = new Timer();
 		midi_in_task = new TimerTask() {
 			public void run() {
@@ -191,9 +191,9 @@ public class Main_window {
 					controlsPads.setConfig3rd(midi_handler.bufferIn, midi_handler.changed3rd);
 					midi_handler.changed3rd = -1;
 				}
-				if (midi_handler.config_curve.changed_curve > -1) {
-					controlsCurves.setConfig(midi_handler.config_curve, midi_handler.config_curve.changed_curve);
-					midi_handler.config_curve.changed_curve = -1;
+				if (midi_handler.changedCurve > -1) {
+					controlsCurves.setConfig(midi_handler.bufferIn, midi_handler.changedCurve);
+					midi_handler.changedCurve = -1;
 				}
 			}
 		};
@@ -781,9 +781,10 @@ public class Main_window {
 	}
 	
 	private void sendCurve(int curve_id) {
-		midi_handler.config_curve.copyVarsFrom(controlsCurves.getConfig(curve_id));
-		midi_handler.send_config_curve(curve_id);
-		delayMs(configOptions.sysexDelay);		
+		byte [] sysexCurve = new byte[Constants.MD_SYSEX_CURVE_SIZE];
+		Utils.copyConfigCurveToSysex(controlsCurves.getConfig(curve_id), sysexCurve, chainId, curve_id);
+		midi_handler.sendSysex(sysexCurve);
+		delayMs(configOptions.sysexDelay);
 	}
 	
 	private void getAllCurves() {

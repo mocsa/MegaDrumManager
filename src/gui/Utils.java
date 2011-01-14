@@ -483,31 +483,39 @@ public class Utils {
 		sysex[i++] = sysex_byte[1];
 		sysex[i++] = Constants.SYSEX_END;
 	}
+	public static void copyConfigCurveToSysex(ConfigCurve config, byte [] sysex, int chainId, int curveId) {
+		byte [] sysex_byte = new byte[2];
+		int i = 0;
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte) chainId;
+		sysex[i++] = Constants.MD_SYSEX_CURVE;
+		sysex[i++] = (byte)curveId;
 
-	//	public void copyConfigPad(ConfigPad src, ConfigPad dst) {
-//		dst.note = src.note;
-//		dst.channel = src.channel;
-//		dst.curve = src.curve;
-//		dst.threshold =  src.threshold;
-//		dst.retrigger = src.retrigger;
-//		dst.levelMax = src.levelMax;
-//		dst.minScan =  src.minScan;
-//		dst.type = src.type;
-//		dst.autoLevel = src.autoLevel;
-//		dst.dual = src.dual;
-//		dst.threeWay = src.threeWay;
-//		dst.special = src.special;
-//		dst.gain = src.gain;
-//		dst.xtalkLevel = src.xtalkLevel;
-//		dst.xtalkGroup = src.xtalkGroup;
-//		dst.dynTime = src.dynTime;
-//		dst.dynLevel = src.dynLevel;
-//		dst.compression = src.compression;
-//		dst.shift = src.shift;
-//		dst.name = src.name;
-//		dst.altNote = src.altNote;
-//		dst.pressrollNote = src.pressrollNote;
-//		dst.altNote_linked = src.altNote_linked;
-//		dst.pressrollNote_linked = src.pressrollNote_linked;		
-//	}
+		for (int p = 0; p < 9;p++) {
+			sysex_byte = byte2sysex((byte)config.yValues[p]);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
+		sysex[i++] = Constants.SYSEX_END;
+
+	}
+	
+	public static void copySysexToConfigCurve(byte [] sysex, ConfigCurve config) {
+		byte [] sysex_byte = new byte[2];
+		int i = 5;
+		if (sysex.length >= Constants.MD_SYSEX_CURVE_SIZE) {
+			for (int p = 0; p < 9;p++) {
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				config.yValues[p] = sysex2byte(sysex_byte);
+				if (config.yValues[p]<0) {
+					config.yValues[p] += 256;
+				}
+			}
+		}
+		
+	}
+
+	
 }
