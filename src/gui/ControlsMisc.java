@@ -204,8 +204,8 @@ public class ControlsMisc extends JPanel {
 		checkBox_allGainsLow.setSelected(configMisc.all_gains_low);		
 	}
 	
-	public void setConfig(ConfigMisc config) {
-		configMisc = config;
+	public void setConfig(byte [] sysex) {
+		Utils.copySysexToConfigMisc(sysex, configMisc);
 		updateControls();
 	}
 	
@@ -221,11 +221,11 @@ public class ControlsMisc extends JPanel {
 	}
 
 	public void copyToConfigFull (ConfigFull config, int chain_id) {
-		config.sysex_misc = configMisc.getSysex(chain_id);
+		Utils.copyConfigMiscToSysex(configMisc, config.sysex_misc, chain_id);
 	}
 	
 	public void loadFromConfigFull (ConfigFull config) {
-		configMisc.setFromSysex(config.sysex_misc);
+		Utils.copySysexToConfigMisc(config.sysex_misc, configMisc);
 		updateControls();
 	}
 }

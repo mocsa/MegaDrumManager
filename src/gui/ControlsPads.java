@@ -507,11 +507,11 @@ public class ControlsPads extends JPanel {
 		int i;
 		switch_to_pad(padPointer);
 		for (i = 0; i<Constants.PADS_COUNT; i++) {
-			Utils.copyConfigPadToSysex(configPads[i], config.sysex_pads[i]);
+			Utils.copyConfigPadToSysex(configPads[i], config.sysex_pads[i], chain_id, i);
 			Utils.copyConfigPadToConfigFull(configPads, config, i);
 		}
 		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
-			Utils.copyConfig3rdToSysex(config3rds[i], config.sysex_3rds[i]);
+			Utils.copyConfig3rdToSysex(config3rds[i], config.sysex_3rds[i], chain_id, i);
 		}
 	}
 	

@@ -35,7 +35,7 @@ public class Midi_handler {
 	private Transmitter	transmitter;
 	
 	public int config_chain_id;
-	public ConfigMisc config_misc;
+	//public ConfigMisc config_misc;
 	public ConfigPedal config_pedal;
 	//public ConfigPad config_pad;
 	//public Config3rd config_3rd;
@@ -43,6 +43,7 @@ public class Midi_handler {
 	public boolean getMidiBlocked;
 	public boolean upgradeCancelled = false;
 	public byte [] bufferIn;
+	public boolean changedMisc;
 	public short changedPad;
 	public short changed3rd;
 
@@ -54,7 +55,7 @@ public class Midi_handler {
 		thruReceiver = null;
 		transmitter = null;
 		config_chain_id = 0;
-		config_misc = new ConfigMisc();
+		//config_misc = new ConfigMisc();
 		config_pedal = new ConfigPedal();
 		//config_pad = new ConfigPad();
 		//config_3rd = new Config3rd();
@@ -62,6 +63,7 @@ public class Midi_handler {
 		dump_receiver = new DumpReceiver();
 		getMidiBlocked = false;
 		bufferIn = null;
+		changedMisc = false;
 		changedPad = 0;
 		changed3rd = -1;
 	}
@@ -107,59 +109,26 @@ public class Midi_handler {
 		}
 	}
 	
-	public void send_sysex(byte [] buf) {
-		SysexMessage	sysexMessage = new SysexMessage();
+	public void sendSysex(byte [] buf) {
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				SysexMessage	sysexMessage = new SysexMessage();
 
-		try {
-			sysexMessage.setMessage(buf, buf.length);
-			receiver.send(sysexMessage, -1);
-		} catch (InvalidMidiDataException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}		
-	}
-	
-	
-	public void send_config_misc() {
-		if (midiout != null) {
-			if (midiout.isOpen()) {
-				send_sysex(config_misc.getSysex(config_chain_id));
+				try {
+					sysexMessage.setMessage(buf, buf.length);
+					receiver.send(sysexMessage, -1);
+				} catch (InvalidMidiDataException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}		
 			}
 		}
 	}
-	
-	public void send_config_pedal() {
-		if (midiout != null) {
-			if (midiout.isOpen()) {
-				send_sysex(config_pedal.getSysex(config_chain_id));
-			}
-		}
-	}
-	
-	public void sendConfigPad(byte [] buffer, int pad_id) {
-		if (midiout != null) {
-			if (midiout.isOpen()) {
-				buffer[2] = (byte)config_chain_id;
-				buffer[4] = (byte)(pad_id + 1);
-				send_sysex(buffer);
-			}
-		}
-	}
-
-	public void sendConfig3rd(byte [] buffer, int third_id) {
-		if (midiout != null) {
-			if (midiout.isOpen()) {
-				buffer[2] = (byte)config_chain_id;
-				buffer[4] = (byte)(third_id);
-				send_sysex(buffer);
-			}
-		}
-	}
-	
+			
 	public void send_config_curve(int curve_id) {
 		if (midiout != null) {
 			if (midiout.isOpen()) {
-				send_sysex(config_curve.getSysex(config_chain_id, curve_id));
+				sendSysex(config_curve.getSysex(config_chain_id, curve_id));
 			}
 		}
 	}
@@ -174,7 +143,7 @@ public class Midi_handler {
 		sx[4] = Constants.SYSEX_END;
 		if (midiout != null) {
 			if (midiout.isOpen()) {
-				send_sysex(sx);
+				sendSysex(sx);
 			}
 		}
 	}
@@ -189,7 +158,7 @@ public class Midi_handler {
 		sx[4] = Constants.SYSEX_END;
 		if (midiout != null) {
 			if (midiout.isOpen()) {
-				send_sysex(sx);
+				sendSysex(sx);
 			}
 		}
 	}
@@ -205,7 +174,7 @@ public class Midi_handler {
 		sx[5] = Constants.SYSEX_END;
 		if (midiout != null) {
 			if (midiout.isOpen()) {
-				send_sysex(sx);
+				sendSysex(sx);
 			}
 		}
 	}
@@ -221,7 +190,7 @@ public class Midi_handler {
 		sx[5] = Constants.SYSEX_END;
 		if (midiout != null) {
 			if (midiout.isOpen()) {
-				send_sysex(sx);
+				sendSysex(sx);
 			}
 		}
 	}
@@ -237,7 +206,7 @@ public class Midi_handler {
 		sx[5] = Constants.SYSEX_END;
 		if (midiout != null) {
 			if (midiout.isOpen()) {
-				send_sysex(sx);
+				sendSysex(sx);
 			}
 		}
 	}
@@ -282,7 +251,8 @@ public class Midi_handler {
 								if (buffer[2] == (byte) config_chain_id) {
 									switch(buffer[3]) {
 									case Constants.MD_SYSEX_MISC:
-										config_misc.setFromSysex(buffer);
+										changedMisc = true;
+										bufferIn = buffer;
 										break;
 									case Constants.MD_SYSEX_PEDAL:
 										config_pedal.setFromSysex(buffer);

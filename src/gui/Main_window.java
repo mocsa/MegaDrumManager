@@ -175,9 +175,9 @@ public class Main_window {
 		midi_in_task = new TimerTask() {
 			public void run() {
 				midi_handler.get_midi();
-				if (midi_handler.config_misc.changed) {
-					midi_handler.config_misc.changed = false;
-					controlsMisc.setConfig(midi_handler.config_misc);
+				if (midi_handler.changedMisc) {
+					midi_handler.changedMisc = false;
+					controlsMisc.setConfig(midi_handler.bufferIn);
 				}
 				if (midi_handler.config_pedal.changed) {
 					midi_handler.config_pedal.changed = false;
@@ -646,8 +646,7 @@ public class Main_window {
 	}
 	
 	private void sendPedal() {
-		midi_handler.config_pedal = controlsPedal.getConfig();
-		midi_handler.send_config_pedal();
+		midi_handler.sendSysex(controlsPedal.getConfig().getSysex(chainId));
 		delayMs(configOptions.sysexDelay);
 	}
 	
@@ -658,8 +657,9 @@ public class Main_window {
 	}
 	
 	private void sendMisc() {
-		midi_handler.config_misc = controlsMisc.getConfig();
-		midi_handler.send_config_misc();	
+		byte [] sysexMisc = new byte[Constants.MD_SYSEX_MISC_SIZE];
+		Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysexMisc, chainId);
+		midi_handler.sendSysex(sysexMisc);
 		delayMs(configOptions.sysexDelay);
 	}
 	
@@ -679,23 +679,23 @@ public class Main_window {
 	}
 	
 	private void sendPad(int pad_id) {
-		byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];
-		byte [] sysex_3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
+		byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE];
+		byte [] sysex3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
 
 		if (pad_id > 0 ) {
-			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id), sysex);
-			midi_handler.sendConfigPad(sysex, pad_id);
+			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id), sysexPad, chainId, pad_id);
+			midi_handler.sendSysex(sysexPad);
 			delayMs(configOptions.sysexDelay);
-			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id + 1), sysex);
-			midi_handler.sendConfigPad(sysex, pad_id+1);
+			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id + 1), sysexPad, chainId, pad_id + 1);
+			midi_handler.sendSysex(sysexPad);
 			delayMs(configOptions.sysexDelay);
 			pad_id = (pad_id - 1)/2;
-			Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd(pad_id), sysex_3rd);
-			midi_handler.sendConfig3rd(sysex_3rd, pad_id);
+			Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd(pad_id), sysex3rd, chainId, pad_id);
+			midi_handler.sendSysex(sysex3rd);
 			delayMs(configOptions.sysexDelay);
 		} else {
-			Utils.copyConfigPadToSysex(controlsPads.getConfig(0), sysex);
-			midi_handler.sendConfigPad(sysex, 0);
+			Utils.copyConfigPadToSysex(controlsPads.getConfig(0), sysexPad, chainId, 0);
+			midi_handler.sendSysex(sysexPad);
 			delayMs(configOptions.sysexDelay);
 		}
 		
