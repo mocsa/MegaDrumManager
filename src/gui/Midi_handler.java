@@ -35,15 +35,12 @@ public class Midi_handler {
 	private Transmitter	transmitter;
 	
 	public int config_chain_id;
-	//public ConfigMisc config_misc;
-	public ConfigPedal config_pedal;
-	//public ConfigPad config_pad;
-	//public Config3rd config_3rd;
 	public ConfigCurve config_curve;
 	public boolean getMidiBlocked;
 	public boolean upgradeCancelled = false;
 	public byte [] bufferIn;
 	public boolean changedMisc;
+	public boolean changedPedal;
 	public short changedPad;
 	public short changed3rd;
 
@@ -55,15 +52,12 @@ public class Midi_handler {
 		thruReceiver = null;
 		transmitter = null;
 		config_chain_id = 0;
-		//config_misc = new ConfigMisc();
-		config_pedal = new ConfigPedal();
-		//config_pad = new ConfigPad();
-		//config_3rd = new Config3rd();
 		config_curve = new ConfigCurve();
 		dump_receiver = new DumpReceiver();
 		getMidiBlocked = false;
 		bufferIn = null;
 		changedMisc = false;
+		changedPedal = false;
 		changedPad = 0;
 		changed3rd = -1;
 	}
@@ -133,7 +127,7 @@ public class Midi_handler {
 		}
 	}
 
-	public void request_config_misc() {
+	public void requestConfigMisc() {
 		byte [] sx = new byte[5];
 		
 		sx[0] = Constants.SYSEX_START;
@@ -148,7 +142,7 @@ public class Midi_handler {
 		}
 	}
 
-	public void request_config_pedal() {
+	public void requestConfigPedal() {
 		byte [] sx = new byte[5];
 		
 		sx[0] = Constants.SYSEX_START;
@@ -249,21 +243,19 @@ public class Midi_handler {
 						if (( buffer[0] == Constants.SYSEX_START) && (buffer[size-1] == Constants.SYSEX_END)) {
 							if (buffer[1] == Constants.MD_SYSEX) {
 								if (buffer[2] == (byte) config_chain_id) {
+									bufferIn = buffer;
 									switch(buffer[3]) {
 									case Constants.MD_SYSEX_MISC:
 										changedMisc = true;
-										bufferIn = buffer;
 										break;
 									case Constants.MD_SYSEX_PEDAL:
-										config_pedal.setFromSysex(buffer);
+										changedPedal = true;
 										break;
 									case Constants.MD_SYSEX_PAD:
 										changedPad = buffer[4];
-										bufferIn = buffer;
 										break;
 									case Constants.MD_SYSEX_3RD:
 										changed3rd = buffer[4];
-										bufferIn = buffer;
 										break;
 									case Constants.MD_SYSEX_CURVE:
 										config_curve.setFromSysex(buffer);

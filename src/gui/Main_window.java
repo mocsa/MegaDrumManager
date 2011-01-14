@@ -179,9 +179,9 @@ public class Main_window {
 					midi_handler.changedMisc = false;
 					controlsMisc.setConfig(midi_handler.bufferIn);
 				}
-				if (midi_handler.config_pedal.changed) {
-					midi_handler.config_pedal.changed = false;
-					controlsPedal.setConfig(midi_handler.config_pedal);
+				if (midi_handler.changedPedal) {
+					midi_handler.changedPedal = false;
+					controlsPedal.setConfig(midi_handler.bufferIn);
 				}
 				if (midi_handler.changedPad > 0) {
 					controlsPads.setConfig(midi_handler.bufferIn, midi_handler.changedPad - 1);
@@ -641,18 +641,20 @@ public class Main_window {
 	
 	private void getPedal() {
 		midi_handler.clear_midi_input();
-		midi_handler.request_config_pedal();
+		midi_handler.requestConfigPedal();
 		delayMs(configOptions.sysexDelay);
 	}
 	
 	private void sendPedal() {
-		midi_handler.sendSysex(controlsPedal.getConfig().getSysex(chainId));
+		byte [] sysexPedal = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
+		Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysexPedal, chainId);
+		midi_handler.sendSysex(sysexPedal);
 		delayMs(configOptions.sysexDelay);
 	}
 	
 	private void getMisc() {
 		midi_handler.clear_midi_input();
-		midi_handler.request_config_misc();					
+		midi_handler.requestConfigMisc();					
 		delayMs(configOptions.sysexDelay);
 	}
 	

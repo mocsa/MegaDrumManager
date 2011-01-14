@@ -576,8 +576,8 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_splash.getSpinner().setValue(configPedal.splashNote);
 	}
 	
-	public void setConfig(ConfigPedal config) {
-		configPedal = config;
+	public void setConfig(byte [] sysex) {
+		Utils.copySysexToConfigPedal(sysex, configPedal);
 		updateControls();
 	}
 	
@@ -593,11 +593,11 @@ public class ControlsPedal extends JPanel {
 	}
 	
 	public void copyToConfigFull (ConfigFull config, int chain_id) {
-		config.sysex_pedal = configPedal.getSysex(chain_id);
+		Utils.copyConfigPedalToSysex(configPedal, config.sysex_pedal, chain_id);
 	}
 	
 	public void loadFromConfigFull (ConfigFull config) {
-		configPedal.setFromSysex(config.sysex_pedal);
+		Utils.copySysexToConfigPedal(config.sysex_pedal, configPedal);
 		updateControls();
 	}
 	
