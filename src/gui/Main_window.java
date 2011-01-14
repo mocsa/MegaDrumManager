@@ -99,7 +99,7 @@ public class Main_window {
 	private JMenu mnView;
 	private JProgressBar progressBar;
 	private JComboBox comboBox_inputsCount;
-	private boolean localFocusLost = false;
+	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
 	
 
@@ -627,7 +627,6 @@ public class Main_window {
 				}
 			});
 		}
-		
 	}
 	
 	private void delayMs(int delay) {
@@ -713,6 +712,7 @@ public class Main_window {
                 SwingUtilities.invokeLater( new Runnable() {
                     public void run() {
                 		int i;
+                        resizeWindow = false;
                 		progressBar.setMinimum(0);
                 		progressBar.setMaximum(configOptions.inputsCount - 2);
                 		for (i = 0; i<(configOptions.inputsCount - 1); i++) {
@@ -727,6 +727,8 @@ public class Main_window {
                 			}
                 		}
                 		progressBar.setVisible(false);
+                        resizeWindow = true;
+                        resizeMainWindow();
                    }
                 });
             }
@@ -746,6 +748,7 @@ public class Main_window {
                 SwingUtilities.invokeLater( new Runnable() {
                     public void run() {
                 		int i;
+                        resizeWindow = false;
                 		progressBar.setMinimum(0);
                 		progressBar.setMaximum(configOptions.inputsCount - 2);
                 		for (i = 0; i<(configOptions.inputsCount - 1); i++) {
@@ -760,6 +763,8 @@ public class Main_window {
                 			}
                 		}
                 		progressBar.setVisible(false);
+                        resizeWindow = true;
+                        resizeMainWindow();
                    }
                 });
             }
@@ -904,7 +909,9 @@ public class Main_window {
 			}
 			framesDetached[i].pack();
 		}
-		frmMegadrummanager.pack();
+		if (resizeWindow) {
+			frmMegadrummanager.pack();
+		}
 	}
 	
 	private void toggleMidiOpenButton() {

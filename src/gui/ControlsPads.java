@@ -283,13 +283,12 @@ public class ControlsPads extends JPanel {
 		panel_head.getComboBox_type().addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
-					panel_rim.getComboBox_type().setEnabled(panel_head.getComboBox_type().getSelectedIndex() > 0);
-					repaint();
-					if (panel_3rd_zone.isVisible() != panel_3rd_zone_prevVisible) {
-						firePropertyChange("resize", false, true);
-						panel_3rd_zone_prevVisible = panel_3rd_zone.isVisible(); 
-					}
+		        	if ((panel_head.getComboBox_type().getSelectedIndex() > 0) != panel_3rd_zone_prevVisible) {
+		        		panel_3rd_zone_prevVisible = (panel_head.getComboBox_type().getSelectedIndex() > 0);
+		        		panel_3rd_zone.setVisible(panel_3rd_zone_prevVisible);
+		        		panel_rim.getComboBox_type().setEnabled(panel_3rd_zone_prevVisible);
+		        		firePropertyChange("resize", false, true);
+		        	}
 		        }
 			}
 		});
@@ -476,7 +475,7 @@ public class ControlsPads extends JPanel {
 			padPointer = ((pad_id - 1)&0xfffffe) + 1;
 			thirdPointer = (pad_id - 1)/2;
 			panel_rim.setVisible(true);
-			panel_3rd_zone.setVisible(true);
+			//panel_3rd_zone.setVisible(true);
 			panel_rim.setConfig(configPads[padPointer+1], rim_pad, padPointer+1);
 			panel_3rd_zone.setConfig(config3rds[thirdPointer]);
 			panel_3rd_zone.setAsSwitch(configPads[padPointer+1].type);
@@ -484,7 +483,7 @@ public class ControlsPads extends JPanel {
 		} else {
 			padPointer = 0;
 			panel_rim.setVisible(false);
-			panel_3rd_zone.setVisible(false);
+			//panel_3rd_zone.setVisible(false);
 		}
 		if (prevPadPointer >= 0) {
 			updatePadsSelection(prevPadPointer);
@@ -493,7 +492,7 @@ public class ControlsPads extends JPanel {
 		prevThirdPointer = thirdPointer;
 		panel_head.setConfig(configPads[padPointer], head_pad, padPointer);
 		panel_head.getComboBox_type().setEnabled((padPointer != 0));
-		panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
+		//panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
 		panel_rim.getComboBox_type().setEnabled(panel_head.getComboBox_type().getSelectedIndex() > 0);
 		//switchingPad = true;
 		comboBox_padSelection.setSelectedIndex(comboBox_pointer);
