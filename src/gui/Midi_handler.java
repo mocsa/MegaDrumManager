@@ -38,11 +38,12 @@ public class Midi_handler {
 	public boolean getMidiBlocked;
 	public boolean upgradeCancelled = false;
 	public byte [] bufferIn;
-	public boolean changedMisc;
-	public boolean changedPedal;
-	public short changedPad;
-	public short changed3rd;
-	public short changedCurve;
+//	public boolean changedMisc;
+//	public boolean changedPedal;
+//	public short changedPad;
+//	public short changed3rd;
+//	public short changedCurve;
+	public boolean sysexReceived;
 
 	public Midi_handler () {
 		midiin = null;
@@ -55,11 +56,12 @@ public class Midi_handler {
 		dump_receiver = new DumpReceiver();
 		getMidiBlocked = false;
 		bufferIn = null;
-		changedMisc = false;
-		changedPedal = false;
-		changedPad = 0;
-		changed3rd = -1;
-		changedCurve = -1;
+//		changedMisc = false;
+//		changedPedal = false;
+//		changedPad = 0;
+//		changed3rd = -1;
+//		changedCurve = -1;
+		sysexReceived = false;
 	}
 	
 	public void closeAllPorts() {
@@ -181,7 +183,7 @@ public class Midi_handler {
 		}
 	}
 
-	public void request_config_curve(int curve_id) {
+	public void requestConfigCurve(int curve_id) {
 		byte [] sx = new byte[6];
 		
 		sx[0] = Constants.SYSEX_START;
@@ -219,54 +221,32 @@ public class Midi_handler {
 				}
 			}
 		}
-	}
+	}	
 	
 	public void get_midi() {
 		if (!getMidiBlocked) {
-			byte [] buffer;
-			buffer = null;
 			int size = 0;
 			if (midiin != null) {
 				if (midiin.isOpen()) {
-					buffer = dump_receiver.getByteMessage();
-					
-					if (buffer != null) {
-						size = buffer.length;
-						if (( buffer[0] == Constants.SYSEX_START) && (buffer[size-1] == Constants.SYSEX_END)) {
-							if (buffer[1] == Constants.MD_SYSEX) {
-								if (buffer[2] == (byte) chainId) {
-									bufferIn = buffer;
-									switch(buffer[3]) {
-									case Constants.MD_SYSEX_MISC:
-										changedMisc = true;
-										break;
-									case Constants.MD_SYSEX_PEDAL:
-										changedPedal = true;
-										break;
-									case Constants.MD_SYSEX_PAD:
-										changedPad = buffer[4];
-										break;
-									case Constants.MD_SYSEX_3RD:
-										changed3rd = buffer[4];
-										break;
-									case Constants.MD_SYSEX_CURVE:
-										changedCurve = buffer[4];
-										break;
-									default:
-										break;
-									}
-								}
+					if (bufferIn == null) {
+						bufferIn = dump_receiver.getByteMessage();
+						
+						if (bufferIn != null) {
+							size = bufferIn.length;
+							if (( bufferIn[0] == Constants.SYSEX_START) && (bufferIn[size-1] == Constants.SYSEX_END)) {
+								sysexReceived = true;
+							} else {
+								// TO-DO
+								sendMidiShort(bufferIn);
+								bufferIn = null;
 							}
-						} else {
-							// TO-DO
-							sendMidiShort(buffer);
 						}
 					}
 				}
 			}
 		}
 	}
-	
+
 	public String [] getMidiInList() {
 		String [] list;
 		int nPorts;
@@ -428,12 +408,13 @@ public class Midi_handler {
 		{
 			//System.out.printf("%h\n", buf[ind]);
 			ba[p++] = (byte) ((byte) (buf[ind]>>4) & 0x0f);
-			//System.out.printf("%h\n", ba[p-1]);
+			//System.out.printf("%h", ba[p-1]);
 			ba[p++] = (byte) ((byte) (buf[ind]) & 0x0f);
-			//System.out.printf("%h\n", ba[p-1]);
+			//System.out.printf("%h ", ba[p-1]);
 			size --;
 			ind++;
 		}
+		//System.out.printf("\n");
 		ba[p++] = (byte) 0xf7;
 		SysexMessage msg = new SysexMessage();
 		try {
@@ -445,7 +426,7 @@ public class Midi_handler {
 		}
 	}
 	
-	public static final int Block_size = 22; // Doesn't work if more than 22
+	public static final int Block_size = 2; // Doesn't work if more than 2
 
 	public static void writeMid(Receiver rr, int[] buf, int ind, int size)
 	{
@@ -471,7 +452,6 @@ public class Midi_handler {
 		DataInputStream dis = null;
 		String resultString = "Upgrade completed successufully";
 		int[] buffer = new int[0x40000];	// Data buffer for sending the data
-		//String	progressChars = "--\\\\||//";
 
 		byte[] receivedBuffer;
 		int receivedByte;		// One byte received from COM port
@@ -506,42 +486,19 @@ public class Midi_handler {
 		dis.close();
 		bis.close();
 		fis.close();
-		//System.out.printf("Firmware file is loaded\n");
-		//System.out.printf("Firmware size is %d bytes\n", bufferSize);
+//		System.out.printf("Firmware file is loaded\n");
+//		System.out.printf("Firmware size is %d bytes\n", bufferSize);
 		
-		//int progressCharP = 0;	
 		for(index = 0; index < bufferSize; index += frameSize)
 		{
 			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
-			nBytes = 1;
-			while (nBytes > 0) {
-				receivedBuffer = dump_receiver.getByteMessage();
-				if (receivedBuffer == null)
-				{
-					nBytes = 0;
-					//out("input buffer cleared");
-				}
-				else
-				{
-					nBytes = receivedBuffer.length;
-				}
-			}
-//			System.out.printf("\r                        \r" + 
-//				       "Transferring.. %c %d%% done.",
-//					progressChars.charAt(progressCharP),
-//					100 * bytesSent / bufferSize);
+			clear_midi_input();
 			parent.setProgressBar(bytesSent);
-
-//			progressCharP++;
-//			if(progressCharP >= progressChars.length())  progressCharP = 0;
-//			System.out.flush();	
-//
 //			System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
-			//nBytes = 2;
 			inDelay = 40;
 			receivedBuffer = null;	
  			while ((nBytes == 0) && (inDelay > 0)) {
@@ -550,7 +507,6 @@ public class Midi_handler {
  				if (receivedBuffer != null)
  				{
  					nBytes = receivedBuffer.length;
-// 					System.out.printf("Received %d bytes\n", nBytes);
  				}
 			    inDelay--;
 			    try {
@@ -560,67 +516,62 @@ public class Midi_handler {
 					e.printStackTrace();
 				}
 			}
+//			System.out.printf("Received %d bytes\n", nBytes);
  			
  
  			receivedByte = Constants.Error_NoResponse;
 			if (nBytes > 2) {
 				receivedByte = receivedBuffer[1]<<4;
 				receivedByte = receivedBuffer[2]|receivedByte;
-				//System.out.println(String.valueOf((int)receivedByte));
+//				System.out.println(String.valueOf((int)receivedByte));
 			} else {
-				//System.out.println("Read error\n");
+				System.out.println("Read error\n");
 				if (nBytes > 0) {
 					receivedByte = Constants.Error_Read;
 				}
 			}
 
-//			if (nBytes > 0) {
-				switch (receivedByte) {
-					case Constants.Error_OK:
-						bytesSent += frameSize;
-						retries = 0;
-						break;
+			switch (receivedByte) {
+				case Constants.Error_OK:
+//					System.out.printf("Got OK from MegaDrum\n");
+					bytesSent += frameSize;
+					retries = 0;
+					break;
 
-					default: // Error_CRC:
-						if (++retries < 4) {
-							index -= frameSize;
-							//System.out.println("Retrying on CRC error\n");
-							try {
-								Thread.sleep(10);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						} else {
-							//System.out.println("\nCRC error. File damaged.\n");
-							switch (receivedByte) {
-							case Constants.Error_CRC:
-								upgradeError = 2;
-								resultString = "CRC error. File damaged?";
-								break;
-							case Constants.Error_NoResponse:
-								upgradeError = 3;
-								resultString = "MegaDrum is not responding";
-								break;
-							case Constants.Error_Read:
-								upgradeError = 4;
-								resultString = "Read error. Bad communication?";
-								break;
-							default:
-								upgradeError = 99;
-								resultString = "Unknown error";
-								break;
-							}
+				default: // Error_CRC:
+					if (++retries < 4) {
+						index -= frameSize;
+//						System.out.println("Retrying on CRC error\n");
+						try {
+							Thread.sleep(10);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-						break;
-				}
-//			}
-//			else
-//			{
-//				//System.out.println("\nFailed: MegaDrum is not responding.\n");
-//				upgradeError = 1;
-//				resultString = "Failed: MegaDrum is not responding";
-//			}			
+					} else {
+						//System.out.println("\nCRC error. File damaged.\n");
+						switch (receivedByte) {
+						case Constants.Error_CRC:
+							upgradeError = 2;
+							resultString = "CRC error. File damaged?";
+							break;
+						case Constants.Error_NoResponse:
+							upgradeError = 3;
+							resultString = "MegaDrum is not responding";
+							break;
+						case Constants.Error_Read:
+							upgradeError = 4;
+							resultString = "Read error. Bad communication?";
+							break;
+						default:
+							upgradeError = 99;
+							resultString = "Unknown error";
+							break;
+						}
+//						System.out.printf("Exit with error: %s\n", resultString);
+					}
+					break;
+			}
 			if (upgradeCancelled) {
 				//System.out.println("Upgrade cancelled\n");
 				upgradeError = 1;
@@ -629,12 +580,7 @@ public class Midi_handler {
 			if (upgradeError > 0) {
 				break;
 			}
-		}
-//		if (upgradeError == 0) {
-//			System.out.println("\rTransferring.. 100%% done.  \n");
-//			System.out.println("MegaDrum updated successfully.\n");
-//		}
-		
+		}		
 		
 		parent.midiFinished(upgradeError, resultString);
 	}

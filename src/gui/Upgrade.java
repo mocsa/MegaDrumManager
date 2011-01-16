@@ -23,6 +23,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.awt.Dialog.ModalityType;
+import java.awt.event.WindowStateListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Upgrade extends JDialog {
 	private Midi_handler midi_handler;
@@ -46,6 +53,17 @@ public class Upgrade extends JDialog {
 	 * Create the panel.
 	 */
 	public Upgrade(Midi_handler mh, FileManager fm) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {
+				if (!textField_fileName.getText().isEmpty()) {
+					btnStart.setEnabled(true);
+					progressBar.setString(null);
+					progressBar.setBackground(pbBgColor);
+					progressBar.setForeground(pbFgColor);
+				}
+			}
+		});
 		mySelf = this;
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		midi_handler = mh;
@@ -90,6 +108,17 @@ public class Upgrade extends JDialog {
 		panel_1.add(lblMegadrumFirmware, "2, 2, right, default");
 		
 		textField_fileName = new JTextField();
+		textField_fileName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				file = new File(textField_fileName.getText());
+				if (file.isFile()) {
+					btnStart.setEnabled(true);					
+				} else {
+					btnStart.setEnabled(false);					
+				}
+			}
+		});
 		panel_1.add(textField_fileName, "4, 2, fill, default");
 		textField_fileName.setColumns(10);
 		

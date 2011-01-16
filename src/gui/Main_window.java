@@ -175,25 +175,10 @@ public class Main_window {
 		midi_in_task = new TimerTask() {
 			public void run() {
 				midi_handler.get_midi();
-				if (midi_handler.changedMisc) {
-					midi_handler.changedMisc = false;
-					controlsMisc.setConfig(midi_handler.bufferIn);
-				}
-				if (midi_handler.changedPedal) {
-					midi_handler.changedPedal = false;
-					controlsPedal.setConfig(midi_handler.bufferIn);
-				}
-				if (midi_handler.changedPad > 0) {
-					controlsPads.setConfig(midi_handler.bufferIn, midi_handler.changedPad - 1);
-					midi_handler.changedPad = 0;
-				}
-				if (midi_handler.changed3rd > -1) {
-					controlsPads.setConfig3rd(midi_handler.bufferIn, midi_handler.changed3rd);
-					midi_handler.changed3rd = -1;
-				}
-				if (midi_handler.changedCurve > -1) {
-					controlsCurves.setConfig(midi_handler.bufferIn, midi_handler.changedCurve);
-					midi_handler.changedCurve = -1;
+				if (midi_handler.sysexReceived) {
+					decodeSysex(midi_handler.bufferIn);
+					midi_handler.sysexReceived = false;
+					midi_handler.bufferIn = null;
 				}
 			}
 		};
@@ -448,9 +433,13 @@ public class Main_window {
 		});
 
 		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,},
+				ColumnSpec.decode("pref:grow"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.PREF_ROWSPEC,
+				RowSpec.decode("1dlu"),
+				RowSpec.decode("pref:grow"),
 				RowSpec.decode("1dlu"),
 				FormFactory.PREF_ROWSPEC,}));
 		
@@ -508,13 +497,47 @@ public class Main_window {
 		});
 		panel_top.add(btnSaveAll, "8, 1");
 		
-		progressBar = new JProgressBar();
-		progressBar.setVisible(false);
+		JPanel panel = new JPanel();
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		frmMegadrummanager.getContentPane().add(panel, "1, 3, fill, fill");
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("40dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		JLabel lblMidi = new JLabel("MIDI :");
+		panel.add(lblMidi, "2, 1");
+		
+		tglbtnMidi = new JToggleButton("Open MIDI");
+		panel.add(tglbtnMidi, "4, 1");
+		tglbtnMidi.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		tglbtnMidi.setMargin(new Insets(1, 4, 1, 4));
+		
+		JLabel lblFirmwareVer = new JLabel("Firmware ver:");
+		panel.add(lblFirmwareVer, "6, 1");
+		
+		JLabel lblJjjjjjjjjjjjjjj = new JLabel("jjjjjjjjjjjjjjj");
+		lblJjjjjjjjjjjjjjj.setForeground(new Color(0, 0, 0));
+		panel.add(lblJjjjjjjjjjjjjjj, "8, 1");
 		
 		JLabel lblInputs = new JLabel("Inputs:");
-		panel_top.add(lblInputs, "10, 1, right, default");
+		panel.add(lblInputs, "10, 1");
 		
 		comboBox_inputsCount = new JComboBox();
+		panel.add(comboBox_inputsCount, "12, 1");
 		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		comboBox_inputsCount.removeAllItems();
 		comboBox_inputsCount.addItem("22");
@@ -522,6 +545,12 @@ public class Main_window {
 		comboBox_inputsCount.addItem("40");
 		comboBox_inputsCount.addItem("48");
 		comboBox_inputsCount.addItem("56");
+		
+		progressBar = new JProgressBar();
+		panel.add(progressBar, "14, 1");
+		progressBar.setVisible(false);
+		
+		progressBar.setStringPainted(true);
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -546,11 +575,6 @@ public class Main_window {
 		        }
 			}
 		});
-		panel_top.add(comboBox_inputsCount, "12, 1, left, fill");
-		
-		tglbtnMidi = new JToggleButton("Open MIDI");
-		tglbtnMidi.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		tglbtnMidi.setMargin(new Insets(1, 4, 1, 4));
 		tglbtnMidi.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
@@ -562,11 +586,7 @@ public class Main_window {
 				toggleMidiOpenButton();
 			}
 		});
-		panel_top.add(tglbtnMidi, "14, 1");
-		
-		progressBar.setStringPainted(true);
-		panel_top.add(progressBar, "16, 1");
-		frmMegadrummanager.getContentPane().add(panel_main, "1, 3, left, fill");
+		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, left, fill");
 		
 		controlsCurves = new ControlsCurves();
 		controlsCurves.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -776,7 +796,7 @@ public class Main_window {
 
 	private void getCurve(int curve_id) {
 		midi_handler.clear_midi_input();
-		midi_handler.request_config_curve(curve_id);
+		midi_handler.requestConfigCurve(curve_id);
 		delayMs(configOptions.sysexDelay);
 	}
 	
@@ -923,6 +943,32 @@ public class Main_window {
 			tglbtnMidi.setText("Open MIDI");
 			tglbtnMidi.setSelected(false);
 		}
+	}
+	
+	private void decodeSysex(byte [] buffer) {
+		if (buffer[1] == Constants.MD_SYSEX) {
+			if (buffer[2] == (byte) chainId) {
+				switch (buffer[3]) {
+					case Constants.MD_SYSEX_MISC:
+						controlsMisc.setConfig(midi_handler.bufferIn);
+						break;
+					case Constants.MD_SYSEX_PEDAL:
+						controlsPedal.setConfig(midi_handler.bufferIn);
+						break;
+					case Constants.MD_SYSEX_PAD:
+						controlsPads.setConfig(midi_handler.bufferIn, buffer[4] - 1);
+						break;
+					case Constants.MD_SYSEX_3RD:
+						controlsPads.setConfig3rd(midi_handler.bufferIn, buffer[4]);
+						break;
+					case Constants.MD_SYSEX_CURVE:
+						controlsCurves.setConfig(midi_handler.bufferIn, buffer[4]);
+						break;
+					default:
+						break;
+				}
+			}
+		}		
 	}
 }
 
