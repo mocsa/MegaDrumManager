@@ -73,6 +73,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.WindowFocusListener;
 import javax.swing.JToggleButton;
+import javax.swing.border.BevelBorder;
 
 public class Main_window {
 
@@ -101,6 +102,7 @@ public class Main_window {
 	private JComboBox comboBox_inputsCount;
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
+	private JLabel lblVersion;
 	
 
 	
@@ -503,22 +505,23 @@ public class Main_window {
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("36dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("32dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("40dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("50dlu"),},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblMidi = new JLabel("MIDI :");
+		lblMidi.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblMidi, "2, 1");
 		
 		tglbtnMidi = new JToggleButton("Open MIDI");
@@ -527,13 +530,18 @@ public class Main_window {
 		tglbtnMidi.setMargin(new Insets(1, 4, 1, 4));
 		
 		JLabel lblFirmwareVer = new JLabel("Firmware ver:");
+		lblFirmwareVer.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblFirmwareVer, "6, 1");
 		
-		JLabel lblJjjjjjjjjjjjjjj = new JLabel("jjjjjjjjjjjjjjj");
-		lblJjjjjjjjjjjjjjj.setForeground(new Color(0, 0, 0));
-		panel.add(lblJjjjjjjjjjjjjjj, "8, 1");
+		lblVersion = new JLabel("???????");
+		lblVersion.setHorizontalAlignment(SwingConstants.CENTER);
+		lblVersion.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblVersion.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		lblVersion.setForeground(new Color(0, 0, 0));
+		panel.add(lblVersion, "8, 1");
 		
 		JLabel lblInputs = new JLabel("Inputs:");
+		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblInputs, "10, 1");
 		
 		comboBox_inputsCount = new JComboBox();
@@ -939,6 +947,7 @@ public class Main_window {
 		if (midi_handler.isMidiOpen()) {
 			tglbtnMidi.setText("Close MIDI");
 			tglbtnMidi.setSelected(true);
+			midi_handler.requestVersion();
 		} else {
 			tglbtnMidi.setText("Open MIDI");
 			tglbtnMidi.setSelected(false);
@@ -960,6 +969,18 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_3RD:
 						controlsPads.setConfig3rd(midi_handler.bufferIn, buffer[4]);
+						break;
+					case Constants.MD_SYSEX_VERSION:
+						int ver = 0;
+						if (buffer.length >= Constants.MD_SYSEX_VERSION_SIZE) {
+							int b;
+							for (int i=0;i<4;i++) {
+								b = (int)(buffer[i*2 + 4]<<4);
+								b |= (int)buffer[i*2 + 5];
+								ver += b<<(8*i);
+							}
+							lblVersion.setText(((Integer)ver).toString());
+						}
 						break;
 					case Constants.MD_SYSEX_CURVE:
 						controlsCurves.setConfig(midi_handler.bufferIn, buffer[4]);

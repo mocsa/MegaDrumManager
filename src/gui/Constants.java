@@ -25,6 +25,8 @@ public interface Constants {
 	public static final byte MD_SYSEX_PAD_SIZE = 34;
 	public static final byte MD_SYSEX_3RD = (byte)0x04;
 	public static final byte MD_SYSEX_3RD_SIZE = 16;
+	public static final byte MD_SYSEX_VERSION = (byte)0x05;
+	public static final byte MD_SYSEX_VERSION_SIZE = 13;
 	public static final byte MD_SYSEX_CURVE = (byte)0x06;
 	public static final byte MD_SYSEX_CURVE_SIZE = 24;
 	public static final String[] CURVES_LIST = { "Linear", "Log1", "Log2", "Log3", "Log4",

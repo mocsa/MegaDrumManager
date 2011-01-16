@@ -136,6 +136,21 @@ public class Midi_handler {
 		}
 	}
 
+	public void requestVersion() {
+		byte [] sx = new byte[5];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)chainId;
+		sx[3] = Constants.MD_SYSEX_VERSION;
+		sx[4] = Constants.SYSEX_END;
+		if (midiout != null) {
+			if (midiout.isOpen()) {
+				sendSysex(sx);
+			}
+		}
+	}
+
 	public void requestConfigPedal() {
 		byte [] sx = new byte[5];
 		
