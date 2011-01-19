@@ -44,6 +44,7 @@ public class Midi_handler {
 //	public short changed3rd;
 //	public short changedCurve;
 	public boolean sysexReceived;
+	public int Block_size;
 
 	public Midi_handler () {
 		midiin = null;
@@ -439,27 +440,17 @@ public class Midi_handler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	public static final int Block_size = 2; // Doesn't work if more than 2
+	}	
 
-	public static void writeMid(Receiver rr, int[] buf, int ind, int size)
+	public void writeMid(Receiver rr, int[] buf, int ind, int size)
 	{
 		int p = 0;
-		boolean running = true;
-		while (running) {
-			if ((p + Block_size) < size)
-			{
-				write(rr,buf,ind + p, Block_size);
-				p += Block_size;
-			}
-			else
-			{
-				write(rr,buf,ind + p, size - p);
-				running = false;
-			}
+		while ((p + Block_size) < size) {
+			write(rr,buf,ind + p, Block_size);
+			p += Block_size;			
 		}
-	}
+		write(rr,buf,ind + p, size - p);
+	}	
 	
 	public void doFirmwareUpgrade (Upgrade parent, ConfigOptions options, File file) throws IOException {		
 		FileInputStream fis = null;
@@ -501,16 +492,17 @@ public class Midi_handler {
 		dis.close();
 		bis.close();
 		fis.close();
-//		System.out.printf("Firmware file is loaded\n");
-//		System.out.printf("Firmware size is %d bytes\n", bufferSize);
+		//System.out.printf("Firmware file is loaded\n");
+		//System.out.printf("Firmware size is %d bytes\n", bufferSize);
 		
 		for(index = 0; index < bufferSize; index += frameSize)
 		{
 			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
 			clear_midi_input();
 			parent.setProgressBar(bytesSent);
-//			System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
+			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
+			Block_size = frameSize/8 + 2;
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
@@ -531,16 +523,16 @@ public class Midi_handler {
 					e.printStackTrace();
 				}
 			}
-//			System.out.printf("Received %d bytes\n", nBytes);
+			//System.out.printf("Received %d bytes\n", nBytes);
  			
  
  			receivedByte = Constants.Error_NoResponse;
 			if (nBytes > 2) {
 				receivedByte = receivedBuffer[1]<<4;
 				receivedByte = receivedBuffer[2]|receivedByte;
-//				System.out.println(String.valueOf((int)receivedByte));
+				//System.out.println(String.valueOf((int)receivedByte));
 			} else {
-				System.out.println("Read error\n");
+				//System.out.println("Read error\n");
 				if (nBytes > 0) {
 					receivedByte = Constants.Error_Read;
 				}
@@ -548,7 +540,7 @@ public class Midi_handler {
 
 			switch (receivedByte) {
 				case Constants.Error_OK:
-//					System.out.printf("Got OK from MegaDrum\n");
+					//System.out.printf("Got OK from MegaDrum\n");
 					bytesSent += frameSize;
 					retries = 0;
 					break;
@@ -556,7 +548,7 @@ public class Midi_handler {
 				default: // Error_CRC:
 					if (++retries < 4) {
 						index -= frameSize;
-//						System.out.println("Retrying on CRC error\n");
+						//System.out.println("Retrying on error\n");
 						try {
 							Thread.sleep(10);
 						} catch (InterruptedException e) {
@@ -583,7 +575,7 @@ public class Midi_handler {
 							resultString = "Unknown error";
 							break;
 						}
-//						System.out.printf("Exit with error: %s\n", resultString);
+						//System.out.printf("Exit with error: %s\n", resultString);
 					}
 					break;
 			}
