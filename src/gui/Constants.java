@@ -1,11 +1,12 @@
 package gui;
 
 public interface Constants {
+	public static final int MIDI_BARS_COUNT = 16;
 	public static final int PANEL_HIDE = 0;
 	public static final int PANEL_SHOW = 1;
 	public static final int PANEL_DETACH = 2;
-	public static final int PANELS_COUNT = 4;
-	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Curve"};
+	public static final int PANELS_COUNT = 5;
+	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Curve", "MIDI Log"};
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
 	public static final int Error_CRC = 0x22;

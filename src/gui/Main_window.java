@@ -89,6 +89,7 @@ public class Main_window {
 	private ControlsPedal controlsPedal;
 	private ControlsPads controlsPads;
 	private ControlsCurves controlsCurves;
+	private PanelMidiLog panelMidiLog;
 	private FrameDetached [] framesDetached;
 	private JPanel [] controlsPanels;
 	private ViewMenu [] viewMenus;
@@ -372,10 +373,11 @@ public class Main_window {
 				FormFactory.PREF_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.PREF_COLSPEC,
-				FormFactory.PREF_COLSPEC,},
+				FormFactory.PREF_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,}));
+				RowSpec.decode("pref:grow"),}));
 		
 		controlsMisc = new ControlsMisc();
 		controlsMisc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -594,7 +596,7 @@ public class Main_window {
 				toggleMidiOpenButton();
 			}
 		});
-		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, left, fill");
+		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
 		
 		controlsCurves = new ControlsCurves();
 		controlsCurves.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -620,6 +622,9 @@ public class Main_window {
 		});
 		panel_main.add(controlsCurves, "4, 2, fill, top");
 		
+		panelMidiLog = new PanelMidiLog();
+		panelMidiLog.setBorder(new TitledBorder(null, "MIDI Log", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_main.add(panelMidiLog, "5, 2, fill, fill");
 
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
 		framesDetached = new FrameDetached[Constants.PANELS_COUNT];
@@ -629,6 +634,8 @@ public class Main_window {
 		controlsPanels[1] = controlsPedal;
 		controlsPanels[2] = controlsPads;
 		controlsPanels[3] = controlsCurves;
+		controlsPanels[4] = panelMidiLog;
+		
 		for (int i=0;i<Constants.PANELS_COUNT;i++) {
 			viewMenus[i] = new ViewMenu(Constants.PANELS_NAMES[i], i);
 			viewMenus[i].addPropertyChangeListener("resize", new PropertyChangeListener() {
@@ -920,7 +927,7 @@ public class Main_window {
 	}
 	
 	private void resizeMainWindow() {
-		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
+		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
 		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
 			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
 			if (configOptions.showPanels[i] == Constants.PANEL_DETACH) {

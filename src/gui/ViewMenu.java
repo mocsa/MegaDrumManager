@@ -15,7 +15,7 @@ public class ViewMenu extends JMenu {
 	private ConfigOptions configOptions;
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
 	public int panelPointer;
-	private int [] prevState = { -1, -1, -1, -1};
+	private int [] prevState = { -1, -1, -1, -1, -1};
 	
 	/**
 	 * Create the panel.
