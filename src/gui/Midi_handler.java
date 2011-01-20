@@ -38,11 +38,6 @@ public class Midi_handler {
 	public boolean getMidiBlocked;
 	public boolean upgradeCancelled = false;
 	public byte [] bufferIn;
-//	public boolean changedMisc;
-//	public boolean changedPedal;
-//	public short changedPad;
-//	public short changed3rd;
-//	public short changedCurve;
 	public boolean sysexReceived;
 	public int Block_size;
 
@@ -254,7 +249,6 @@ public class Midi_handler {
 							} else {
 								// TO-DO
 								sendMidiShort(bufferIn);
-								bufferIn = null;
 							}
 						}
 					}

@@ -182,6 +182,9 @@ public class Main_window {
 					decodeSysex(midi_handler.bufferIn);
 					midi_handler.sysexReceived = false;
 					midi_handler.bufferIn = null;
+				} else if (midi_handler.bufferIn != null) {
+					decodeShortMidi(midi_handler.bufferIn);
+					midi_handler.bufferIn = null;
 				}
 			}
 		};
@@ -997,6 +1000,27 @@ public class Main_window {
 				}
 			}
 		}		
+	}
+	
+	public void decodeShortMidi (byte [] buffer) {
+		switch (buffer.length) {
+		case 1:
+			//shortMessage.setMessage(buf[0]);
+			break;
+		case 2:
+			//shortMessage.setMessage(buf[0], buf[1],0);
+			break;
+		default:
+			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
+			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
+				panelMidiLog.showNewHit(buffer[1], buffer[2], Color.BLUE);
+			}
+			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
+				panelMidiLog.showHiHatLevel(127 - buffer[2], Color.MAGENTA);
+			}
+			break;
+		}
+	
 	}
 }
 

@@ -8,15 +8,18 @@ import com.jgoodies.forms.factories.FormFactory;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
+
+import java.awt.Color;
 import java.awt.Font;
 
 public class PanelMidiBar extends JPanel {
-	private PanelHitBar panelHitBar;
+	private PanelMidiLevelBar panelMidiLevelBar;
 	private JLabel lblTime;
 	private JLabel lblNote;
 	public int level = 0;
-	public int timeDiff = 1;
-	public int noteNumber = 1;
+	public int timeDiff = 0;
+	public int noteNumber = 0;
+	public Color color = Color.BLUE;
 
 	/**
 	 * Create the panel.
@@ -35,7 +38,7 @@ public class PanelMidiBar extends JPanel {
 		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		add(lblTime, "1, 1");
 		
-		panelHitBar = new PanelHitBar();
+		panelMidiLevelBar = new PanelMidiLevelBar();
 //		panelHitBar.addMouseListener(new MouseAdapter() {
 //			@Override
 //			public void mousePressed(MouseEvent arg0) {
@@ -44,7 +47,7 @@ public class PanelMidiBar extends JPanel {
 //				lblNote.setText(((Integer)(int)(Math.random()*127)).toString());
 //			}
 //		});
-		add(panelHitBar, "1, 3, fill, fill");
+		add(panelMidiLevelBar, "1, 3, fill, fill");
 		
 		lblNote = new JLabel("?");
 		lblNote.setFont(new Font("Tahoma", Font.PLAIN, 9));
@@ -53,10 +56,15 @@ public class PanelMidiBar extends JPanel {
 	}
 	
 	public void updateToValues() {
-		panelHitBar.level = level;
-		panelHitBar.repaint();
-		lblNote.setText(((Integer)noteNumber).toString());		
-		lblTime.setText(((Integer)timeDiff).toString());		
+		panelMidiLevelBar.level = level;
+		panelMidiLevelBar.fgColor = color;
+		panelMidiLevelBar.repaint();
+		lblNote.setText(((Integer)noteNumber).toString());
+		if (timeDiff > 999) {
+			lblTime.setText(">1s");
+		} else {
+			lblTime.setText(((Integer)timeDiff).toString());
+		}
 	}
 
 }

@@ -11,7 +11,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
-public class PanelHitBar extends JPanel {
+public class PanelMidiLevelBar extends JPanel {
 	
 	private Color bgColor = Color.WHITE;
 	private Color fontColor = Color.BLACK;
@@ -24,7 +24,7 @@ public class PanelHitBar extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public PanelHitBar() {
+	public PanelMidiLevelBar() {
 		setPreferredSize(new Dimension(barWidth, barHeight));
 	}
 
