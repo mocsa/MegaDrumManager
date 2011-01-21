@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Timer;
 
@@ -30,16 +31,27 @@ public class PanelMidiLog extends JPanel {
 	private JLabel lblNotesNumbers;
 	private PanelMidiLevelBar panelHiHatBar;
 	private JLabel lblHihatPosition;
-	private JPanel panel;
+	private JPanel panelHiHat;
 	private JLabel lblL;
 	private JLabel lblL_1;
+	private JPanel panelCombined;
+	private JPanel panelScroll;
+	private PanelMidiScroll panelMidiScroll;
 
 	/**
 	 * Create the panel.
 	 */
 	public PanelMidiLog() {
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("center:pref"),
+				FormFactory.PREF_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),}));
+		panelCombined = new JPanel();
+		add(panelCombined, "1, 1, left, top");
+		panelCombined.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("center:pref:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("center:pref:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -54,20 +66,20 @@ public class PanelMidiLog extends JPanel {
 		
 		lblHitsIntervalsmilliseconds = new JLabel("hits intervals (milliseconds)");
 		lblHitsIntervalsmilliseconds.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		add(lblHitsIntervalsmilliseconds, "1, 2");
+		panelCombined.add(lblHitsIntervalsmilliseconds, "1, 2");
 		
 		panelBars = new JPanel();
-//		panelBars.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mousePressed(MouseEvent arg0) {
-//				showNewHit((int)(Math.random()*127),(int)(Math.random()*127), Color.BLUE);
-//			}
-//		});
+		panelBars.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				showNewHit((int)(Math.random()*127),(int)(Math.random()*127), Color.BLUE);
+			}
+		});
 		
 		lblHihatPosition = new JLabel("HiHat");
 		lblHihatPosition.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		add(lblHihatPosition, "3, 2");
-		add(panelBars, "1, 4, fill, fill");
+		panelCombined.add(lblHihatPosition, "3, 2");
+		panelCombined.add(panelBars, "1, 4, fill, fill");
 		columnSpecs = new ColumnSpec[Constants.MIDI_BARS_COUNT*2];
 		for (int i=0; i<Constants.MIDI_BARS_COUNT;i++) {
 			columnSpecs[i*2] = ColumnSpec.decode("1dlu");
@@ -115,9 +127,9 @@ public class PanelMidiLog extends JPanel {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.PREF_ROWSPEC,}));
 		
-		panel = new JPanel();
-		add(panel, "3, 4, fill, fill");
-		panel.setLayout(new FormLayout(new ColumnSpec[] {
+		panelHiHat = new JPanel();
+		panelCombined.add(panelHiHat, "3, 4, fill, fill");
+		panelHiHat.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("center:pref"),},
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
@@ -129,18 +141,26 @@ public class PanelMidiLog extends JPanel {
 		
 		lblL = new JLabel("Open");
 		lblL.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel.add(lblL, "1, 2, center, default");
+		panelHiHat.add(lblL, "1, 2, center, default");
 		
 		panelHiHatBar = new PanelMidiLevelBar();
-		panel.add(panelHiHatBar, "1, 4, center, top");
+		panelHiHat.add(panelHiHatBar, "1, 4, center, top");
 		
 		lblL_1 = new JLabel("Closed");
 		lblL_1.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel.add(lblL_1, "1, 6, center, default");
+		panelHiHat.add(lblL_1, "1, 6, center, default");
 		
 		lblNotesNumbers = new JLabel("notes numbers");
 		lblNotesNumbers.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		add(lblNotesNumbers, "1, 6");
+		panelCombined.add(lblNotesNumbers, "1, 6");
+		
+		panelScroll = new JPanel();
+		add(panelScroll, "1, 3, fill, fill");
+		panelScroll.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.PREF_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.PREF_ROWSPEC,}));
+		
 //		panelBars.setLayout(new FormLayout(columnSpecs,
 //			new RowSpec[] {
 //				FormFactory.RELATED_GAP_ROWSPEC,
@@ -153,7 +173,11 @@ public class PanelMidiLog extends JPanel {
 			panelBars.add(panelsMidiBar[i], ((Integer)((i+1)*2)).toString()+", 2");
 			logStore[i] = new LogStore();
 		}
-		//panelBars.add(panelsMidiBar[0], "2, 2");
+
+		panelMidiScroll = new PanelMidiScroll(new Dimension(panelBars.getPreferredSize().width, 128));
+		panelScroll.add(panelMidiScroll, "1, 1, fill, fill");
+		panelMidiScroll.reSet(new Dimension(panelBars.getPreferredSize().width, 128), 10);
+
 		prevTime = System.nanoTime();
 
 	}
@@ -182,6 +206,7 @@ public class PanelMidiLog extends JPanel {
 				p = Constants.MIDI_BARS_COUNT - 1;
 			}
 		}
+		panelMidiScroll.showHit(level, Color.GREEN);
 	}
 	public void showHiHatLevel(int level, Color color) {
 		panelHiHatBar.level = level;
