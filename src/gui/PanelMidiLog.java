@@ -22,6 +22,14 @@ import javax.swing.JToggleButton;
 import javax.swing.JScrollBar;
 import java.awt.event.AdjustmentListener;
 import java.awt.event.AdjustmentEvent;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import javax.swing.border.LineBorder;
+import javax.swing.border.EtchedBorder;
 
 class LogStore {
 	public int note = 0;
@@ -53,30 +61,36 @@ public class PanelMidiLog extends JPanel {
 	private JLabel lblAutoPause;
 	private JToggleButton tglbtnPause;
 	private JScrollBar scrollBar;
+	private JPanel panel;
+	private JComboBox comboBoxBarsCount;
+	private JLabel lblBarsNumber;
+	
+	public int barsCount;
 
 	/**
 	 * Create the panel.
 	 */
-	public PanelMidiLog() {
+	public PanelMidiLog(int bars) {
+		barsCount = bars;
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.PREF_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),}));
+				FormFactory.PREF_ROWSPEC,}));
 		panelCombined = new JPanel();
 		add(panelCombined, "1, 1, left, top");
 		panelCombined.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("center:pref:grow"),
+				FormFactory.PREF_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("center:pref:grow"),
+				ColumnSpec.decode("center:pref"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("default:grow"),
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
@@ -85,73 +99,27 @@ public class PanelMidiLog extends JPanel {
 		panelCombined.add(lblHitsIntervalsmilliseconds, "1, 2");
 		
 		panelBars = new JPanel();
-		panelBars.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-				showNewHit((int)(Math.random()*127),(int)(Math.random()*127), Color.BLUE);
-			}
-		});
+//		panelBars.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mousePressed(MouseEvent arg0) {
+//				showNewHit((int)(Math.random()*127),(int)(Math.random()*127), Color.BLUE);
+//			}
+//		});
 		
 		lblHihatPosition = new JLabel("HiHat");
 		lblHihatPosition.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panelCombined.add(lblHihatPosition, "3, 2");
 		panelCombined.add(panelBars, "1, 4, fill, fill");
-		columnSpecs = new ColumnSpec[Constants.MIDI_BARS_COUNT*2];
-		for (int i=0; i<Constants.MIDI_BARS_COUNT;i++) {
-			columnSpecs[i*2] = ColumnSpec.decode("1dlu");
-			columnSpecs[i*2+1] = FormFactory.DEFAULT_COLSPEC;
-		}
-//		panelBars.setLayout(new FormLayout(
-//				columnSpecs,
-//			new RowSpec[] {
-//				FormFactory.RELATED_GAP_ROWSPEC,
-//				FormFactory.PREF_ROWSPEC,}));
-		panelBars.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("default:grow"),
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,}));
 		
 		panelHiHat = new JPanel();
 		panelCombined.add(panelHiHat, "3, 4, fill, fill");
 		panelHiHat.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("center:pref"),},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.LINE_GAP_ROWSPEC,
-				RowSpec.decode("256px"),
+				FormFactory.PREF_ROWSPEC,
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
@@ -166,6 +134,34 @@ public class PanelMidiLog extends JPanel {
 		lblL_1.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panelHiHat.add(lblL_1, "1, 6, center, default");
 		
+		panel = new JPanel();
+		panelCombined.add(panel, "5, 4, fill, fill");
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.PREF_COLSPEC,
+				ColumnSpec.decode("2dlu"),
+				FormFactory.PREF_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		comboBoxBarsCount = new JComboBox();
+		comboBoxBarsCount.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
+		        	barsCount = comboBoxBarsCount.getSelectedIndex()*4 + 16;
+		        	reSetPanelBars();
+		    		panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 128));
+	        		firePropertyChange("resize", false, true);
+		        }
+			}
+		});
+		comboBoxBarsCount.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		comboBoxBarsCount.setModel(new DefaultComboBoxModel(new String[] {"16", "20", "24", "28", "32"}));
+		panel.add(comboBoxBarsCount, "1, 1, fill, default");
+		
+		lblBarsNumber = new JLabel("Bars number");
+		lblBarsNumber.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblBarsNumber, "3, 1");
+		
 		lblNotesNumbers = new JLabel("notes numbers");
 		lblNotesNumbers.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panelCombined.add(lblNotesNumbers, "1, 6");
@@ -175,7 +171,7 @@ public class PanelMidiLog extends JPanel {
 		panelScroll.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("pref:grow"),}));
 		
@@ -184,25 +180,21 @@ public class PanelMidiLog extends JPanel {
 //				FormFactory.RELATED_GAP_ROWSPEC,
 //				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		panelsMidiBar = new PanelMidiBar[Constants.MIDI_BARS_COUNT];
-		logStore = new LogStore[Constants.MIDI_BARS_COUNT];
-		for (int i=0; i<Constants.MIDI_BARS_COUNT;i++) {
-			panelsMidiBar[i] = new PanelMidiBar();
-			panelBars.add(panelsMidiBar[i], ((Integer)((i+1)*2)).toString()+", 2");
-			logStore[i] = new LogStore();
-		}
+		reSetPanelBars();
 
 		panelMidiScroll = new PanelMidiScroll(new Dimension(panelBars.getPreferredSize().width, 128));
+		panelMidiScroll.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		
 		panelScroll.add(panelMidiScroll, "1, 1, fill, fill");
 		
 		panelScrollControls = new JPanel();
+		panelScrollControls.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelScroll.add(panelScrollControls, "3, 1, fill, fill");
 		panelScrollControls.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("right:pref"),
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("left:default"),},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -259,7 +251,7 @@ public class PanelMidiLog extends JPanel {
 	public void showNewHit(int note, int level, Color color) {
 		int timeDiff;
 		storePointer++;
-		if (storePointer >= Constants.MIDI_BARS_COUNT) {
+		if (storePointer >= barsCount) {
 			storePointer = 0;
 		}
 		timeDiff = (int)((System.nanoTime() - prevTime)/1000000);
@@ -269,22 +261,35 @@ public class PanelMidiLog extends JPanel {
 		logStore[storePointer].level = level;
 		logStore[storePointer].color = color;
 		int p = storePointer;
-		for (int i=0;i<Constants.MIDI_BARS_COUNT;i++) {
-			panelsMidiBar[Constants.MIDI_BARS_COUNT - i - 1].noteNumber = logStore[p].note; 
-			panelsMidiBar[Constants.MIDI_BARS_COUNT - i - 1].level = logStore[p].level;
-			panelsMidiBar[Constants.MIDI_BARS_COUNT - i - 1].color = logStore[p].color;
-			panelsMidiBar[Constants.MIDI_BARS_COUNT - i - 1].timeDiff = logStore[p].timeDiff;
-			panelsMidiBar[Constants.MIDI_BARS_COUNT - i - 1].updateToValues();
+		for (int i=0;i<barsCount;i++) {
+			panelsMidiBar[barsCount - i - 1].noteNumber = logStore[p].note; 
+			panelsMidiBar[barsCount - i - 1].level = logStore[p].level;
+			panelsMidiBar[barsCount - i - 1].color = logStore[p].color;
+			panelsMidiBar[barsCount - i - 1].timeDiff = logStore[p].timeDiff;
+			panelsMidiBar[barsCount - i - 1].updateToValues();
 			p--;
 			if (p<0) {
-				p = Constants.MIDI_BARS_COUNT - 1;
+				p = barsCount - 1;
 			}
 		}
-		panelMidiScroll.showHit(level, Color.BLACK);
+		if (panelMidiScroll != null) {
+			panelMidiScroll.showHit(level, Color.BLACK);
+		}
 	}
 	public void showHiHatLevel(int level, Color color) {
 		panelHiHatBar.level = level;
 		panelHiHatBar.fgColor = color;
 		panelHiHatBar.repaint();
+	}
+	
+	public void reSetPanelBars() {
+		panelBars.removeAll();
+		panelsMidiBar = new PanelMidiBar[barsCount];
+		logStore = new LogStore[barsCount];
+		for (int i=0; i<barsCount;i++) {
+			panelsMidiBar[i] = new PanelMidiBar();
+			panelBars.add(panelsMidiBar[i], ((Integer)((i+1)*2)).toString()+", 2");
+			logStore[i] = new LogStore();
+		}
 	}
 }

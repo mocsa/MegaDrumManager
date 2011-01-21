@@ -1,7 +1,7 @@
 package gui;
 
 public interface Constants {
-	public static final int MIDI_BARS_COUNT = 16;
+	//public static final int MIDI_BARS_COUNT = 32;
 	public static final int PANEL_HIDE = 0;
 	public static final int PANEL_SHOW = 1;
 	public static final int PANEL_DETACH = 2;

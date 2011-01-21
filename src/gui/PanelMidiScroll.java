@@ -44,6 +44,7 @@ public class PanelMidiScroll extends JPanel {
 	
 	public void reSetSize(Dimension dim) {
 		setPreferredSize(dim);
+		setSize(dim);
 		offImage = new BufferedImage(dim.width, dim.height,BufferedImage.TYPE_INT_RGB);
 		g2offScreen = (Graphics2D) offImage.getGraphics();
 		g2offScreen.setColor(bgColor);

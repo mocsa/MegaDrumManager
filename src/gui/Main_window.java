@@ -372,15 +372,15 @@ public class Main_window {
 		
 		
 		panel_main = new JPanel();
-		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
-			new RowSpec[] {
-				FormFactory.LINE_GAP_ROWSPEC,
-				RowSpec.decode("pref:grow"),}));
+//		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
+//				FormFactory.PREF_COLSPEC,
+//				FormFactory.DEFAULT_COLSPEC,
+//				FormFactory.PREF_COLSPEC,
+//				FormFactory.PREF_COLSPEC,
+//				ColumnSpec.decode("default:grow"),},
+//			new RowSpec[] {
+//				FormFactory.LINE_GAP_ROWSPEC,
+//				RowSpec.decode("pref:grow"),}));
 		
 		controlsMisc = new ControlsMisc();
 		controlsMisc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -411,11 +411,11 @@ public class Main_window {
 		});
 		
 		controlsPads = new ControlsPads();
-		controlsPads.addPropertyChangeListener("resize", new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent arg0) {
-				resizeMainWindow();
-			}
-		});
+//		controlsPads.addPropertyChangeListener("resize", new PropertyChangeListener() {
+//			public void propertyChange(PropertyChangeEvent arg0) {
+//				resizeMainWindow();
+//			}
+//		});
 		controlsPads.getBtnSendall().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendAllPads();
@@ -625,7 +625,7 @@ public class Main_window {
 		});
 		panel_main.add(controlsCurves, "4, 2, fill, top");
 		
-		panelMidiLog = new PanelMidiLog();
+		panelMidiLog = new PanelMidiLog(16);
 		panelMidiLog.setBorder(new TitledBorder(null, "MIDI Log", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_main.add(panelMidiLog, "5, 2, fill, fill");
 
@@ -640,6 +640,11 @@ public class Main_window {
 		controlsPanels[4] = panelMidiLog;
 		
 		for (int i=0;i<Constants.PANELS_COUNT;i++) {
+			controlsPanels[i].addPropertyChangeListener("resize", new PropertyChangeListener() {
+				public void propertyChange(PropertyChangeEvent arg0) {
+					resizeMainWindow();
+				}
+			});			
 			viewMenus[i] = new ViewMenu(Constants.PANELS_NAMES[i], i);
 			viewMenus[i].addPropertyChangeListener("resize", new PropertyChangeListener() {
 				public void propertyChange(PropertyChangeEvent arg0) {
