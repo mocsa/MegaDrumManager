@@ -18,6 +18,10 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JSlider;
+import javax.swing.JToggleButton;
+import javax.swing.JScrollBar;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.AdjustmentEvent;
 
 class LogStore {
 	public int note = 0;
@@ -47,7 +51,8 @@ public class PanelMidiLog extends JPanel {
 	private JLabel lblScrollSpeed;
 	private JCheckBox checkBoxAutoPause;
 	private JLabel lblAutoPause;
-	private JSlider slider;
+	private JToggleButton tglbtnPause;
+	private JScrollBar scrollBar;
 
 	/**
 	 * Create the panel.
@@ -206,16 +211,18 @@ public class PanelMidiLog extends JPanel {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		slider = new JSlider();
-		slider.setPreferredSize(new Dimension(100, 23));
-		slider.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		slider.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				panelMidiScroll.reSetTimer((Integer)slider.getValue());
+		scrollBar = new JScrollBar();
+		scrollBar.setValue(50);
+		scrollBar.setPreferredSize(new Dimension(80, 14));
+		scrollBar.addAdjustmentListener(new AdjustmentListener() {
+			public void adjustmentValueChanged(AdjustmentEvent arg0) {
+				panelMidiScroll.reSetTimer((Integer)scrollBar.getValue());
+
 			}
 		});
-		slider.setMinimum(5);
-		panelScrollControls.add(slider, "2, 2");
+		scrollBar.setMinimum(10);
+		scrollBar.setOrientation(JScrollBar.HORIZONTAL);
+		panelScrollControls.add(scrollBar, "2, 2");
 		
 		lblScrollSpeed = new JLabel("Scroll speed");
 		lblScrollSpeed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -227,16 +234,24 @@ public class PanelMidiLog extends JPanel {
 				panelMidiScroll.autoPause = checkBoxAutoPause.isSelected();
 			}
 		});
-		panelScrollControls.add(checkBoxAutoPause, "2, 4");
+		
+		tglbtnPause = new JToggleButton("Pause");
+		tglbtnPause.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				panelMidiScroll.pauseScroll = tglbtnPause.isSelected();
+			}
+		});
+		tglbtnPause.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelScrollControls.add(tglbtnPause, "2, 4");
+		panelScrollControls.add(checkBoxAutoPause, "2, 6");
 		
 		lblAutoPause = new JLabel("Auto pause");
 		lblAutoPause.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panelScrollControls.add(lblAutoPause, "4, 4");
+		panelScrollControls.add(lblAutoPause, "4, 6");
+		panelMidiScroll.autoPause = checkBoxAutoPause.isSelected();
 		
 		panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 128));
-		panelMidiScroll.reSetTimer(100);
-		panelMidiScroll.reSetTimer((Integer)slider.getValue());
-		panelMidiScroll.autoPause = checkBoxAutoPause.isSelected();
+		panelMidiScroll.reSetTimer((Integer)scrollBar.getValue());
 		prevTime = System.nanoTime();
 
 	}
@@ -265,7 +280,7 @@ public class PanelMidiLog extends JPanel {
 				p = Constants.MIDI_BARS_COUNT - 1;
 			}
 		}
-		panelMidiScroll.showHit(level, Color.GREEN);
+		panelMidiScroll.showHit(level, Color.BLACK);
 	}
 	public void showHiHatLevel(int level, Color color) {
 		panelHiHatBar.level = level;

@@ -22,6 +22,7 @@ public class PanelMidiScroll extends JPanel {
 	private Graphics2D g2offScreen;
 	//public Color fgColor = Color.BLUE;
 	
+	public boolean pauseScroll = false;
 	public boolean autoPause = false;
 	private int runsToPause = 0;
 	
@@ -70,7 +71,9 @@ public class PanelMidiScroll extends JPanel {
 			}
 			if (runsToPause > 0 ) {
 				runsToPause --;
-				g2offScreen.copyArea(1, 0, this.getPreferredSize().width-1, this.getPreferredSize().height, -1, 0);
+				if (!pauseScroll) {
+					g2offScreen.copyArea(1, 0, this.getPreferredSize().width-1, this.getPreferredSize().height, -1, 0);
+				}
 			}
 			g2offScreen.setColor(bgColor);
 			g2offScreen.drawLine(this.getPreferredSize().width-1, 0, this.getPreferredSize().width - 1, this.getPreferredSize().height);
@@ -79,7 +82,7 @@ public class PanelMidiScroll extends JPanel {
 	}
 	
 	public void showHit(int level, Color color) {
-		runsToPause = this.getPreferredSize().width/2;
+		runsToPause = this.getPreferredSize().width/4;
 		g2offScreen.setColor(color);
 		g2offScreen.drawLine(this.getPreferredSize().width-1, 128 - level, this.getPreferredSize().width - 1, this.getPreferredSize().height);
 	}
