@@ -20,7 +20,10 @@ public class PanelMidiScroll extends JPanel {
 	private Color bgColor = Color.WHITE;
 	private BufferedImage offImage;	
 	private Graphics2D g2offScreen;
-	public Color fgColor = Color.BLUE;
+	//public Color fgColor = Color.BLUE;
+	
+	public boolean autoPause = false;
+	private int runsToPause = 0;
 	
 	private Timer timerScroll;
 	private TimerTask timerScrollTask;
@@ -34,24 +37,41 @@ public class PanelMidiScroll extends JPanel {
 				repaint();
 			}
 		};
+		timerScroll = new Timer();
+		timerScroll.scheduleAtFixedRate(timerScrollTask, 1000, 100);
 	}
 	
-	public void reSet(Dimension dim, int period) {
+	public void reSetSize(Dimension dim) {
 		setPreferredSize(dim);
-		timerScroll = new Timer();
-		timerScroll.scheduleAtFixedRate(timerScrollTask, 1000, period);
-
 		offImage = new BufferedImage(dim.width, dim.height,BufferedImage.TYPE_INT_RGB);
 		g2offScreen = (Graphics2D) offImage.getGraphics();
 		g2offScreen.setColor(bgColor);
 		g2offScreen.fillRect(0, 0, dim.width, dim.height);
+	}
+	
+	public void reSetTimer(int period) {
+		timerScroll.cancel();		
+		timerScroll = new Timer();
+		timerScrollTask = new TimerTask() {
+			public void run() {
+				repaint();
+			}
+		};
+		timerScroll.scheduleAtFixedRate(timerScrollTask, period, period);
+
 	}
 
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D)g;
 		super.paintComponent(g2); // paints background
 		if (g2offScreen != null ) {
-			g2offScreen.copyArea(1, 0, this.getPreferredSize().width-1, this.getPreferredSize().height, -1, 0);
+			if (!autoPause) {
+				runsToPause++;
+			}
+			if (runsToPause > 0 ) {
+				runsToPause --;
+				g2offScreen.copyArea(1, 0, this.getPreferredSize().width-1, this.getPreferredSize().height, -1, 0);
+			}
 			g2offScreen.setColor(bgColor);
 			g2offScreen.drawLine(this.getPreferredSize().width-1, 0, this.getPreferredSize().width - 1, this.getPreferredSize().height);
 			g2.drawImage(offImage, null, 0, 0);
@@ -59,6 +79,7 @@ public class PanelMidiScroll extends JPanel {
 	}
 	
 	public void showHit(int level, Color color) {
+		runsToPause = this.getPreferredSize().width/2;
 		g2offScreen.setColor(color);
 		g2offScreen.drawLine(this.getPreferredSize().width-1, 128 - level, this.getPreferredSize().width - 1, this.getPreferredSize().height);
 	}

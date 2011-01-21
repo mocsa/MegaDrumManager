@@ -12,6 +12,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Timer;
+import javax.swing.JSpinner;
+import javax.swing.JCheckBox;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.JSlider;
 
 class LogStore {
 	public int note = 0;
@@ -37,6 +43,11 @@ public class PanelMidiLog extends JPanel {
 	private JPanel panelCombined;
 	private JPanel panelScroll;
 	private PanelMidiScroll panelMidiScroll;
+	private JPanel panelScrollControls;
+	private JLabel lblScrollSpeed;
+	private JCheckBox checkBoxAutoPause;
+	private JLabel lblAutoPause;
+	private JSlider slider;
 
 	/**
 	 * Create the panel.
@@ -157,9 +168,11 @@ public class PanelMidiLog extends JPanel {
 		panelScroll = new JPanel();
 		add(panelScroll, "1, 3, fill, fill");
 		panelScroll.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,},
+				FormFactory.PREF_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,}));
+				RowSpec.decode("pref:grow"),}));
 		
 //		panelBars.setLayout(new FormLayout(columnSpecs,
 //			new RowSpec[] {
@@ -175,9 +188,55 @@ public class PanelMidiLog extends JPanel {
 		}
 
 		panelMidiScroll = new PanelMidiScroll(new Dimension(panelBars.getPreferredSize().width, 128));
+		
 		panelScroll.add(panelMidiScroll, "1, 1, fill, fill");
-		panelMidiScroll.reSet(new Dimension(panelBars.getPreferredSize().width, 128), 10);
-
+		
+		panelScrollControls = new JPanel();
+		panelScroll.add(panelScrollControls, "3, 1, fill, fill");
+		panelScrollControls.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("right:pref"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("left:default"),},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		slider = new JSlider();
+		slider.setPreferredSize(new Dimension(100, 23));
+		slider.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		slider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				panelMidiScroll.reSetTimer((Integer)slider.getValue());
+			}
+		});
+		slider.setMinimum(5);
+		panelScrollControls.add(slider, "2, 2");
+		
+		lblScrollSpeed = new JLabel("Scroll speed");
+		lblScrollSpeed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelScrollControls.add(lblScrollSpeed, "4, 2");
+		
+		checkBoxAutoPause = new JCheckBox("");
+		checkBoxAutoPause.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				panelMidiScroll.autoPause = checkBoxAutoPause.isSelected();
+			}
+		});
+		panelScrollControls.add(checkBoxAutoPause, "2, 4");
+		
+		lblAutoPause = new JLabel("Auto pause");
+		lblAutoPause.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelScrollControls.add(lblAutoPause, "4, 4");
+		
+		panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 128));
+		panelMidiScroll.reSetTimer(100);
+		panelMidiScroll.reSetTimer((Integer)slider.getValue());
+		panelMidiScroll.autoPause = checkBoxAutoPause.isSelected();
 		prevTime = System.nanoTime();
 
 	}
