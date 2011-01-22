@@ -83,8 +83,6 @@ public class Main_window {
 	private Options dialog_options;
 	private Upgrade upgradeDialog;
 	private Midi_handler midi_handler;
-	private Timer timer_midi;
-	private TimerTask midi_in_task;
 	private ControlsMisc controlsMisc;
 	private ControlsPedal controlsPedal;
 	private ControlsPads controlsPads;
@@ -177,14 +175,16 @@ public class Main_window {
 		midi_handler.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
-				midi_handler.getMidi();
-				if (midi_handler.sysexReceived) {
-					decodeSysex(midi_handler.bufferIn);
-					midi_handler.sysexReceived = false;
-					midi_handler.bufferIn = null;
-				} else if (midi_handler.bufferIn != null) {
-					decodeShortMidi(midi_handler.bufferIn);
-					midi_handler.bufferIn = null;
+				if (!upgradeDialog.isVisible()) {
+					midi_handler.getMidi();
+					if (midi_handler.sysexReceived) {
+						decodeSysex(midi_handler.bufferIn);
+						midi_handler.sysexReceived = false;
+						midi_handler.bufferIn = null;
+					} else if (midi_handler.bufferIn != null) {
+						decodeShortMidi(midi_handler.bufferIn);
+						midi_handler.bufferIn = null;
+					}
 				}
 			}
 		});		
