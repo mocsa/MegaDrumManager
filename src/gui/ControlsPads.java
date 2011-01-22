@@ -32,8 +32,8 @@ public class ControlsPads extends JPanel {
 	private ControlsPadCommon panel_rim;
 	private ThirdZoneControls panel_3rd_zone;
 	
-	private ConfigPad [] configPads;
-	private Config3rd [] config3rds;
+	public ConfigPad [] configPads;
+	public Config3rd [] config3rds;
 	private int padPointer;
 	private int prevPadPointer;
 	private int thirdPointer;

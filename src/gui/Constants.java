@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Color;
+
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
 	public static final int PANEL_HIDE = 0;
@@ -54,4 +56,11 @@ public interface Constants {
 			"Timpani2", "Timpani3", "Timpani4"
 
 	};
+	public static final Color MD_HEAD_COLOR = Color.BLUE;
+	public static final Color MD_RIM_COLOR = Color.GREEN;
+	public static final Color MD_3RD_COLOR = Color.ORANGE;
+	public static final Color MD_UNKNOWN_COLOR = Color.YELLOW;
+	public static final Color MD_HIHAT_COLOR = Color.MAGENTA;
+	public static final Color MD_AFTERTOUCH_ON_COLOR = Color.GRAY;
+	public static final Color MD_AFTERTOUCH_OFF_COLOR = Color.LIGHT_GRAY;
 }

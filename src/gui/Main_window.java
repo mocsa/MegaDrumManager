@@ -1006,6 +1006,7 @@ public class Main_window {
 	}
 	
 	public void decodeShortMidi (byte [] buffer) {
+		Color color;
 		switch (buffer.length) {
 		case 1:
 			//shortMessage.setMessage(buf[0]);
@@ -1016,13 +1017,33 @@ public class Main_window {
 		default:
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
 			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
-				panelMidiLog.showNewHit(buffer[1], buffer[2], Color.BLUE);
+				color = Constants.MD_UNKNOWN_COLOR;
+				for (int i = 0; i< controlsPads.configPads.length;i++) {
+					if ((buffer[1]==controlsPads.configPads[i].note) ||
+							(buffer[1]==controlsPads.configPads[i].altNote) ||
+							(buffer[1]==controlsPads.configPads[i].pressrollNote)) {
+						if (i==0) {
+							color = Constants.MD_HEAD_COLOR;
+						} else {
+							color = ((i&0x01)==1)?Constants.MD_HEAD_COLOR:Constants.MD_RIM_COLOR;
+						}
+					}
+					if ((i&0x01) == 1) {
+						if ((buffer[1]==controlsPads.config3rds[(i-1)/2].note) ||
+								(buffer[1]==controlsPads.config3rds[(i-1)/2].altNote) ||
+								(buffer[1]==controlsPads.config3rds[(i-1)/2].pressrollNote) ||
+								(buffer[1]==controlsPads.config3rds[(i-1)/2].dampenedNote)) {
+									color = Constants.MD_3RD_COLOR;
+						}						
+					}
+				}
+				panelMidiLog.showNewHit(buffer[1], buffer[2], color);
 			}
 			if ((buffer[0]&0xf0) == 0xa0) {
-				panelMidiLog.showNewHit(buffer[1], 127,(buffer[2]>0)?Color.GRAY:Color.LIGHT_GRAY);
+				panelMidiLog.showNewHit(buffer[1], 127,(buffer[2]>0)?Constants.MD_AFTERTOUCH_ON_COLOR:Constants.MD_AFTERTOUCH_OFF_COLOR);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
-				panelMidiLog.showHiHatLevel(127 - buffer[2], Color.MAGENTA);
+				panelMidiLog.showHiHatLevel(127 - buffer[2], Constants.MD_HIHAT_COLOR);
 			}
 			break;
 		}

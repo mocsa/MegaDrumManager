@@ -66,6 +66,18 @@ public class PanelMidiLog extends JPanel {
 	private JLabel lblBarsNumber;
 	
 	public int barsCount;
+	private JLabel lblHeadHit;
+	private JLabel lblRimHit;
+	private JLabel lblrdZoneHit;
+	private JLabel lblChokeOn;
+	private JLabel lblChokeOff;
+	private JPanel panelHeadColor;
+	private JPanel panelRimColor;
+	private JPanel panel3rdColor;
+	private JPanel panelChokeOnColor;
+	private JPanel panelChokeOffColor;
+	private JLabel lblUnknown;
+	private JPanel panelUnknownColor;
 
 	/**
 	 * Create the panel.
@@ -141,6 +153,18 @@ public class PanelMidiLog extends JPanel {
 				ColumnSpec.decode("2dlu"),
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		comboBoxBarsCount = new JComboBox();
@@ -161,6 +185,54 @@ public class PanelMidiLog extends JPanel {
 		lblBarsNumber = new JLabel("Bars number");
 		lblBarsNumber.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblBarsNumber, "3, 1");
+		
+		panelHeadColor = new JPanel();
+		panelHeadColor.setBackground(Constants.MD_HEAD_COLOR);
+		panel.add(panelHeadColor, "1, 3, fill, fill");
+		
+		lblHeadHit = new JLabel("Head hit");
+		lblHeadHit.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblHeadHit, "3, 3");
+		
+		panelRimColor = new JPanel();
+		panelRimColor.setBackground(Constants.MD_RIM_COLOR);
+		panel.add(panelRimColor, "1, 5, fill, fill");
+		
+		lblRimHit = new JLabel("Rim hit");
+		lblRimHit.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblRimHit, "3, 5");
+		
+		panel3rdColor = new JPanel();
+		panel3rdColor.setBackground(Constants.MD_3RD_COLOR);
+		panel.add(panel3rdColor, "1, 7, fill, fill");
+		
+		lblrdZoneHit = new JLabel("3rd zone hit");
+		lblrdZoneHit.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblrdZoneHit, "3, 7");
+		
+		panelChokeOnColor = new JPanel();
+		panelChokeOnColor.setBackground(Constants.MD_AFTERTOUCH_ON_COLOR);
+		panel.add(panelChokeOnColor, "1, 9, fill, fill");
+		
+		lblChokeOn = new JLabel("Choke on");
+		lblChokeOn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblChokeOn, "3, 9");
+		
+		panelChokeOffColor = new JPanel();
+		panelChokeOffColor.setBackground(Constants.MD_AFTERTOUCH_OFF_COLOR);
+		panel.add(panelChokeOffColor, "1, 11, fill, fill");
+		
+		lblChokeOff = new JLabel("Choke off");
+		lblChokeOff.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblChokeOff, "3, 11");
+		
+		panelUnknownColor = new JPanel();
+		panelUnknownColor.setBackground(Constants.MD_UNKNOWN_COLOR);
+		panel.add(panelUnknownColor, "1, 13, fill, fill");
+		
+		lblUnknown = new JLabel("Unknown");
+		lblUnknown.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblUnknown, "3, 13");
 		
 		lblNotesNumbers = new JLabel("notes numbers");
 		lblNotesNumbers.setFont(new Font("Tahoma", Font.PLAIN, 10));
