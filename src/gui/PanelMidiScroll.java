@@ -85,6 +85,6 @@ public class PanelMidiScroll extends JPanel {
 	public void showHit(int level, Color color) {
 		runsToPause = this.getPreferredSize().width/4;
 		g2offScreen.setColor(color);
-		g2offScreen.drawLine(this.getPreferredSize().width-1, 128 - level, this.getPreferredSize().width - 1, this.getPreferredSize().height);
+		g2offScreen.drawLine(this.getPreferredSize().width-1, 127 - level, this.getPreferredSize().width - 1, this.getPreferredSize().height);
 	}
 }

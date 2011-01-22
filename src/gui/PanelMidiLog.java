@@ -149,7 +149,7 @@ public class PanelMidiLog extends JPanel {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
 		        	barsCount = comboBoxBarsCount.getSelectedIndex()*4 + 16;
 		        	reSetPanelBars();
-		    		panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 128));
+		    		panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 132));
 	        		firePropertyChange("resize", false, true);
 		        }
 			}
@@ -242,7 +242,7 @@ public class PanelMidiLog extends JPanel {
 		panelScrollControls.add(lblAutoPause, "4, 6");
 		panelMidiScroll.autoPause = checkBoxAutoPause.isSelected();
 		
-		panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 128));
+		panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 132));
 		panelMidiScroll.reSetTimer((Integer)scrollBar.getValue());
 		prevTime = System.nanoTime();
 

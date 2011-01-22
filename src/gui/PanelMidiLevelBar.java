@@ -16,7 +16,7 @@ public class PanelMidiLevelBar extends JPanel {
 	private Color bgColor = Color.WHITE;
 	private Color fontColor = Color.BLACK;
 	private int barWidth = 16;
-	private int barHeight = 256;
+	private int barHeight = 254;
 	private Font levelFont = new Font("Tahoma", Font.PLAIN, 9);
 	
 	public int level = 0;
