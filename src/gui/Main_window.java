@@ -174,10 +174,10 @@ public class Main_window {
 		dialog_options = new Options(midi_handler);
 		upgradeDialog = new Upgrade(midi_handler, fileManager);
 		midi_handler.chainId = chainId;
-		timer_midi = new Timer();
-		midi_in_task = new TimerTask() {
-			public void run() {
-				midi_handler.get_midi();
+		midi_handler.addMidiEventListener(new MidiEventListener() {
+			@Override
+			public void midiEventOccurred(MidiEvent evt) {
+				midi_handler.getMidi();
 				if (midi_handler.sysexReceived) {
 					decodeSysex(midi_handler.bufferIn);
 					midi_handler.sysexReceived = false;
@@ -187,9 +187,7 @@ public class Main_window {
 					midi_handler.bufferIn = null;
 				}
 			}
-		};
-
-		timer_midi.scheduleAtFixedRate(midi_in_task, 1000, 1);
+		});		
 		
 		JMenuBar menuBar = new JMenuBar();
 		frmMegadrummanager.setJMenuBar(menuBar);
@@ -1019,6 +1017,9 @@ public class Main_window {
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
 			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
 				panelMidiLog.showNewHit(buffer[1], buffer[2], Color.BLUE);
+			}
+			if ((buffer[0]&0xf0) == 0xa0) {
+				panelMidiLog.showNewHit(buffer[1], 127,(buffer[2]>0)?Color.GRAY:Color.LIGHT_GRAY);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
 				panelMidiLog.showHiHatLevel(127 - buffer[2], Color.MAGENTA);

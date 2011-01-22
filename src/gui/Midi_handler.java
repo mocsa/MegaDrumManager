@@ -19,6 +19,7 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.SysexMessage;
+import javax.swing.event.EventListenerList;
 
 public class Midi_handler {
 
@@ -41,7 +42,24 @@ public class Midi_handler {
 	public boolean sysexReceived;
 	public int Block_size;
 
-	public Midi_handler () {
+	protected EventListenerList listenerList = new EventListenerList();
+	
+	public void addMidiEventListener(MidiEventListener listener) {
+		listenerList.add(MidiEventListener.class, listener);
+	}
+	public void removeMidiEventListener(MidiEventListener listener) {
+		listenerList.remove(MidiEventListener.class, listener);
+	}
+	protected void fireMidiEvent(MidiEvent evt) {
+		Object[] listeners = listenerList.getListenerList();
+		for (int i = 0; i < listeners.length; i = i+2) {
+			if (listeners[i] == MidiEventListener.class) {
+				((MidiEventListener) listeners[i+1]).midiEventOccurred(evt);
+			}
+		}
+	}
+
+	  public Midi_handler () {
 		midiin = null;
 		midiout = null;
 		midithru = null;
@@ -50,13 +68,14 @@ public class Midi_handler {
 		transmitter = null;
 		chainId = 0;
 		dump_receiver = new DumpReceiver();
+		dump_receiver.addMidiEventListener(new MidiEventListener() {
+			@Override
+			public void midiEventOccurred(MidiEvent evt) {
+				fireMidiEvent(new MidiEvent(this));
+			}
+		});
 		getMidiBlocked = false;
 		bufferIn = null;
-//		changedMisc = false;
-//		changedPedal = false;
-//		changedPad = 0;
-//		changed3rd = -1;
-//		changedCurve = -1;
 		sysexReceived = false;
 	}
 	
@@ -233,27 +252,17 @@ public class Midi_handler {
 			}
 		}
 	}	
-	
-	public void get_midi() {
-		if (!getMidiBlocked) {
-			int size = 0;
-			if (midiin != null) {
-				if (midiin.isOpen()) {
-					if (bufferIn == null) {
-						bufferIn = dump_receiver.getByteMessage();
-						
-						if (bufferIn != null) {
-							size = bufferIn.length;
-							if (( bufferIn[0] == Constants.SYSEX_START) && (bufferIn[size-1] == Constants.SYSEX_END)) {
-								sysexReceived = true;
-							} else {
-								// TO-DO
-								sendMidiShort(bufferIn);
-							}
-						}
-					}
-				}
-			}
+
+	public void getMidi() {
+		int size = 0;
+		bufferIn = dump_receiver.getByteMessage();
+		
+		size = bufferIn.length;
+		if (( bufferIn[0] == Constants.SYSEX_START) && (bufferIn[size-1] == Constants.SYSEX_END)) {
+			sysexReceived = true;
+		} else {
+			// TO-DO
+			sendMidiShort(bufferIn);
 		}
 	}
 
