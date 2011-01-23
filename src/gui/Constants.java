@@ -33,6 +33,7 @@ public interface Constants {
 	public static final byte MD_SYSEX_VERSION_SIZE = 13;
 	public static final byte MD_SYSEX_CURVE = (byte)0x06;
 	public static final byte MD_SYSEX_CURVE_SIZE = 24;
+	public static final byte MD_SYSEX_SAVE_SLOT1 = (byte)0x7f;
 	public static final String[] CURVES_LIST = { "Linear", "Log1", "Log2", "Log3", "Log4",
 		"Exp1", "Exp2", "S1", "S2", "Strong1", "Strong2", "Max",
 		"Custom1", "Custom2", "Custom3", "Custom4" };

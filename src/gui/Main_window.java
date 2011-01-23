@@ -231,6 +231,11 @@ public class Main_window {
 		mnLoad.add(mntmSaveToFile);
 		
 		JMenuItem mntmSaveToMd = new JMenuItem("Save to MD slot 1");
+		mntmSaveToMd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.requestSaveSlot1();
+			}
+		});
 		mnLoad.add(mntmSaveToMd);
 		
 		JMenu mnMiscSettings = new JMenu("Misc settings");
@@ -370,15 +375,18 @@ public class Main_window {
 		
 		
 		panel_main = new JPanel();
-//		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
-//				FormFactory.PREF_COLSPEC,
-//				FormFactory.DEFAULT_COLSPEC,
-//				FormFactory.PREF_COLSPEC,
-//				FormFactory.PREF_COLSPEC,
-//				ColumnSpec.decode("default:grow"),},
-//			new RowSpec[] {
-//				FormFactory.LINE_GAP_ROWSPEC,
-//				RowSpec.decode("pref:grow"),}));
+		FlowLayout flowLayout = (FlowLayout) panel_main.getLayout();
+		flowLayout.setAlignOnBaseline(true);
+		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.PREF_COLSPEC,
+				FormFactory.PREF_COLSPEC,
+				FormFactory.PREF_COLSPEC,
+				FormFactory.PREF_COLSPEC,
+				FormFactory.PREF_COLSPEC,
+				},
+			new RowSpec[] {
+				FormFactory.LINE_GAP_ROWSPEC,
+				RowSpec.decode("pref:grow"),}));
 		
 		controlsMisc = new ControlsMisc();
 		controlsMisc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -501,6 +509,15 @@ public class Main_window {
 			}
 		});
 		panel_top.add(btnSaveAll, "8, 1");
+		
+		JButton btnSaveToSlot = new JButton("Save To Slot1");
+		btnSaveToSlot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.requestSaveSlot1();
+			}
+		});
+		btnSaveToSlot.setMargin(new Insets(2, 4, 2, 4));
+		panel_top.add(btnSaveToSlot, "10, 1");
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -854,17 +871,25 @@ public class Main_window {
 		sendAllCurves();
 	}
 
-	private void load_all() {
-		configFull = fileManager.load_all(configFull, configOptions);
+	private void loadAllFromConfigFull() {
 		controlsMisc.loadFromConfigFull(configFull);
 		controlsPedal.loadFromConfigFull(configFull);
 		controlsPads.loadFromConfigFull(configFull);		
+		controlsCurves.loadFromConfigFull(configFull);				
+	}
+	private void load_all() {
+		fileManager.load_all(configFull, configOptions);
+		loadAllFromConfigFull();
 	}
 	
-	private void save_all() {
+	private void copyAllToConfigFull() {
 		controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
 		controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
 		controlsPads.copyToConfigFull(configFull, configOptions.chainId);
+		controlsCurves.copyToConfigFull(configFull, configOptions.chainId);		
+	}
+	private void save_all() {
+		copyAllToConfigFull();
 		fileManager.save_all(configFull, configOptions);
 	}
 	
@@ -901,10 +926,8 @@ public class Main_window {
 		controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
 		controlsPads.copyToConfigFull(configFull, configOptions.chainId);
 		if (!configOptions.lastFullPathConfig.equals("")) {
-			configFull = fileManager.loadAllSilent(configFull, configOptions);
-			controlsMisc.loadFromConfigFull(configFull);
-			controlsPedal.loadFromConfigFull(configFull);
-			controlsPads.loadFromConfigFull(configFull);		
+			fileManager.loadAllSilent(configFull, configOptions);
+			loadAllFromConfigFull();
 		}
 		frmMegadrummanager.setLocation(configOptions.mainWindowPosition);
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {

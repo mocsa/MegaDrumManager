@@ -66,6 +66,36 @@ public class FileManager {
 		prop = new Properties();
 		//file = new File();
 	}
+
+	public void saveAll(ConfigFull config, File file) {
+		if (file.exists()) {
+			file.delete();
+		}
+		try {
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(config.sysex_misc);
+			fos.write(config.sysex_pedal);
+			for (int i=0;i<Constants.PADS_COUNT;i++) {
+				fos.write(config.sysex_pads[i]);
+				if (i>0) {
+					if((i&0x01) == 0) {
+						fos.write(config.sysex_3rds[(i-1)/2]);
+					}
+				}
+				fos.write(config.altNote_linked[i]?1:0);
+				fos.write(config.pressrollNote_linked[i]?1:0);
+			}
+			for (int i=0;i<Constants.CURVES_COUNT;i++) {
+				fos.write(config.sysex_curves[i]);
+			}
+			
+			fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public void save_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
@@ -83,21 +113,39 @@ public class FileManager {
 			if (file.exists()) {
 				file.delete();
 			}
-			try {
-				file.createNewFile();
-				FileOutputStream fos = new FileOutputStream(file);
-				ObjectOutputStream oos = new ObjectOutputStream(fos);
-				oos.writeObject(config);
-				oos.flush();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			saveAll(config, file);
 		}
 	}
 
-	public ConfigFull load_all(ConfigFull configOld, ConfigOptions options) {
-		ConfigFull config = new ConfigFull();
+	public void loadAll(ConfigFull config, File file) {
+		byte b;
+		try {
+			FileInputStream fis = new FileInputStream(file);
+			fis.read(config.sysex_misc);
+			fis.read(config.sysex_pedal);
+			for (int i=0;i<Constants.PADS_COUNT;i++) {
+				fis.read(config.sysex_pads[i]);
+				if (i>0) {
+					if((i&0x01) == 0) {
+						fis.read(config.sysex_3rds[(i-1)/2]);
+					}
+				}
+				b = (byte)fis.read();
+				config.altNote_linked[i] = (b>0)?true:false;
+				b = (byte)fis.read();
+				config.pressrollNote_linked[i] = (b>0)?true:false;
+			}
+			for (int i=0;i<Constants.CURVES_COUNT;i++) {
+				fis.read(config.sysex_curves[i]);
+			}			
+			fis.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	
+	
+	public void load_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
 		if (!options.lastFullPathConfig.equals("")) {
 			fileChooser.setCurrentDirectory(new File(options.lastFullPathConfig));
@@ -108,23 +156,8 @@ public class FileManager {
 			file = fileChooser.getSelectedFile();
 			options.lastFullPathConfig = file.getAbsolutePath();
 			if (file.exists()) {
-				try {
-					FileInputStream fis = new FileInputStream(file);
-					ObjectInputStream ois = new ObjectInputStream(fis);
-					try {
-						config = (ConfigFull)ois.readObject();
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}				
+				loadAll(config, file);
 			}
-			return config;
-		} else {
-			return configOld;			
 		}
 	}
 	
@@ -143,32 +176,11 @@ public class FileManager {
 		return file;
 	}
 
-	public ConfigFull loadAllSilent(ConfigFull configOld, ConfigOptions options) {
-		ConfigFull config = new ConfigFull();
+	public void loadAllSilent(ConfigFull config, ConfigOptions options) {
 		file = new File(options.lastFullPathConfig);
 		options.lastFullPathConfig = file.getAbsolutePath();
 		if (file.exists()) {
-			try {
-				FileInputStream fis = new FileInputStream(file);
-				ObjectInputStream ois = new ObjectInputStream(fis);
-				try {
-					config = (ConfigFull)ois.readObject();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.out.printf("Error reading config from file\n");
-					return configOld;
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Error reading file\n");
-				e.printStackTrace();
-				file.delete();
-				return configOld;
-			}				
-			return config;
-		} else {
-			return configOld;
+			loadAll(config, file);
 		}
 	}
 
