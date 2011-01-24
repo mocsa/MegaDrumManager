@@ -663,6 +663,15 @@ public class Main_window {
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
 		
 		controlsCurves = new ControlsCurves();
+		controlsCurves.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if ((configOptions != null) && configOptions.interactive) {
+					if (arg0.getPropertyName().equals("valueChanged")) {
+						sendCurve(controlsCurves.getCurvePointer());
+					}
+				}
+			}
+		});
 		controlsCurves.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		controlsCurves.getButton_get().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

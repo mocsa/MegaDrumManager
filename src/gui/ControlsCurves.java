@@ -27,6 +27,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class ControlsCurves extends JPanel {
+	private Boolean changeEventsAllowed = false;
+	
 	private CurvesPaint paintPanel;
 	//private int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
 	private ChangeListener spinnerChangeListener;
@@ -228,6 +230,7 @@ public class ControlsCurves extends JPanel {
 				configCurves[curvePointer].yValues[id] = ((Integer)((CSpinner)arg0.getSource()).getValue());
 				//paintPanel.yValues = yValues;
 				paintPanel.repaint();
+				valueChanged();
 			}
 		};
 		
@@ -239,7 +242,14 @@ public class ControlsCurves extends JPanel {
 			panelControls.add(spinners[i], ((Integer)(i+1)).toString() + ", 1");
 		}
 		
+		changeEventsAllowed = true;
 	}    
+
+	private void valueChanged() {
+		if (changeEventsAllowed) {
+			firePropertyChange("valueChanged", false, true);
+		}
+	}
 
 	private void updateControls() {
     	paintPanel.yValues = configCurves[curvePointer].yValues;
@@ -262,9 +272,11 @@ public class ControlsCurves extends JPanel {
 	}
 	
 	public void setConfig(byte [] buffer,int curveId) {
+		changeEventsAllowed = false;
 		Utils.copySysexToConfigCurve(buffer, configCurves[curveId]);
 		updateYvalues();
 		paintPanel.repaint();
+		changeEventsAllowed = true;
 	}
 
 	public void copyToConfigFull (ConfigFull config, int chain_id) {
@@ -275,11 +287,13 @@ public class ControlsCurves extends JPanel {
 	}
 	
 	public void loadFromConfigFull (ConfigFull config) {
+		changeEventsAllowed = false;
 		int i;
 		for (i = 0; i<Constants.CURVES_COUNT; i++) {
 			Utils.copySysexToConfigCurve(config.sysex_curves[i], configCurves[i]);
 		}
 		updateControls();
+		changeEventsAllowed = true;
 	}
 	
 	public int getCurvePointer() {
