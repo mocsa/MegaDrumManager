@@ -967,6 +967,7 @@ public class Main_window {
 			framesDetached[i].setLocation(configOptions.framesPositions[i]);
 			viewMenus[i].setConfigOptions(configOptions);
 		}
+		tglbtnLiveUpdates.setSelected(configOptions.interactive);
 		
 	}
 	
