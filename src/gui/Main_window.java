@@ -413,6 +413,15 @@ public class Main_window {
 		});
 		
 		controlsPedal = new ControlsPedal();
+		controlsPedal.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if ((configOptions != null) && configOptions.interactive) {
+					if (arg0.getPropertyName().equals("valueChanged")) {
+						sendPedal();
+					}
+				}
+			}
+		});
 		controlsPedal.setBorder(new TitledBorder(null, "HiHat Pedal", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_main.add(controlsPedal, "2, 2, default, top");
 		controlsPedal.getBtnGet().addActionListener(new ActionListener() {

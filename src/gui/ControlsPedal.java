@@ -23,8 +23,11 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.event.ChangeEvent;
 import java.awt.Insets;
+import java.util.ArrayList;
 
 public class ControlsPedal extends JPanel {
+	private Boolean changeEventsAllowed = false;
+
 	private JButton btnGet;
 	private JButton btnSend;
 	private JComboBox comboBox_type;
@@ -58,7 +61,6 @@ public class ControlsPedal extends JPanel {
 	private NoteSpinControl noteSpinControl_bellClosed;
 	private NoteSpinControl noteSpinControl_chick;
 	private NoteSpinControl noteSpinControl_splash;
-	
 	
 	
 	private ConfigPedal configPedal;
@@ -123,7 +125,10 @@ public class ControlsPedal extends JPanel {
 		comboBox_type = new JComboBox();
 		comboBox_type.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-			configPedal.type = (comboBox_type.getSelectedIndex() != 0);
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					configPedal.type = (comboBox_type.getSelectedIndex() != 0);
+					valueChanged();
+				}
 			}
 		});
 		comboBox_type.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -139,7 +144,10 @@ public class ControlsPedal extends JPanel {
 		comboBox_curve.setMaximumRowCount(16);
 		comboBox_curve.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				configPedal.curve = (short)comboBox_curve.getSelectedIndex();
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					configPedal.curve = (short)comboBox_curve.getSelectedIndex();
+					valueChanged();
+				}
 			}
 		});
 		comboBox_curve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -156,7 +164,10 @@ public class ControlsPedal extends JPanel {
 		comboBox_input.setMaximumRowCount(20);
 		comboBox_input.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
+					valueChanged();
+				}
 			}
 		});
 		updateInputCountsControls(Constants.PADS_COUNT);
@@ -171,6 +182,7 @@ public class ControlsPedal extends JPanel {
 		checkBox_altInput.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				configPedal.altIn = checkBox_altInput.isSelected();
+				valueChanged();
 			}
 		});
 		checkBox_altInput.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -184,6 +196,7 @@ public class ControlsPedal extends JPanel {
 		checkBox_reverseLevels.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				configPedal.reverseLevels = checkBox_reverseLevels.isSelected();
+				valueChanged();
 			}
 		});
 		checkBox_reverseLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -197,6 +210,7 @@ public class ControlsPedal extends JPanel {
 		checkBox_softChicks.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				configPedal.softChicks = checkBox_softChicks.isSelected();
+				valueChanged();
 			}
 		});
 		checkBox_softChicks.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -210,6 +224,7 @@ public class ControlsPedal extends JPanel {
 		checkBox_autoLevels.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				configPedal.autoLevels = checkBox_autoLevels.isSelected();
+				valueChanged();
 			}
 		});
 		checkBox_autoLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -222,7 +237,8 @@ public class ControlsPedal extends JPanel {
 		spin127Control_chickDelay = new Spin127Control();
 		spin127Control_chickDelay.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configPedal.chickDelay = ((Short)spin127Control_chickDelay.getSpinner().getValue()).shortValue();
+				configPedal.chickDelay = ((Integer)spin127Control_chickDelay.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_misc.add(spin127Control_chickDelay, "3, 8, fill, fill");
@@ -235,6 +251,7 @@ public class ControlsPedal extends JPanel {
 		spin127Control_cc.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.cc = ((Integer)spin127Control_cc.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_misc.add(spin127Control_cc, "3, 9, fill, fill");
@@ -263,6 +280,7 @@ public class ControlsPedal extends JPanel {
 		spin1023Control_lowLevel.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.lowLevel = ((Integer)spin1023Control_lowLevel.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_levels.add(spin1023Control_lowLevel, "3, 1, fill, fill");
@@ -275,6 +293,7 @@ public class ControlsPedal extends JPanel {
 		spin1023Control_highLevel.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.highLevel = ((Integer)spin1023Control_highLevel.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_levels.add(spin1023Control_highLevel, "3, 2, fill, fill");
@@ -287,6 +306,7 @@ public class ControlsPedal extends JPanel {
 		spin127Control_openLevel.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.openLevel = ((Integer)spin127Control_openLevel.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_levels.add(spin127Control_openLevel, "3, 3, fill, fill");
@@ -299,6 +319,7 @@ public class ControlsPedal extends JPanel {
 		spin127Control_semiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.semiOpenLevel = ((Integer)spin127Control_semiOpen.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_levels.add(spin127Control_semiOpen, "3, 4, fill, fill");
@@ -311,6 +332,7 @@ public class ControlsPedal extends JPanel {
 		spin127Control_halfOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.halfOpenLevel = ((Integer)spin127Control_halfOpen.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_levels.add(spin127Control_halfOpen, "3, 5, fill, fill");
@@ -323,6 +345,7 @@ public class ControlsPedal extends JPanel {
 		spin127Control_closed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.closedLevel = ((Integer)spin127Control_closed.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_levels.add(spin127Control_closed, "3, 6, fill, fill");
@@ -335,6 +358,7 @@ public class ControlsPedal extends JPanel {
 		spin127Control_shortThres.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.shortThres = ((Integer)spin127Control_shortThres.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_levels.add(spin127Control_shortThres, "3, 7, fill, fill");
@@ -347,6 +371,7 @@ public class ControlsPedal extends JPanel {
 		spin127Control_longThres.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.longThres = ((Integer)spin127Control_longThres.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_levels.add(spin127Control_longThres, "3, 8, fill, fill");
@@ -381,6 +406,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bowSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.bowSemiOpenNote = ((Short)noteSpinControl_bowSemiOpen.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_bowSemiOpen, "3, 1, left, center");
@@ -393,6 +419,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_edgeSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.edgeSemiOpenNote = ((Short)noteSpinControl_edgeSemiOpen.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_edgeSemiOpen, "3, 2, left, center");
@@ -405,6 +432,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bellSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.bellSemiOpenNote = ((Short)noteSpinControl_bellSemiOpen.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_bellSemiOpen, "3, 3, left, center");
@@ -417,6 +445,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bowHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.bowHalfOpenNote = ((Short)noteSpinControl_bowHalfOpen.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_bowHalfOpen, "3, 4, left, center");
@@ -429,6 +458,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_edgeHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.edgeHalfOpenNote = ((Short)noteSpinControl_edgeHalfOpen.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_edgeHalfOpen, "3, 5, left, center");
@@ -441,6 +471,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bellHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.bellHalfOpenNote = ((Short)noteSpinControl_bellHalfOpen.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_bellHalfOpen, "3, 6, left, center");
@@ -453,6 +484,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bowSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.bowSemiClosedNote = ((Short)noteSpinControl_bowSemiClosed.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_bowSemiClosed, "3, 7, left, center");
@@ -465,6 +497,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_edgeSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.edgeSemiClosedNote = ((Short)noteSpinControl_edgeSemiClosed.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_edgeSemiClosed, "3, 8, left, center");
@@ -477,6 +510,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bellSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.bellSemiClosedNote = ((Short)noteSpinControl_bellSemiClosed.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_bellSemiClosed, "3, 9, left, center");
@@ -489,6 +523,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bowClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.bowClosedNote = ((Short)noteSpinControl_bowClosed.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_bowClosed, "3, 10, left, center");
@@ -501,6 +536,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_edgeClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.edgeClosedNote = ((Short)noteSpinControl_edgeClosed.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_edgeClosed, "3, 11, left, center");
@@ -513,6 +549,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bellClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.bellClosedNote = ((Short)noteSpinControl_bellClosed.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_bellClosed, "3, 12, left, center");
@@ -525,6 +562,7 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_chick.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.chickNote = ((Short)noteSpinControl_chick.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_chick, "3, 13, left, center");
@@ -537,11 +575,20 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_splash.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.splashNote = ((Short)noteSpinControl_splash.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_notes.add(noteSpinControl_splash, "3, 14, left, center");
+		changeEventsAllowed = true;
 
 	}
+	
+	private void valueChanged() {
+		if (changeEventsAllowed) {
+			firePropertyChange("valueChanged", false, true);
+		}
+	}
+
 	private void updateControls() {
 		comboBox_type.setSelectedIndex(configPedal.type?1:0);
 		comboBox_curve.setSelectedIndex(configPedal.curve);
@@ -577,8 +624,10 @@ public class ControlsPedal extends JPanel {
 	}
 	
 	public void setConfig(byte [] sysex) {
+		changeEventsAllowed = false;
 		Utils.copySysexToConfigPedal(sysex, configPedal);
 		updateControls();
+		changeEventsAllowed = true;
 	}
 	
 	public ConfigPedal getConfig() {
@@ -597,8 +646,10 @@ public class ControlsPedal extends JPanel {
 	}
 	
 	public void loadFromConfigFull (ConfigFull config) {
+		changeEventsAllowed = false;
 		Utils.copySysexToConfigPedal(config.sysex_pedal, configPedal);
 		updateControls();
+		changeEventsAllowed = true;
 	}
 	
 	public void updateInputCountsControls(int count) {

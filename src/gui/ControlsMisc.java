@@ -248,7 +248,9 @@ public class ControlsMisc extends JPanel {
 	}
 	
 	public void loadFromConfigFull (ConfigFull config) {
+		changeEventsAllowed = false;
 		Utils.copySysexToConfigMisc(config.sysex_misc, configMisc);
 		updateControls();
+		changeEventsAllowed = true;
 	}
 }
