@@ -390,6 +390,15 @@ public class Main_window {
 				RowSpec.decode("pref:grow"),}));
 		
 		controlsMisc = new ControlsMisc();
+		controlsMisc.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if ((configOptions != null) && configOptions.interactive) {
+					if (arg0.getPropertyName().equals("valueChanged")) {
+						sendMisc();
+					}
+				}
+			}
+		});
 		controlsMisc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_main.add(controlsMisc, "1, 2, default, top");
 		controlsMisc.getBtnGet().addActionListener(new ActionListener() {

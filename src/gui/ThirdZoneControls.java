@@ -140,9 +140,7 @@ public class ThirdZoneControls extends JPanel {
 			if (control.getClass().equals(JSlider.class)) {
 				((JSlider) control).addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
-						if (changeEventsAllowed) {
-							valueChanged();
-						}
+						valueChanged();
 					}
 				});
 				
@@ -150,9 +148,7 @@ public class ThirdZoneControls extends JPanel {
 			if (control.getClass().equals(JSpinner.class)) {
 				((JSpinner) control).addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
-						if (changeEventsAllowed) {
-							valueChanged();
-						}
+						valueChanged();
 					}
 				});
 				
@@ -163,8 +159,10 @@ public class ThirdZoneControls extends JPanel {
 	}
 
 	private void valueChanged() {
-		updateConfig();
-		firePropertyChange("valueChanged", false, true);
+		if (changeEventsAllowed) {
+			updateConfig();
+			firePropertyChange("valueChanged", false, true);
+		}
 	}
 
 	public void updateControls() {

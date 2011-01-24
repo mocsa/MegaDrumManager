@@ -470,10 +470,8 @@ public class ControlsPadCommon extends JPanel {
 			if (control.getClass().equals(JComboBox.class)) {
 				((JComboBox) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
-						if (changeEventsAllowed) {
-							if (arg0.getStateChange() == ItemEvent.SELECTED) {
-								valueChanged();
-							}
+						if (arg0.getStateChange() == ItemEvent.SELECTED) {
+							valueChanged();
 						}
 					}
 				});
@@ -482,9 +480,7 @@ public class ControlsPadCommon extends JPanel {
 			if (control.getClass().equals(JCheckBox.class)) {
 				((JCheckBox) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
-						if (changeEventsAllowed) {
-							valueChanged();
-						}
+						valueChanged();
 					}
 				});
 				
@@ -492,9 +488,7 @@ public class ControlsPadCommon extends JPanel {
 			if (control.getClass().equals(JSpinner.class)) {
 				((JSpinner) control).addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
-						if (changeEventsAllowed) {
-							valueChanged();
-						}
+						valueChanged();
 					}
 				});
 				
@@ -504,8 +498,10 @@ public class ControlsPadCommon extends JPanel {
 	}
 	
 	private void valueChanged() {
-		updateConfig();
-		firePropertyChange("valueChanged", false, true);
+		if (changeEventsAllowed) {
+			updateConfig();
+			firePropertyChange("valueChanged", false, true);
+		}
 	}
 
 	public void updateControls() {

@@ -16,6 +16,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.Insets;
 
 public class ControlsMisc extends JPanel {
@@ -25,6 +27,8 @@ public class ControlsMisc extends JPanel {
 	 */
 	private static final long serialVersionUID = 8689919340566654881L;
 
+	private Boolean changeEventsAllowed = false;
+	
 	private ConfigMisc configMisc;
 	private JSpinner spinner_noteoff;
 	private JSpinner spinner_pressroll;
@@ -97,6 +101,7 @@ public class ControlsMisc extends JPanel {
 					configMisc.pressroll = configMisc.note_off; 
 				}
 				spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (configMisc.pressroll*10)), new Short((short) 0), new Short((short) (configMisc.note_off*10)), new Short((short) 10)));
+				valueChanged();
 			}
 		});
 		spinner_noteoff.setModel(new SpinnerNumberModel(new Short((short) 200), new Short((short) 100), new Short((short) 2000), new Short((short) 10)));
@@ -111,6 +116,7 @@ public class ControlsMisc extends JPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_pressroll.getValue()).shortValue();
 				configMisc.pressroll = (short)(value/10);
+				valueChanged();
 			}
 		});
 		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 200), new Short((short) 10)));
@@ -125,6 +131,7 @@ public class ControlsMisc extends JPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_latency.getValue()).shortValue();
 				configMisc.latency = (short)value;
+				valueChanged();
 			}
 		});
 		spinner_latency.setModel(new SpinnerNumberModel(new Short((short) 40), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
@@ -135,9 +142,10 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblBigVuMeter, "1, 4");
 		
 		checkBox_bigVuMeter = new JCheckBox("");
-		checkBox_bigVuMeter.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
+		checkBox_bigVuMeter.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
 				configMisc.big_vu_meter = checkBox_bigVuMeter.isSelected();
+				valueChanged();
 			}
 		});
 		panel.add(checkBox_bigVuMeter, "3, 4");
@@ -147,9 +155,10 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblQuickAccess, "1, 5");
 		
 		checkBox_quickAccess = new JCheckBox("");
-		checkBox_quickAccess.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
+		checkBox_quickAccess.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
 				configMisc.quick_access = checkBox_quickAccess.isSelected();
+				valueChanged();
 			}
 		});
 		panel.add(checkBox_quickAccess, "3, 5");
@@ -159,9 +168,10 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblAltFalsetrsuppression, "1, 6");
 		
 		checkBox_altFalseTrSupp = new JCheckBox("");
-		checkBox_altFalseTrSupp.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
+		checkBox_altFalseTrSupp.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
 				configMisc.alt_false_tr_supp = checkBox_altFalseTrSupp.isSelected();
+				valueChanged();
 			}
 		});
 		panel.add(checkBox_altFalseTrSupp, "3, 6");
@@ -171,9 +181,11 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblInputsPriority, "1, 7");
 		
 		checkBox_inputsPriority = new JCheckBox("");
-		checkBox_inputsPriority.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				configMisc.inputs_priority = checkBox_inputsPriority.isSelected();			}
+		checkBox_inputsPriority.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				configMisc.inputs_priority = checkBox_inputsPriority.isSelected();
+				valueChanged();
+			}
 		});
 		panel.add(checkBox_inputsPriority, "3, 7");
 		
@@ -182,12 +194,21 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblAllGainsLow, "1, 8");
 		
 		checkBox_allGainsLow = new JCheckBox("");
-		checkBox_allGainsLow.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent arg0) {
-				configMisc.all_gains_low = checkBox_allGainsLow.isSelected();			}
+		checkBox_allGainsLow.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				configMisc.all_gains_low = checkBox_allGainsLow.isSelected();
+				valueChanged();
+			}
 		});
 		panel.add(checkBox_allGainsLow, "3, 8");
+		changeEventsAllowed = true;
 
+	}
+
+	private void valueChanged() {
+		if (changeEventsAllowed) {
+			firePropertyChange("valueChanged", false, true);
+		}
 	}
 	
 	private void updateControls() {
@@ -205,8 +226,10 @@ public class ControlsMisc extends JPanel {
 	}
 	
 	public void setConfig(byte [] sysex) {
+		changeEventsAllowed = false;
 		Utils.copySysexToConfigMisc(sysex, configMisc);
 		updateControls();
+		changeEventsAllowed = true;
 	}
 	
 	public ConfigMisc getConfig() {
