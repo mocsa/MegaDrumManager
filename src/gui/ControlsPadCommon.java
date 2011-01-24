@@ -472,7 +472,6 @@ public class ControlsPadCommon extends JPanel {
 					public void itemStateChanged(ItemEvent arg0) {
 						if (changeEventsAllowed) {
 							if (arg0.getStateChange() == ItemEvent.SELECTED) {
-								System.out.printf("ComboBox value changed\n");
 								valueChanged();
 							}
 						}
@@ -484,7 +483,6 @@ public class ControlsPadCommon extends JPanel {
 				((JCheckBox) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
 						if (changeEventsAllowed) {
-							System.out.printf("CheckBox value changed\n");
 							valueChanged();
 						}
 					}
@@ -495,7 +493,6 @@ public class ControlsPadCommon extends JPanel {
 				((JSpinner) control).addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
 						if (changeEventsAllowed) {
-							System.out.printf("Spinner value changed\n");
 							valueChanged();
 						}
 					}

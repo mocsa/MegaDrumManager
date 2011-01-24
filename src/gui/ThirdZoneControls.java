@@ -12,10 +12,14 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.Font;
+import java.util.ArrayList;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
 public class ThirdZoneControls extends JPanel {
+	private Boolean changeEventsAllowed = false;
+
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
 	private NoteSpinControl noteSpinControl_pressrollNote;
@@ -28,10 +32,13 @@ public class ThirdZoneControls extends JPanel {
 	private boolean inUpdate = false;
 	private boolean allInitialized = false;
 
+	private ArrayList<Object> controls; 
+
 	/**
 	 * Create the panel.
 	 */
 	public ThirdZoneControls() {
+		controls = new ArrayList<Object>();
 		config3rd = new Config3rd();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:42dlu"),
@@ -52,6 +59,7 @@ public class ThirdZoneControls extends JPanel {
 		add(lblNote, "1, 1, right, default");
 		
 		noteSpinControl_note = new NoteSpinControl();
+		controls.add(noteSpinControl_note.getSpinner());
 		add(noteSpinControl_note, "3, 1, fill, fill");
 		
 		JLabel lblMidpoint = new JLabel("MidPoint");
@@ -59,6 +67,7 @@ public class ThirdZoneControls extends JPanel {
 		add(lblMidpoint, "5, 1, right, default");
 		
 		slider_midPoint = new JSlider();
+		controls.add(slider_midPoint);
 		slider_midPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				config3rd.threshold = (short)((config3rd.threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4));
@@ -78,6 +87,7 @@ public class ThirdZoneControls extends JPanel {
 		add(lblAltNote, "1, 2, right, default");
 		
 		noteSpinControl_altNote = new NoteSpinControl();
+		controls.add(noteSpinControl_altNote.getSpinner());
 		add(noteSpinControl_altNote, "3, 2, fill, fill");
 		
 		JLabel lblMidpointWidth = new JLabel("MidPoint Width");
@@ -85,6 +95,7 @@ public class ThirdZoneControls extends JPanel {
 		add(lblMidpointWidth, "5, 2, right, default");
 		
 		spinner_midPointWidth = new JSpinner();
+		controls.add(spinner_midPointWidth);
 		spinner_midPointWidth.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				config3rd.threshold = (short)((config3rd.threshold&0xf0)|((Short)spinner_midPointWidth.getValue()&0x0f));
@@ -99,6 +110,7 @@ public class ThirdZoneControls extends JPanel {
 		add(lblPressrollNote, "1, 3, right, default");
 		
 		noteSpinControl_pressrollNote = new NoteSpinControl();
+		controls.add(noteSpinControl_pressrollNote.getSpinner());
 		add(noteSpinControl_pressrollNote, "3, 3, fill, fill");
 		
 		JLabel lblThreshold = new JLabel("Threshold");
@@ -106,6 +118,7 @@ public class ThirdZoneControls extends JPanel {
 		add(lblThreshold, "5, 3, right, default");
 		
 		spinner_threshold = new JSpinner();
+		controls.add(spinner_threshold);
 		spinner_threshold.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				config3rd.threshold = (short)(Short)(spinner_threshold.getValue());
@@ -120,11 +133,40 @@ public class ThirdZoneControls extends JPanel {
 		add(lblDampenedNote, "1, 4");
 		
 		noteSpinControl_dampenedNote = new NoteSpinControl();
+		controls.add(noteSpinControl_dampenedNote.getSpinner());
 		add(noteSpinControl_dampenedNote, "3, 4, fill, fill");
+
+		for (Object control : controls) {
+			if (control.getClass().equals(JSlider.class)) {
+				((JSlider) control).addChangeListener(new ChangeListener() {
+					public void stateChanged(ChangeEvent arg0) {
+						if (changeEventsAllowed) {
+							valueChanged();
+						}
+					}
+				});
+				
+			}
+			if (control.getClass().equals(JSpinner.class)) {
+				((JSpinner) control).addChangeListener(new ChangeListener() {
+					public void stateChanged(ChangeEvent arg0) {
+						if (changeEventsAllowed) {
+							valueChanged();
+						}
+					}
+				});
+				
+			}
+		}
 		
 		allInitialized = true;
 	}
-	
+
+	private void valueChanged() {
+		updateConfig();
+		firePropertyChange("valueChanged", false, true);
+	}
+
 	public void updateControls() {
 		if (allInitialized) {
 			if (!inUpdate) {
@@ -156,8 +198,10 @@ public class ThirdZoneControls extends JPanel {
 	}
 	
 	public void setConfig(Config3rd config) {
+		changeEventsAllowed = false;
 		config3rd = config;
 		updateControls();
+		changeEventsAllowed = true;
 	}
 	
 }

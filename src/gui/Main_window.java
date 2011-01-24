@@ -427,9 +427,13 @@ public class Main_window {
 					if (arg0.getPropertyName().equals("rimValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer() + 1);
 					}
+					if (arg0.getPropertyName().equals("thirdZoneValueChanged")) {
+						sendThirdZone(controlsPads.getPadPointer());
+					}
 				}
 			}
 		});
+		
 //		controlsPads.addPropertyChangeListener("resize", new PropertyChangeListener() {
 //			public void propertyChange(PropertyChangeEvent arg0) {
 //				resizeMainWindow();
@@ -769,16 +773,21 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);		
 	}
 	
-	private void sendPad(int pad_id) {
+	private void sendThirdZone(int pad_id) {
 		byte [] sysex3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
+		
+		pad_id = (pad_id - 1)/2;
+		Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd(pad_id), sysex3rd, chainId, pad_id);
+		midi_handler.sendSysex(sysex3rd);
+		delayMs(configOptions.sysexDelay);
+	}
+
+	private void sendPad(int pad_id) {
 
 		sendPadOneZone(pad_id);
 		if (pad_id > 0 ) {
 			sendPadOneZone(pad_id + 1);
-			pad_id = (pad_id - 1)/2;
-			Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd(pad_id), sysex3rd, chainId, pad_id);
-			midi_handler.sendSysex(sysex3rd);
-			delayMs(configOptions.sysexDelay);
+			sendThirdZone(pad_id);
 		}
 		
 	}

@@ -347,6 +347,13 @@ public class ControlsPads extends JPanel {
 		panel_rim.setBorder(new TitledBorder(null, "Rim/Edge", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		panel_3rd_zone = new ThirdZoneControls();
+		panel_3rd_zone.addPropertyChangeListener( new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if (arg0.getPropertyName().equals("valueChanged")) {
+					firePropertyChange("thirdZoneValueChanged", false, true);
+				}
+			}
+		});
 		panel_3rd_zone.setVisible(false);
 		add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
