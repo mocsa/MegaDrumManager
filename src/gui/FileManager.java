@@ -164,14 +164,14 @@ public class FileManager {
 	public File selectFirmwareFile(ConfigOptions options) {
 		int returnVal;
 		file = null;
-		if (!options.lastFullPathConfig.equals("")) {
-			fileChooser.setCurrentDirectory(new File(options.lastFullPathConfig));
+		if (!options.lastFullPathFirmware.equals("")) {
+			fileChooser.setCurrentDirectory(new File(options.lastFullPathFirmware));
 		}
 		fileChooser.setFileFilter(binFileFilter);
 		returnVal = fileChooser.showOpenDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			file = fileChooser.getSelectedFile();
-			options.lastFullPathConfig = file.getAbsolutePath();
+			options.lastFullPathFirmware = file.getAbsolutePath();
 		}
 		return file;
 	}
@@ -195,8 +195,10 @@ public class FileManager {
 					config.useThruPort = Boolean.parseBoolean(prop.getProperty("useThruPort"));
 					config.autoOpenPorts = Boolean.parseBoolean(prop.getProperty("autoOpenPorts"));
 					config.saveOnExit = Boolean.parseBoolean(prop.getProperty("saveOnExit"));
+					config.interactive = Boolean.parseBoolean(prop.getProperty("interactive"));
 					config.lastDir = prop.getProperty("lastDir");
 					config.lastFullPathConfig = prop.getProperty("lastFullPathConfig");
+					config.lastFullPathFirmware = prop.getProperty("lastFullPathFirmware");
 					config.MidiInName = prop.getProperty("MidiInName");
 					config.MidiOutName = prop.getProperty("MidiOutName");
 					config.MidiThruName = prop.getProperty("MidiThruName");
@@ -233,8 +235,10 @@ public class FileManager {
 		prop.setProperty("useThruPort", ((Boolean)config.useThruPort).toString());
 		prop.setProperty("autoOpenPorts", ((Boolean)config.autoOpenPorts).toString());
 		prop.setProperty("saveOnExit", ((Boolean)config.saveOnExit).toString());
+		prop.setProperty("interactive", ((Boolean)config.interactive).toString());
 		prop.setProperty("lastDir", config.lastDir);
 		prop.setProperty("lastFullPathConfig", config.lastFullPathConfig);
+		prop.setProperty("lastFullPathFirmware", config.lastFullPathFirmware);
 		prop.setProperty("MidiInName", config.MidiInName);
 		prop.setProperty("MidiOutName", config.MidiOutName);
 		prop.setProperty("MidiThruName", config.MidiThruName);

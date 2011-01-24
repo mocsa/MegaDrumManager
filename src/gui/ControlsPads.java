@@ -23,6 +23,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Insets;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class ControlsPads extends JPanel {
 	private JButton btnGet;
@@ -243,9 +245,9 @@ public class ControlsPads extends JPanel {
 			}
 		};
 		panel_head = new ControlsPadCommon(head_pad);
-		panel_head.getComboBox_name().addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+		panel_head.addPropertyChangeListener( new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if (arg0.getPropertyName().equals("nameChanged")) {
 					if (!switchingPad) {
 						int index;
 						index = comboBox_padSelection.getSelectedIndex();
@@ -255,6 +257,17 @@ public class ControlsPads extends JPanel {
 						updatePadsSelection(padPointer);
 						comboBox_padSelection.setSelectedIndex(index);
 					}
+				}
+				if (arg0.getPropertyName().equals("typeChanged")) {
+		        	if ((panel_head.getComboBox_type().getSelectedIndex() > 0) != panel_3rd_zone_prevVisible) {
+		        		panel_3rd_zone_prevVisible = (panel_head.getComboBox_type().getSelectedIndex() > 0);
+		        		panel_3rd_zone.setVisible(panel_3rd_zone_prevVisible);
+		        		panel_rim.getComboBox_type().setEnabled(panel_3rd_zone_prevVisible);
+		        		firePropertyChange("resize", false, true);
+		        	}					
+				}
+				if (arg0.getPropertyName().equals("valueChanged")) {
+					firePropertyChange("headValueChanged", false, true);
 				}
 			}
 		});
@@ -280,25 +293,13 @@ public class ControlsPads extends JPanel {
 		panel_head.getPadButton_minScan().addActionListener(padButtonActionListener);
 		panel_head.getPadButton_type().addActionListener(padButtonActionListener);
 
-		panel_head.getComboBox_type().addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-		        	if ((panel_head.getComboBox_type().getSelectedIndex() > 0) != panel_3rd_zone_prevVisible) {
-		        		panel_3rd_zone_prevVisible = (panel_head.getComboBox_type().getSelectedIndex() > 0);
-		        		panel_3rd_zone.setVisible(panel_3rd_zone_prevVisible);
-		        		panel_rim.getComboBox_type().setEnabled(panel_3rd_zone_prevVisible);
-		        		firePropertyChange("resize", false, true);
-		        	}
-		        }
-			}
-		});
 		panel_head_rim.add(panel_head);
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		panel_rim = new ControlsPadCommon(rim_pad);
-		panel_rim.getComboBox_name().addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+		panel_rim.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if (arg0.getPropertyName().equals("nameChanged")) {
 					if (!switchingPad) {
 						if (padPointer > 0 ) {
 							int index;
@@ -310,6 +311,12 @@ public class ControlsPads extends JPanel {
 							comboBox_padSelection.setSelectedIndex(index);
 						}
 					}
+				}
+				if (arg0.getPropertyName().equals("typeChanged")) {
+					panel_3rd_zone.setAsSwitch(panel_rim.getComboBox_type().getSelectedIndex() > 0);
+				}
+				if (arg0.getPropertyName().equals("valueChanged")) {
+					firePropertyChange("rimValueChanged", false, true);
 				}
 			}
 		});
@@ -335,13 +342,6 @@ public class ControlsPads extends JPanel {
 		panel_rim.getPadButton_minScan().addActionListener(padButtonActionListener);
 		panel_rim.getPadButton_type().addActionListener(padButtonActionListener);
 		
-		panel_rim.getComboBox_type().addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					panel_3rd_zone.setAsSwitch(panel_rim.getComboBox_type().getSelectedIndex() > 0);
-		        }
-			}
-		});
 		panel_rim.setVisible(false);
 		panel_head_rim.add(panel_rim);
 		panel_rim.setBorder(new TitledBorder(null, "Rim/Edge", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -354,8 +354,9 @@ public class ControlsPads extends JPanel {
 		panel_head.setConfig(configPads[0], head_pad, 0);
 		comboBox_padSelection.setSelectedIndex(0);
 
+		
 	}
-
+	
 	public JButton getBtnGet() {
 		return btnGet;
 	}

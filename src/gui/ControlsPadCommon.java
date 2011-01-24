@@ -32,8 +32,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 
 public class ControlsPadCommon extends JPanel {
+	private Boolean changeEventsAllowed = false;
+	
 	private JComboBox comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
@@ -83,11 +88,14 @@ public class ControlsPadCommon extends JPanel {
 	private PadButton padButton_dynTime;
 	private PadButton padButton_minScan;
 	private PadButton padButton_type;
+	
+	private ArrayList<Object> controls; 
 
 	/**
 	 * Create the panel.
 	 */
 	public ControlsPadCommon(boolean pad_type) {
+		controls = new ArrayList<Object>();
 		head_rim_pad = pad_type;
 		configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -124,6 +132,14 @@ public class ControlsPadCommon extends JPanel {
 		add(lblName, "1, 1, right, center");
 		
 		comboBox_name = new JComboBox();
+		controls.add(comboBox_name);
+		comboBox_name.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					firePropertyChange("nameChanged", false, true);
+				}
+			}
+		});
 		comboBox_name.setMaximumRowCount(30);
 		comboBox_name.addItem("");
 		for (String string : Constants.CUSTOM_PADS_NAMES_LIST) {
@@ -140,6 +156,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblNote, "1, 2, right, center");
 		
 		noteSpinControl_note = new NoteSpinControl();
+		controls.add(noteSpinControl_note.getSpinner());
 		noteSpinControl_note.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		noteSpinControl_note.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -170,6 +187,7 @@ public class ControlsPadCommon extends JPanel {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		noteSpinControl_altNote = new NoteSpinControl();
+		controls.add(noteSpinControl_altNote.getSpinner());
 		panel_1.add(noteSpinControl_altNote, "1, 1");
 		
 		checkBox_altLinked = new JCheckBox("");
@@ -197,6 +215,7 @@ public class ControlsPadCommon extends JPanel {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		noteSpinControl_pressrollNote = new NoteSpinControl();
+		controls.add(noteSpinControl_pressrollNote.getSpinner());
 		panel_2.add(noteSpinControl_pressrollNote, "1, 1");
 		
 		checkBox_pressrollLinked = new JCheckBox("");
@@ -216,6 +235,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblCurve, "1, 5, right, center");
 		
 		spinner_channel = new JSpinner();
+		controls.add(spinner_channel);
 		spinner_channel.setModel(new SpinnerNumberModel(1, 1, 16, 1));
 		add(spinner_channel, "3, 5, left, center");
 		
@@ -227,6 +247,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblSpecialFunction, "1, 6, right, default");
 		
 		checkBox_special = new JCheckBox("");
+		controls.add(checkBox_special);
 		add(checkBox_special, "3, 6");
 		
 		padButton_special = new PadButton("special", head_rim_pad);
@@ -237,6 +258,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblCurve_1, "1, 7, right, center");
 		
 		comboBox_curve = new JComboBox();
+		controls.add(comboBox_curve);
 		comboBox_curve.setMaximumRowCount(16);
 		for (String string : Constants.CURVES_LIST) {
 			comboBox_curve.addItem(string);
@@ -252,6 +274,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblCompression, "1, 8, right, center");
 		
 		comboBox_compression = new JComboBox();
+		controls.add(comboBox_compression);
         for(int i=0; i<8; i++){
     		comboBox_compression.addItem(((Integer)i).toString());
         }		
@@ -266,6 +289,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblShift, "1, 9, right, center");
 		
 		comboBox_shift = new JComboBox();
+		controls.add(comboBox_shift);
         for(int i=0; i<8; i++){
     		comboBox_shift.addItem(((Integer)(i*8)).toString());
         }		
@@ -280,6 +304,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblXtalkLevel, "1, 10, right, center");
 		
 		comboBox_xtalkLevel = new JComboBox();
+		controls.add(comboBox_xtalkLevel);
         for(int i=0; i<8; i++){
     		comboBox_xtalkLevel.addItem(((Integer)i).toString());
         }		
@@ -294,6 +319,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblXtalkGroup, "1, 11, right, center");
 		
 		comboBox_xtalkGroup = new JComboBox();
+		controls.add(comboBox_xtalkGroup);
         for(int i=0; i<8; i++){
     		comboBox_xtalkGroup.addItem(((Integer)i).toString());
         }		
@@ -308,6 +334,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblThreshold, "1, 12, right, center");
 		
 		spinner_threshold = new JSpinner();
+		controls.add(spinner_threshold);
 		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_threshold, "3, 12, left, center");
 		
@@ -319,6 +346,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblGain, "1, 13, right, center");
 		
 		comboBox_gain = new JComboBox();
+		controls.add(comboBox_gain);
 		comboBox_gain.setMaximumRowCount(10);
         for(int i=0; i<9; i++){
     		comboBox_gain.addItem(((Integer)i).toString());
@@ -333,7 +361,8 @@ public class ControlsPadCommon extends JPanel {
 		lblHighlevelAuto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblHighlevelAuto, "1, 14, right, center");
 		
-		checkBox_autoLevel = new JCheckBox("");
+		checkBox_autoLevel = new JCheckBox("");		
+		controls.add(checkBox_autoLevel);
 		add(checkBox_autoLevel, "3, 14, left, center");
 		
 		padButton_autoLevel = new PadButton("autoLevel", head_rim_pad);
@@ -351,6 +380,7 @@ public class ControlsPadCommon extends JPanel {
 				RowSpec.decode("20px"),}));
 		
 		spinner_highLevel = new JSpinner();
+		controls.add(spinner_highLevel);
 		spinner_highLevel.setModel(new SpinnerNumberModel(new Short((short) 64), new Short((short) 64), new Short((short) 1023), new Short((short) 1)));
 		JSpinner.NumberEditor jsne_spinner_highLevel = new JSpinner.NumberEditor(spinner_highLevel,"#");
 		spinner_highLevel.setEditor(jsne_spinner_highLevel);
@@ -364,6 +394,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblRetriggerMask, "1, 16, right, center");
 		
 		spinner_retrigger = new JSpinner();
+		controls.add(spinner_retrigger);
 		spinner_retrigger.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_retrigger, "3, 16, left, center");
 		
@@ -376,6 +407,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblDyn, "1, 17, right, center");
 		
 		comboBox_dynLevel = new JComboBox();
+		controls.add(comboBox_dynLevel);
 		comboBox_dynLevel.setMaximumRowCount(16);
         for(int i=0; i<16; i++){
     		comboBox_dynLevel.addItem(((Integer)i).toString());
@@ -392,6 +424,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblDyntime, "1, 18, right, center");
 		
 		comboBox_dynTime = new JComboBox();
+		controls.add(comboBox_dynTime);
 		comboBox_dynTime.setMaximumRowCount(16);
         for(int i=0; i<16; i++){
     		comboBox_dynTime.addItem(((Integer)(i*4)).toString());
@@ -407,6 +440,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblMinscan, "1, 19, right, center");
 		
 		spinner_minScan = new JSpinner();
+		controls.add(spinner_minScan);
 		spinner_minScan.setModel(new SpinnerNumberModel(new Short((short) 10), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
 		add(spinner_minScan, "3, 19, left, center");
 		
@@ -418,12 +452,63 @@ public class ControlsPadCommon extends JPanel {
 		add(lblType, "1, 20, right, center");
 		
 		comboBox_type = new JComboBox();
+		controls.add(comboBox_type);
+		comboBox_type.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					firePropertyChange("typeChanged", false, true);
+				}
+			}
+		});
 		comboBox_type.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_type, "3, 20, fill, center");
 		
 		padButton_type = new PadButton("type", head_rim_pad);
 		add(padButton_type, "5, 20");
+		
+		for (Object control : controls) {
+			if (control.getClass().equals(JComboBox.class)) {
+				((JComboBox) control).addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent arg0) {
+						if (changeEventsAllowed) {
+							if (arg0.getStateChange() == ItemEvent.SELECTED) {
+								System.out.printf("ComboBox value changed\n");
+								valueChanged();
+							}
+						}
+					}
+				});
 				
+			}
+			if (control.getClass().equals(JCheckBox.class)) {
+				((JCheckBox) control).addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent arg0) {
+						if (changeEventsAllowed) {
+							System.out.printf("CheckBox value changed\n");
+							valueChanged();
+						}
+					}
+				});
+				
+			}
+			if (control.getClass().equals(JSpinner.class)) {
+				((JSpinner) control).addChangeListener(new ChangeListener() {
+					public void stateChanged(ChangeEvent arg0) {
+						if (changeEventsAllowed) {
+							System.out.printf("Spinner value changed\n");
+							valueChanged();
+						}
+					}
+				});
+				
+			}
+		}
+				
+	}
+	
+	private void valueChanged() {
+		updateConfig();
+		firePropertyChange("valueChanged", false, true);
 	}
 
 	public void updateControls() {
@@ -518,11 +603,13 @@ public class ControlsPadCommon extends JPanel {
 	}
 	
 	public void setConfig(ConfigPad config, boolean pad_type, int pad_id) {
+		changeEventsAllowed = false;
 		head_rim_pad = pad_type;
 		configPad = config;
 		updateControls();
 		comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[pad_id], 0);
 		comboBox_name.removeItemAt(1);
+		changeEventsAllowed = true;
 	}
 	
 	public boolean getHeadRim() {
@@ -532,9 +619,11 @@ public class ControlsPadCommon extends JPanel {
 	public JComboBox getComboBox_type() {
 		return comboBox_type;
 	}
-	public JComboBox getComboBox_name() {
-		return comboBox_name;
-	}
+
+//	public JComboBox getComboBox_name() {
+//		return comboBox_name;
+//	}
+
 	public JButton getPadButton_name() {
 		return padButton__name;
 	}

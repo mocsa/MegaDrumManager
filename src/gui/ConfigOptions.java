@@ -7,8 +7,10 @@ public class ConfigOptions implements java.io.Serializable {
 	public boolean useThruPort = false;
 	public boolean autoOpenPorts = false;
 	public boolean saveOnExit = false;
+	public boolean interactive = false;
 	public String lastDir = "";
 	public String lastFullPathConfig = "";
+	public String lastFullPathFirmware = "";
 	public String MidiInName = "";
 	public String MidiOutName = "";
 	public String MidiThruName = "";

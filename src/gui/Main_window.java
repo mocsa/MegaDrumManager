@@ -102,6 +102,7 @@ public class Main_window {
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
 	private JLabel lblVersion;
+	private JToggleButton tglbtnLiveUpdates;
 	
 
 	
@@ -417,6 +418,18 @@ public class Main_window {
 		});
 		
 		controlsPads = new ControlsPads();
+		controlsPads.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if ((configOptions != null) && configOptions.interactive) {
+					if (arg0.getPropertyName().equals("headValueChanged")) {
+						sendPadOneZone(controlsPads.getPadPointer());
+					}
+					if (arg0.getPropertyName().equals("rimValueChanged")) {
+						sendPadOneZone(controlsPads.getPadPointer() + 1);
+					}
+				}
+			}
+		});
 //		controlsPads.addPropertyChangeListener("resize", new PropertyChangeListener() {
 //			public void propertyChange(PropertyChangeEvent arg0) {
 //				resizeMainWindow();
@@ -536,6 +549,8 @@ public class Main_window {
 				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("45dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,}));
@@ -574,8 +589,17 @@ public class Main_window {
 		comboBox_inputsCount.addItem("48");
 		comboBox_inputsCount.addItem("56");
 		
+		tglbtnLiveUpdates = new JToggleButton("Live updates");
+		tglbtnLiveUpdates.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				configOptions.interactive = tglbtnLiveUpdates.isSelected(); 
+			}
+		});
+		tglbtnLiveUpdates.setMargin(new Insets(2, 4, 2, 4));
+		panel.add(tglbtnLiveUpdates, "14, 1");
+		
 		progressBar = new JProgressBar();
-		panel.add(progressBar, "14, 1");
+		panel.add(progressBar, "16, 1");
 		progressBar.setVisible(false);
 		
 		progressBar.setStringPainted(true);
@@ -737,24 +761,23 @@ public class Main_window {
 		}
 	}
 	
-	private void sendPad(int pad_id) {
+	private void sendPadOneZone(int pad_id) {
 		byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE];
+		
+		Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id), sysexPad, chainId, pad_id);
+		midi_handler.sendSysex(sysexPad);
+		delayMs(configOptions.sysexDelay);		
+	}
+	
+	private void sendPad(int pad_id) {
 		byte [] sysex3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
 
+		sendPadOneZone(pad_id);
 		if (pad_id > 0 ) {
-			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id), sysexPad, chainId, pad_id);
-			midi_handler.sendSysex(sysexPad);
-			delayMs(configOptions.sysexDelay);
-			Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id + 1), sysexPad, chainId, pad_id + 1);
-			midi_handler.sendSysex(sysexPad);
-			delayMs(configOptions.sysexDelay);
+			sendPadOneZone(pad_id + 1);
 			pad_id = (pad_id - 1)/2;
 			Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd(pad_id), sysex3rd, chainId, pad_id);
 			midi_handler.sendSysex(sysex3rd);
-			delayMs(configOptions.sysexDelay);
-		} else {
-			Utils.copyConfigPadToSysex(controlsPads.getConfig(0), sysexPad, chainId, 0);
-			midi_handler.sendSysex(sysexPad);
 			delayMs(configOptions.sysexDelay);
 		}
 		
@@ -895,6 +918,7 @@ public class Main_window {
 	
 	private void loadConfig() {
 		configOptions = new ConfigOptions(); // default options loaded with new
+		//copyAllToConfigFull();
 		configOptions  = fileManager.loadLastOptions(configOptions);
 		dialog_options.fillInPorts(midi_handler.getMidiInList());
 		dialog_options.fillOutPorts(midi_handler.getMidiOutList());
