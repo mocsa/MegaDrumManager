@@ -390,6 +390,21 @@ public class Main_window {
 				RowSpec.decode("pref:grow"),}));
 		
 		controlsMisc = new ControlsMisc();
+		controlsMisc.getBtnSave().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
+				Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysex, chainId);
+				fileManager.saveSysex(sysex, configOptions);
+			}
+		});
+		controlsMisc.getBtnLoad().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
+				Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysex, chainId);
+				fileManager.loadSysex(sysex, configOptions);
+				controlsMisc.setConfig(sysex);
+			}
+		});
 		controlsMisc.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
@@ -413,6 +428,21 @@ public class Main_window {
 		});
 		
 		controlsPedal = new ControlsPedal();
+		controlsPedal.getBtnSave().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
+				Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysex, chainId);
+				fileManager.saveSysex(sysex, configOptions);
+			}
+		});
+		controlsPedal.getBtnLoad().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
+				Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysex, chainId);
+				fileManager.loadSysex(sysex, configOptions);
+				controlsPedal.setConfig(sysex);
+			}
+		});
 		controlsPedal.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
@@ -436,6 +466,74 @@ public class Main_window {
 		});
 		
 		controlsPads = new ControlsPads();
+		controlsPads.getBtnSave().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];
+				byte [] sysex3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
+				byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE];
+				int padId = controlsPads.getPadPointer();
+				if (padId > 0 ) {
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, chainId, padId);
+					for (int i = 0; i<sysex.length;i++) {
+						sysexPad[i] = sysex[i];
+					}
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId+1), sysex, chainId, padId+1);
+					for (int i = 0; i<sysex.length;i++) {
+						sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
+					}
+					Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd((padId-1)/2), sysex3rd, chainId, (padId-1)/2);
+					for (int i = 0; i<sysex3rd.length;i++) {
+						sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
+					}
+					fileManager.saveSysex(sysexPad, configOptions);
+				} else {
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(0), sysex, chainId, 0);
+					for (int i = 0; i<sysex.length;i++) {
+						sysexPad[i] = sysex[i];
+					}					
+					fileManager.saveSysex(sysex, configOptions);
+				}
+			}
+		});
+		controlsPads.getBtnLoad().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];
+				byte [] sysex3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
+				byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE];
+				int padId = controlsPads.getPadPointer();
+				if (padId > 0 ) {
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, chainId, padId);
+					for (int i = 0; i<sysex.length;i++) {
+						sysexPad[i] = sysex[i];
+					}
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId+1), sysex, chainId, padId+1);
+					for (int i = 0; i<sysex.length;i++) {
+						sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
+					}
+					Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd((padId-1)/2), sysex3rd, chainId, (padId-1)/2);
+					for (int i = 0; i<sysex3rd.length;i++) {
+						sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
+					}
+					fileManager.loadSysex(sysexPad, configOptions);
+					for (int i = 0; i<sysex.length;i++) {
+						sysex[i] = sysexPad[i];
+					}
+					controlsPads.setConfig(sysex, padId);
+					for (int i = 0; i<sysex.length;i++) {
+						sysex[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE + i];
+					}
+					controlsPads.setConfig(sysex, padId+1);
+					for (int i = 0; i<sysex3rd.length;i++) {
+						sysex3rd[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i];
+					}
+					controlsPads.setConfig3rd(sysex3rd, (padId-1)/2);
+				} else {
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, chainId, padId);
+					fileManager.loadSysex(sysex, configOptions);					
+					controlsPads.setConfig(sysex, 0);
+				}
+			}
+		});
 		controlsPads.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {

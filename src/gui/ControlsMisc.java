@@ -40,6 +40,8 @@ public class ControlsMisc extends JPanel {
 	private JCheckBox checkBox_allGainsLow;
 	private JButton btnGet;
 	private JButton btnSend;
+	private JButton btnLoad;
+	private JButton btnSave;
 
 	/**
 	 * Create the panel.
@@ -56,21 +58,35 @@ public class ControlsMisc extends JPanel {
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("20dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("24dlu"),},
+				ColumnSpec.decode("20dlu"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("20dlu"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("20dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
 		
 		btnGet = new JButton("Get");
-		btnGet.setMargin(new Insets(1, 4, 1, 4));
+		btnGet.setMargin(new Insets(1, 2, 1, 2));
 		btnGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnGet, "1, 1, fill, fill");
 		
 		btnSend = new JButton("Send");
-		btnSend.setMargin(new Insets(1, 4, 1, 4));
+		btnSend.setMargin(new Insets(1, 2, 1, 2));
 		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnSend, "3, 1, fill, fill");
+		
+		btnLoad = new JButton("Load");
+		btnLoad.setMargin(new Insets(1, 2, 1, 2));
+		btnLoad.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnLoad, "5, 1");
+		
+		btnSave = new JButton("Save");
+		btnSave.setMargin(new Insets(1, 2, 1, 2));
+		btnSave.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnSave, "7, 1");
 		
 		JPanel panel = new JPanel();
 		add(panel, "1, 2, fill, fill");
@@ -252,5 +268,11 @@ public class ControlsMisc extends JPanel {
 		Utils.copySysexToConfigMisc(config.sysex_misc, configMisc);
 		updateControls();
 		changeEventsAllowed = true;
+	}
+	public JButton getBtnLoad() {
+		return btnLoad;
+	}
+	public JButton getBtnSave() {
+		return btnSave;
 	}
 }

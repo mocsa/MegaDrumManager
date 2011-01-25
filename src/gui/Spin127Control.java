@@ -52,7 +52,7 @@ public class Spin127Control extends JPanel {
 	}
 	
 	public void setValue(short value) {
-		if ((value >= 0 ) && (value < 1024)) {
+		if ((value >= 0 ) && (value < 128)) {
 			spinner.setValue(value);
 		}
 	}

@@ -89,7 +89,7 @@ public class FileManager {
 			for (int i=0;i<Constants.CURVES_COUNT;i++) {
 				fos.write(config.sysex_curves[i]);
 			}
-			
+			fos.flush();
 			fos.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -199,6 +199,7 @@ public class FileManager {
 					config.lastDir = prop.getProperty("lastDir");
 					config.lastFullPathConfig = prop.getProperty("lastFullPathConfig");
 					config.lastFullPathFirmware = prop.getProperty("lastFullPathFirmware");
+					config.lastFullPathSysex = prop.getProperty("lastFullPathSysex");
 					config.MidiInName = prop.getProperty("MidiInName");
 					config.MidiOutName = prop.getProperty("MidiOutName");
 					config.MidiThruName = prop.getProperty("MidiThruName");
@@ -239,6 +240,7 @@ public class FileManager {
 		prop.setProperty("lastDir", config.lastDir);
 		prop.setProperty("lastFullPathConfig", config.lastFullPathConfig);
 		prop.setProperty("lastFullPathFirmware", config.lastFullPathFirmware);
+		prop.setProperty("lastFullPathSysex", config.lastFullPathSysex);
 		prop.setProperty("MidiInName", config.MidiInName);
 		prop.setProperty("MidiOutName", config.MidiOutName);
 		prop.setProperty("MidiThruName", config.MidiThruName);
@@ -268,4 +270,56 @@ public class FileManager {
 		
 	}
 		
+	public void saveSysex(byte [] sysex, ConfigOptions options) {
+		int returnVal;
+		fileChooser.setFileFilter(sysexFileFilter);
+		if (!options.lastFullPathSysex.equals("")) {
+			fileChooser.setCurrentDirectory(new File(options.lastFullPathSysex));
+		}
+		returnVal = fileChooser.showSaveDialog(parent);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			file = fileChooser.getSelectedFile();
+			if (!(file.getName().toLowerCase().endsWith(".syx"))) {
+				file = new File(file.getAbsolutePath() + ".syx");
+			}
+			options.lastFullPathSysex = file.getAbsolutePath();
+			if (file.exists()) {
+				file.delete();
+			}
+			try {
+				file.createNewFile();
+				FileOutputStream fos = new FileOutputStream(file);
+				fos.write(sysex);
+				fos.flush();
+				fos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void loadSysex(byte [] sysex, ConfigOptions options) {
+		int returnVal;
+		if (!options.lastFullPathSysex.equals("")) {
+			fileChooser.setCurrentDirectory(new File(options.lastFullPathSysex));
+		}
+		fileChooser.setFileFilter(sysexFileFilter);
+		returnVal = fileChooser.showOpenDialog(parent);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			file = fileChooser.getSelectedFile();
+			options.lastFullPathSysex = file.getAbsolutePath();
+			if (file.exists()) {
+				FileInputStream fis;
+				try {
+					fis = new FileInputStream(file);
+					fis.read(sysex);
+					fis.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

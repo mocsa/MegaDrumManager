@@ -45,6 +45,8 @@ public class ControlsCurves extends JPanel {
 	private JButton button_send;
 	private JButton button_getAll;
 	private JButton button_sendAll;
+	private JButton btnLoad;
+	private JButton btnSave;
 	
 	/**
 	 * Create the panel.
@@ -85,13 +87,17 @@ public class ControlsCurves extends JPanel {
 		JPanel panel = new JPanel();
 		add(panel, "1, 1, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("18dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("18dlu"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("22dlu"),
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("22dlu"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("18dlu"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("18dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),}));
 		
@@ -106,14 +112,24 @@ public class ControlsCurves extends JPanel {
 		panel.add(button_send, "3, 1");
 		
 		button_getAll = new JButton("GetAll");
-		button_getAll.setMargin(new Insets(1, 4, 1, 4));
+		button_getAll.setMargin(new Insets(1, 0, 1, 0));
 		button_getAll.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel.add(button_getAll, "5, 1");
 		
 		button_sendAll = new JButton("SendAll");
-		button_sendAll.setMargin(new Insets(1, 4, 1, 4));
+		button_sendAll.setMargin(new Insets(1, 0, 1, 0));
 		button_sendAll.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel.add(button_sendAll, "7, 1");
+		
+		btnLoad = new JButton("Load");
+		btnLoad.setMargin(new Insets(1, 2, 1, 2));
+		btnLoad.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel.add(btnLoad, "9, 1");
+		
+		btnSave = new JButton("Save");
+		btnSave.setMargin(new Insets(1, 2, 1, 2));
+		btnSave.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel.add(btnSave, "11, 1");
 		
 		JPanel panel_1 = new JPanel();
 		add(panel_1, "1, 3, fill, fill");

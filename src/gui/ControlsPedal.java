@@ -24,6 +24,7 @@ import java.awt.event.ItemEvent;
 import javax.swing.event.ChangeEvent;
 import java.awt.Insets;
 import java.util.ArrayList;
+import javax.swing.SpinnerNumberModel;
 
 public class ControlsPedal extends JPanel {
 	private Boolean changeEventsAllowed = false;
@@ -64,6 +65,8 @@ public class ControlsPedal extends JPanel {
 	
 	
 	private ConfigPedal configPedal;
+	private JButton btnLoad;
+	private JButton btnSave;
 
 	/**
 	 * Create the panel.
@@ -84,6 +87,10 @@ public class ControlsPedal extends JPanel {
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("24dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("fill:12dlu"),}));
@@ -97,6 +104,16 @@ public class ControlsPedal extends JPanel {
 		btnSend.setMargin(new Insets(1, 4, 1, 4));
 		btnSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_buttons.add(btnSend, "3, 1, fill, fill");
+		
+		btnLoad = new JButton("Load");
+		btnLoad.setMargin(new Insets(1, 4, 1, 4));
+		btnLoad.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnLoad, "5, 1");
+		
+		btnSave = new JButton("Save");
+		btnSave.setMargin(new Insets(1, 4, 1, 4));
+		btnSave.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_buttons.add(btnSave, "7, 1");
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		panel.add(tabbedPane, "1, 2, left, top");
@@ -238,7 +255,6 @@ public class ControlsPedal extends JPanel {
 		spin127Control_chickDelay.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.chickDelay = ((Integer)spin127Control_chickDelay.getSpinner().getValue()).shortValue();
-				valueChanged();
 			}
 		});
 		panel_misc.add(spin127Control_chickDelay, "3, 8, fill, fill");
@@ -597,7 +613,7 @@ public class ControlsPedal extends JPanel {
 		checkBox_reverseLevels.setSelected(configPedal.reverseLevels);
 		checkBox_softChicks.setSelected(configPedal.softChicks);
 		checkBox_autoLevels.setSelected(configPedal.autoLevels);
-		spin127Control_chickDelay.getSpinner().setValue(configPedal.chickDelay);
+		spin127Control_chickDelay.getSpinner().setValue((int)configPedal.chickDelay);
 		spin127Control_cc.getSpinner().setValue((int)configPedal.cc);
 		spin1023Control_lowLevel.getSpinner().setValue(configPedal.lowLevel);
 		spin1023Control_highLevel.getSpinner().setValue(configPedal.highLevel);
@@ -660,4 +676,10 @@ public class ControlsPedal extends JPanel {
         }
 	}
 
+	public JButton getBtnLoad() {
+		return btnLoad;
+	}
+	public JButton getBtnSave() {
+		return btnSave;
+	}
 }

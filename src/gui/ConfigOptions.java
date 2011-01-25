@@ -11,6 +11,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public String lastDir = "";
 	public String lastFullPathConfig = "";
 	public String lastFullPathFirmware = "";
+	public String lastFullPathSysex = "";
 	public String MidiInName = "";
 	public String MidiOutName = "";
 	public String MidiThruName = "";
