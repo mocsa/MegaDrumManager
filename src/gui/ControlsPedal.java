@@ -255,6 +255,7 @@ public class ControlsPedal extends JPanel {
 		spin127Control_chickDelay.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configPedal.chickDelay = ((Integer)spin127Control_chickDelay.getSpinner().getValue()).shortValue();
+				valueChanged();
 			}
 		});
 		panel_misc.add(spin127Control_chickDelay, "3, 8, fill, fill");

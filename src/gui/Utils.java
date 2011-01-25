@@ -30,7 +30,7 @@ public class Utils {
 	public static short sysex2short (byte [] sx) {
 		short result;
 		
-		result = (short)(((sx[0]&0x0f)<<4)|(sx[1]&0x0f)|((sx[2]&0xf000)<<12)|((sx[2]&0x0f00)<<8));
+		result = (short)(((sx[0]&0x0f)<<4)|(sx[1]&0x0f)|((sx[2]&0x0f)<<12)|((sx[3]&0x0f)<<8));
 		return result;
 	}
 

@@ -327,4 +327,10 @@ public class ControlsCurves extends JPanel {
 	public JButton getButton_sendAll() {
 		return button_sendAll;
 	}
+	public JButton getBtnLoad() {
+		return btnLoad;
+	}
+	public JButton getBtnSave() {
+		return btnSave;
+	}
 }

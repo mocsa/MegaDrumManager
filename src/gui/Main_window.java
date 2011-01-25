@@ -180,12 +180,11 @@ public class Main_window {
 					midi_handler.getMidi();
 					if (midi_handler.sysexReceived) {
 						decodeSysex(midi_handler.bufferIn);
-						midi_handler.sysexReceived = false;
-						midi_handler.bufferIn = null;
+						
 					} else if (midi_handler.bufferIn != null) {
 						decodeShortMidi(midi_handler.bufferIn);
-						midi_handler.bufferIn = null;
 					}
+					midi_handler.bufferIn = null;
 				}
 			}
 		});		
@@ -761,6 +760,21 @@ public class Main_window {
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
 		
 		controlsCurves = new ControlsCurves();
+		controlsCurves.getBtnSave().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
+				Utils.copyConfigCurveToSysex(controlsCurves.getConfig(controlsCurves.getCurvePointer()), sysex, chainId, controlsCurves.getCurvePointer());
+				fileManager.saveSysex(sysex, configOptions);
+			}
+		});
+		controlsCurves.getBtnLoad().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
+				Utils.copyConfigCurveToSysex(controlsCurves.getConfig(controlsCurves.getCurvePointer()), sysex, chainId, controlsCurves.getCurvePointer());
+				fileManager.loadSysex(sysex, configOptions);					
+				controlsCurves.setConfig(sysex, controlsCurves.getCurvePointer());
+			}
+		});
 		controlsCurves.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
