@@ -94,7 +94,7 @@ public class Main_window {
 	private ConfigFull configFull;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
-	private int chainId;
+	//private int chainId;
 	private JMenuItem menuItem;
 	private JMenu mnView;
 	private JProgressBar progressBar;
@@ -166,13 +166,13 @@ public class Main_window {
 		frmMegadrummanager.setTitle("MegaDrumManager");
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		chainId = 0;
+		//chainId = 0;
 		configFull = new ConfigFull();
 		fileManager = new FileManager(frmMegadrummanager);
 		midi_handler = new Midi_handler();
 		dialog_options = new Options(midi_handler);
 		upgradeDialog = new Upgrade(midi_handler, fileManager);
-		midi_handler.chainId = chainId;
+		midi_handler.chainId = 0;
 		midi_handler.addMidiEventListener(new MidiEventListener() {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
@@ -392,14 +392,14 @@ public class Main_window {
 		controlsMisc.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
-				Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysex, chainId);
+				Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysex, configOptions.chainId);
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsMisc.getBtnLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
-				Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysex, chainId);
+				Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysex, configOptions.chainId);
 				fileManager.loadSysex(sysex, configOptions);
 				controlsMisc.setConfig(sysex);
 			}
@@ -430,14 +430,14 @@ public class Main_window {
 		controlsPedal.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-				Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysex, chainId);
+				Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysex, configOptions.chainId);
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsPedal.getBtnLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-				Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysex, chainId);
+				Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysex, configOptions.chainId);
 				fileManager.loadSysex(sysex, configOptions);
 				controlsPedal.setConfig(sysex);
 			}
@@ -472,21 +472,21 @@ public class Main_window {
 				byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE];
 				int padId = controlsPads.getPadPointer();
 				if (padId > 0 ) {
-					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, chainId, padId);
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, configOptions.chainId, padId);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[i] = sysex[i];
 					}
-					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId+1), sysex, chainId, padId+1);
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId+1), sysex, configOptions.chainId, padId+1);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
 					}
-					Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd((padId-1)/2), sysex3rd, chainId, (padId-1)/2);
+					Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd((padId-1)/2), sysex3rd, configOptions.chainId, (padId-1)/2);
 					for (int i = 0; i<sysex3rd.length;i++) {
 						sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
 					}
 					fileManager.saveSysex(sysexPad, configOptions);
 				} else {
-					Utils.copyConfigPadToSysex(controlsPads.getConfig(0), sysex, chainId, 0);
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(0), sysex, configOptions.chainId, 0);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[i] = sysex[i];
 					}					
@@ -501,15 +501,15 @@ public class Main_window {
 				byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE];
 				int padId = controlsPads.getPadPointer();
 				if (padId > 0 ) {
-					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, chainId, padId);
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, configOptions.chainId, padId);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[i] = sysex[i];
 					}
-					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId+1), sysex, chainId, padId+1);
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId+1), sysex, configOptions.chainId, padId+1);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
 					}
-					Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd((padId-1)/2), sysex3rd, chainId, (padId-1)/2);
+					Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd((padId-1)/2), sysex3rd, configOptions.chainId, (padId-1)/2);
 					for (int i = 0; i<sysex3rd.length;i++) {
 						sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
 					}
@@ -527,7 +527,7 @@ public class Main_window {
 					}
 					controlsPads.setConfig3rd(sysex3rd, (padId-1)/2);
 				} else {
-					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, chainId, padId);
+					Utils.copyConfigPadToSysex(controlsPads.getConfig(padId), sysex, configOptions.chainId, padId);
 					fileManager.loadSysex(sysex, configOptions);					
 					controlsPads.setConfig(sysex, 0);
 				}
@@ -763,14 +763,14 @@ public class Main_window {
 		controlsCurves.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(controlsCurves.getConfig(controlsCurves.getCurvePointer()), sysex, chainId, controlsCurves.getCurvePointer());
+				Utils.copyConfigCurveToSysex(controlsCurves.getConfig(controlsCurves.getCurvePointer()), sysex, configOptions.chainId, controlsCurves.getCurvePointer());
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsCurves.getBtnLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(controlsCurves.getConfig(controlsCurves.getCurvePointer()), sysex, chainId, controlsCurves.getCurvePointer());
+				Utils.copyConfigCurveToSysex(controlsCurves.getConfig(controlsCurves.getCurvePointer()), sysex, configOptions.chainId, controlsCurves.getCurvePointer());
 				fileManager.loadSysex(sysex, configOptions);					
 				controlsCurves.setConfig(sysex, controlsCurves.getCurvePointer());
 			}
@@ -871,7 +871,7 @@ public class Main_window {
 	
 	private void sendPedal() {
 		byte [] sysexPedal = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-		Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysexPedal, chainId);
+		Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysexPedal, configOptions.chainId);
 		midi_handler.sendSysex(sysexPedal);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -884,7 +884,7 @@ public class Main_window {
 	
 	private void sendMisc() {
 		byte [] sysexMisc = new byte[Constants.MD_SYSEX_MISC_SIZE];
-		Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysexMisc, chainId);
+		Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysexMisc, configOptions.chainId);
 		midi_handler.sendSysex(sysexMisc);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -907,7 +907,7 @@ public class Main_window {
 	private void sendPadOneZone(int pad_id) {
 		byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE];
 		
-		Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id), sysexPad, chainId, pad_id);
+		Utils.copyConfigPadToSysex(controlsPads.getConfig(pad_id), sysexPad, configOptions.chainId, pad_id);
 		midi_handler.sendSysex(sysexPad);
 		delayMs(configOptions.sysexDelay);		
 	}
@@ -916,7 +916,7 @@ public class Main_window {
 		byte [] sysex3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
 		
 		pad_id = (pad_id - 1)/2;
-		Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd(pad_id), sysex3rd, chainId, pad_id);
+		Utils.copyConfig3rdToSysex(controlsPads.getConfig3rd(pad_id), sysex3rd, configOptions.chainId, pad_id);
 		midi_handler.sendSysex(sysex3rd);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1011,7 +1011,7 @@ public class Main_window {
 	
 	private void sendCurve(int curve_id) {
 		byte [] sysexCurve = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-		Utils.copyConfigCurveToSysex(controlsCurves.getConfig(curve_id), sysexCurve, chainId, curve_id);
+		Utils.copyConfigCurveToSysex(controlsCurves.getConfig(curve_id), sysexCurve, configOptions.chainId, curve_id);
 		midi_handler.sendSysex(sysexCurve);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1076,6 +1076,7 @@ public class Main_window {
 			midi_handler.initPorts(configOptions);
 			tglbtnMidi.setSelected(midi_handler.isMidiOpen());
 		}
+		midi_handler.chainId = configOptions.chainId; 
 		switch (configOptions.inputsCount) {
 			case 21:
 				comboBox_inputsCount.setSelectedIndex(0);
@@ -1165,7 +1166,7 @@ public class Main_window {
 	
 	private void decodeSysex(byte [] buffer) {
 		if (buffer[1] == Constants.MD_SYSEX) {
-			if (buffer[2] == (byte) chainId) {
+			if (buffer[2] == (byte) configOptions.chainId) {
 				switch (buffer[3]) {
 					case Constants.MD_SYSEX_MISC:
 						controlsMisc.setConfig(midi_handler.bufferIn);
