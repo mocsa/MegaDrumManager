@@ -34,16 +34,16 @@ public class Utils {
 		return result;
 	}
 
-	public static void copyConfigPadToConfigFull(ConfigPad [] src, ConfigFull dst, int pad_id) {
-		dst.altNote_linked[pad_id] = src[pad_id].altNote_linked;
-		dst.pressrollNote_linked[pad_id] = src[pad_id].pressrollNote_linked;
-	}
-	
-	public static void copyConfigFullToConfigPad(ConfigFull src, ConfigPad [] dst, int pad_id) {
-		dst[pad_id].altNote_linked = src.altNote_linked[pad_id];
-		dst[pad_id].pressrollNote_linked = src.pressrollNote_linked[pad_id];
-	}
-	
+//	public static void copyConfigPadToConfigFull(ConfigPad [] src, ConfigFull dst, int pad_id) {
+//		dst.altNote_linked[pad_id] = src[pad_id].altNote_linked;
+//		dst.pressrollNote_linked[pad_id] = src[pad_id].pressrollNote_linked;
+//	}
+//	
+//	public static void copyConfigFullToConfigPad(ConfigFull src, ConfigPad [] dst, int pad_id) {
+//		dst[pad_id].altNote_linked = src.altNote_linked[pad_id];
+//		dst[pad_id].pressrollNote_linked = src.pressrollNote_linked[pad_id];
+//	}
+//	
 	public static void copyConfigPadToSysex(ConfigPad config, byte [] sysex, int chainId, int padId) {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];

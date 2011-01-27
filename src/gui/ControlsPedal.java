@@ -658,13 +658,14 @@ public class ControlsPedal extends JPanel {
 		return btnSend;
 	}
 	
-	public void copyToConfigFull (ConfigFull config, int chain_id) {
-		Utils.copyConfigPedalToSysex(configPedal, config.sysex_pedal, chain_id);
-	}
+//	public void copyToConfigFull (ConfigFull config, int chain_id) {
+//		Utils.copyConfigPedalToSysex(configPedal, config.sysex_pedal, chain_id);
+//	}
 	
 	public void loadFromConfigFull (ConfigFull config) {
 		changeEventsAllowed = false;
-		Utils.copySysexToConfigPedal(config.sysex_pedal, configPedal);
+		configPedal = config.configPedal;
+		//Utils.copySysexToConfigPedal(config.sysex_pedal, configPedal);
 		updateControls();
 		changeEventsAllowed = true;
 	}

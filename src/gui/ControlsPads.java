@@ -525,28 +525,10 @@ public class ControlsPads extends JPanel {
 			//comboBox_padSelection.setSelectedIndex(comboBox_pointer);
 		//}
 	}
-
-	public void copyToConfigFull (ConfigFull config, int chain_id) {
-		int i;
-		switch_to_pad(padPointer);
-		for (i = 0; i<Constants.PADS_COUNT; i++) {
-			Utils.copyConfigPadToSysex(configPads[i], config.sysex_pads[i], chain_id, i);
-			Utils.copyConfigPadToConfigFull(configPads, config, i);
-		}
-		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
-			Utils.copyConfig3rdToSysex(config3rds[i], config.sysex_3rds[i], chain_id, i);
-		}
-	}
 	
 	public void loadFromConfigFull (ConfigFull config) {
-		int i;
-		for (i = 0; i<Constants.PADS_COUNT; i++) {
-			Utils.copySysexToConfigPad(config.sysex_pads[i], configPads[i]);
-			Utils.copyConfigFullToConfigPad(config, configPads, i);
-		}
-		for (i = 0; i<((Constants.PADS_COUNT - 1)/2); i++) {
-			Utils.copySysexToConfig3rd(config.sysex_3rds[i], config3rds[i]);
-		}
+		configPads = config.configPads;
+		config3rds = config.config3rds;
 		prevPadPointer = -1;
 		switch_to_pad(padPointer);
 	}

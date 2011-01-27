@@ -750,6 +750,7 @@ public class Main_window {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
 					midi_handler.closeAllPorts();
+					lblVersion.setText("????????");
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					midi_handler.initPorts(configOptions);
@@ -864,7 +865,7 @@ public class Main_window {
 	}
 	
 	private void getPedal() {
-		midi_handler.clear_midi_input();
+		//midi_handler.clear_midi_input();
 		midi_handler.requestConfigPedal();
 		delayMs(configOptions.sysexDelay);
 	}
@@ -877,7 +878,7 @@ public class Main_window {
 	}
 	
 	private void getMisc() {
-		midi_handler.clear_midi_input();
+		//midi_handler.clear_midi_input();
 		midi_handler.requestConfigMisc();					
 		delayMs(configOptions.sysexDelay);
 	}
@@ -890,7 +891,7 @@ public class Main_window {
 	}
 	
 	private void getPad(int pad_id) {
-		midi_handler.clear_midi_input();
+		//midi_handler.clear_midi_input();
 		if ( pad_id > 0 ) {
 			midi_handler.requestConfigPad(pad_id + 1);
 			delayMs(configOptions.sysexDelay);
@@ -1004,7 +1005,7 @@ public class Main_window {
 	}
 
 	private void getCurve(int curve_id) {
-		midi_handler.clear_midi_input();
+		//midi_handler.clear_midi_input();
 		midi_handler.requestConfigCurve(curve_id);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1054,9 +1055,9 @@ public class Main_window {
 	}
 	
 	private void copyAllToConfigFull() {
-		controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
-		controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
-		controlsPads.copyToConfigFull(configFull, configOptions.chainId);
+		//controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
+		//controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
+		//controlsPads.copyToConfigFull(configFull, configOptions.chainId);
 		controlsCurves.copyToConfigFull(configFull, configOptions.chainId);		
 	}
 	private void save_all() {
@@ -1095,9 +1096,9 @@ public class Main_window {
 				break;
 		}
 		updateInputsCountControls();
-		controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
-		controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
-		controlsPads.copyToConfigFull(configFull, configOptions.chainId);
+		//controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
+		//controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
+		//controlsPads.copyToConfigFull(configFull, configOptions.chainId);
 		if (!configOptions.lastFullPathConfig.equals("")) {
 			fileManager.loadAllSilent(configFull, configOptions);
 			loadAllFromConfigFull();

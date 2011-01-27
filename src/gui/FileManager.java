@@ -18,6 +18,11 @@ import java.util.Properties;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
+import org.apache.commons.configuration.CombinedConfiguration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
 class ConfigFileFilter extends javax.swing.filechooser.FileFilter {
     public boolean accept(File f) {
         return f.isDirectory() || f.getName().toLowerCase().endsWith(".mds");
@@ -56,6 +61,8 @@ public class FileManager {
 	private SysexFileFilter sysexFileFilter;
 	private BinFileFilter binFileFilter;
 	private Properties prop;
+	private PropertiesConfiguration fullConfig;
+	private CombinedConfiguration cc;
 	
 	public FileManager (JFrame parentFrame) {
 		fileChooser = new JFileChooser();
@@ -64,38 +71,57 @@ public class FileManager {
 		sysexFileFilter = new SysexFileFilter();
 		binFileFilter = new BinFileFilter();
 		prop = new Properties();
-		//file = new File();
+		//fullConfig = new PropertiesConfiguration();
 	}
 
-	public void saveAll(ConfigFull config, File file) {
+	public void saveConfigFull(ConfigFull config, File file) {
 		if (file.exists()) {
 			file.delete();
 		}
+		fullConfig = new PropertiesConfiguration();
+		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(fullConfig);
+		layout.setHeaderComment("MegaDrum config");
+		fullConfig.setLayout(layout);
+		config.copyToPropertiesConfiguration(fullConfig,layout);
+
 		try {
-			file.createNewFile();
-			FileOutputStream fos = new FileOutputStream(file);
-			fos.write(config.sysex_misc);
-			fos.write(config.sysex_pedal);
-			for (int i=0;i<Constants.PADS_COUNT;i++) {
-				fos.write(config.sysex_pads[i]);
-				if (i>0) {
-					if((i&0x01) == 0) {
-						fos.write(config.sysex_3rds[(i-1)/2]);
-					}
-				}
-				fos.write(config.altNote_linked[i]?1:0);
-				fos.write(config.pressrollNote_linked[i]?1:0);
-			}
-			for (int i=0;i<Constants.CURVES_COUNT;i++) {
-				fos.write(config.sysex_curves[i]);
-			}
-			fos.flush();
-			fos.close();
-		} catch (IOException e) {
+			fullConfig.save(file);
+		} catch (ConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
+	
+//	public void saveAll(ConfigFull config, File file) {
+//		if (file.exists()) {
+//			file.delete();
+//		}
+//		try {
+//			file.createNewFile();
+//			FileOutputStream fos = new FileOutputStream(file);
+//			fos.write(config.sysex_misc);
+//			fos.write(config.sysex_pedal);
+//			for (int i=0;i<Constants.PADS_COUNT;i++) {
+//				fos.write(config.sysex_pads[i]);
+//				if (i>0) {
+//					if((i&0x01) == 0) {
+//						fos.write(config.sysex_3rds[(i-1)/2]);
+//					}
+//				}
+//				fos.write(config.altNote_linked[i]?1:0);
+//				fos.write(config.pressrollNote_linked[i]?1:0);
+//			}
+//			for (int i=0;i<Constants.CURVES_COUNT;i++) {
+//				fos.write(config.sysex_curves[i]);
+//			}
+//			fos.flush();
+//			fos.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public void save_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
@@ -113,37 +139,49 @@ public class FileManager {
 			if (file.exists()) {
 				file.delete();
 			}
-			saveAll(config, file);
+			//saveAll(config, file);
+			saveConfigFull(config, file);
 		}
 	}
 
-	public void loadAll(ConfigFull config, File file) {
-		byte b;
+	public void loadConfigFull(ConfigFull config, File file) {
+		fullConfig = new PropertiesConfiguration();
 		try {
-			FileInputStream fis = new FileInputStream(file);
-			fis.read(config.sysex_misc);
-			fis.read(config.sysex_pedal);
-			for (int i=0;i<Constants.PADS_COUNT;i++) {
-				fis.read(config.sysex_pads[i]);
-				if (i>0) {
-					if((i&0x01) == 0) {
-						fis.read(config.sysex_3rds[(i-1)/2]);
-					}
-				}
-				b = (byte)fis.read();
-				config.altNote_linked[i] = (b>0)?true:false;
-				b = (byte)fis.read();
-				config.pressrollNote_linked[i] = (b>0)?true:false;
-			}
-			for (int i=0;i<Constants.CURVES_COUNT;i++) {
-				fis.read(config.sysex_curves[i]);
-			}			
-			fis.close();
-		} catch (IOException e) {
+			fullConfig.load(file);
+			config.copyFromPropertiesConfiguration(fullConfig);
+		} catch (ConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}	
+
+//	public void loadAll(ConfigFull config, File file) {
+//		byte b;
+//		try {
+//			FileInputStream fis = new FileInputStream(file);
+//			fis.read(config.sysex_misc);
+//			fis.read(config.sysex_pedal);
+//			for (int i=0;i<Constants.PADS_COUNT;i++) {
+//				fis.read(config.sysex_pads[i]);
+//				if (i>0) {
+//					if((i&0x01) == 0) {
+//						fis.read(config.sysex_3rds[(i-1)/2]);
+//					}
+//				}
+//				b = (byte)fis.read();
+//				config.altNote_linked[i] = (b>0)?true:false;
+//				b = (byte)fis.read();
+//				config.pressrollNote_linked[i] = (b>0)?true:false;
+//			}
+//			for (int i=0;i<Constants.CURVES_COUNT;i++) {
+//				fis.read(config.sysex_curves[i]);
+//			}			
+//			fis.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}	
 	
 	public void load_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
@@ -156,7 +194,8 @@ public class FileManager {
 			file = fileChooser.getSelectedFile();
 			options.lastFullPathConfig = file.getAbsolutePath();
 			if (file.exists()) {
-				loadAll(config, file);
+				//(config, file);
+				loadConfigFull(config,file);
 			}
 		}
 	}
@@ -180,7 +219,8 @@ public class FileManager {
 		file = new File(options.lastFullPathConfig);
 		options.lastFullPathConfig = file.getAbsolutePath();
 		if (file.exists()) {
-			loadAll(config, file);
+			//loadAll(config, file);
+			loadConfigFull(config,file);
 		}
 	}
 

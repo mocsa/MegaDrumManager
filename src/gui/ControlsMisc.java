@@ -47,7 +47,7 @@ public class ControlsMisc extends JPanel {
 	 * Create the panel.
 	 */
 	public ControlsMisc() {
-		configMisc = new ConfigMisc();
+		//configMisc = new ConfigMisc();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
@@ -259,13 +259,14 @@ public class ControlsMisc extends JPanel {
 		return btnSend;
 	}
 
-	public void copyToConfigFull (ConfigFull config, int chain_id) {
-		Utils.copyConfigMiscToSysex(configMisc, config.sysex_misc, chain_id);
-	}
+//	public void copyToConfigFull (ConfigFull config, int chain_id) {
+//		//Utils.copyConfigMiscToSysex(configMisc, config.sysex_misc, chain_id);
+//	}
 	
 	public void loadFromConfigFull (ConfigFull config) {
 		changeEventsAllowed = false;
-		Utils.copySysexToConfigMisc(config.sysex_misc, configMisc);
+		configMisc = config.configMisc;
+		//Utils.copySysexToConfigMisc(config.sysex_misc, configMisc);
 		updateControls();
 		changeEventsAllowed = true;
 	}
