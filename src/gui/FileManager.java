@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 
 import org.apache.commons.configuration.CombinedConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
@@ -87,41 +88,12 @@ public class FileManager {
 		try {
 			fullConfig.save(file);
 		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			Utils.show_error("Error saving all settings to:\n" +
+					file.getAbsolutePath()+"\n"+"("+e.getMessage()+")");
 		}
 		
 	}
-	
-//	public void saveAll(ConfigFull config, File file) {
-//		if (file.exists()) {
-//			file.delete();
-//		}
-//		try {
-//			file.createNewFile();
-//			FileOutputStream fos = new FileOutputStream(file);
-//			fos.write(config.sysex_misc);
-//			fos.write(config.sysex_pedal);
-//			for (int i=0;i<Constants.PADS_COUNT;i++) {
-//				fos.write(config.sysex_pads[i]);
-//				if (i>0) {
-//					if((i&0x01) == 0) {
-//						fos.write(config.sysex_3rds[(i-1)/2]);
-//					}
-//				}
-//				fos.write(config.altNote_linked[i]?1:0);
-//				fos.write(config.pressrollNote_linked[i]?1:0);
-//			}
-//			for (int i=0;i<Constants.CURVES_COUNT;i++) {
-//				fos.write(config.sysex_curves[i]);
-//			}
-//			fos.flush();
-//			fos.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 	
 	public void save_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
@@ -139,7 +111,6 @@ public class FileManager {
 			if (file.exists()) {
 				file.delete();
 			}
-			//saveAll(config, file);
 			saveConfigFull(config, file);
 		}
 	}
@@ -148,41 +119,21 @@ public class FileManager {
 		fullConfig = new PropertiesConfiguration();
 		try {
 			fullConfig.load(file);
-			config.copyFromPropertiesConfiguration(fullConfig);
+			try {
+				config.copyFromPropertiesConfiguration(fullConfig);
+			} catch (ConversionException e ) {
+				Utils.show_error("Error parsing settings from:\n" +
+						file.getAbsolutePath()+"\n"+"("+e.getMessage()+")");
+			}
+
 		} catch (ConfigurationException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			Utils.show_error("Error loading all settings from:\n" +
+					file.getAbsolutePath()+"\n"+"("+e.getMessage()+")");
 		}
 	}	
 
-//	public void loadAll(ConfigFull config, File file) {
-//		byte b;
-//		try {
-//			FileInputStream fis = new FileInputStream(file);
-//			fis.read(config.sysex_misc);
-//			fis.read(config.sysex_pedal);
-//			for (int i=0;i<Constants.PADS_COUNT;i++) {
-//				fis.read(config.sysex_pads[i]);
-//				if (i>0) {
-//					if((i&0x01) == 0) {
-//						fis.read(config.sysex_3rds[(i-1)/2]);
-//					}
-//				}
-//				b = (byte)fis.read();
-//				config.altNote_linked[i] = (b>0)?true:false;
-//				b = (byte)fis.read();
-//				config.pressrollNote_linked[i] = (b>0)?true:false;
-//			}
-//			for (int i=0;i<Constants.CURVES_COUNT;i++) {
-//				fis.read(config.sysex_curves[i]);
-//			}			
-//			fis.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}	
-	
 	public void load_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
 		if (!options.lastFullPathConfig.equals("")) {
@@ -194,7 +145,6 @@ public class FileManager {
 			file = fileChooser.getSelectedFile();
 			options.lastFullPathConfig = file.getAbsolutePath();
 			if (file.exists()) {
-				//(config, file);
 				loadConfigFull(config,file);
 			}
 		}
@@ -219,64 +169,70 @@ public class FileManager {
 		file = new File(options.lastFullPathConfig);
 		options.lastFullPathConfig = file.getAbsolutePath();
 		if (file.exists()) {
-			//loadAll(config, file);
 			loadConfigFull(config,file);
 		}
 	}
 
 	public ConfigOptions loadLastOptions(ConfigOptions config) {
 		file = new File(Constants.MD_MANAGER_CONFIG);
-		try {
-			if (file.exists()) {
-				FileInputStream fis = new FileInputStream(file);
-				prop.load(fis);
-				if ((prop.getProperty("MDconfigVersion") != null) && (Double.parseDouble(prop.getProperty("MDconfigVersion")) == Constants.MD_CONFIG_VERSION)) {
-					config.useSamePort = Boolean.parseBoolean(prop.getProperty("useSamePort"));
-					config.useThruPort = Boolean.parseBoolean(prop.getProperty("useThruPort"));
-					config.autoOpenPorts = Boolean.parseBoolean(prop.getProperty("autoOpenPorts"));
-					config.saveOnExit = Boolean.parseBoolean(prop.getProperty("saveOnExit"));
-					config.interactive = Boolean.parseBoolean(prop.getProperty("interactive"));
-					config.lastDir = prop.getProperty("lastDir");
-					config.lastFullPathConfig = prop.getProperty("lastFullPathConfig");
-					config.lastFullPathFirmware = prop.getProperty("lastFullPathFirmware");
-					config.lastFullPathSysex = prop.getProperty("lastFullPathSysex");
-					config.MidiInName = prop.getProperty("MidiInName");
-					config.MidiOutName = prop.getProperty("MidiOutName");
-					config.MidiThruName = prop.getProperty("MidiThruName");
-					config.chainId = Integer.parseInt(prop.getProperty("chainId"));
-					config.inputsCount = Integer.parseInt(prop.getProperty("inputsCount"));
-					config.sysexDelay = Integer.parseInt(prop.getProperty("sysexDelay"));
+		if (file.exists()) {
+			PropertiesConfiguration prop = new PropertiesConfiguration();
+			try {
+				prop.load(file);
+				try {
+					config.useSamePort = prop.getBoolean("useSamePort", config.useSamePort);
+					config.useThruPort = prop.getBoolean("useThruPort", config.useThruPort);
+					config.autoOpenPorts = prop.getBoolean("autoOpenPorts", config.autoOpenPorts);
+					config.saveOnExit = prop.getBoolean("saveOnExit", config.saveOnExit);
+					config.interactive = prop.getBoolean("interactive", config.interactive);
+					config.lastDir = prop.getString("lastDir", config.lastDir);
+					config.lastFullPathConfig = prop.getString("lastFullPathConfig", config.lastFullPathConfig);
+					config.lastFullPathFirmware = prop.getString("lastFullPathFirmware", config.lastFullPathFirmware);
+					config.lastFullPathSysex = prop.getString("lastFullPathSysex", config.lastFullPathSysex);
+					config.MidiInName = prop.getString("MidiInName", config.MidiInName);
+					config.MidiOutName = prop.getString("MidiOutName", config.MidiOutName);
+					config.MidiThruName = prop.getString("MidiThruName", config.MidiThruName);
+					config.chainId = prop.getInt("chainId", config.chainId);
+					config.inputsCount = prop.getInt("inputsCount", config.inputsCount);
+					config.sysexDelay = prop.getInt("sysexDelay", config.sysexDelay);
+						
 					config.mainWindowPosition = new Point(
-							Integer.parseInt(prop.getProperty("mainWindowPositionX")),
-							Integer.parseInt(prop.getProperty("mainWindowPositionY"))
+							prop.getInt("mainWindowPositionX", 0),
+							prop.getInt("mainWindowPositionY", 0)
 							);
 					for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 						config.framesPositions[i] = new Point (
-								Integer.parseInt(prop.getProperty("framesPositions"+ ((Integer)i).toString()+"X")),
-								Integer.parseInt(prop.getProperty("framesPositions"+ ((Integer)i).toString()+"Y"))							
+								prop.getInt("framesPositions"+ ((Integer)i).toString()+"X", 0),
+								prop.getInt("framesPositions"+ ((Integer)i).toString()+"Y", 0)
 								);
-						config.showPanels[i] = Integer.parseInt(prop.getProperty("showPanels"+ ((Integer)i).toString()));
+						config.showPanels[i] = prop.getInt("showPanels"+ ((Integer)i).toString());
 					}
+				} catch (ConversionException e) {
+					// TODO Auto-generated catch block
+					Utils.show_error("Error parsing MegaDrum options from file:\n" +
+							file.getAbsolutePath() + "\n"
+							+"(" + e.getMessage() + ")");
 				}
-			} else {
+			} catch (ConfigurationException e) {
+				// TODO Auto-generated catch block
 				saveLastOptions(config);
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
+		} else {
 			saveLastOptions(config);
-		}	
+		}
 		return config;
 	}
 	
 	public void saveLastOptions(ConfigOptions config) {
 		file = new File(Constants.MD_MANAGER_CONFIG);
+		PropertiesConfiguration prop = new PropertiesConfiguration();
+		prop.setHeader("MegaDrum options");
 		prop.setProperty("MDconfigVersion", Constants.MD_CONFIG_VERSION.toString());
-		prop.setProperty("useSamePort", ((Boolean)config.useSamePort).toString());
-		prop.setProperty("useThruPort", ((Boolean)config.useThruPort).toString());
-		prop.setProperty("autoOpenPorts", ((Boolean)config.autoOpenPorts).toString());
-		prop.setProperty("saveOnExit", ((Boolean)config.saveOnExit).toString());
-		prop.setProperty("interactive", ((Boolean)config.interactive).toString());
+		prop.setProperty("useSamePort", config.useSamePort);
+		prop.setProperty("useThruPort", config.useThruPort);
+		prop.setProperty("autoOpenPorts", config.autoOpenPorts);
+		prop.setProperty("saveOnExit", config.saveOnExit);
+		prop.setProperty("interactive", config.interactive);
 		prop.setProperty("lastDir", config.lastDir);
 		prop.setProperty("lastFullPathConfig", config.lastFullPathConfig);
 		prop.setProperty("lastFullPathFirmware", config.lastFullPathFirmware);
@@ -284,29 +240,26 @@ public class FileManager {
 		prop.setProperty("MidiInName", config.MidiInName);
 		prop.setProperty("MidiOutName", config.MidiOutName);
 		prop.setProperty("MidiThruName", config.MidiThruName);
-		prop.setProperty("chainId", ((Integer)config.chainId).toString());
-		prop.setProperty("inputsCount", ((Integer)config.inputsCount).toString());
-		prop.setProperty("sysexDelay", ((Integer)config.sysexDelay).toString());
-		prop.setProperty("mainWindowPositionX", ((Integer)config.mainWindowPosition.x).toString());
-		prop.setProperty("mainWindowPositionY", ((Integer)config.mainWindowPosition.y).toString());
+		prop.setProperty("chainId", config.chainId);
+		prop.setProperty("inputsCount", config.inputsCount);
+		prop.setProperty("sysexDelay", config.sysexDelay);
+		prop.setProperty("mainWindowPositionX", config.mainWindowPosition.x);
+		prop.setProperty("mainWindowPositionY", config.mainWindowPosition.y);
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
-			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"X", ((Integer)config.framesPositions[i].x).toString());
-			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", ((Integer)config.framesPositions[i].y).toString());
+			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"X", config.framesPositions[i].x);
+			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", config.framesPositions[i].y);
 
-			prop.setProperty("showPanels"+ ((Integer)i).toString(), ((Integer)config.showPanels[i]).toString());
+			prop.setProperty("showPanels"+ ((Integer)i).toString(), config.showPanels[i]);
 		}
 		try {
-			if (file.exists()) {
-				file.delete();
-			}
-			file.createNewFile();
-			FileOutputStream fos = new FileOutputStream(file);
-			prop.store(fos, "MegaDrum config");
-		} catch (IOException e) {
+			prop.save(file);
+		} catch (ConfigurationException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}				
-		
+			//e.printStackTrace();
+			Utils.show_error("Error saving MegaDrum options to file:\n" +
+					file.getAbsolutePath() + "\n"
+					+"(" + e.getMessage() + ")");
+		}		
 		
 	}
 		
@@ -334,7 +287,11 @@ public class FileManager {
 				fos.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
+				Utils.show_error("Error saving Sysex to file:\n" +
+						file.getAbsolutePath() + "\n"
+						+"(" + e.getMessage() + ")");
+
 			}
 		}
 	}
@@ -357,7 +314,10 @@ public class FileManager {
 					fis.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					// e.printStackTrace();
+					Utils.show_error("Error loading Sysex from file:\n" +
+							file.getAbsolutePath() + "\n"
+							+"(" + e.getMessage() + ")");
 				}
 			}
 		}

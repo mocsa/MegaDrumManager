@@ -1,6 +1,15 @@
 package gui;
 
+import javax.swing.JOptionPane;
+
 public class Utils {
+
+	public static void show_error(String msg) {
+		JOptionPane.showMessageDialog(null,
+			    msg,
+			    "Error",
+			    JOptionPane.ERROR_MESSAGE);
+	}
 
 	public static byte [] byte2sysex (byte b) {
 		byte [] result = new byte[2];

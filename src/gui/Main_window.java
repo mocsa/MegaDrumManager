@@ -144,12 +144,12 @@ public class Main_window {
 		toggleMidiOpenButton();
 	}
 	
-	public static void show_error(String msg) {
-		JOptionPane.showMessageDialog(null,
-			    msg,
-			    "Error",
-			    JOptionPane.ERROR_MESSAGE);
-	}
+//	public static void show_error(String msg) {
+//		JOptionPane.showMessageDialog(null,
+//			    msg,
+//			    "Error",
+//			    JOptionPane.ERROR_MESSAGE);
+//	}
 	
 	/**
 	 * Initialize the contents of the frame.
@@ -179,8 +179,8 @@ public class Main_window {
 				if (!upgradeDialog.isVisible()) {
 					midi_handler.getMidi();
 					if (midi_handler.sysexReceived) {
-						decodeSysex(midi_handler.bufferIn);
-						
+						midi_handler.sysexReceived = false;
+						decodeSysex(midi_handler.bufferIn);						
 					} else if (midi_handler.bufferIn != null) {
 						decodeShortMidi(midi_handler.bufferIn);
 					}
@@ -860,7 +860,10 @@ public class Main_window {
 			Thread.sleep(delay);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			Utils.show_error("Unrecoverable delayMs (timer) error. Exiting.\n" +
+					"(" + e.getMessage() + ")");
+			System.exit(1);
 		}
 	}
 	
@@ -1053,15 +1056,8 @@ public class Main_window {
 		fileManager.load_all(configFull, configOptions);
 		loadAllFromConfigFull();
 	}
-	
-	private void copyAllToConfigFull() {
-		//controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
-		//controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
-		//controlsPads.copyToConfigFull(configFull, configOptions.chainId);
-		controlsCurves.copyToConfigFull(configFull, configOptions.chainId);		
-	}
+
 	private void save_all() {
-		copyAllToConfigFull();
 		fileManager.save_all(configFull, configOptions);
 	}
 	
@@ -1134,6 +1130,10 @@ public class Main_window {
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
 		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
 			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
+			if (i == 3) {
+				// Pause, start live MIDI log
+				panelMidiLog.pauseLiveScroll(!panelMidiLog.isVisible());
+			}
 			if (configOptions.showPanels[i] == Constants.PANEL_DETACH) {
 				if (!framesDetached[i].isDetached) {
 					framesDetached[i].isDetached = true;

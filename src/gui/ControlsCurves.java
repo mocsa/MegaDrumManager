@@ -295,19 +295,9 @@ public class ControlsCurves extends JPanel {
 		changeEventsAllowed = true;
 	}
 
-	public void copyToConfigFull (ConfigFull config, int chain_id) {
-		int i;
-		for (i = 0; i<Constants.CURVES_COUNT; i++) {
-			Utils.copyConfigCurveToSysex(configCurves[i], config.sysex_curves[i], chain_id, i);
-		}
-	}
-	
 	public void loadFromConfigFull (ConfigFull config) {
 		changeEventsAllowed = false;
-		int i;
-		for (i = 0; i<Constants.CURVES_COUNT; i++) {
-			Utils.copySysexToConfigCurve(config.sysex_curves[i], configCurves[i]);
-		}
+		configCurves = config.configCurves;
 		updateControls();
 		changeEventsAllowed = true;
 	}

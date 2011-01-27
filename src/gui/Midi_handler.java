@@ -115,7 +115,10 @@ public class Midi_handler {
 				thruReceiver.send(shortMessage, -1);
 			} catch (InvalidMidiDataException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				// e.printStackTrace();
+				Utils.show_error("Error sending Short MIDI message to port:\n" +
+						midithru.getDeviceInfo().getName() + "\n" +
+						"(" + e.getMessage() + ")");
 			}
 		}
 	}
@@ -130,7 +133,10 @@ public class Midi_handler {
 					receiver.send(sysexMessage, -1);
 				} catch (InvalidMidiDataException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					//e.printStackTrace();
+					Utils.show_error("Error sending Sysex MIDI message to port:\n" +
+							midiout.getDeviceInfo().getName() + "\n" +
+							"(" + e.getMessage() + ")");
 				}		
 			}
 		}
@@ -274,7 +280,8 @@ public class Midi_handler {
 			}
 			catch (MidiUnavailableException e)
 			{
-				Main_window.show_error("Error trying to list MIDI In devices");
+				Utils.show_error("Error trying to list MIDI In ports.\n"
+						+"(" + e.getMessage() + ")");
 			}
 			
 		}
@@ -307,7 +314,8 @@ public class Midi_handler {
 			}
 			catch (MidiUnavailableException e)
 			{
-				Main_window.show_error("Error trying to list MIDI In devices");
+				Utils.show_error("Error trying to list MIDI Out ports.\n"
+						+"(" + e.getMessage() + ")");
 			}
 			
 		}
@@ -344,7 +352,8 @@ public class Midi_handler {
 				}
 			} catch (MidiUnavailableException e)
 			{
-				Main_window.show_error("Error trying to open MIDI In device");
+				Utils.show_error("Error trying to open MIDI In port:\n" +
+						midiin.getDeviceInfo().getName());
 			}
  		}
 
@@ -364,7 +373,8 @@ public class Midi_handler {
 				}
 			} catch (MidiUnavailableException e)
 			{
-				Main_window.show_error("Error trying to open MIDI Out device");
+				Utils.show_error("Error trying to open MIDI Out port:\n" +
+						midiout.getDeviceInfo().getName());
 			}
  		}
 
@@ -384,7 +394,8 @@ public class Midi_handler {
 				}
 			} catch (MidiUnavailableException e)
 			{
-				Main_window.show_error("Error trying to open MIDI Out device");
+				Utils.show_error("Error trying to open MIDI Thru port:\n" +
+						midithru.getDeviceInfo().getName());
 			}
  		}
  		
@@ -428,7 +439,9 @@ public class Midi_handler {
 			rr.send(msg, -1);
 		} catch (InvalidMidiDataException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			Utils.show_error("Error sending Sysex.\n" +
+					"(" + e.getMessage() + ")");
 		}
 	}	
 
@@ -465,7 +478,10 @@ public class Midi_handler {
 			fis = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// e.printStackTrace();
+			Utils.show_error("Error loading from file:\n" +
+					file.getAbsolutePath() + "\n" +
+					"(" + e.getMessage() + ")");
 		}
 		bis = new BufferedInputStream(fis);
 		dis = new DataInputStream(bis);
@@ -510,7 +526,10 @@ public class Midi_handler {
 					Thread.sleep(50);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					// e.printStackTrace();
+					Utils.show_error("Unrecoverable timer error. Exiting.\n" +
+							"(" + e.getMessage() + ")");
+					System.exit(1);
 				}
 			}
 			//System.out.printf("Received %d bytes\n", nBytes);
@@ -543,7 +562,10 @@ public class Midi_handler {
 							Thread.sleep(10);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							// e.printStackTrace();
+							Utils.show_error("Unrecoverable error. Exiting.\n" +
+									"(" + e.getMessage() + ")");
+							System.exit(1);
 						}
 					} else {
 						//System.out.println("\nCRC error. File damaged.\n");

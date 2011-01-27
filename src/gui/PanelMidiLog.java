@@ -364,4 +364,9 @@ public class PanelMidiLog extends JPanel {
 			logStore[i] = new LogStore();
 		}
 	}
+	
+	public void pauseLiveScroll(boolean b) {
+		panelMidiScroll.pauseScroll = b;
+		tglbtnPause.setSelected(b);
+	}
 }
