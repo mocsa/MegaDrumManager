@@ -14,6 +14,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
@@ -25,6 +26,11 @@ import java.awt.event.MouseEvent;
 import java.awt.Insets;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import javax.swing.JPopupMenu;
+import java.awt.Component;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import java.awt.Dimension;
 
 public class ControlsPads extends JPanel {
 	private JButton btnGet;
@@ -55,12 +61,14 @@ public class ControlsPads extends JPanel {
 	private static final boolean rim_pad = false;
 	private JButton btnGetall;
 	private JButton btnSendall;
-	private JButton btnCopyPad;
-	private JButton btnCopyHead;
 	private JButton btnCopyRim;
 	private JButton btnCopyrd;
 	private JButton btnLoad;
 	private JButton btnSave;
+	private JPanel panelCopyPad;
+	private JMenu menu;
+	private JMenuBar menuBar;
+	private JMenu mnCopypadto;
 
 	/**
 	 * Create the panel.
@@ -113,7 +121,7 @@ public class ControlsPads extends JPanel {
 				ColumnSpec.decode("25dlu"),
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),}));
+				RowSpec.decode("12dlu:grow"),}));
 		
 		btnGet = new JButton("Get");
 		btnGet.setMargin(new Insets(1, 2, 1, 2));
@@ -145,15 +153,20 @@ public class ControlsPads extends JPanel {
 		btnSave.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnSave, "11, 1");
 		
-		btnCopyPad = new JButton("CopyPad");
-		btnCopyPad.setMargin(new Insets(1, 0, 1, 0));
-		btnCopyPad.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel_buttons.add(btnCopyPad, "13, 1");
+		panelCopyPad = new JPanel();
+		panelCopyPad.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel_buttons.add(panelCopyPad, "13, 1, fill, fill");
+		panelCopyPad.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.PREF_COLSPEC,},
+			new RowSpec[] {
+				RowSpec.decode("fill:pref"),}));
 		
-		btnCopyHead = new JButton("CopyHead");
-		btnCopyHead.setMargin(new Insets(1, 0, 1, 0));
-		btnCopyHead.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel_buttons.add(btnCopyHead, "15, 1");
+		menuBar = new JMenuBar();
+		panelCopyPad.add(menuBar, "1, 1, left, top");
+		
+		mnCopypadto = new JMenu("CopyPad");
+		mnCopypadto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		menuBar.add(mnCopypadto);
 		
 		btnCopyRim = new JButton("CopyRim");
 		btnCopyRim.setMargin(new Insets(1, 0, 1, 0));
@@ -480,8 +493,34 @@ public class ControlsPads extends JPanel {
 			head_str = getPadName(0);
 			padString = ((Integer)(1)).toString() + "(" + head_str + ")";			
 		}
+
+		ActionListener copyPadAction =  new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.printf("Index = %d\n", Integer.parseInt(((JMenuItem)arg0.getSource()).getName()));
+			}
+		};
+		if (mnCopypadto.getMenuComponentCount() == 0) {
+			mnCopypadto.insert("All", 0);
+			((JMenuItem)mnCopypadto.getMenuComponent(0)).setName("0");
+			((JMenuItem)mnCopypadto.getMenuComponent(0)).addActionListener(copyPadAction);
+		}
+		if ((index+1) < mnCopypadto.getMenuComponentCount()) {
+			mnCopypadto.remove(index+1);
+		}
+		mnCopypadto.insert(padString, index+1);
+		((JMenuItem)mnCopypadto.getMenuComponent(index+1)).setName(((Integer)(index+1)).toString());
+		((JMenuItem)mnCopypadto.getMenuComponent(index+1)).addActionListener(copyPadAction);
+		
 		comboBox_padSelection.insertItemAt(padString, index);
 		comboBox_padSelection.removeItemAt(index+1);
+		//populateCopyPad();
+	}
+
+	private void populateCopyPad() {
+		mnCopypadto.removeAll();
+		for (int i = 0;i<comboBox_padSelection.getItemCount();i++) {
+			mnCopypadto.add(comboBox_padSelection.getItemAt(i).toString());
+		}
 	}
 
 	private void switch_to_pad(int pad_id) {
@@ -628,6 +667,7 @@ public class ControlsPads extends JPanel {
 		if (panel_head != null) {
 			switch_to_pad(0);
 		}
+		mnCopypadto.removeAll();
 		comboBox_padSelection.setMaximumRowCount((count+1)/2);
 		comboBox_padSelection.removeAllItems();
 		comboBox_padSelection.addItem("");
@@ -651,4 +691,21 @@ public class ControlsPads extends JPanel {
 	public JButton getBtnSave() {
 		return btnSave;
 	}
+//	private static void addPopup(Component component, final JPopupMenu popup) {
+//		component.addMouseListener(new MouseAdapter() {
+//			public void mousePressed(MouseEvent e) {
+//				if (e.isPopupTrigger()) {
+//					showMenu(e);
+//				}
+//			}
+//			public void mouseReleased(MouseEvent e) {
+//				if (e.isPopupTrigger()) {
+//					showMenu(e);
+//				}
+//			}
+//			private void showMenu(MouseEvent e) {
+//				popup.show(e.getComponent(), e.getX(), e.getY());
+//			}
+//		});
+//	}
 }
