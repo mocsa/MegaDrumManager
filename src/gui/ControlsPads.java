@@ -30,6 +30,10 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
 import java.awt.Dimension;
 
 public class ControlsPads extends JPanel {
@@ -61,14 +65,15 @@ public class ControlsPads extends JPanel {
 	private static final boolean rim_pad = false;
 	private JButton btnGetall;
 	private JButton btnSendall;
-	private JButton btnCopyRim;
-	private JButton btnCopyrd;
 	private JButton btnLoad;
 	private JButton btnSave;
 	private JPanel panelCopyPad;
 	private JMenu menu;
 	private JMenuBar menuBar;
 	private JMenu mnCopypadto;
+	private JMenu mnCopyhead;
+	private JMenu mnCopyrim;
+	private JMenu mnCopyrd;
 
 	/**
 	 * Create the panel.
@@ -112,14 +117,7 @@ public class ControlsPads extends JPanel {
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("18dlu"),
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("25dlu"),
-				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("25dlu"),
-				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("25dlu"),
-				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("25dlu"),
-				ColumnSpec.decode("default:grow"),},
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("12dlu:grow"),}));
 		
@@ -168,15 +166,17 @@ public class ControlsPads extends JPanel {
 		mnCopypadto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		menuBar.add(mnCopypadto);
 		
-		btnCopyRim = new JButton("CopyRim");
-		btnCopyRim.setMargin(new Insets(1, 0, 1, 0));
-		btnCopyRim.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel_buttons.add(btnCopyRim, "17, 1");
+		mnCopyhead = new JMenu("CopyHead");
+		mnCopyhead.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		menuBar.add(mnCopyhead);
 		
-		btnCopyrd = new JButton("Copy3rd");
-		btnCopyrd.setMargin(new Insets(1, 0, 1, 0));
-		btnCopyrd.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel_buttons.add(btnCopyrd, "19, 1");
+		mnCopyrim = new JMenu("CopyRim");
+		mnCopyrim.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		menuBar.add(mnCopyrim);
+		
+		mnCopyrd = new JMenu("Copy3rd");
+		mnCopyrd.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		menuBar.add(mnCopyrd);
 		
 		JPanel panel_input_selection = new JPanel();
 		add(panel_input_selection, "1, 3, fill, fill");
@@ -477,11 +477,94 @@ public class ControlsPads extends JPanel {
 		return result;
 	}
 	
+	private void copyPad(int index, boolean copyHead, boolean copyRim) {
+		PropertiesConfiguration propSrcHead = new PropertiesConfiguration();
+		PropertiesConfiguration propSrcRim = new PropertiesConfiguration();
+		
+		PropertiesConfigurationLayout layoutHead = new PropertiesConfigurationLayout(propSrcHead);		
+		PropertiesConfigurationLayout layoutRim = new PropertiesConfigurationLayout(propSrcRim);		
+		configPads[padPointer].copyToPropertiesConfiguration(propSrcHead, layoutHead, "copy", 0);
+		if (padPointer > 0) {
+			configPads[padPointer+1].copyToPropertiesConfiguration(propSrcRim, layoutRim, "copy", 0);			
+		}
+		
+		if (index > 0) {
+			int dst;
+			if (index > 1) {
+				dst = (index-2)*2+1;
+				if (dst != padPointer) {
+					if (copyHead) {
+						configPads[dst].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
+					}
+					if (padPointer  > 0) {
+						if (copyRim) {
+							configPads[dst+1].copyFromPropertiesConfiguration(propSrcRim, "copy", 0);
+						}
+					}
+				}
+			} else {
+				if (padPointer != 0) {
+					if (copyHead) {
+						configPads[0].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
+						configPads[0].dual = false;
+						configPads[0].threeWay = false;
+					}
+				}
+			}
+		} else {
+			for (int i = 0;i<comboBox_padSelection.getItemCount()*2-1;i++) {
+				if (i != padPointer) {
+					if (i>0){
+						if (copyHead) {
+							configPads[i].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
+						}
+						i++;
+						if (padPointer>0) {
+							if (copyRim) {
+								configPads[i].copyFromPropertiesConfiguration(propSrcRim, "copy", 0);
+							}
+						}
+					} else {
+						if (copyHead) {
+							configPads[i].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
+							configPads[i].dual = false;
+							configPads[i].threeWay = false;
+						}
+					}
+				} else {
+					if (i > 0) {
+						i++;
+					}
+				}				
+			}
+		}
+	}
+	
 	private void updatePadsSelection(int pad_id) {
 		int index;
-		String head_str;
-		String rim_str;
-		String padString;
+		String head_str = "";
+		String rim_str = "";
+		String padString = "";
+		ActionListener copyPadAction =  new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), true, true);
+			}
+		};
+		ActionListener copyHeadAction =  new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), true, false);
+			}
+		};
+		ActionListener copyRimAction =  new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), false, true);
+			}
+		};
+		ActionListener copy3rdAction =  new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.printf("Index = %d\n", Integer.parseInt(((JMenuItem)arg0.getSource()).getName()));
+			}
+		};
 		
 		if (pad_id > 0) {
 			index = ((pad_id - 1)>>1) + 1;
@@ -491,16 +574,48 @@ public class ControlsPads extends JPanel {
 		} else {
 			index = 0;
 			head_str = getPadName(0);
-			padString = ((Integer)(1)).toString() + "(" + head_str + ")";			
+			padString = ((Integer)(1)).toString() + " " + head_str;			
 		}
 
-		ActionListener copyPadAction =  new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.printf("Index = %d\n", Integer.parseInt(((JMenuItem)arg0.getSource()).getName()));
+		if (pad_id > 0) {
+			if (mnCopyrim.getMenuComponentCount() == 0) {
+				mnCopyrim.insert("To All Rims", 0);
+				((JMenuItem)mnCopyrim.getMenuComponent(0)).setName("0");
+				((JMenuItem)mnCopyrim.getMenuComponent(0)).addActionListener(copyRimAction);
 			}
-		};
+			if ((index) < mnCopyrim.getMenuComponentCount()) {
+				mnCopyrim.remove(index);
+			}
+			mnCopyrim.insert(((Integer)(pad_id + 2)).toString() + " " +  rim_str, index);
+			((JMenuItem)mnCopyrim.getMenuComponent(index)).setName(((Integer)(index)).toString());
+			((JMenuItem)mnCopyrim.getMenuComponent(index)).addActionListener(copyRimAction);
+			
+			if (mnCopyrd.getMenuComponentCount() == 0) {
+				mnCopyrd.insert("To All 3rd zones", 0);
+				((JMenuItem)mnCopyrd.getMenuComponent(0)).setName("0");
+				((JMenuItem)mnCopyrd.getMenuComponent(0)).addActionListener(copy3rdAction);
+			}
+			if ((index) < mnCopyrd.getMenuComponentCount()) {
+				mnCopyrd.remove(index);
+			}
+			mnCopyrd.insert(padString, index);
+			((JMenuItem)mnCopyrd.getMenuComponent(index)).setName(((Integer)(index)).toString());
+			((JMenuItem)mnCopyrd.getMenuComponent(index)).addActionListener(copy3rdAction);
+		}
+		if (mnCopyhead.getMenuComponentCount() == 0) {
+			mnCopyhead.insert("To All Heads", 0);
+			((JMenuItem)mnCopyhead.getMenuComponent(0)).setName("0");
+			((JMenuItem)mnCopyhead.getMenuComponent(0)).addActionListener(copyHeadAction);
+		}
+		if ((index+1) < mnCopyhead.getMenuComponentCount()) {
+			mnCopyhead.remove(index+1);
+		}
+		mnCopyhead.insert(((Integer)(pad_id + 1)).toString() + " " +  head_str, index+1);
+		((JMenuItem)mnCopyhead.getMenuComponent(index+1)).setName(((Integer)(index+1)).toString());
+		((JMenuItem)mnCopyhead.getMenuComponent(index+1)).addActionListener(copyHeadAction);
+
 		if (mnCopypadto.getMenuComponentCount() == 0) {
-			mnCopypadto.insert("All", 0);
+			mnCopypadto.insert("To All Pads", 0);
 			((JMenuItem)mnCopypadto.getMenuComponent(0)).setName("0");
 			((JMenuItem)mnCopypadto.getMenuComponent(0)).addActionListener(copyPadAction);
 		}
@@ -513,14 +628,6 @@ public class ControlsPads extends JPanel {
 		
 		comboBox_padSelection.insertItemAt(padString, index);
 		comboBox_padSelection.removeItemAt(index+1);
-		//populateCopyPad();
-	}
-
-	private void populateCopyPad() {
-		mnCopypadto.removeAll();
-		for (int i = 0;i<comboBox_padSelection.getItemCount();i++) {
-			mnCopypadto.add(comboBox_padSelection.getItemAt(i).toString());
-		}
 	}
 
 	private void switch_to_pad(int pad_id) {
@@ -668,6 +775,9 @@ public class ControlsPads extends JPanel {
 			switch_to_pad(0);
 		}
 		mnCopypadto.removeAll();
+		mnCopyhead.removeAll();
+		mnCopyrim.removeAll();
+		mnCopyrd.removeAll();
 		comboBox_padSelection.setMaximumRowCount((count+1)/2);
 		comboBox_padSelection.removeAllItems();
 		comboBox_padSelection.addItem("");
