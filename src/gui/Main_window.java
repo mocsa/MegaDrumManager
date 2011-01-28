@@ -99,7 +99,8 @@ public class Main_window {
 	private FrameDetached [] framesDetached;
 	private JPanel [] controlsPanels;
 	private ViewMenu [] viewMenus;
-	private ConfigFull configFull;
+	//private ConfigFull configFull;
+	private ConfigFull [] fullConfigs;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
 	//private int chainId;
@@ -112,8 +113,8 @@ public class Main_window {
 	private JLabel lblVersion;
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox comboBoxCfg;
-	private int configPointer = 0;
-	private String [] configsStrings;
+	//private int configPointer = 0;
+	//private String [] configsStrings;
 	
 
 	
@@ -177,12 +178,11 @@ public class Main_window {
 		frmMegadrummanager.setTitle("MegaDrumManager");
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		//chainId = 0;
-		configsStrings = new String[Constants.CONFIGS_COUNT];
+		configOptions = new ConfigOptions(); // default options loaded with new
+		fullConfigs = new ConfigFull[Constants.CONFIGS_COUNT];
 		for (Integer i = 1;i<=Constants.CONFIGS_COUNT;i++) {
-			configsStrings[i-1] = "Config"+i.toString();
+			fullConfigs[i-1] = new ConfigFull();
 		}
-		configFull = new ConfigFull();
 		fileManager = new FileManager(frmMegadrummanager);
 		midi_handler = new Midi_handler();
 		dialog_options = new Options(midi_handler);
@@ -680,21 +680,22 @@ public class Main_window {
 			public void actionPerformed(ActionEvent arg0) {
 				String text = comboBoxCfg.getSelectedItem().toString();
 				if (comboBoxCfg.getSelectedIndex()<0) {
-					configsStrings[configPointer] = text;
-					comboBoxCfg.setModel(new DefaultComboBoxModel(configsStrings));
-					comboBoxCfg.setSelectedIndex(configPointer);
+					configOptions.configsNames[configOptions.lastConfig] = text;
+					comboBoxCfg.setModel(new DefaultComboBoxModel(configOptions.configsNames));
+					comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 				}
 			}			
 		});
-		comboBoxCfg.setModel(new DefaultComboBoxModel(configsStrings));
-		comboBoxCfg.setSelectedIndex(configPointer);
+		comboBoxCfg.setModel(new DefaultComboBoxModel(configOptions.configsNames));
+		comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		comboBoxCfg.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					if (comboBoxCfg.getSelectedIndex()>-1) {
-						configPointer = comboBoxCfg.getSelectedIndex();
+						configOptions.lastConfig = comboBoxCfg.getSelectedIndex();
+						loadAllFromConfigFull();
 					}
 				}
 			}
@@ -706,9 +707,9 @@ public class Main_window {
 		JButton btnPrevcfg = new JButton("prevCfg");
 		btnPrevcfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (configPointer>0) {
-					configPointer--;
-					comboBoxCfg.setSelectedIndex(configPointer);
+				if (configOptions.lastConfig>0) {
+					configOptions.lastConfig--;
+					comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 				}
 			}
 		});
@@ -719,9 +720,9 @@ public class Main_window {
 		JButton btnNextcfg = new JButton("nextCfg");
 		btnNextcfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (configPointer<(Constants.CONFIGS_COUNT-1)) {
-					configPointer++;
-					comboBoxCfg.setSelectedIndex(configPointer);
+				if (configOptions.lastConfig<(Constants.CONFIGS_COUNT-1)) {
+					configOptions.lastConfig++;
+					comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 				}
 			}
 		});
@@ -1126,24 +1127,25 @@ public class Main_window {
 	}
 
 	private void loadAllFromConfigFull() {
-		controlsMisc.loadFromConfigFull(configFull);
-		controlsPedal.loadFromConfigFull(configFull);
-		controlsPads.loadFromConfigFull(configFull);		
-		controlsCurves.loadFromConfigFull(configFull);				
+		controlsMisc.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);
+		controlsPedal.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);
+		controlsPads.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);		
+		controlsCurves.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);				
 	}
 	private void load_all() {
-		fileManager.load_all(configFull, configOptions);
+		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
 		loadAllFromConfigFull();
 	}
 
 	private void save_all() {
-		fileManager.save_all(configFull, configOptions);
+		fileManager.save_all(fullConfigs[configOptions.lastConfig], configOptions);
 	}
 	
 	private void loadConfig() {
-		configOptions = new ConfigOptions(); // default options loaded with new
 		//copyAllToConfigFull();
 		configOptions  = fileManager.loadLastOptions(configOptions);
+		comboBoxCfg.setModel(new DefaultComboBoxModel(configOptions.configsNames));
+		comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		dialog_options.fillInPorts(midi_handler.getMidiInList());
 		dialog_options.fillOutPorts(midi_handler.getMidiOutList());
 		dialog_options.fillThruPorts(midi_handler.getMidiOutList());
@@ -1175,7 +1177,7 @@ public class Main_window {
 		//controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
 		//controlsPads.copyToConfigFull(configFull, configOptions.chainId);
 		if (!configOptions.lastFullPathConfig.equals("")) {
-			fileManager.loadAllSilent(configFull, configOptions);
+			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
 			loadAllFromConfigFull();
 		}
 		frmMegadrummanager.setLocation(configOptions.mainWindowPosition);

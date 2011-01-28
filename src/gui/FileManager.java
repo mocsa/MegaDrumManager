@@ -186,6 +186,10 @@ public class FileManager {
 					config.saveOnExit = prop.getBoolean("saveOnExit", config.saveOnExit);
 					config.interactive = prop.getBoolean("interactive", config.interactive);
 					config.lastDir = prop.getString("lastDir", config.lastDir);
+					config.lastConfig = prop.getInt("lastConfig",config.lastConfig);
+					for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
+						config.configsNames[i] = prop.getString("configName"+i.toString(), config.configsNames[i]);
+					}
 					config.lastFullPathConfig = prop.getString("lastFullPathConfig", config.lastFullPathConfig);
 					config.lastFullPathFirmware = prop.getString("lastFullPathFirmware", config.lastFullPathFirmware);
 					config.lastFullPathSysex = prop.getString("lastFullPathSysex", config.lastFullPathSysex);
@@ -234,6 +238,10 @@ public class FileManager {
 		prop.setProperty("saveOnExit", config.saveOnExit);
 		prop.setProperty("interactive", config.interactive);
 		prop.setProperty("lastDir", config.lastDir);
+		prop.setProperty("lastConfig",config.lastConfig);
+		for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
+			prop.setProperty("configName"+i.toString(), config.configsNames[i]);
+		}
 		prop.setProperty("lastFullPathConfig", config.lastFullPathConfig);
 		prop.setProperty("lastFullPathFirmware", config.lastFullPathFirmware);
 		prop.setProperty("lastFullPathSysex", config.lastFullPathSysex);

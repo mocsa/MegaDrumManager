@@ -9,6 +9,8 @@ public class ConfigOptions implements java.io.Serializable {
 	public boolean saveOnExit = false;
 	public boolean interactive = false;
 	public String lastDir = "";
+	public int lastConfig = 0;
+	public String [] configsNames;
 	public String lastFullPathConfig = "";
 	public String lastFullPathFirmware = "";
 	public String lastFullPathSysex = "";
@@ -24,6 +26,10 @@ public class ConfigOptions implements java.io.Serializable {
 	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
 	
 	public ConfigOptions() {
+		configsNames = new String[Constants.CONFIGS_COUNT];
+		for (Integer i = 1;i<=Constants.CONFIGS_COUNT;i++) {
+			configsNames[i-1] = "Config"+i.toString();
+		}
 		
 	}
 }
