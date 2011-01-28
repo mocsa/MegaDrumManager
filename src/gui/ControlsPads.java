@@ -477,15 +477,18 @@ public class ControlsPads extends JPanel {
 		return result;
 	}
 	
-	private void copyPad(int index, boolean copyHead, boolean copyRim) {
+	private void copyPad(int index, boolean copyHead, boolean copyRim, boolean copy3rd) {
 		PropertiesConfiguration propSrcHead = new PropertiesConfiguration();
 		PropertiesConfiguration propSrcRim = new PropertiesConfiguration();
+		PropertiesConfiguration propSrc3rd = new PropertiesConfiguration();
 		
 		PropertiesConfigurationLayout layoutHead = new PropertiesConfigurationLayout(propSrcHead);		
 		PropertiesConfigurationLayout layoutRim = new PropertiesConfigurationLayout(propSrcRim);		
+		PropertiesConfigurationLayout layout3rd = new PropertiesConfigurationLayout(propSrc3rd);		
 		configPads[padPointer].copyToPropertiesConfiguration(propSrcHead, layoutHead, "copy", 0);
 		if (padPointer > 0) {
 			configPads[padPointer+1].copyToPropertiesConfiguration(propSrcRim, layoutRim, "copy", 0);			
+			config3rds[(padPointer-1)/2].copyToPropertiesConfiguration(propSrc3rd, layoutRim, "copy", 0);			
 		}
 		
 		if (index > 0) {
@@ -499,6 +502,9 @@ public class ControlsPads extends JPanel {
 					if (padPointer  > 0) {
 						if (copyRim) {
 							configPads[dst+1].copyFromPropertiesConfiguration(propSrcRim, "copy", 0);
+						}
+						if (copy3rd) {
+							config3rds[(dst-1)/2].copyFromPropertiesConfiguration(propSrc3rd, "copy", 0);
 						}
 					}
 				}
@@ -522,6 +528,9 @@ public class ControlsPads extends JPanel {
 						if (padPointer>0) {
 							if (copyRim) {
 								configPads[i].copyFromPropertiesConfiguration(propSrcRim, "copy", 0);
+							}
+							if (copy3rd) {
+								config3rds[(i-2)/2].copyFromPropertiesConfiguration(propSrc3rd, "copy", 0);
 							}
 						}
 					} else {
@@ -547,22 +556,22 @@ public class ControlsPads extends JPanel {
 		String padString = "";
 		ActionListener copyPadAction =  new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), true, true);
+				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), true, true, true);
 			}
 		};
 		ActionListener copyHeadAction =  new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), true, false);
+				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), true, false, false);
 			}
 		};
 		ActionListener copyRimAction =  new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), false, true);
+				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), false, true, false);
 			}
 		};
 		ActionListener copy3rdAction =  new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.printf("Index = %d\n", Integer.parseInt(((JMenuItem)arg0.getSource()).getName()));
+				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), false, false, true);
 			}
 		};
 		
