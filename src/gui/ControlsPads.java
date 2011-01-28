@@ -554,6 +554,7 @@ public class ControlsPads extends JPanel {
 		String head_str = "";
 		String rim_str = "";
 		String padString = "";
+		Font menuFont = new Font("Tahoma", Font.PLAIN, 9);
 		ActionListener copyPadAction =  new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				copyPad(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()), true, true, true);
@@ -589,6 +590,7 @@ public class ControlsPads extends JPanel {
 		if (pad_id > 0) {
 			if (mnCopyrim.getMenuComponentCount() == 0) {
 				mnCopyrim.insert("To All Rims", 0);
+				((JMenuItem)mnCopyrim.getMenuComponent(0)).setFont(menuFont);
 				((JMenuItem)mnCopyrim.getMenuComponent(0)).setName("0");
 				((JMenuItem)mnCopyrim.getMenuComponent(0)).addActionListener(copyRimAction);
 			}
@@ -596,11 +598,13 @@ public class ControlsPads extends JPanel {
 				mnCopyrim.remove(index);
 			}
 			mnCopyrim.insert(((Integer)(pad_id + 2)).toString() + " " +  rim_str, index);
+			((JMenuItem)mnCopyrim.getMenuComponent(index)).setFont(menuFont);
 			((JMenuItem)mnCopyrim.getMenuComponent(index)).setName(((Integer)(index)).toString());
 			((JMenuItem)mnCopyrim.getMenuComponent(index)).addActionListener(copyRimAction);
 			
 			if (mnCopyrd.getMenuComponentCount() == 0) {
 				mnCopyrd.insert("To All 3rd zones", 0);
+				((JMenuItem)mnCopyrd.getMenuComponent(0)).setFont(menuFont);
 				((JMenuItem)mnCopyrd.getMenuComponent(0)).setName("0");
 				((JMenuItem)mnCopyrd.getMenuComponent(0)).addActionListener(copy3rdAction);
 			}
@@ -608,11 +612,13 @@ public class ControlsPads extends JPanel {
 				mnCopyrd.remove(index);
 			}
 			mnCopyrd.insert(padString, index);
+			((JMenuItem)mnCopyrd.getMenuComponent(index)).setFont(menuFont);
 			((JMenuItem)mnCopyrd.getMenuComponent(index)).setName(((Integer)(index)).toString());
 			((JMenuItem)mnCopyrd.getMenuComponent(index)).addActionListener(copy3rdAction);
 		}
 		if (mnCopyhead.getMenuComponentCount() == 0) {
 			mnCopyhead.insert("To All Heads", 0);
+			((JMenuItem)mnCopyhead.getMenuComponent(0)).setFont(menuFont);
 			((JMenuItem)mnCopyhead.getMenuComponent(0)).setName("0");
 			((JMenuItem)mnCopyhead.getMenuComponent(0)).addActionListener(copyHeadAction);
 		}
@@ -620,11 +626,13 @@ public class ControlsPads extends JPanel {
 			mnCopyhead.remove(index+1);
 		}
 		mnCopyhead.insert(((Integer)(pad_id + 1)).toString() + " " +  head_str, index+1);
+		((JMenuItem)mnCopyhead.getMenuComponent(index+1)).setFont(menuFont);
 		((JMenuItem)mnCopyhead.getMenuComponent(index+1)).setName(((Integer)(index+1)).toString());
 		((JMenuItem)mnCopyhead.getMenuComponent(index+1)).addActionListener(copyHeadAction);
 
 		if (mnCopypadto.getMenuComponentCount() == 0) {
 			mnCopypadto.insert("To All Pads", 0);
+			((JMenuItem)mnCopypadto.getMenuComponent(0)).setFont(menuFont);
 			((JMenuItem)mnCopypadto.getMenuComponent(0)).setName("0");
 			((JMenuItem)mnCopypadto.getMenuComponent(0)).addActionListener(copyPadAction);
 		}
@@ -632,6 +640,7 @@ public class ControlsPads extends JPanel {
 			mnCopypadto.remove(index+1);
 		}
 		mnCopypadto.insert(padString, index+1);
+		((JMenuItem)mnCopypadto.getMenuComponent(index+1)).setFont(menuFont);
 		((JMenuItem)mnCopypadto.getMenuComponent(index+1)).setName(((Integer)(index+1)).toString());
 		((JMenuItem)mnCopypadto.getMenuComponent(index+1)).addActionListener(copyPadAction);
 		

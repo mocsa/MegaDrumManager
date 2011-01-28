@@ -235,6 +235,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblCurve, "1, 5, right, center");
 		
 		spinner_channel = new JSpinner();
+		spinner_channel.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		controls.add(spinner_channel);
 		spinner_channel.setModel(new SpinnerNumberModel(1, 1, 16, 1));
 		add(spinner_channel, "3, 5, left, center");
@@ -334,6 +335,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblThreshold, "1, 12, right, center");
 		
 		spinner_threshold = new JSpinner();
+		spinner_threshold.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		controls.add(spinner_threshold);
 		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_threshold, "3, 12, left, center");
@@ -380,6 +382,7 @@ public class ControlsPadCommon extends JPanel {
 				RowSpec.decode("20px"),}));
 		
 		spinner_highLevel = new JSpinner();
+		spinner_highLevel.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		controls.add(spinner_highLevel);
 		spinner_highLevel.setModel(new SpinnerNumberModel(new Short((short) 64), new Short((short) 64), new Short((short) 1023), new Short((short) 1)));
 		JSpinner.NumberEditor jsne_spinner_highLevel = new JSpinner.NumberEditor(spinner_highLevel,"#");
@@ -394,6 +397,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblRetriggerMask, "1, 16, right, center");
 		
 		spinner_retrigger = new JSpinner();
+		spinner_retrigger.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		controls.add(spinner_retrigger);
 		spinner_retrigger.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_retrigger, "3, 16, left, center");
@@ -440,6 +444,7 @@ public class ControlsPadCommon extends JPanel {
 		add(lblMinscan, "1, 19, right, center");
 		
 		spinner_minScan = new JSpinner();
+		spinner_minScan.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		controls.add(spinner_minScan);
 		spinner_minScan.setModel(new SpinnerNumberModel(new Short((short) 10), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
 		add(spinner_minScan, "3, 19, left, center");

@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.EventQueue;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -38,7 +39,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
+import javax.swing.text.JTextComponent;
 
 import java.awt.Font;
 import java.util.Timer;
@@ -74,6 +78,10 @@ import javax.swing.DefaultComboBoxModel;
 import java.awt.event.WindowFocusListener;
 import javax.swing.JToggleButton;
 import javax.swing.border.BevelBorder;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class Main_window {
 
@@ -103,6 +111,9 @@ public class Main_window {
 	private JToggleButton tglbtnMidi;
 	private JLabel lblVersion;
 	private JToggleButton tglbtnLiveUpdates;
+	private JComboBox comboBoxCfg;
+	private int configPointer = 0;
+	private String [] configsStrings;
 	
 
 	
@@ -167,6 +178,10 @@ public class Main_window {
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//chainId = 0;
+		configsStrings = new String[Constants.CONFIGS_COUNT];
+		for (Integer i = 1;i<=Constants.CONFIGS_COUNT;i++) {
+			configsStrings[i-1] = "Config"+i.toString();
+		}
 		configFull = new ConfigFull();
 		fileManager = new FileManager(frmMegadrummanager);
 		midi_handler = new Midi_handler();
@@ -593,24 +608,26 @@ public class Main_window {
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("20dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("32dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("40dlu"),
+				ColumnSpec.decode("2dlu"),
+				FormFactory.PREF_COLSPEC,
+				ColumnSpec.decode("2dlu"),
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("12dlu:grow"),}));
 		
 		JButton btnGetAll = new JButton("Get All");
+		btnGetAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnGetAll.setMargin(new Insets(2, 2, 2, 2));
 		btnGetAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getAll();
@@ -619,6 +636,8 @@ public class Main_window {
 		panel_top.add(btnGetAll, "2, 1");
 		
 		JButton btnSendAll = new JButton("Send All");
+		btnSendAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnSendAll.setMargin(new Insets(2, 2, 2, 2));
 		btnSendAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendAll();
@@ -627,6 +646,8 @@ public class Main_window {
 		panel_top.add(btnSendAll, "4, 1");
 		
 		JButton btnLoadAll = new JButton("Load All");
+		btnLoadAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnLoadAll.setMargin(new Insets(2, 2, 2, 2));
 		btnLoadAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				load_all();
@@ -635,6 +656,8 @@ public class Main_window {
 		panel_top.add(btnLoadAll, "6, 1");
 		
 		JButton btnSaveAll = new JButton("Save All");
+		btnSaveAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnSaveAll.setMargin(new Insets(2, 2, 2, 2));
 		btnSaveAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				save_all();
@@ -643,13 +666,68 @@ public class Main_window {
 		panel_top.add(btnSaveAll, "8, 1");
 		
 		JButton btnSaveToSlot = new JButton("Save To Slot1");
+		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnSaveToSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				midi_handler.requestSaveSlot1();
 			}
 		});
-		btnSaveToSlot.setMargin(new Insets(2, 4, 2, 4));
+		btnSaveToSlot.setMargin(new Insets(2, 2, 2, 2));
 		panel_top.add(btnSaveToSlot, "10, 1");
+		
+		comboBoxCfg = new JComboBox();
+		comboBoxCfg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String text = comboBoxCfg.getSelectedItem().toString();
+				if (comboBoxCfg.getSelectedIndex()<0) {
+					configsStrings[configPointer] = text;
+					comboBoxCfg.setModel(new DefaultComboBoxModel(configsStrings));
+					comboBoxCfg.setSelectedIndex(configPointer);
+				}
+			}			
+		});
+		comboBoxCfg.setModel(new DefaultComboBoxModel(configsStrings));
+		comboBoxCfg.setSelectedIndex(configPointer);
+		comboBoxCfg.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
+				}
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					if (comboBoxCfg.getSelectedIndex()>-1) {
+						configPointer = comboBoxCfg.getSelectedIndex();
+					}
+				}
+			}
+		});
+		comboBoxCfg.setEditable(true);
+		comboBoxCfg.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel_top.add(comboBoxCfg, "12, 1, fill, default");
+		
+		JButton btnPrevcfg = new JButton("prevCfg");
+		btnPrevcfg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (configPointer>0) {
+					configPointer--;
+					comboBoxCfg.setSelectedIndex(configPointer);
+				}
+			}
+		});
+		btnPrevcfg.setMargin(new Insets(2, 1, 2, 1));
+		btnPrevcfg.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel_top.add(btnPrevcfg, "14, 1");
+		
+		JButton btnNextcfg = new JButton("nextCfg");
+		btnNextcfg.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (configPointer<(Constants.CONFIGS_COUNT-1)) {
+					configPointer++;
+					comboBoxCfg.setSelectedIndex(configPointer);
+				}
+			}
+		});
+		btnNextcfg.setMargin(new Insets(2, 1, 2, 1));
+		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel_top.add(btnNextcfg, "16, 1");
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -709,6 +787,7 @@ public class Main_window {
 		comboBox_inputsCount.addItem("56");
 		
 		tglbtnLiveUpdates = new JToggleButton("Live updates");
+		tglbtnLiveUpdates.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnLiveUpdates.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				configOptions.interactive = tglbtnLiveUpdates.isSelected(); 
