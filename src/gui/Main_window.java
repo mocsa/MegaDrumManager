@@ -82,6 +82,7 @@ import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.Toolkit;
 
 public class Main_window {
 
@@ -168,6 +169,7 @@ public class Main_window {
 	 */
 	private void initialize() {
 		frmMegadrummanager = new JFrame();
+		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/gui/logo-megadrum-manager-128.png")));
 		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
@@ -917,6 +919,7 @@ public class Main_window {
 			mnView.add(viewMenus[i]);
 			framesDetached[i] = new FrameDetached(i);
 			framesDetached[i].setTitle(Constants.PANELS_NAMES[i]);
+			framesDetached[i].setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/gui/logo-megadrum-manager-128.png")));
 			framesDetached[i].addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowActivated(WindowEvent arg0) {
