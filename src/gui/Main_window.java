@@ -169,7 +169,7 @@ public class Main_window {
 	 */
 	private void initialize() {
 		frmMegadrummanager = new JFrame();
-		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/gui/logo-megadrum-manager-128.png")));
+		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/gui/megadrum-manager128.png")));
 		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
@@ -919,7 +919,7 @@ public class Main_window {
 			mnView.add(viewMenus[i]);
 			framesDetached[i] = new FrameDetached(i);
 			framesDetached[i].setTitle(Constants.PANELS_NAMES[i]);
-			framesDetached[i].setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/gui/logo-megadrum-manager-128.png")));
+			framesDetached[i].setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/gui/megadrum-manager128.png")));
 			framesDetached[i].addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowActivated(WindowEvent arg0) {

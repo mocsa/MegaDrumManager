@@ -77,6 +77,7 @@ public class Options extends JDialog {
 		contentPanel.add(panel_midi, "1, 1, fill, fill");
 		
 		comboBox_MIDI_Out = new JComboBox();
+		comboBox_MIDI_Out.setMaximumRowCount(16);
 		comboBox_MIDI_Out.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		comboBox_MIDI_Out.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -117,6 +118,7 @@ public class Options extends JDialog {
 		panel_midi.add(comboBox_MIDI_Out, "3, 3, fill, fill");
 		
 		comboBox_MIDI_In = new JComboBox();
+		comboBox_MIDI_In.setMaximumRowCount(16);
 		comboBox_MIDI_In.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		comboBox_MIDI_In.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -162,6 +164,7 @@ public class Options extends JDialog {
 		panel_midi.add(lblMidiThru, "1, 6, right, default");
 		
 		comboBox_MIDI_Thru = new JComboBox();
+		comboBox_MIDI_Thru.setMaximumRowCount(16);
 		comboBox_MIDI_Thru.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panel_midi.add(comboBox_MIDI_Thru, "3, 6, fill, fill");
 		
