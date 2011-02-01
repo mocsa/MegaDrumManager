@@ -19,6 +19,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.JCheckBox;
 
 public class NoteSpinControl extends JPanel {
 	private JLabel lblNoteName;
@@ -27,6 +28,7 @@ public class NoteSpinControl extends JPanel {
 	private int octave;
 	private int note_pointer;
 	private static final String [] note_names = {"C ", "C#", "D ", "D#", "E ", "F ", "F#", "G ", "G#", "A ", "A#", "B "};
+	private JCheckBox checkBox;
 	/**
 	 * Create the panel.
 	 */
@@ -54,7 +56,8 @@ public class NoteSpinControl extends JPanel {
 		});
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("47px"),
-				ColumnSpec.decode("63px"),},
+				ColumnSpec.decode("20dlu"),
+				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("20px"),}));
 		spinner.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -65,6 +68,10 @@ public class NoteSpinControl extends JPanel {
 		lblNoteName.setToolTipText("Note Disabled");
 		lblNoteName.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		add(lblNoteName, "2, 1, fill, fill");
+		
+		checkBox = new JCheckBox("");
+		checkBox.setVisible(false);
+		add(checkBox, "3, 1");
 	}
 
 	public SpinnerModel getSpinnerModel() {
@@ -85,5 +92,8 @@ public class NoteSpinControl extends JPanel {
 	}
 	public JSpinner getSpinner() {
 		return spinner;
+	}
+	public JCheckBox getCheckBox() {
+		return checkBox;
 	}
 }

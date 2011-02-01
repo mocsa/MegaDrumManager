@@ -79,9 +79,9 @@ public class ControlsPadCommon extends JPanel {
 	private ComboBoxCustom comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
-	private JCheckBox checkBox_altLinked;
+	//private JCheckBox checkBox_altLinked;
 	private NoteSpinControl noteSpinControl_pressrollNote;
-	private JCheckBox checkBox_pressrollLinked;
+	//private JCheckBox checkBox_pressrollLinked;
 	private JSpinner spinner_channel;
 	private JCheckBox checkBox_special;
 	private ComboBoxCustom comboBox_curve;
@@ -103,8 +103,8 @@ public class ControlsPadCommon extends JPanel {
 	private static final boolean rim_pad = false;
 	
 	private ConfigPad configPad;
-	private JPanel panel_1;
-	private JPanel panel_2;
+//	private JPanel panel_1;
+//	private JPanel panel_2;
 	private PadButton padButton__name;
 	private PadButton padButton__note;
 	private PadButton padButton_altNote;
@@ -189,10 +189,10 @@ public class ControlsPadCommon extends JPanel {
 		noteSpinControl_note = new NoteSpinControl();
 		noteSpinControl_note.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				if (checkBox_altLinked.isSelected()) {
+				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
 					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
 				}
-				if (checkBox_pressrollLinked.isSelected()) {
+				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
 					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
 				}
 			}
@@ -206,25 +206,15 @@ public class ControlsPadCommon extends JPanel {
 		LabelCustom lblAltNote = new LabelCustom("Alt Note");
 		add(lblAltNote, "1, 3, right, center");
 		
-		panel_1 = new JPanel();
-		add(panel_1, "3, 3, fill, fill");
-		panel_1.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("44dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,}));
-		
 		noteSpinControl_altNote = new NoteSpinControl();
-		panel_1.add(noteSpinControl_altNote, "1, 1");
-		
-		checkBox_altLinked = new JCheckBox("");
-		panel_1.add(checkBox_altLinked, "2, 1");
-		checkBox_altLinked.addChangeListener(new ChangeListener() {
+		add(noteSpinControl_altNote, "3, 3");
+		noteSpinControl_altNote.getCheckBox().setVisible(true);
+		noteSpinControl_altNote.getCheckBox().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				noteSpinControl_altNote.getSpinner().setEnabled(!checkBox_altLinked.isSelected());
+				noteSpinControl_altNote.getSpinner().setEnabled(!noteSpinControl_altNote.getCheckBox().isSelected());
 			}
 		});
-		checkBox_altLinked.setToolTipText("Linked to Note");
+		noteSpinControl_altNote.getCheckBox().setToolTipText("Linked to Note");
 		
 		padButton_altNote = new PadButton("altNote", head_rim_pad);
 		add(padButton_altNote, "5, 3");
@@ -232,25 +222,15 @@ public class ControlsPadCommon extends JPanel {
 		LabelCustom lblPressrollNote = new LabelCustom("Pressroll Note");
 		add(lblPressrollNote, "1, 4, right, center");
 		
-		panel_2 = new JPanel();
-		add(panel_2, "3, 4, fill, fill");
-		panel_2.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("44dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,}));
-		
 		noteSpinControl_pressrollNote = new NoteSpinControl();
-		panel_2.add(noteSpinControl_pressrollNote, "1, 1");
-		
-		checkBox_pressrollLinked = new JCheckBox("");
-		panel_2.add(checkBox_pressrollLinked, "2, 1");
-		checkBox_pressrollLinked.addChangeListener(new ChangeListener() {
+		add(noteSpinControl_pressrollNote, "3, 4");
+		noteSpinControl_pressrollNote.getCheckBox().setVisible(true);
+		noteSpinControl_pressrollNote.getCheckBox().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				noteSpinControl_pressrollNote.getSpinner().setEnabled(!checkBox_pressrollLinked.isSelected());
+				noteSpinControl_pressrollNote.getSpinner().setEnabled(!noteSpinControl_pressrollNote.getCheckBox().isSelected());
 			}
 		});
-		checkBox_pressrollLinked.setToolTipText("Linked to Note");
+		noteSpinControl_pressrollNote.getCheckBox().setToolTipText("Linked to Note");
 		
 		padButton_pressrollNote = new PadButton("pressrollNote", head_rim_pad);
 		add(padButton_pressrollNote, "5, 4");
@@ -497,9 +477,9 @@ public class ControlsPadCommon extends JPanel {
 		comboBox_name.setSelectedIndex(configPad.name);
 		noteSpinControl_note.getSpinner().setValue(configPad.note);
 		noteSpinControl_altNote.getSpinner().setValue(configPad.altNote);
-		checkBox_altLinked.setSelected(configPad.altNote_linked);
+		noteSpinControl_altNote.getCheckBox().setSelected(configPad.altNote_linked);
 		noteSpinControl_pressrollNote.getSpinner().setValue(configPad.pressrollNote);
-		checkBox_pressrollLinked.setSelected(configPad.pressrollNote_linked);
+		noteSpinControl_pressrollNote.getCheckBox().setSelected(configPad.pressrollNote_linked);
 		spinner_channel.setValue(configPad.channel + 1);
 		checkBox_special.setSelected(configPad.special);
 		comboBox_curve.setSelectedIndex(configPad.curve);
@@ -541,9 +521,9 @@ public class ControlsPadCommon extends JPanel {
 		configPad.name = (short)comboBox_name.getSelectedIndex();
 		configPad.note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
 		configPad.altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
-		configPad.altNote_linked = checkBox_altLinked.isSelected();
+		configPad.altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
 		configPad.pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
-		configPad.pressrollNote_linked = checkBox_pressrollLinked.isSelected();
+		configPad.pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
 		configPad.channel = (short)(((Integer)spinner_channel.getValue()).shortValue() - 1);
 		configPad.special = checkBox_special.isSelected();
 		configPad.curve = (short)comboBox_curve.getSelectedIndex();
