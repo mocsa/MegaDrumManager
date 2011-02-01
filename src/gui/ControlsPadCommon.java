@@ -79,9 +79,7 @@ public class ControlsPadCommon extends JPanel {
 	private ComboBoxCustom comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
-	//private JCheckBox checkBox_altLinked;
 	private NoteSpinControl noteSpinControl_pressrollNote;
-	//private JCheckBox checkBox_pressrollLinked;
 	private JSpinner spinner_channel;
 	private JCheckBox checkBox_special;
 	private ComboBoxCustom comboBox_curve;
@@ -103,8 +101,6 @@ public class ControlsPadCommon extends JPanel {
 	private static final boolean rim_pad = false;
 	
 	private ConfigPad configPad;
-//	private JPanel panel_1;
-//	private JPanel panel_2;
 	private PadButton padButton__name;
 	private PadButton padButton__note;
 	private PadButton padButton_altNote;
@@ -131,7 +127,6 @@ public class ControlsPadCommon extends JPanel {
 	 * Create the panel.
 	 */
 	public ControlsPadCommon(boolean pad_type) {
-		//controls = new ArrayList<Object>();
 		head_rim_pad = pad_type;
 		configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -495,8 +490,6 @@ public class ControlsPadCommon extends JPanel {
 		comboBox_dynLevel.setSelectedIndex(configPad.dynLevel);
 		comboBox_dynTime.setSelectedIndex(configPad.dynTime);
 		spinner_minScan.setValue(configPad.minScan);
-		//TO-DO piezo/switch, 3way type, dual and etc
-		//comboBox_type.setSelectedIndex(configPad.type?1:0);
 		comboBox_type.removeAllItems();
 		if (head_rim_pad == head_pad) {
 			comboBox_type.addItem("Single Piezo");
