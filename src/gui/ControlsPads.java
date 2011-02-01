@@ -18,6 +18,7 @@ import javax.swing.JMenuItem;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -35,6 +36,11 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 import java.awt.Dimension;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Member;
 
 public class ControlsPads extends JPanel {
 	private JButton btnGet;
@@ -56,7 +62,7 @@ public class ControlsPads extends JPanel {
 	private JButton btnLast;
 	private int padSelection;
 	private int prevPadSelection;
-	private ActionListener padButtonActionListener;
+	private PropertyChangeListener padButtonPropertyChangeListener;
 	private boolean switchingPad = false;
 	private boolean panel_3rd_zone_prevVisible = false;
 
@@ -74,6 +80,17 @@ public class ControlsPads extends JPanel {
 	private JMenu mnCopyhead;
 	private JMenu mnCopyrim;
 	private JMenu mnCopyrd;
+	private JPopupMenu popupMenu;
+	private JMenu mnCopyHeadrimrd;
+	private JMenu mnCopyHead;
+	private JMenu mnCopyRim;
+	private JMenu mnCopy3rd;
+	//private ArrayList<JMenu> settingsMenu;
+	private JMenu menu_1;
+	
+	//private ArrayList<Field> configPadFields; 
+	//private ArrayList<Field> config3rdFields; 
+
 
 	/**
 	 * Create the panel.
@@ -92,6 +109,41 @@ public class ControlsPads extends JPanel {
         }
         thirdPointer = 0;
         prevThirdPointer = -1;
+		
+//        configPadFields = new ArrayList<Field>();
+//        config3rdFields = new ArrayList<Field>();
+//        try {
+//			Class<?> c = Class.forName("gui.ConfigPad");
+//			for (Member mbr: c.getFields()) {
+//				configPadFields.add((Field)mbr);
+//			}
+//			c = Class.forName("gui.Config3rd");
+//			for (Member mbr: c.getFields()) {
+//				config3rdFields.add((Field)mbr);
+//			}
+//		} catch (ClassNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+
+		popupMenu = new JPopupMenu();
+		addPopup(this, popupMenu);
+		
+		mnCopyHeadrimrd = new JMenu("Copy Head/Rim/3rd");
+		mnCopyHeadrimrd.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		popupMenu.add(mnCopyHeadrimrd);	
+		
+		mnCopyHead = new JMenu("Copy Head");
+		mnCopyHead.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		popupMenu.add(mnCopyHead);
+		
+		mnCopyRim = new JMenu("Copy Rim");
+		mnCopyRim.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		popupMenu.add(mnCopyRim);
+		
+		mnCopy3rd = new JMenu("Copy 3rd");
+		mnCopy3rd.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		popupMenu.add(mnCopy3rd);
         
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
@@ -266,13 +318,6 @@ public class ControlsPads extends JPanel {
 		add(panel_head_rim, "1, 4, fill, fill");
 		panel_head_rim.setLayout(new GridLayout(1, 2, 0, 0));
 		
-		padButtonActionListener = new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				String varName = ((PadButton)arg0.getSource()).getName();
-				boolean head_rim = ((ControlsPadCommon)((PadButton)arg0.getSource()).getParent()).getHeadRim();
-				copyPadVarToAll(varName, head_rim);
-			}
-		};
 		panel_head = new ControlsPadCommon(head_pad);
 		panel_head.addPropertyChangeListener( new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
@@ -299,28 +344,7 @@ public class ControlsPads extends JPanel {
 					firePropertyChange("headValueChanged", false, true);
 				}
 			}
-		});
-		
-		panel_head.getPadButton_name().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_note().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_altNote().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_pressrollNote().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_channel().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_special().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_curve().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_compression().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_shift().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_xtalkLevel().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_xtalkGroup().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_threshold().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_gain().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_autoLevel().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_highLevel().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_retrigger().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_dynLevel().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_dynTime().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_minScan().addActionListener(padButtonActionListener);
-		panel_head.getPadButton_type().addActionListener(padButtonActionListener);
+		});		
 
 		panel_head_rim.add(panel_head);
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -349,27 +373,20 @@ public class ControlsPads extends JPanel {
 				}
 			}
 		});
+
+		padButtonPropertyChangeListener = new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if (arg0.getPropertyName().equals("copyButton")) {
+					String varName = ((ControlsPadCommon)arg0.getSource()).pressedPadButtonName;
+					boolean head_rim = ((ControlsPadCommon)arg0.getSource()).getHeadRim();
+					copyPadVarToAll(varName, head_rim);
+				}
+			}
+		};
 		
-		panel_rim.getPadButton_name().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_note().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_altNote().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_pressrollNote().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_channel().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_special().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_curve().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_compression().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_shift().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_xtalkLevel().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_xtalkGroup().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_threshold().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_gain().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_autoLevel().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_highLevel().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_retrigger().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_dynLevel().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_dynTime().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_minScan().addActionListener(padButtonActionListener);
-		panel_rim.getPadButton_type().addActionListener(padButtonActionListener);
+		panel_head.addPropertyChangeListener(padButtonPropertyChangeListener);
+		panel_rim.addPropertyChangeListener(padButtonPropertyChangeListener);
+		
 		
 		panel_rim.setVisible(false);
 		panel_head_rim.add(panel_rim);
@@ -819,21 +836,23 @@ public class ControlsPads extends JPanel {
 	public JButton getBtnSave() {
 		return btnSave;
 	}
-//	private static void addPopup(Component component, final JPopupMenu popup) {
-//		component.addMouseListener(new MouseAdapter() {
-//			public void mousePressed(MouseEvent e) {
-//				if (e.isPopupTrigger()) {
-//					showMenu(e);
-//				}
-//			}
-//			public void mouseReleased(MouseEvent e) {
-//				if (e.isPopupTrigger()) {
-//					showMenu(e);
-//				}
-//			}
-//			private void showMenu(MouseEvent e) {
-//				popup.show(e.getComponent(), e.getX(), e.getY());
-//			}
-//		});
-//	}
+
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
+		
 }

@@ -1,5 +1,8 @@
 package gui;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
@@ -31,8 +34,8 @@ public class ConfigPad {
 
 	
 	public ConfigPad (){
-	}	
-
+	}
+	
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix, Integer id) {
 		id++;
 		prefix = prefix+"["+id.toString()+"].";

@@ -36,10 +36,47 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 
+class PadButton extends JButton {
+	private String name;
+
+	/**
+	 * Create the panel.
+	 */
+	public PadButton(String text, boolean pad_type) {
+		name = text;
+		setIcon(new ImageIcon(ControlsPadCommon.class.getResource("/com/sun/java/swing/plaf/motif/icons/ScrollRightArrowActive.gif")));
+		if (pad_type) {
+			setToolTipText("Copy this input setting to All inputs");
+		} else {
+			setToolTipText("Copy head/rim setting to All pads");
+		}
+	}
+
+	public String getName() {
+		return name;
+	}
+}
+
+class ComboBoxCustom extends JComboBox {
+
+	public ComboBoxCustom () {
+		this.setMaximumRowCount(30);
+		this.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+	}
+}
+
+class LabelCustom extends JLabel {
+
+	public LabelCustom (String name) {
+		this.setText(name);
+		this.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+	}
+}
+
 public class ControlsPadCommon extends JPanel {
 	private Boolean changeEventsAllowed = false;
 	
-	private JComboBox comboBox_name;
+	private ComboBoxCustom comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
 	private JCheckBox checkBox_altLinked;
@@ -47,20 +84,20 @@ public class ControlsPadCommon extends JPanel {
 	private JCheckBox checkBox_pressrollLinked;
 	private JSpinner spinner_channel;
 	private JCheckBox checkBox_special;
-	private JComboBox comboBox_curve;
-	private JComboBox comboBox_compression;
-	private JComboBox comboBox_shift;
-	private JComboBox comboBox_xtalkLevel;
-	private JComboBox comboBox_xtalkGroup;
+	private ComboBoxCustom comboBox_curve;
+	private ComboBoxCustom comboBox_compression;
+	private ComboBoxCustom comboBox_shift;
+	private ComboBoxCustom comboBox_xtalkLevel;
+	private ComboBoxCustom comboBox_xtalkGroup;
 	private JSpinner spinner_threshold;
-	private JComboBox comboBox_gain;
+	private ComboBoxCustom comboBox_gain;
 	private JCheckBox checkBox_autoLevel;
 	private JSpinner spinner_highLevel;
 	private JSpinner spinner_retrigger;
-	private JComboBox comboBox_dynLevel;
-	private JComboBox comboBox_dynTime;
+	private ComboBoxCustom comboBox_dynLevel;
+	private ComboBoxCustom comboBox_dynTime;
 	private JSpinner spinner_minScan;
-	private JComboBox comboBox_type;
+	private ComboBoxCustom comboBox_type;
 	private boolean head_rim_pad;
 	private static final boolean head_pad = true;
 	private static final boolean rim_pad = false;
@@ -88,14 +125,13 @@ public class ControlsPadCommon extends JPanel {
 	private PadButton padButton_dynTime;
 	private PadButton padButton_minScan;
 	private PadButton padButton_type;
+	public String pressedPadButtonName;
 	
-	private ArrayList<Object> controls; 
-
 	/**
 	 * Create the panel.
 	 */
 	public ControlsPadCommon(boolean pad_type) {
-		controls = new ArrayList<Object>();
+		//controls = new ArrayList<Object>();
 		head_rim_pad = pad_type;
 		configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -126,13 +162,11 @@ public class ControlsPadCommon extends JPanel {
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),}));
 		
-		JLabel lblName = new JLabel("Name");
-		lblName.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblName = new LabelCustom("Name");
 		lblName.setToolTipText("Input Name");
 		add(lblName, "1, 1, right, center");
 		
-		comboBox_name = new JComboBox();
-		controls.add(comboBox_name);
+		comboBox_name = new ComboBoxCustom();
 		comboBox_name.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -140,24 +174,19 @@ public class ControlsPadCommon extends JPanel {
 				}
 			}
 		});
-		comboBox_name.setMaximumRowCount(30);
 		comboBox_name.addItem("");
 		for (String string : Constants.CUSTOM_PADS_NAMES_LIST) {
 			comboBox_name.addItem(string);
 			}
-		comboBox_name.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_name, "3, 1, fill, center");
 		
 		padButton__name = new PadButton("name",head_rim_pad);
-		add(padButton__name, "5, 1, fill, center");
+		add(padButton__name, "5, 1");
 		
-		JLabel lblNote = new JLabel("Note");
-		lblNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblNote = new LabelCustom("Note");
 		add(lblNote, "1, 2, right, center");
 		
 		noteSpinControl_note = new NoteSpinControl();
-		controls.add(noteSpinControl_note.getSpinner());
-		noteSpinControl_note.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		noteSpinControl_note.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				if (checkBox_altLinked.isSelected()) {
@@ -171,11 +200,10 @@ public class ControlsPadCommon extends JPanel {
 		add(noteSpinControl_note, "3, 2, left, center");
 		
 		padButton__note = new PadButton("note", head_rim_pad);
-		add(padButton__note, "5, 2, default, fill");
+		add(padButton__note, "5, 2");
 		
 		
-		JLabel lblAltNote = new JLabel("Alt Note");
-		lblAltNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblAltNote = new LabelCustom("Alt Note");
 		add(lblAltNote, "1, 3, right, center");
 		
 		panel_1 = new JPanel();
@@ -187,7 +215,6 @@ public class ControlsPadCommon extends JPanel {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		noteSpinControl_altNote = new NoteSpinControl();
-		controls.add(noteSpinControl_altNote.getSpinner());
 		panel_1.add(noteSpinControl_altNote, "1, 1");
 		
 		checkBox_altLinked = new JCheckBox("");
@@ -202,8 +229,7 @@ public class ControlsPadCommon extends JPanel {
 		padButton_altNote = new PadButton("altNote", head_rim_pad);
 		add(padButton_altNote, "5, 3");
 		
-		JLabel lblPressrollNote = new JLabel("Pressroll Note");
-		lblPressrollNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblPressrollNote = new LabelCustom("Pressroll Note");
 		add(lblPressrollNote, "1, 4, right, center");
 		
 		panel_2 = new JPanel();
@@ -215,7 +241,6 @@ public class ControlsPadCommon extends JPanel {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		noteSpinControl_pressrollNote = new NoteSpinControl();
-		controls.add(noteSpinControl_pressrollNote.getSpinner());
 		panel_2.add(noteSpinControl_pressrollNote, "1, 1");
 		
 		checkBox_pressrollLinked = new JCheckBox("");
@@ -230,234 +255,178 @@ public class ControlsPadCommon extends JPanel {
 		padButton_pressrollNote = new PadButton("pressrollNote", head_rim_pad);
 		add(padButton_pressrollNote, "5, 4");
 		
-		JLabel lblCurve = new JLabel("Channel");
-		lblCurve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblCurve = new LabelCustom("Channel");
 		add(lblCurve, "1, 5, right, center");
 		
 		spinner_channel = new JSpinner();
-		spinner_channel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		controls.add(spinner_channel);
 		spinner_channel.setModel(new SpinnerNumberModel(1, 1, 16, 1));
 		add(spinner_channel, "3, 5, left, center");
 		
 		padButton_channel = new PadButton("channel", head_rim_pad);
 		add(padButton_channel, "5, 5");
 		
-		JLabel lblSpecialFunction = new JLabel("Special Function");
-		lblSpecialFunction.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblSpecialFunction = new LabelCustom("Special Function");
 		add(lblSpecialFunction, "1, 6, right, default");
 		
 		checkBox_special = new JCheckBox("");
-		controls.add(checkBox_special);
 		add(checkBox_special, "3, 6");
 		
 		padButton_special = new PadButton("special", head_rim_pad);
 		add(padButton_special, "5, 6");
 		
-		JLabel lblCurve_1 = new JLabel("Curve");
-		lblCurve_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblCurve_1 = new LabelCustom("Curve");
 		add(lblCurve_1, "1, 7, right, center");
 		
-		comboBox_curve = new JComboBox();
-		controls.add(comboBox_curve);
-		comboBox_curve.setMaximumRowCount(16);
+		comboBox_curve = new ComboBoxCustom();
 		for (String string : Constants.CURVES_LIST) {
 			comboBox_curve.addItem(string);
 			}
-		comboBox_curve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_curve, "3, 7, fill, center");
 		
 		padButton_curve = new PadButton("curve", head_rim_pad);
 		add(padButton_curve, "5, 7");
 				
-		JLabel lblCompression = new JLabel("Compression");
-		lblCompression.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblCompression = new LabelCustom("Compression");
 		add(lblCompression, "1, 8, right, center");
 		
-		comboBox_compression = new JComboBox();
-		controls.add(comboBox_compression);
+		comboBox_compression = new ComboBoxCustom();
         for(int i=0; i<8; i++){
     		comboBox_compression.addItem(((Integer)i).toString());
         }		
-		comboBox_compression.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_compression, "3, 8, fill, center");
 		
 		padButton_compression = new PadButton("compression", head_rim_pad);
 		add(padButton_compression, "5, 8");
 		
-		JLabel lblShift = new JLabel("Level Shift");
-		lblShift.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblShift = new LabelCustom("Level Shift");
 		add(lblShift, "1, 9, right, center");
 		
-		comboBox_shift = new JComboBox();
-		controls.add(comboBox_shift);
+		comboBox_shift = new ComboBoxCustom();
         for(int i=0; i<8; i++){
     		comboBox_shift.addItem(((Integer)(i*8)).toString());
         }		
-		comboBox_shift.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_shift, "3, 9, fill, center");
 		
 		padButton_shift = new PadButton("shift", head_rim_pad);
 		add(padButton_shift, "5, 9");
 		
-		JLabel lblXtalkLevel = new JLabel("XTalk Level");
-		lblXtalkLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblXtalkLevel = new LabelCustom("XTalk Level");
 		add(lblXtalkLevel, "1, 10, right, center");
 		
-		comboBox_xtalkLevel = new JComboBox();
-		controls.add(comboBox_xtalkLevel);
+		comboBox_xtalkLevel = new ComboBoxCustom();
         for(int i=0; i<8; i++){
     		comboBox_xtalkLevel.addItem(((Integer)i).toString());
         }		
-		comboBox_xtalkLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_xtalkLevel, "3, 10, fill, center");
 		
 		padButton_xtalkLevel = new PadButton("xtalkLevel", head_rim_pad);
 		add(padButton_xtalkLevel, "5, 10");
 		
-		JLabel lblXtalkGroup = new JLabel("XTalk Group");
-		lblXtalkGroup.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblXtalkGroup = new LabelCustom("XTalk Group");
 		add(lblXtalkGroup, "1, 11, right, center");
 		
-		comboBox_xtalkGroup = new JComboBox();
-		controls.add(comboBox_xtalkGroup);
+		comboBox_xtalkGroup = new ComboBoxCustom();
         for(int i=0; i<8; i++){
     		comboBox_xtalkGroup.addItem(((Integer)i).toString());
         }		
-		comboBox_xtalkGroup.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_xtalkGroup, "3, 11, fill, center");
 		
 		padButton_xtalkGroup = new PadButton("xtalkGroup", head_rim_pad);
 		add(padButton_xtalkGroup, "5, 11");
 		
-		JLabel lblThreshold = new JLabel("Threshold");
-		lblThreshold.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblThreshold = new LabelCustom("Threshold");
 		add(lblThreshold, "1, 12, right, center");
 		
 		spinner_threshold = new JSpinner();
-		spinner_threshold.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		controls.add(spinner_threshold);
 		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_threshold, "3, 12, left, center");
 		
 		padButton_threshold = new PadButton("threshold", head_rim_pad);
 		add(padButton_threshold, "5, 12");
 		
-		JLabel lblGain = new JLabel("Gain");
-		lblGain.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblGain = new LabelCustom("Gain");
 		add(lblGain, "1, 13, right, center");
 		
-		comboBox_gain = new JComboBox();
-		controls.add(comboBox_gain);
-		comboBox_gain.setMaximumRowCount(10);
+		comboBox_gain = new ComboBoxCustom();
         for(int i=0; i<9; i++){
     		comboBox_gain.addItem(((Integer)i).toString());
         }		
-		comboBox_gain.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_gain, "3, 13, fill, center");
 		
 		padButton_gain = new PadButton("gain", head_rim_pad);
 		add(padButton_gain, "5, 13");
 		
-		JLabel lblHighlevelAuto = new JLabel("HighLevel Auto");
-		lblHighlevelAuto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblHighlevelAuto = new LabelCustom("HighLevel Auto");
 		add(lblHighlevelAuto, "1, 14, right, center");
 		
 		checkBox_autoLevel = new JCheckBox("");		
-		controls.add(checkBox_autoLevel);
 		add(checkBox_autoLevel, "3, 14, left, center");
 		
 		padButton_autoLevel = new PadButton("autoLevel", head_rim_pad);
 		add(padButton_autoLevel, "5, 14");
 		
-		JLabel lblHighlevel = new JLabel("HighLevel");
-		lblHighlevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblHighlevel = new LabelCustom("HighLevel");
 		add(lblHighlevel, "1, 15, right, center");
-		
-		JPanel panel = new JPanel();
-		add(panel, "3, 15, left, top");
-		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("58px"),},
-			new RowSpec[] {
-				RowSpec.decode("20px"),}));
-		
+				
 		spinner_highLevel = new JSpinner();
-		spinner_highLevel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		controls.add(spinner_highLevel);
 		spinner_highLevel.setModel(new SpinnerNumberModel(new Short((short) 64), new Short((short) 64), new Short((short) 1023), new Short((short) 1)));
 		JSpinner.NumberEditor jsne_spinner_highLevel = new JSpinner.NumberEditor(spinner_highLevel,"#");
 		spinner_highLevel.setEditor(jsne_spinner_highLevel);
-		panel.add(spinner_highLevel, "1, 1, fill, top");
+		add(spinner_highLevel, "3, 15, left, default");
 		
 		padButton_highLevel = new PadButton("highLevel", head_rim_pad);
 		add(padButton_highLevel, "5, 15");
 		
-		JLabel lblRetriggerMask = new JLabel("Retrigger Mask");
-		lblRetriggerMask.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblRetriggerMask = new LabelCustom("Retrigger Mask");
 		add(lblRetriggerMask, "1, 16, right, center");
 		
 		spinner_retrigger = new JSpinner();
-		spinner_retrigger.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		controls.add(spinner_retrigger);
 		spinner_retrigger.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
 		add(spinner_retrigger, "3, 16, left, center");
 		
 		padButton_retrigger = new PadButton("retrigger", head_rim_pad);
 		add(padButton_retrigger, "5, 16");
 		
-		JLabel lblDyn = new JLabel(" DynLevel");
-		lblDyn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblDyn = new LabelCustom(" DynLevel");
 		lblDyn.setToolTipText("Dynamic Threshold Level");
 		add(lblDyn, "1, 17, right, center");
 		
-		comboBox_dynLevel = new JComboBox();
-		controls.add(comboBox_dynLevel);
-		comboBox_dynLevel.setMaximumRowCount(16);
+		comboBox_dynLevel = new ComboBoxCustom();
         for(int i=0; i<16; i++){
     		comboBox_dynLevel.addItem(((Integer)i).toString());
         }		
-		comboBox_dynLevel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_dynLevel, "3, 17, fill, center");
 		
 		padButton_dynLevel = new PadButton("dynLevel", head_rim_pad);
 		add(padButton_dynLevel, "5, 17");
 		
-		JLabel lblDyntime = new JLabel("DynTime");
-		lblDyntime.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblDyntime = new LabelCustom("DynTime");
 		lblDyntime.setToolTipText("Dynamic Threshold decay time");
 		add(lblDyntime, "1, 18, right, center");
 		
-		comboBox_dynTime = new JComboBox();
-		controls.add(comboBox_dynTime);
-		comboBox_dynTime.setMaximumRowCount(16);
+		comboBox_dynTime = new ComboBoxCustom();
         for(int i=0; i<16; i++){
     		comboBox_dynTime.addItem(((Integer)(i*4)).toString());
         }		
-		comboBox_dynTime.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_dynTime, "3, 18, fill, center");
 		
 		padButton_dynTime = new PadButton("dynTime", head_rim_pad);
 		add(padButton_dynTime, "5, 18");
 		
-		JLabel lblMinscan = new JLabel("MinScan");
-		lblMinscan.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblMinscan = new LabelCustom("MinScan");
 		add(lblMinscan, "1, 19, right, center");
 		
 		spinner_minScan = new JSpinner();
-		spinner_minScan.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		controls.add(spinner_minScan);
 		spinner_minScan.setModel(new SpinnerNumberModel(new Short((short) 10), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
 		add(spinner_minScan, "3, 19, left, center");
 		
 		padButton_minScan = new PadButton("minScan", head_rim_pad);
 		add(padButton_minScan, "5, 19");
 		
-		JLabel lblType = new JLabel("Type");
-		lblType.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		LabelCustom lblType = new LabelCustom("Type");
 		add(lblType, "1, 20, right, center");
 		
-		comboBox_type = new JComboBox();
-		controls.add(comboBox_type);
+		comboBox_type = new ComboBoxCustom();
 		comboBox_type.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -465,13 +434,21 @@ public class ControlsPadCommon extends JPanel {
 				}
 			}
 		});
-		comboBox_type.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(comboBox_type, "3, 20, fill, center");
 		
 		padButton_type = new PadButton("type", head_rim_pad);
 		add(padButton_type, "5, 20");
 		
-		for (Object control : controls) {
+		for (Object control: this.getComponents()) {
+			//System.out.printf("Component -> %s\n",control.getClass().toString());
+			if (control.getClass().equals(PadButton.class)) {
+				((PadButton)control).addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						pressedPadButtonName = ((PadButton)arg0.getSource()).getName();
+						firePropertyChange("copyButton", false, true);
+					}
+				});
+			}
 			if (control.getClass().equals(JComboBox.class)) {
 				((JComboBox) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
@@ -490,13 +467,20 @@ public class ControlsPadCommon extends JPanel {
 				});
 				
 			}
+			if (control.getClass().equals(NoteSpinControl.class)) {
+				((NoteSpinControl) control).getSpinner().addChangeListener(new ChangeListener() {
+					public void stateChanged(ChangeEvent arg0) {
+						valueChanged();
+					}
+				});				
+			}
 			if (control.getClass().equals(JSpinner.class)) {
+				((JSpinner) control).setFont(new Font("Tahoma", Font.PLAIN, 11));
 				((JSpinner) control).addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
 						valueChanged();
 					}
-				});
-				
+				});				
 			}
 		}
 				
@@ -618,68 +602,4 @@ public class ControlsPadCommon extends JPanel {
 		return comboBox_type;
 	}
 
-//	public JComboBox getComboBox_name() {
-//		return comboBox_name;
-//	}
-
-	public JButton getPadButton_name() {
-		return padButton__name;
-	}
-	public JButton getPadButton_note() {
-		return padButton__note;
-	}
-	public PadButton getPadButton_altNote() {
-		return padButton_altNote;
-	}
-	public PadButton getPadButton_pressrollNote() {
-		return padButton_pressrollNote;
-	}
-	public PadButton getPadButton_channel() {
-		return padButton_channel;
-	}
-	public PadButton getPadButton_special() {
-		return padButton_special;
-	}
-	public PadButton getPadButton_curve() {
-		return padButton_curve;
-	}
-	public PadButton getPadButton_compression() {
-		return padButton_compression;
-	}
-	public PadButton getPadButton_shift() {
-		return padButton_shift;
-	}
-	public PadButton getPadButton_xtalkLevel() {
-		return padButton_xtalkLevel;
-	}
-	public PadButton getPadButton_xtalkGroup() {
-		return padButton_xtalkGroup;
-	}
-	public PadButton getPadButton_threshold() {
-		return padButton_threshold;
-	}
-	public PadButton getPadButton_gain() {
-		return padButton_gain;
-	}
-	public PadButton getPadButton_autoLevel() {
-		return padButton_autoLevel;
-	}
-	public PadButton getPadButton_highLevel() {
-		return padButton_highLevel;
-	}
-	public PadButton getPadButton_retrigger() {
-		return padButton_retrigger;
-	}
-	public PadButton getPadButton_dynLevel() {
-		return padButton_dynLevel;
-	}
-	public PadButton getPadButton_dynTime() {
-		return padButton_dynTime;
-	}
-	public PadButton getPadButton_minScan() {
-		return padButton_minScan;
-	}
-	public PadButton getPadButton_type() {
-		return padButton_type;
-	}
 }
