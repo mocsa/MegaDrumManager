@@ -279,12 +279,12 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)config.latency);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		sysex_short = Utils.short2sysex(flags);
+		sysex_short = short2sysex(flags);
 		sysex[i++] = sysex_short[0];
 		sysex[i++] = sysex_short[1];
 		sysex[i++] = sysex_short[2];
 		sysex[i++] = sysex_short[3];
-		sysex_byte = short2sysex((byte)config.pressroll);
+		sysex_byte = byte2sysex((byte)config.pressroll);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex[i++] = Constants.SYSEX_END;		

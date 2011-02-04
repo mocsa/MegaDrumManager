@@ -38,7 +38,7 @@ public class ConfigMisc {
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
 		note_off = Utils.validateShort(prop.getShort(prefix+"note_off", note_off),10,200,note_off);
 		latency = Utils.validateShort(prop.getShort(prefix+"latency", latency),10,100,latency);
-		pressroll = Utils.validateShort(prop.getShort(prefix+"pressroll", pressroll),0,10,pressroll);
+		pressroll = Utils.validateShort(prop.getShort(prefix+"pressroll", pressroll),0,note_off,pressroll);
 		all_gains_low = prop.getBoolean(prefix+"all_gains_low", all_gains_low);
 		big_vu_meter = prop.getBoolean(prefix+"big_vu_meter", big_vu_meter);
 		quick_access = prop.getBoolean(prefix+"quick_access", quick_access);
