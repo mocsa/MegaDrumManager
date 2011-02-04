@@ -29,11 +29,11 @@ public class Config3rd {
 		id = id*2+2;
 		Integer rim = id+1;
 		prefix = prefix+"["+id.toString()+"+"+rim.toString()+"].";
-		note = prop.getShort(prefix+"note", note);
-		threshold = prop.getShort(prefix+"threshold", threshold);
-		altNote = prop.getShort(prefix+"altNote", altNote);
-		pressrollNote = prop.getShort(prefix+"pressrollNote", pressrollNote);
-		dampenedNote = prop.getShort(prefix+"dampenedNote", dampenedNote);
+		note = Utils.validateShort(prop.getShort(prefix+"note", note),0,127,note);
+		threshold = Utils.validateShort(prop.getShort(prefix+"threshold", threshold),0,256,threshold);
+		altNote = Utils.validateShort(prop.getShort(prefix+"altNote", altNote),0,127,altNote);
+		pressrollNote = Utils.validateShort(prop.getShort(prefix+"pressrollNote", pressrollNote),0,127,pressrollNote);
+		dampenedNote = Utils.validateShort(prop.getShort(prefix+"dampenedNote", dampenedNote),0,127,dampenedNote);
 	}	
 	
 }

@@ -2,6 +2,9 @@ package gui;
 
 import java.awt.Point;
 
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
 public class ConfigOptions implements java.io.Serializable {
 	public boolean useSamePort = false;
 	public boolean useThruPort = false;
@@ -31,5 +34,69 @@ public class ConfigOptions implements java.io.Serializable {
 			configsNames[i-1] = "Config"+i.toString();
 		}
 		
+	}
+	public void copyToPropertiesConfiguration(PropertiesConfiguration prop) {
+		prop.setHeader("MegaDrum options");
+		prop.setProperty("MDconfigVersion", Constants.MD_CONFIG_VERSION.toString());
+		prop.setProperty("useSamePort", useSamePort);
+		prop.setProperty("useThruPort", useThruPort);
+		prop.setProperty("autoOpenPorts", autoOpenPorts);
+		prop.setProperty("saveOnExit", saveOnExit);
+		prop.setProperty("interactive", interactive);
+		prop.setProperty("lastDir", lastDir);
+		prop.setProperty("lastConfig", lastConfig);
+		for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
+			prop.setProperty("configName"+i.toString(), configsNames[i]);
+		}
+		prop.setProperty("lastFullPathConfig", lastFullPathConfig);
+		prop.setProperty("lastFullPathFirmware", lastFullPathFirmware);
+		prop.setProperty("lastFullPathSysex", lastFullPathSysex);
+		prop.setProperty("MidiInName", MidiInName);
+		prop.setProperty("MidiOutName", MidiOutName);
+		prop.setProperty("MidiThruName", MidiThruName);
+		prop.setProperty("chainId", chainId);
+		prop.setProperty("inputsCount", inputsCount);
+		prop.setProperty("sysexDelay", sysexDelay);
+		prop.setProperty("mainWindowPositionX", mainWindowPosition.x);
+		prop.setProperty("mainWindowPositionY", mainWindowPosition.y);
+		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
+			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"X", framesPositions[i].x);
+			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", framesPositions[i].y);
+			prop.setProperty("showPanels"+ ((Integer)i).toString(), showPanels[i]);
+		}
+	}
+
+	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop) {
+		useSamePort = prop.getBoolean("useSamePort", useSamePort);
+		useThruPort = prop.getBoolean("useThruPort", useThruPort);
+		autoOpenPorts = prop.getBoolean("autoOpenPorts", autoOpenPorts);
+		saveOnExit = prop.getBoolean("saveOnExit", saveOnExit);
+		interactive = prop.getBoolean("interactive", interactive);
+		lastDir = prop.getString("lastDir", lastDir);
+		lastConfig = Utils.validateInt(prop.getInt("lastConfig",lastConfig),0,Constants.CONFIGS_COUNT-1,lastConfig);
+		for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
+			configsNames[i] = prop.getString("configName"+i.toString(), configsNames[i]);
+		}
+		lastFullPathConfig = prop.getString("lastFullPathConfig", lastFullPathConfig);
+		lastFullPathFirmware = prop.getString("lastFullPathFirmware", lastFullPathFirmware);
+		lastFullPathSysex = prop.getString("lastFullPathSysex", lastFullPathSysex);
+		MidiInName = prop.getString("MidiInName", MidiInName);
+		MidiOutName = prop.getString("MidiOutName", MidiOutName);
+		MidiThruName = prop.getString("MidiThruName", MidiThruName);
+		chainId = Utils.validateInt(prop.getInt("chainId", chainId),0,3,chainId);
+		inputsCount = Utils.validateInt(prop.getInt("inputsCount", inputsCount),21,56,inputsCount);
+		sysexDelay = Utils.validateInt(prop.getInt("sysexDelay", sysexDelay),10,100,sysexDelay);
+			
+		mainWindowPosition = new Point(
+				Utils.validateInt(prop.getInt("mainWindowPositionX", 0),0,1600,0),
+				Utils.validateInt(prop.getInt("mainWindowPositionY", 0),0,600,0)
+				);
+		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
+			framesPositions[i] = new Point (
+					Utils.validateInt(prop.getInt("framesPositions"+ ((Integer)i).toString()+"X", 0),0,1600,0),
+							Utils.validateInt(prop.getInt("framesPositions"+ ((Integer)i).toString()+"Y", 0),0,600,0)
+					);
+			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString()),0,2,showPanels[i]);
+		}
 	}
 }

@@ -27,7 +27,7 @@ public class ConfigCurve {
 		prefix = prefix+"["+id.toString()+"].";
 		for (Integer i = 0; i<yValues.length;i++) {
 			c = i+1;
-			yValues[i] = prop.getInt(prefix+"P"+c.toString(), yValues[i]);		
+			yValues[i] = Utils.validateInt(prop.getInt(prefix+"P"+c.toString(), yValues[i]),2,255,yValues[i]);		
 		}
 	}	
 

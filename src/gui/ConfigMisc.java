@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.IOException;
+
 import org.apache.commons.configuration.CombinedConfiguration;
 import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.configuration.PropertiesConfiguration;
@@ -34,9 +36,9 @@ public class ConfigMisc {
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
-		note_off = prop.getShort(prefix+"note_off", note_off);
-		latency = prop.getShort(prefix+"latency", latency);
-		pressroll = prop.getShort(prefix+"pressroll", pressroll);
+		note_off = Utils.validateShort(prop.getShort(prefix+"note_off", note_off),10,200,note_off);
+		latency = Utils.validateShort(prop.getShort(prefix+"latency", latency),10,100,latency);
+		pressroll = Utils.validateShort(prop.getShort(prefix+"pressroll", pressroll),0,10,pressroll);
 		all_gains_low = prop.getBoolean(prefix+"all_gains_low", all_gains_low);
 		big_vu_meter = prop.getBoolean(prefix+"big_vu_meter", big_vu_meter);
 		quick_access = prop.getBoolean(prefix+"quick_access", quick_access);

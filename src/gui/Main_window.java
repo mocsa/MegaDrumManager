@@ -1176,9 +1176,6 @@ public class Main_window {
 				break;
 		}
 		updateInputsCountControls();
-		//controlsMisc.copyToConfigFull(configFull, configOptions.chainId);
-		//controlsPedal.copyToConfigFull(configFull, configOptions.chainId);
-		//controlsPads.copyToConfigFull(configFull, configOptions.chainId);
 		if (!configOptions.lastFullPathConfig.equals("")) {
 			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
 			loadAllFromConfigFull();

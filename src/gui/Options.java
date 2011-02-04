@@ -278,27 +278,12 @@ public class Options extends JDialog {
 	}
 	
 	public void loadOptionsFrom(ConfigOptions options) {
-		configOptions.autoOpenPorts = options.autoOpenPorts;
-		configOptions.saveOnExit = options.saveOnExit;
-		configOptions.useSamePort = options.useSamePort;
-		configOptions.useThruPort = options.useThruPort;
-		configOptions.MidiInName = options.MidiInName;
-		configOptions.MidiOutName = options.MidiOutName;
-		configOptions.MidiThruName = options.MidiThruName;
-		configOptions.chainId = options.chainId;
+		configOptions = options;
 		updateControls();
 	}
 	
 	public void saveOptionsTo(ConfigOptions options) {
 		updateConfig();
-		options.autoOpenPorts = configOptions.autoOpenPorts;
-		options.saveOnExit = configOptions.saveOnExit;
-		options.useSamePort = configOptions.useSamePort;		
-		options.useThruPort = configOptions.useThruPort;
-		options.MidiInName = configOptions.MidiInName;
-		options.MidiOutName = configOptions.MidiOutName;
-		options.MidiThruName = configOptions.MidiThruName;
-		options.chainId = configOptions.chainId;
 	}
 	
 	public void fillInPorts(String[] list) {

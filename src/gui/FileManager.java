@@ -180,37 +180,7 @@ public class FileManager {
 			try {
 				prop.load(file);
 				try {
-					config.useSamePort = prop.getBoolean("useSamePort", config.useSamePort);
-					config.useThruPort = prop.getBoolean("useThruPort", config.useThruPort);
-					config.autoOpenPorts = prop.getBoolean("autoOpenPorts", config.autoOpenPorts);
-					config.saveOnExit = prop.getBoolean("saveOnExit", config.saveOnExit);
-					config.interactive = prop.getBoolean("interactive", config.interactive);
-					config.lastDir = prop.getString("lastDir", config.lastDir);
-					config.lastConfig = prop.getInt("lastConfig",config.lastConfig);
-					for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
-						config.configsNames[i] = prop.getString("configName"+i.toString(), config.configsNames[i]);
-					}
-					config.lastFullPathConfig = prop.getString("lastFullPathConfig", config.lastFullPathConfig);
-					config.lastFullPathFirmware = prop.getString("lastFullPathFirmware", config.lastFullPathFirmware);
-					config.lastFullPathSysex = prop.getString("lastFullPathSysex", config.lastFullPathSysex);
-					config.MidiInName = prop.getString("MidiInName", config.MidiInName);
-					config.MidiOutName = prop.getString("MidiOutName", config.MidiOutName);
-					config.MidiThruName = prop.getString("MidiThruName", config.MidiThruName);
-					config.chainId = prop.getInt("chainId", config.chainId);
-					config.inputsCount = prop.getInt("inputsCount", config.inputsCount);
-					config.sysexDelay = prop.getInt("sysexDelay", config.sysexDelay);
-						
-					config.mainWindowPosition = new Point(
-							prop.getInt("mainWindowPositionX", 0),
-							prop.getInt("mainWindowPositionY", 0)
-							);
-					for (int i = 0;i<Constants.PANELS_COUNT;i++) {
-						config.framesPositions[i] = new Point (
-								prop.getInt("framesPositions"+ ((Integer)i).toString()+"X", 0),
-								prop.getInt("framesPositions"+ ((Integer)i).toString()+"Y", 0)
-								);
-						config.showPanels[i] = prop.getInt("showPanels"+ ((Integer)i).toString());
-					}
+					config.copyFromPropertiesConfiguration(prop);
 				} catch (ConversionException e) {
 					// TODO Auto-generated catch block
 					Utils.show_error("Error parsing MegaDrum options from file:\n" +
@@ -230,35 +200,7 @@ public class FileManager {
 	public void saveLastOptions(ConfigOptions config) {
 		file = new File(Constants.MD_MANAGER_CONFIG);
 		PropertiesConfiguration prop = new PropertiesConfiguration();
-		prop.setHeader("MegaDrum options");
-		prop.setProperty("MDconfigVersion", Constants.MD_CONFIG_VERSION.toString());
-		prop.setProperty("useSamePort", config.useSamePort);
-		prop.setProperty("useThruPort", config.useThruPort);
-		prop.setProperty("autoOpenPorts", config.autoOpenPorts);
-		prop.setProperty("saveOnExit", config.saveOnExit);
-		prop.setProperty("interactive", config.interactive);
-		prop.setProperty("lastDir", config.lastDir);
-		prop.setProperty("lastConfig",config.lastConfig);
-		for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
-			prop.setProperty("configName"+i.toString(), config.configsNames[i]);
-		}
-		prop.setProperty("lastFullPathConfig", config.lastFullPathConfig);
-		prop.setProperty("lastFullPathFirmware", config.lastFullPathFirmware);
-		prop.setProperty("lastFullPathSysex", config.lastFullPathSysex);
-		prop.setProperty("MidiInName", config.MidiInName);
-		prop.setProperty("MidiOutName", config.MidiOutName);
-		prop.setProperty("MidiThruName", config.MidiThruName);
-		prop.setProperty("chainId", config.chainId);
-		prop.setProperty("inputsCount", config.inputsCount);
-		prop.setProperty("sysexDelay", config.sysexDelay);
-		prop.setProperty("mainWindowPositionX", config.mainWindowPosition.x);
-		prop.setProperty("mainWindowPositionY", config.mainWindowPosition.y);
-		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
-			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"X", config.framesPositions[i].x);
-			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", config.framesPositions[i].y);
-
-			prop.setProperty("showPanels"+ ((Integer)i).toString(), config.showPanels[i]);
-		}
+		config.copyToPropertiesConfiguration(prop);
 		try {
 			prop.save(file);
 		} catch (ConfigurationException e) {
