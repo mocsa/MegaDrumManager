@@ -21,6 +21,10 @@ import javax.swing.JButton;
 import java.awt.Insets;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
@@ -289,7 +293,14 @@ public class ControlsCurves extends JPanel {
 	
 	public void setConfig(byte [] buffer,int curveId) {
 		changeEventsAllowed = false;
-		Utils.copySysexToConfigCurve(buffer, configCurves[curveId]);
+		PropertiesConfiguration prop = new PropertiesConfiguration();
+		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
+		ConfigCurve config = new ConfigCurve();
+		configCurves[curveId].copyToPropertiesConfiguration(prop, layout, "", curveId);
+		config.copyFromPropertiesConfiguration(prop, "",curveId);		
+		Utils.copySysexToConfigCurve(buffer, config);
+		config.copyToPropertiesConfiguration(prop, layout, "", curveId);
+		configCurves[curveId].copyFromPropertiesConfiguration(prop, "", curveId);		
 		updateYvalues();
 		paintPanel.repaint();
 		changeEventsAllowed = true;

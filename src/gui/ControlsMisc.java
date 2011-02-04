@@ -14,6 +14,10 @@ import javax.swing.JCheckBox;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -243,7 +247,14 @@ public class ControlsMisc extends JPanel {
 	
 	public void setConfig(byte [] sysex) {
 		changeEventsAllowed = false;
-		Utils.copySysexToConfigMisc(sysex, configMisc);
+		PropertiesConfiguration prop = new PropertiesConfiguration();
+		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
+		ConfigMisc config = new ConfigMisc();
+		configMisc.copyToPropertiesConfiguration(prop, layout, "");
+		config.copyFromPropertiesConfiguration(prop, "");
+		Utils.copySysexToConfigMisc(sysex, config);
+		config.copyToPropertiesConfiguration(prop, layout, "");
+		configMisc.copyFromPropertiesConfiguration(prop, "");
 		updateControls();
 		changeEventsAllowed = true;
 	}

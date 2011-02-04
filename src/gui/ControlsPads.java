@@ -450,7 +450,14 @@ public class ControlsPads extends JPanel {
 	}
 	
 	public void setConfig(byte[] buffer, int pad_id) {
-		Utils.copySysexToConfigPad(buffer, configPads[pad_id]);
+		PropertiesConfiguration prop = new PropertiesConfiguration();
+		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
+		ConfigPad config = new ConfigPad();
+		configPads[pad_id].copyToPropertiesConfiguration(prop, layout, "", pad_id);
+		config.copyFromPropertiesConfiguration(prop, "",pad_id);		
+		Utils.copySysexToConfigPad(buffer, config);
+		config.copyToPropertiesConfiguration(prop, layout, "", pad_id);
+		configPads[pad_id].copyFromPropertiesConfiguration(prop, "", pad_id);		
 		if (pad_id > 0) {
 			if (pad_id == padPointer) {
 				panel_head.setConfig(configPads[pad_id], head_pad, pad_id);				
@@ -474,7 +481,14 @@ public class ControlsPads extends JPanel {
 	}
 
 	public void setConfig3rd(byte [] buffer, int third_id) {
-		Utils.copySysexToConfig3rd(buffer, config3rds[third_id]);
+		PropertiesConfiguration prop = new PropertiesConfiguration();
+		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
+		Config3rd config = new Config3rd();
+		config3rds[third_id].copyToPropertiesConfiguration(prop, layout, "", third_id);
+		config.copyFromPropertiesConfiguration(prop, "",third_id);		
+		Utils.copySysexToConfig3rd(buffer, config);
+		config.copyToPropertiesConfiguration(prop, layout, "", third_id);
+		config3rds[third_id].copyFromPropertiesConfiguration(prop, "", third_id);		
 		if (padPointer > 0 ) {
 			if (third_id == thirdPointer) {
 				panel_3rd_zone.setConfig(config3rds[third_id]);

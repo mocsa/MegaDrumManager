@@ -26,6 +26,9 @@ import java.awt.Insets;
 import java.util.ArrayList;
 import javax.swing.SpinnerNumberModel;
 
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
 public class ControlsPedal extends JPanel {
 	private Boolean changeEventsAllowed = false;
 
@@ -642,7 +645,14 @@ public class ControlsPedal extends JPanel {
 	
 	public void setConfig(byte [] sysex) {
 		changeEventsAllowed = false;
-		Utils.copySysexToConfigPedal(sysex, configPedal);
+		PropertiesConfiguration prop = new PropertiesConfiguration();
+		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
+		ConfigPedal config = new ConfigPedal();
+		configPedal.copyToPropertiesConfiguration(prop, layout, "");
+		config.copyFromPropertiesConfiguration(prop, "");
+		Utils.copySysexToConfigPedal(sysex, config);
+		config.copyToPropertiesConfiguration(prop, layout, "");
+		configPedal.copyFromPropertiesConfiguration(prop, "");
 		updateControls();
 		changeEventsAllowed = true;
 	}
