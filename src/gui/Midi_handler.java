@@ -513,15 +513,6 @@ public class Midi_handler {
 			Block_size = frameSize/8 + 2;
 			//Block_size = 2;
 			writeMid(receiver, buffer, index, frameSize);
-		    try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
-				Utils.show_error("Unrecoverable timer error. Exiting.\n" +
-						"(" + e.getMessage() + ")");
-				System.exit(1);
-			}
 
 			nBytes = 0;
 			inDelay = 40;
