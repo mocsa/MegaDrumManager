@@ -53,7 +53,7 @@ public class ControlsMisc extends JPanel {
 	 * Create the panel.
 	 */
 	public ControlsMisc() {
-		//configMisc = new ConfigMisc();
+		configMisc = new ConfigMisc();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
