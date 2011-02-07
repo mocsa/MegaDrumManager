@@ -256,6 +256,7 @@ public class ControlsMisc extends JPanel {
 		spinner_latency.setValue((short)(configMisc.latency));
 		checkBox_bigVuMeter.setSelected(configMisc.big_vu_meter);
 		checkBox_quickAccess.setSelected(configMisc.quick_access);
+		checkBox_bigVuSplit.setSelected(configMisc.big_vu_split);
 		checkBox_altFalseTrSupp.setSelected(configMisc.alt_false_tr_supp);
 		checkBox_inputsPriority.setSelected(configMisc.inputs_priority);
 		checkBox_allGainsLow.setSelected(configMisc.all_gains_low);		
