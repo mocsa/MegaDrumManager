@@ -16,6 +16,7 @@ public class ConfigMisc {
 	public short pressroll = 0;
 	public boolean all_gains_low = false;
 	public boolean big_vu_meter = false;
+	public boolean big_vu_split = false;
 	public boolean quick_access = false;
 	public boolean alt_false_tr_supp = false;
 	public boolean inputs_priority = false;
@@ -30,6 +31,7 @@ public class ConfigMisc {
 		prop.setProperty(prefix+"pressroll", pressroll);
 		prop.setProperty(prefix+"all_gains_low", all_gains_low);
 		prop.setProperty(prefix+"big_vu_meter", big_vu_meter);
+		prop.setProperty(prefix+"big_vu_split", big_vu_split);
 		prop.setProperty(prefix+"quick_access", quick_access);
 		prop.setProperty(prefix+"alt_false_tr_supp", alt_false_tr_supp);
 		prop.setProperty(prefix+"inputs_priority", inputs_priority);
@@ -41,6 +43,7 @@ public class ConfigMisc {
 		pressroll = Utils.validateShort(prop.getShort(prefix+"pressroll", pressroll),0,note_off,pressroll);
 		all_gains_low = prop.getBoolean(prefix+"all_gains_low", all_gains_low);
 		big_vu_meter = prop.getBoolean(prefix+"big_vu_meter", big_vu_meter);
+		big_vu_split = prop.getBoolean(prefix+"big_vu_split", big_vu_split);
 		quick_access = prop.getBoolean(prefix+"quick_access", quick_access);
 		alt_false_tr_supp = prop.getBoolean(prefix+"alt_false_tr_supp", alt_false_tr_supp);
 		inputs_priority = prop.getBoolean(prefix+"inputs_priority", inputs_priority);

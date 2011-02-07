@@ -46,6 +46,8 @@ public class ControlsMisc extends JPanel {
 	private JButton btnSend;
 	private JButton btnLoad;
 	private JButton btnSave;
+	private JLabel lblBigVuSplit;
+	private JCheckBox checkBox_bigVuSplit;
 
 	/**
 	 * Create the panel.
@@ -99,6 +101,7 @@ public class ControlsMisc extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("32dlu"),},
 			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -170,9 +173,22 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_bigVuMeter, "3, 4");
 		
+		lblBigVuSplit = new JLabel("Big VU split");
+		lblBigVuSplit.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblBigVuSplit, "1, 5");
+		
+		checkBox_bigVuSplit = new JCheckBox("");
+		checkBox_bigVuSplit.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				configMisc.big_vu_split = checkBox_bigVuSplit.isSelected();
+				valueChanged();
+			}
+		});
+		panel.add(checkBox_bigVuSplit, "3, 5");
+		
 		JLabel lblQuickAccess = new JLabel("Quick Access");
 		lblQuickAccess.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblQuickAccess, "1, 5");
+		panel.add(lblQuickAccess, "1, 6");
 		
 		checkBox_quickAccess = new JCheckBox("");
 		checkBox_quickAccess.addItemListener(new ItemListener() {
@@ -181,11 +197,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_quickAccess, "3, 5");
+		panel.add(checkBox_quickAccess, "3, 6");
 		
 		JLabel lblAltFalsetrsuppression = new JLabel("AltFalseTrSupp");
 		lblAltFalsetrsuppression.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblAltFalsetrsuppression, "1, 6");
+		panel.add(lblAltFalsetrsuppression, "1, 7");
 		
 		checkBox_altFalseTrSupp = new JCheckBox("");
 		checkBox_altFalseTrSupp.addItemListener(new ItemListener() {
@@ -194,11 +210,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_altFalseTrSupp, "3, 6");
+		panel.add(checkBox_altFalseTrSupp, "3, 7");
 		
 		JLabel lblInputsPriority = new JLabel("Inputs Priority");
 		lblInputsPriority.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblInputsPriority, "1, 7");
+		panel.add(lblInputsPriority, "1, 8");
 		
 		checkBox_inputsPriority = new JCheckBox("");
 		checkBox_inputsPriority.addItemListener(new ItemListener() {
@@ -207,11 +223,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_inputsPriority, "3, 7");
+		panel.add(checkBox_inputsPriority, "3, 8");
 		
 		JLabel lblAllGainsLow = new JLabel("All Gains Low");
 		lblAllGainsLow.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblAllGainsLow, "1, 8");
+		panel.add(lblAllGainsLow, "1, 9");
 		
 		checkBox_allGainsLow = new JCheckBox("");
 		checkBox_allGainsLow.addItemListener(new ItemListener() {
@@ -220,7 +236,7 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_allGainsLow, "3, 8");
+		panel.add(checkBox_allGainsLow, "3, 9");
 		changeEventsAllowed = true;
 
 	}
