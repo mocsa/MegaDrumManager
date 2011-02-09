@@ -4,6 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
+	public static final String MD_VERSION = "20110209";
 	public static final Double MD_CONFIG_VERSION = 0.5; 
 	public static final int CONFIGS_COUNT = 8;
 	public static final int PANEL_HIDE = 0;
@@ -66,4 +67,8 @@ public interface Constants {
 	public static final Color MD_HIHAT_COLOR = Color.MAGENTA;
 	public static final Color MD_AFTERTOUCH_ON_COLOR = Color.GRAY;
 	public static final Color MD_AFTERTOUCH_OFF_COLOR = Color.LIGHT_GRAY;
+	public static final String HELP_ABOUT = "MegaDrum Manager\n" +
+			"Version: " + MD_VERSION + "\n" +
+			"www.megadrum.info\n"+
+			"© 2007-2011 Dmitri Skachkov";
 }

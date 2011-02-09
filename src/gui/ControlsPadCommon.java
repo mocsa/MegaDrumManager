@@ -44,7 +44,7 @@ class PadButton extends JButton {
 	 */
 	public PadButton(String text, boolean pad_type) {
 		name = text;
-		setIcon(new ImageIcon(ControlsPadCommon.class.getResource("/com/sun/java/swing/plaf/motif/icons/ScrollRightArrowActive.gif")));
+		setIcon(new ImageIcon(ControlsPadCommon.class.getResource("/icons12x12/46.png")));
 		if (pad_type) {
 			setToolTipText("Copy this input setting to All inputs");
 		} else {
@@ -134,7 +134,7 @@ public class ControlsPadCommon extends JPanel {
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("53dlu"),
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("12dlu"),},
+				ColumnSpec.decode("10dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),

@@ -169,7 +169,7 @@ public class Main_window {
 	 */
 	private void initialize() {
 		frmMegadrummanager = new JFrame();
-		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/gui/megadrum-manager128.png")));
+		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/icons/megadrum-manager128.png")));
 		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
@@ -389,6 +389,20 @@ public class Main_window {
 		
 		mnView = new JMenu("View");
 		menuBar.add(mnView);
+		
+		JMenu mnHelp = new JMenu("Help");
+		menuBar.add(mnHelp);
+		
+		JMenuItem mntmAbout = new JMenuItem("About");
+		mntmAbout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JOptionPane.showMessageDialog(null,
+					    Constants.HELP_ABOUT,
+					    "About",
+					    JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		mnHelp.add(mntmAbout);
 		
 		
 		panel_main = new JPanel();
@@ -919,7 +933,7 @@ public class Main_window {
 			mnView.add(viewMenus[i]);
 			framesDetached[i] = new FrameDetached(i);
 			framesDetached[i].setTitle(Constants.PANELS_NAMES[i]);
-			framesDetached[i].setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/gui/megadrum-manager128.png")));
+			framesDetached[i].setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/icons/megadrum-manager128.png")));
 			framesDetached[i].addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowActivated(WindowEvent arg0) {
