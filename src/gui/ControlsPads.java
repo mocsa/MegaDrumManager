@@ -63,6 +63,7 @@ public class ControlsPads extends JPanel {
 	private int padSelection;
 	private int prevPadSelection;
 	private PropertyChangeListener padButtonPropertyChangeListener;
+	private PropertyChangeListener ZoneButtonPropertyChangeListener;
 	private boolean switchingPad = false;
 	private boolean panel_3rd_zone_prevVisible = false;
 
@@ -400,6 +401,15 @@ public class ControlsPads extends JPanel {
 				}
 			}
 		});
+		ZoneButtonPropertyChangeListener = new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+				if (arg0.getPropertyName().equals("copyButton")) {
+					String varName = ((ThirdZoneControls)arg0.getSource()).pressedPadButtonName;
+					copy3rdVarToAll(varName);
+				}
+			}
+		};
+		panel_3rd_zone.addPropertyChangeListener(ZoneButtonPropertyChangeListener);
 		panel_3rd_zone.setVisible(false);
 		add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -760,9 +770,11 @@ public class ControlsPads extends JPanel {
 			configPads[pad_id].minScan = config.minScan;	
 		}
 		if (varName.equals("type")) {
-			configPads[pad_id].type = config.type;	
-			configPads[pad_id].dual = config.dual;	
-			configPads[pad_id].threeWay = config.threeWay;	
+			if (pad_id>0) {
+				configPads[pad_id].type = config.type;	
+				configPads[pad_id].dual = config.dual;	
+				configPads[pad_id].threeWay = config.threeWay;
+			}
 		}
 		if (varName.equals("autoLevel")) {
 			configPads[pad_id].autoLevel = config.autoLevel;	
@@ -819,6 +831,45 @@ public class ControlsPads extends JPanel {
 		}
 	}
 	
+	private void copy3rdVar(String varName, int third_id, Config3rd config) {
+		if (varName.equals("note")) {
+			config3rds[third_id].note = config.note;	
+		}
+		if (varName.equals("altNote")) {
+			config3rds[third_id].altNote = config.altNote;	
+		}
+		if (varName.equals("pressrollNote")) {
+			config3rds[third_id].pressrollNote = config.pressrollNote;	
+		}
+		if (varName.equals("dampenedNote")) {
+			config3rds[third_id].dampenedNote = config.dampenedNote;	
+		}
+		if (varName.equals("threshold")) {
+			config3rds[third_id].threshold = config.threshold;	
+		}
+		if (varName.equals("midpoint")) {
+			config3rds[third_id].threshold = (short) (((short)(config3rds[third_id].threshold&0x0f))
+			|
+			((short)(config.threshold&0xf0)));
+		}
+		if (varName.equals("midwidth")) {
+			config3rds[third_id].threshold = (short) (((short)(config3rds[third_id].threshold&0xf0))
+					|
+					((short)(config.threshold&0x0f)));
+		}
+	}
+	
+	private void copy3rdVarToAll(String varName) {
+		int input = thirdPointer;
+		panel_3rd_zone.updateConfig();
+		for (int i = 0; i<((Constants.PADS_COUNT - 1)/2);i++) {
+			if (i != input) {
+				copy3rdVar(varName, i, config3rds[input]);
+			}
+	
+		}
+	}
+
 	public void updateInputCountsControls(int count) {
 		if (panel_head != null) {
 			switch_to_pad(0);

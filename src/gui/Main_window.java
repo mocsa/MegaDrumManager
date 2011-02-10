@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.UIDefaults;
 
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
@@ -126,6 +127,8 @@ public class Main_window {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					//UIDefaults defaults = UIManager.getDefaults();
+					//defaults.put("JComponent.sizeVariant", "regular");
 					Main_window window = new Main_window();
 					window.frmMegadrummanager.setVisible(true);
 					window.dialog_options.setVisible(false);
@@ -396,8 +399,11 @@ public class Main_window {
 		JMenuItem mntmAbout = new JMenuItem("About");
 		mntmAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//JOptionPane jp = JOptionPane();
+				//jp.setFont(new Font("Tahoma", Font.PLAIN, 10));
+				//jp.showMessageDialog(null,
 				JOptionPane.showMessageDialog(null,
-					    Constants.HELP_ABOUT,
+					    "<html><font size=5>"+Constants.HELP_ABOUT+"</font></html>",
 					    "About",
 					    JOptionPane.INFORMATION_MESSAGE);
 			}
