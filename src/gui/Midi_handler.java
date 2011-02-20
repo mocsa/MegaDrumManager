@@ -452,9 +452,11 @@ public class Midi_handler {
 		int p = 0;
 		while ((p + Block_size) < size) {
 			write(rr,buf,ind + p, Block_size);
-			p += Block_size;			
+			p += Block_size;
 		}
-		write(rr,buf,ind + p, size - p);
+		if (p < size) {
+			write(rr,buf,ind + p, size - p);
+		}
 	}	
 	
 	public void doFirmwareUpgrade (Upgrade parent, ConfigOptions options, File file) throws IOException {		
@@ -506,12 +508,12 @@ public class Midi_handler {
 		for(index = 0; index < bufferSize; index += frameSize)
 		{
 			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
-			clear_midi_input();
+			//clear_midi_input();
 			parent.setProgressBar(bytesSent);
 			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
+			//Block_size = frameSize;
 			Block_size = frameSize/8 + 2;
-			//Block_size = 2;
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
@@ -526,7 +528,7 @@ public class Midi_handler {
  				}
 			    inDelay--;
 			    try {
-					Thread.sleep(50);
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					// e.printStackTrace();
@@ -536,8 +538,7 @@ public class Midi_handler {
 				}
 			}
 			//System.out.printf("Received %d bytes\n", nBytes);
- 			
- 
+						
  			receivedByte = Constants.Error_NoResponse;
 			if (nBytes > 2) {
 				receivedByte = receivedBuffer[1]<<4;
