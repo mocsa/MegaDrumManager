@@ -55,7 +55,7 @@ public class NoteSpinControl extends JPanel {
 			}
 		});
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("47px"),
+				ColumnSpec.decode("40px"),
 				ColumnSpec.decode("20dlu"),
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {

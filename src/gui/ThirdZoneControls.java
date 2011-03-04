@@ -90,6 +90,16 @@ public class ThirdZoneControls extends JPanel {
 		add(lblNote, "1, 1, right, default");
 		
 		noteSpinControl_note = new NoteSpinControl();
+		noteSpinControl_note.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
+					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+				}
+				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
+					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+				}
+			}
+		});
 		controls.add(noteSpinControl_note.getSpinner());
 		add(noteSpinControl_note, "3, 1, fill, fill");
 		
@@ -124,6 +134,16 @@ public class ThirdZoneControls extends JPanel {
 		add(lblAltNote, "1, 2, right, default");
 		
 		noteSpinControl_altNote = new NoteSpinControl();
+		noteSpinControl_altNote.getCheckBox().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				noteSpinControl_altNote.getSpinner().setEnabled(!noteSpinControl_altNote.getCheckBox().isSelected());
+				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
+					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+				}
+			}
+		});
+		noteSpinControl_altNote.getCheckBox().setVisible(true);
+		noteSpinControl_altNote.getCheckBox().setToolTipText("Linked to Note");
 		controls.add(noteSpinControl_altNote.getSpinner());
 		add(noteSpinControl_altNote, "3, 2, fill, fill");
 		
@@ -153,6 +173,16 @@ public class ThirdZoneControls extends JPanel {
 		add(lblPressrollNote, "1, 3, right, default");
 		
 		noteSpinControl_pressrollNote = new NoteSpinControl();
+		noteSpinControl_pressrollNote.getCheckBox().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				noteSpinControl_pressrollNote.getSpinner().setEnabled(!noteSpinControl_pressrollNote.getCheckBox().isSelected());
+				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
+					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+				}
+			}
+		});
+		noteSpinControl_pressrollNote.getCheckBox().setVisible(true);
+		noteSpinControl_pressrollNote.getCheckBox().setToolTipText("Linked to Note");
 		controls.add(noteSpinControl_pressrollNote.getSpinner());
 		add(noteSpinControl_pressrollNote, "3, 3, fill, fill");
 		
@@ -182,6 +212,7 @@ public class ThirdZoneControls extends JPanel {
 		add(lblDampenedNote, "1, 4");
 		
 		noteSpinControl_dampenedNote = new NoteSpinControl();
+		//noteSpinControl_dampenedNote.getCheckBox().setVisible(true);
 		controls.add(noteSpinControl_dampenedNote.getSpinner());
 		add(noteSpinControl_dampenedNote, "3, 4, fill, fill");
 		

@@ -207,6 +207,9 @@ public class ControlsPadCommon extends JPanel {
 		noteSpinControl_altNote.getCheckBox().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				noteSpinControl_altNote.getSpinner().setEnabled(!noteSpinControl_altNote.getCheckBox().isSelected());
+				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
+					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+				}
 			}
 		});
 		noteSpinControl_altNote.getCheckBox().setToolTipText("Linked to Note");
@@ -223,6 +226,9 @@ public class ControlsPadCommon extends JPanel {
 		noteSpinControl_pressrollNote.getCheckBox().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				noteSpinControl_pressrollNote.getSpinner().setEnabled(!noteSpinControl_pressrollNote.getCheckBox().isSelected());
+				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
+					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+				}
 			}
 		});
 		noteSpinControl_pressrollNote.getCheckBox().setToolTipText("Linked to Note");
