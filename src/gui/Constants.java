@@ -57,8 +57,10 @@ public interface Constants {
 			"Cuica2", "Triangl1", "Triangl2", "Bass1", "Bass2", "Sizzle1",
 			"Sizzle2", "Splash1", "Splash2", "Swish1", "Swish2", "Clash1",
 			"Clash2", "Chenda1", "Chenda2", "Tenor1", "Tenor2", "Timpani1",
-			"Timpani2", "Timpani3", "Timpani4"
-
+			"Timpani2", "Timpani3", "Timpani4",	"Crash3", "Crash4", "Crash5",
+			"Splash3", "Splash4", "Splash5", "RotoTom1", "RotoTom2", "RotoTom3",
+			"Sticks1", "Sticks2", "Sticks3", "HndClap1", "HndClap2", "HndClap3",
+			"FngrSnap", "Mtronome" 
 	};
 	public static final Color MD_HEAD_COLOR = Color.BLUE;
 	public static final Color MD_RIM_COLOR = Color.GREEN;
