@@ -88,6 +88,7 @@ public class Upgrade extends JDialog {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JTextPane txtpnSelectThe = new JTextPane();
+		txtpnSelectThe.setEditable(false);
 		txtpnSelectThe.setText("1. Select the MegaDrum firmware file.\r\n2. Disconnect (power off) MegaDrum.\r\n3. While holding MegaDrum's button LEFT connect (power on) MegaDrum. \r\n4. By pressing MegaDrum's button UP select a correct MegaDrum crystal frequency.\r\n5. Press MegaDrum's button DOWN. MegaDrum LCD will show 'StartUpdateOnPC'.\r\n6. Click button Start.\r\n7. Wait for the upgrade to finish.\r\n8. Click button Close.");
 		getContentPane().add(txtpnSelectThe, "2, 2, fill, fill");
 		

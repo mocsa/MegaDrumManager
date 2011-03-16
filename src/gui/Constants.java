@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20110304";
+	public static final String MD_VERSION = "20110316";
 	public static final Double MD_CONFIG_VERSION = 0.5; 
 	public static final int CONFIGS_COUNT = 8;
 	public static final int PANEL_HIDE = 0;
