@@ -513,7 +513,8 @@ public class Midi_handler {
 			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
 			//Block_size = frameSize;
-			Block_size = frameSize/8 + 2;
+			//Block_size = frameSize/8 + 2;
+			Block_size = 2;
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
