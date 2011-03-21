@@ -855,6 +855,7 @@ public class Main_window {
 					lblVersion.setText("????????");
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					showMidiWarningIfNeeded();
 					midi_handler.initPorts(configOptions);
 				}
 				toggleMidiOpenButton();
@@ -1173,6 +1174,7 @@ public class Main_window {
 		dialog_options.fillOutPorts(midi_handler.getMidiOutList());
 		dialog_options.fillThruPorts(midi_handler.getMidiOutList());
 		dialog_options.loadOptionsFrom(configOptions);
+		showMidiWarningIfNeeded();
 		if (configOptions.autoOpenPorts) {
 			midi_handler.initPorts(configOptions);
 			tglbtnMidi.setSelected(midi_handler.isMidiOpen());
@@ -1347,6 +1349,15 @@ public class Main_window {
 			break;
 		}
 	
+	}
+	
+	private void showMidiWarningIfNeeded() {
+		if (configOptions.MidiInName.equals("") || configOptions.MidiOutName.equals("")) {
+			JOptionPane.showMessageDialog(null,
+				    Constants.MIDI_PORTS_WARNING,
+				    "Warning",
+				    JOptionPane.INFORMATION_MESSAGE);
+		}		
 	}
 }
 

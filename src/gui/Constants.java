@@ -69,8 +69,11 @@ public interface Constants {
 	public static final Color MD_HIHAT_COLOR = Color.MAGENTA;
 	public static final Color MD_AFTERTOUCH_ON_COLOR = Color.GRAY;
 	public static final Color MD_AFTERTOUCH_OFF_COLOR = Color.LIGHT_GRAY;
-	public static final String HELP_ABOUT = "<html><font size=2>MegaDrum Manager</font><html>\n" +
-			"<html><font size=2>Version: " + MD_VERSION + "</font><html>\n" +
-			"<html><font size=2>www.megadrum.info</font><html>\n"+
-			"<html><font size=2>© 2007-2011 Dmitri Skachkov</font><html>";
+	public static final String HELP_ABOUT = "<html><font size=2>MegaDrum Manager</font></html>\n" +
+			"<html><font size=2>Version: " + MD_VERSION + "</font></html>\n" +
+			"<html><font size=2>www.megadrum.info</font></html>\n"+
+			"<html><font size=2>© 2007-2011 Dmitri Skachkov</font></html>";
+	public static final String MIDI_PORTS_WARNING =
+			"<html><font size=3>Before using MegaDrum Manager</font></html>\n" +
+			"<html><font size=3>you first must set MIDI In/Out ports in Main->Options!!!</font></html>";
 }
