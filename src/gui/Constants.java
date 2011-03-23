@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20110316";
+	public static final String MD_VERSION = "20110321";
 	public static final Double MD_CONFIG_VERSION = 0.5; 
 	public static final int CONFIGS_COUNT = 8;
 	public static final int PANEL_HIDE = 0;
@@ -74,6 +74,6 @@ public interface Constants {
 			"<html><font size=2>www.megadrum.info</font></html>\n"+
 			"<html><font size=2>© 2007-2011 Dmitri Skachkov</font></html>";
 	public static final String MIDI_PORTS_WARNING =
-			"<html><font size=3>Before using MegaDrum Manager</font></html>\n" +
-			"<html><font size=3>you first must set MIDI In/Out ports in Main->Options!!!</font></html>";
+			"<html><font size=4>Before using MegaDrum Manager</font></html>\n" +
+			"<html><font size=4>you first must set MIDI In/Out ports in Main->Options!!!</font></html>";
 }
