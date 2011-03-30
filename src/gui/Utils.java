@@ -259,6 +259,7 @@ public class Utils {
 			config.big_vu_split = ((flags&(1<<4)) != 0);
 			config.alt_false_tr_supp = ((flags&(1<<5)) != 0);
 			config.inputs_priority = ((flags&(1<<6)) != 0);
+			config.midi_thru = ((flags&(1<<8)) != 0);
 		}
 	}
 	
@@ -269,7 +270,9 @@ public class Utils {
 		int i = 0;
 		
 		flags = (short) (((config.all_gains_low)?1:0)|(((config.big_vu_meter)?1:0)<<2)
-				|(((config.quick_access)?1:0)<<3)|(((config.big_vu_split)?1:0)<<4)|(((config.alt_false_tr_supp)?1:0)<<5)|(((config.inputs_priority)?1:0)<<6));
+				|(((config.quick_access)?1:0)<<3)|(((config.big_vu_split)?1:0)<<4)
+				|(((config.alt_false_tr_supp)?1:0)<<5)|(((config.inputs_priority)?1:0)<<6)
+				|(((config.midi_thru)?1:0)<<8));
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = (byte) chainId;

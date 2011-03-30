@@ -48,6 +48,8 @@ public class ControlsMisc extends JPanel {
 	private JButton btnSave;
 	private JLabel lblBigVuSplit;
 	private JCheckBox checkBox_bigVuSplit;
+	private JCheckBox checkBox_MidiThru;
+	private JLabel lblMidiThruEnabled;
 
 	/**
 	 * Create the panel.
@@ -101,6 +103,7 @@ public class ControlsMisc extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("32dlu"),},
 			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -237,6 +240,19 @@ public class ControlsMisc extends JPanel {
 			}
 		});
 		panel.add(checkBox_allGainsLow, "3, 9");
+		
+		lblMidiThruEnabled = new JLabel("MIDI Thru");
+		lblMidiThruEnabled.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblMidiThruEnabled, "1, 10");
+		
+		checkBox_MidiThru = new JCheckBox("");
+		checkBox_MidiThru.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				configMisc.midi_thru = checkBox_MidiThru.isSelected();
+				valueChanged();
+			}
+		});
+		panel.add(checkBox_MidiThru, "3, 10");
 		changeEventsAllowed = true;
 
 	}
@@ -260,6 +276,7 @@ public class ControlsMisc extends JPanel {
 		checkBox_altFalseTrSupp.setSelected(configMisc.alt_false_tr_supp);
 		checkBox_inputsPriority.setSelected(configMisc.inputs_priority);
 		checkBox_allGainsLow.setSelected(configMisc.all_gains_low);		
+		checkBox_MidiThru.setSelected(configMisc.midi_thru);		
 	}
 	
 	public void setConfig(byte [] sysex) {

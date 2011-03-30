@@ -20,6 +20,7 @@ public class ConfigMisc {
 	public boolean quick_access = false;
 	public boolean alt_false_tr_supp = false;
 	public boolean inputs_priority = false;
+	public boolean midi_thru = false;
 
 	public ConfigMisc (){
 	}
@@ -35,6 +36,7 @@ public class ConfigMisc {
 		prop.setProperty(prefix+"quick_access", quick_access);
 		prop.setProperty(prefix+"alt_false_tr_supp", alt_false_tr_supp);
 		prop.setProperty(prefix+"inputs_priority", inputs_priority);
+		prop.setProperty(prefix+"midi_thru", midi_thru);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
@@ -47,5 +49,6 @@ public class ConfigMisc {
 		quick_access = prop.getBoolean(prefix+"quick_access", quick_access);
 		alt_false_tr_supp = prop.getBoolean(prefix+"alt_false_tr_supp", alt_false_tr_supp);
 		inputs_priority = prop.getBoolean(prefix+"inputs_priority", inputs_priority);
+		midi_thru = prop.getBoolean(prefix+"midi_thru", midi_thru);
 	}
 }
