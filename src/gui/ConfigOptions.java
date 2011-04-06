@@ -96,7 +96,7 @@ public class ConfigOptions implements java.io.Serializable {
 					Utils.validateInt(prop.getInt("framesPositions"+ ((Integer)i).toString()+"X", 0),0,1600,0),
 							Utils.validateInt(prop.getInt("framesPositions"+ ((Integer)i).toString()+"Y", 0),0,600,0)
 					);
-			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString()),0,2,showPanels[i]);
+			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString(),showPanels[i]),0,2,showPanels[i]);
 		}
 	}
 }
