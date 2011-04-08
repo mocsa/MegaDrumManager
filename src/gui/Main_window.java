@@ -800,15 +800,13 @@ public class Main_window {
 		panel.add(lblInputs, "10, 1");
 		
 		comboBox_inputsCount = new JComboBox();
+		comboBox_inputsCount.setMaximumRowCount(20);
 		panel.add(comboBox_inputsCount, "12, 1");
 		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		comboBox_inputsCount.removeAllItems();
-		comboBox_inputsCount.addItem("22");
-		comboBox_inputsCount.addItem("32");
-		comboBox_inputsCount.addItem("40");
-		comboBox_inputsCount.addItem("48");
-		comboBox_inputsCount.addItem("56");
-		
+		for (int i=0;i<((Constants.MAX_INPUTS-Constants.MIN_INPUTS)/2 + 1);i++) {
+			comboBox_inputsCount.addItem((i*2) + Constants.MIN_INPUTS + 1);
+		}		
 		tglbtnLiveUpdates = new JToggleButton("Live updates");
 		tglbtnLiveUpdates.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnLiveUpdates.addItemListener(new ItemListener() {
@@ -827,23 +825,7 @@ public class Main_window {
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-		        	switch (comboBox_inputsCount.getSelectedIndex()) {
-		        	case 0:
-		        		configOptions.inputsCount = 21;
-		        		break;
-		        	case 1:
-		        		configOptions.inputsCount = 31;
-		        		break;
-		        	case 2:
-		        		configOptions.inputsCount = 39;
-		        		break;
-		        	case 3:
-		        		configOptions.inputsCount = 47;
-		        		break;
-		        	default:
-		        		configOptions.inputsCount = 55;
-		        		break;
-		        	}
+		        	configOptions.inputsCount = (comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS;
 		        	updateInputsCountControls();
 		        }
 			}
@@ -1179,24 +1161,8 @@ public class Main_window {
 			midi_handler.initPorts(configOptions);
 			tglbtnMidi.setSelected(midi_handler.isMidiOpen());
 		}
-		midi_handler.chainId = configOptions.chainId; 
-		switch (configOptions.inputsCount) {
-			case 21:
-				comboBox_inputsCount.setSelectedIndex(0);
-				break;
-			case 31:
-				comboBox_inputsCount.setSelectedIndex(1);
-				break;
-			case 39:
-				comboBox_inputsCount.setSelectedIndex(2);
-				break;
-			case 47:
-				comboBox_inputsCount.setSelectedIndex(3);
-				break;
-			default:
-				comboBox_inputsCount.setSelectedIndex(4);
-				break;
-		}
+		midi_handler.chainId = configOptions.chainId;
+		comboBox_inputsCount.setSelectedIndex((configOptions.inputsCount - Constants.MIN_INPUTS)/2);
 		updateInputsCountControls();
 		if (!configOptions.lastFullPathConfig.equals("")) {
 			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
