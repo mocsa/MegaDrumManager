@@ -127,6 +127,21 @@ public class Main_window {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					/*
+			        System.out.println(System.getProperty("os.name")
+			                + " " + System.getProperty("os.version")
+			                + " " + System.getProperty("java.version"));
+			            UIManager.LookAndFeelInfo[] lfa =
+			                UIManager.getInstalledLookAndFeels();
+			            for (UIManager.LookAndFeelInfo lf : lfa) {
+			                UIManager.setLookAndFeel(lf.getClassName());
+			                UIDefaults uid = UIManager.getLookAndFeelDefaults();
+			                System.out.println("***"
+			                    + " " + lf.getName()
+			                    + " " + lf.getClassName()
+			                    + " " + uid.size() + " entries");
+			            }
+			        */
 					//UIDefaults defaults = UIManager.getDefaults();
 					//defaults.put("JComponent.sizeVariant", "regular");
 					Main_window window = new Main_window();

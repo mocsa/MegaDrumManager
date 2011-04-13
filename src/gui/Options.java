@@ -63,28 +63,41 @@ public class Options extends JDialog {
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setName("dialog_options");
 		setTitle("Options");
-		setBounds(100, 100, 495, 347);
+		setBounds(100, 100, 542, 347);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("261px"),},
+				ColumnSpec.decode("261px"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("276px"),}));
+				RowSpec.decode("276px:grow"),}));
 		
 		JPanel panel_midi = new JPanel();
 		panel_midi.setBorder(new TitledBorder(null, "MIDI Ports", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPanel.add(panel_midi, "1, 1, fill, fill");
-		
-		comboBox_MIDI_Out = new JComboBox();
-		comboBox_MIDI_Out.setMaximumRowCount(16);
-		comboBox_MIDI_Out.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		comboBox_MIDI_Out.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				midi_port_out = comboBox_MIDI_Out.getSelectedIndex();
-			}
-		});
 		panel_midi.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("right:101px"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("left:144px:grow"),},
+			new RowSpec[] {
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("12dlu"),
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:12dlu"),
+				RowSpec.decode("12dlu"),
+				RowSpec.decode("12dlu"),
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("12dlu"),}));
+
+		JPanel panel_misc = new JPanel();
+		panel_misc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		contentPanel.add(panel_misc, "3, 1, fill, fill");
+		panel_misc.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:101px"),
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("left:144px:grow"),},
@@ -101,6 +114,15 @@ public class Options extends JDialog {
 				RowSpec.decode("12dlu"),
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("12dlu"),}));
+		
+		comboBox_MIDI_Out = new JComboBox();
+		comboBox_MIDI_Out.setMaximumRowCount(16);
+		comboBox_MIDI_Out.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		comboBox_MIDI_Out.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				midi_port_out = comboBox_MIDI_Out.getSelectedIndex();
+			}
+		});
 		
 		JLabel lblUseSameInout = new JLabel("Use same In/Out");
 		lblUseSameInout.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -170,7 +192,7 @@ public class Options extends JDialog {
 		
 		JLabel lblSaveOptionsOn = new JLabel("Save Options on Exit");
 		lblSaveOptionsOn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_midi.add(lblSaveOptionsOn, "1, 7");
+		panel_misc.add(lblSaveOptionsOn, "1, 1");
 		
 		checkBox_saveOnClose = new JCheckBox("");
 		checkBox_saveOnClose.addItemListener(new ItemListener() {
@@ -179,22 +201,22 @@ public class Options extends JDialog {
 			}
 		});
 		checkBox_saveOnClose.setHorizontalTextPosition(SwingConstants.LEADING);
-		panel_midi.add(checkBox_saveOnClose, "3, 7");
+		panel_misc.add(checkBox_saveOnClose, "3, 1");
 		
 		JLabel lblOpenOnStartup = new JLabel("Init Ports on Startup");
 		lblOpenOnStartup.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_midi.add(lblOpenOnStartup, "1, 8");
+		panel_midi.add(lblOpenOnStartup, "1, 7");
 		
 		checkBox_autoOpen = new JCheckBox("");
 		checkBox_autoOpen.setHorizontalTextPosition(SwingConstants.LEADING);
-		panel_midi.add(checkBox_autoOpen, "3, 8");
+		panel_midi.add(checkBox_autoOpen, "3, 7");
 		
 		JLabel lblSysexDelay = new JLabel("SysEx delay");
 		lblSysexDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_midi.add(lblSysexDelay, "1, 9");
+		panel_midi.add(lblSysexDelay, "1, 8");
 		
 		JPanel panel = new JPanel();
-		panel_midi.add(panel, "3, 9, fill, fill");
+		panel_midi.add(panel, "3, 8, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("40px"),
 				ColumnSpec.decode("1dlu"),
@@ -216,7 +238,9 @@ public class Options extends JDialog {
 			}
 		});
 		btnRescanMidiPorts.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_midi.add(btnRescanMidiPorts, "3, 12, default, fill");
+		panel_midi.add(btnRescanMidiPorts, "3, 11, default, fill");
+		
+		
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
