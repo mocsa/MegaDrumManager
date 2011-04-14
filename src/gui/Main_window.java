@@ -85,6 +85,7 @@ import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Toolkit;
+import com.jgoodies.forms.layout.Sizes;
 
 public class Main_window {
 
@@ -784,17 +785,17 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("64px"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("30dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),},
 			new RowSpec[] {
@@ -806,8 +807,8 @@ public class Main_window {
 		
 		tglbtnMidi = new JToggleButton("Open MIDI");
 		panel.add(tglbtnMidi, "4, 1");
-		tglbtnMidi.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		tglbtnMidi.setMargin(new Insets(1, 4, 1, 4));
+		tglbtnMidi.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		tglbtnMidi.setMargin(new Insets(1, 1, 1, 1));
 		
 		JLabel lblFirmwareVer = new JLabel("Firmware ver:");
 		lblFirmwareVer.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -839,7 +840,7 @@ public class Main_window {
 				configOptions.interactive = tglbtnLiveUpdates.isSelected(); 
 			}
 		});
-		tglbtnLiveUpdates.setMargin(new Insets(2, 4, 2, 4));
+		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
 		panel.add(tglbtnLiveUpdates, "14, 1");
 		
 		progressBar = new JProgressBar();
