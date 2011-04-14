@@ -147,32 +147,32 @@ public class ControlsPads extends JPanel {
 		popupMenu.add(mnCopy3rd);
         
 		setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,},
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
 				FormFactory.PREF_ROWSPEC,
 				FormFactory.PREF_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,}));
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,},
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("12dlu:grow"),}));
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		btnGet = new JButton("Get");
 		btnGet.setMargin(new Insets(1, 2, 1, 2));
@@ -237,9 +237,9 @@ public class ControlsPads extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("86dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
@@ -247,10 +247,10 @@ public class ControlsPads extends JPanel {
 				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),}));
+				RowSpec.decode("fill:default"),}));
 		
 		JLabel label = new JLabel("Input");
-		label.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		label.setFont(new Font("Segoe UI", Font.BOLD, 11));
 		panel_input_selection.add(label, "2, 1, right, default");
 		
 		comboBox_padSelection = new JComboBox();
@@ -271,13 +271,14 @@ public class ControlsPads extends JPanel {
 							switch_to_pad(0);
 						}
 						switchingPad = false;
+						firePropertyChange("resize", false, true);
 					}
 					//}
 		        }
 			}
 		});
 		comboBox_padSelection.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_input_selection.add(comboBox_padSelection, "4, 1, fill, fill");
+		panel_input_selection.add(comboBox_padSelection, "4, 1, fill, center");
 		
 		btnFirst = new JButton("first");
 		btnFirst.addActionListener(new ActionListener() {
@@ -317,7 +318,6 @@ public class ControlsPads extends JPanel {
 		
 		JPanel panel_head_rim = new JPanel();
 		add(panel_head_rim, "1, 4, fill, fill");
-		panel_head_rim.setLayout(new GridLayout(1, 2, 0, 0));
 		
 		panel_head = new ControlsPadCommon(head_pad);
 		panel_head.addPropertyChangeListener( new PropertyChangeListener() {
@@ -346,8 +346,13 @@ public class ControlsPads extends JPanel {
 				}
 			}
 		});		
+		panel_head_rim.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,}));
 
-		panel_head_rim.add(panel_head);
+		panel_head_rim.add(panel_head, "1, 1, fill, fill");
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		panel_rim = new ControlsPadCommon(rim_pad);
@@ -390,7 +395,7 @@ public class ControlsPads extends JPanel {
 		
 		
 		panel_rim.setVisible(false);
-		panel_head_rim.add(panel_rim);
+		panel_head_rim.add(panel_rim, "2, 1, fill, fill");
 		panel_rim.setBorder(new TitledBorder(null, "Rim/Edge", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
 		panel_3rd_zone = new ThirdZoneControls();

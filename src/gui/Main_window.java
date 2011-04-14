@@ -167,12 +167,7 @@ public class Main_window {
 	private void open_options_dialog() {
 		
 		dialog_options.config_applied = false;
-		try {
 		dialog_options.setVisible(true);
-		} catch (Exception e) {
-			Utils.show_error("Error setting LookAndFeel. Exiting.\n" +
-					"(" + e.getMessage() + ")");			
-		}
 		if (dialog_options.config_applied) {
 			dialog_options.saveOptionsTo(configOptions);
 			midi_handler.initPorts(configOptions);
@@ -212,6 +207,7 @@ public class Main_window {
 		midi_handler = new Midi_handler();
 		dialog_options = new Options(midi_handler);
 		SwingUtilities.updateComponentTreeUI(dialog_options);
+		dialog_options.pack();
 		dialog_options.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("UIchanged")) {
@@ -454,12 +450,11 @@ public class Main_window {
 		FlowLayout flowLayout = (FlowLayout) panel_main.getLayout();
 		flowLayout.setAlignOnBaseline(true);
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				},
+				ColumnSpec.decode("default:grow"),
+				ColumnSpec.decode("default:grow"),
+				ColumnSpec.decode("default:grow"),
+				ColumnSpec.decode("default:grow"),
+				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
 				RowSpec.decode("pref:grow"),}));
@@ -684,11 +679,11 @@ public class Main_window {
 				ColumnSpec.decode("2dlu"),
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("12dlu:grow"),}));
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JButton btnGetAll = new JButton("Get All");
 		btnGetAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnGetAll.setMargin(new Insets(2, 2, 2, 2));
+		btnGetAll.setMargin(new Insets(0, 1, 0, 1));
 		btnGetAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getAll();
@@ -698,7 +693,7 @@ public class Main_window {
 		
 		JButton btnSendAll = new JButton("Send All");
 		btnSendAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnSendAll.setMargin(new Insets(2, 2, 2, 2));
+		btnSendAll.setMargin(new Insets(0, 1, 0, 1));
 		btnSendAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sendAll();
@@ -708,7 +703,7 @@ public class Main_window {
 		
 		JButton btnLoadAll = new JButton("Load All");
 		btnLoadAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnLoadAll.setMargin(new Insets(2, 2, 2, 2));
+		btnLoadAll.setMargin(new Insets(0, 1, 0, 1));
 		btnLoadAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				load_all();
@@ -718,7 +713,7 @@ public class Main_window {
 		
 		JButton btnSaveAll = new JButton("Save All");
 		btnSaveAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnSaveAll.setMargin(new Insets(2, 2, 2, 2));
+		btnSaveAll.setMargin(new Insets(0, 1, 0, 1));
 		btnSaveAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				save_all();
@@ -733,7 +728,7 @@ public class Main_window {
 				midi_handler.requestSaveSlot1();
 			}
 		});
-		btnSaveToSlot.setMargin(new Insets(2, 2, 2, 2));
+		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
 		panel_top.add(btnSaveToSlot, "10, 1");
 		
 		comboBoxCfg = new JComboBox();
@@ -774,8 +769,8 @@ public class Main_window {
 				}
 			}
 		});
-		btnPrevcfg.setMargin(new Insets(2, 1, 2, 1));
-		btnPrevcfg.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		btnPrevcfg.setMargin(new Insets(0, 1, 0, 1));
+		btnPrevcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panel_top.add(btnPrevcfg, "14, 1");
 		
 		JButton btnNextcfg = new JButton("nextCfg");
@@ -787,8 +782,8 @@ public class Main_window {
 				}
 			}
 		});
-		btnNextcfg.setMargin(new Insets(2, 1, 2, 1));
-		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		btnNextcfg.setMargin(new Insets(0, 1, 0, 1));
+		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panel_top.add(btnNextcfg, "16, 1");
 		
 		JPanel panel = new JPanel();
@@ -798,17 +793,17 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("36dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("32dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("45dlu"),
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("2dlu"),
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),},
 			new RowSpec[] {

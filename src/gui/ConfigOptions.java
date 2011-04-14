@@ -23,6 +23,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public int chainId = 0;
 	public int inputsCount = 55;
 	public int sysexDelay = 30;
+	public String LookAndFeelName = "";
 	public Point mainWindowPosition = new Point(10,10);
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
 	public Point [] framesPositions = { new Point(10,10), new Point(210,10), new Point(410,10), new Point(610,10), new Point(810,10)};
@@ -57,6 +58,7 @@ public class ConfigOptions implements java.io.Serializable {
 		prop.setProperty("chainId", chainId);
 		prop.setProperty("inputsCount", inputsCount);
 		prop.setProperty("sysexDelay", sysexDelay);
+		prop.setProperty("LookAndFeelName", LookAndFeelName);
 		prop.setProperty("mainWindowPositionX", mainWindowPosition.x);
 		prop.setProperty("mainWindowPositionY", mainWindowPosition.y);
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
@@ -86,7 +88,7 @@ public class ConfigOptions implements java.io.Serializable {
 		chainId = Utils.validateInt(prop.getInt("chainId", chainId),0,3,chainId);
 		inputsCount = Utils.validateInt(prop.getInt("inputsCount", inputsCount),21,56,inputsCount);
 		sysexDelay = Utils.validateInt(prop.getInt("sysexDelay", sysexDelay),10,100,sysexDelay);
-			
+		LookAndFeelName = prop.getString("LookAndFeelName", LookAndFeelName);
 		mainWindowPosition = new Point(
 				Utils.validateInt(prop.getInt("mainWindowPositionX", 0),0,1600,0),
 				Utils.validateInt(prop.getInt("mainWindowPositionY", 0),0,600,0)

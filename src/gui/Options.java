@@ -79,7 +79,7 @@ public class Options extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("261px"),
+				ColumnSpec.decode("default:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
@@ -89,41 +89,41 @@ public class Options extends JDialog {
 		panel_midi.setBorder(new TitledBorder(null, "MIDI Ports", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPanel.add(panel_midi, "1, 1, fill, fill");
 		panel_midi.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("right:101px"),
+				ColumnSpec.decode("right:default"),
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("left:144px:grow"),},
+				ColumnSpec.decode("left:max(117dlu;default):grow"),},
 			new RowSpec[] {
-				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("fill:12dlu"),
 				RowSpec.decode("fill:default"),
-				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("12dlu"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("12dlu"),}));
+				RowSpec.decode("fill:default"),}));
 
 		JPanel panel_misc = new JPanel();
 		panel_misc.setBorder(new TitledBorder(null, "Misc", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		contentPanel.add(panel_misc, "3, 1, fill, fill");
 		panel_misc.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("right:101px"),
+				ColumnSpec.decode("right:default"),
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("left:144px:grow"),},
+				ColumnSpec.decode("left:default:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("fill:12dlu"),
 				RowSpec.decode("fill:default"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("fill:12dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("12dlu"),}));
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),
+				RowSpec.decode("fill:default"),}));
 		
 		comboBox_MIDI_Out = new JComboBox();
 		comboBox_MIDI_Out.setMaximumRowCount(16);
@@ -258,17 +258,19 @@ public class Options extends JDialog {
 		JPanel panel = new JPanel();
 		panel_midi.add(panel, "3, 8, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("40px"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("46px"),},
 			new RowSpec[] {
-				RowSpec.decode("fill:20px"),}));
+				RowSpec.decode("fill:default"),}));
 		
 		spinner_sysexDelay = new JSpinner();
+		spinner_sysexDelay.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		spinner_sysexDelay.setModel(new SpinnerNumberModel(10, 10, 100, 1));
 		panel.add(spinner_sysexDelay, "1, 1, fill, fill");
 		
 		JLabel lblMs = new JLabel("ms");
+		lblMs.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblMs, "3, 1, left, center");
 		
 		JButton btnRescanMidiPorts = new JButton("Rescan MIDI ports");
@@ -325,6 +327,7 @@ public class Options extends JDialog {
 		configOptions.saveOnExit = checkBox_saveOnClose.isSelected();
 		configOptions.autoOpenPorts = checkBox_autoOpen.isSelected();
 		configOptions.sysexDelay = (Integer)spinner_sysexDelay.getValue();
+		configOptions.LookAndFeelName = comboBox_lookAndFeel.getSelectedItem().toString();
 	}
 	
 	private void updateControls() {
@@ -339,6 +342,7 @@ public class Options extends JDialog {
 		checkBox_saveOnClose.setSelected(configOptions.saveOnExit);
 		checkBox_autoOpen.setSelected(configOptions.autoOpenPorts);
 		spinner_sysexDelay.setValue(configOptions.sysexDelay);
+		comboBox_lookAndFeel.setSelectedItem(configOptions.LookAndFeelName);
 	}
 	
 	public void loadOptionsFrom(ConfigOptions options) {

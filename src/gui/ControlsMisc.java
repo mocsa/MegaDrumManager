@@ -66,15 +66,15 @@ public class ControlsMisc extends JPanel {
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("20dlu"),
+				ColumnSpec.decode("default:grow"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("20dlu"),
+				ColumnSpec.decode("default:grow"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("20dlu"),
+				ColumnSpec.decode("default:grow"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("20dlu"),},
+				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),}));
+				RowSpec.decode("default:grow"),}));
 		
 		btnGet = new JButton("Get");
 		btnGet.setMargin(new Insets(1, 2, 1, 2));

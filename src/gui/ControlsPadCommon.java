@@ -35,6 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
+import com.jgoodies.forms.layout.Sizes;
 
 class PadButton extends JButton {
 	private String name;
@@ -130,11 +131,11 @@ public class ControlsPadCommon extends JPanel {
 		head_rim_pad = pad_type;
 		configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("78px"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("53dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("10dlu"),},
+				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("12dlu", true), Sizes.constant("12dlu", true)), 0),},
 			new RowSpec[] {
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),

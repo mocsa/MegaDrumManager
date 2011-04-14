@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import com.jgoodies.forms.layout.Sizes;
 
 class ZoneButton extends JButton {
 	private String name;
@@ -68,22 +69,22 @@ public class ThirdZoneControls extends JPanel {
 		controls = new ArrayList<Object>();
 		config3rd = new Config3rd();
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("right:42dlu"),
+				ColumnSpec.decode("right:default"),
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
+				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("12dlu", true), Sizes.constant("12dlu", true)), 0),
 				ColumnSpec.decode("10dlu"),
-				ColumnSpec.decode("10dlu"),
-				ColumnSpec.decode("42dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("60dlu"),
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("10dlu"),},
+				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("12dlu", true), Sizes.constant("12dlu", true)), 0),},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("12dlu"),
-				RowSpec.decode("12dlu"),}));
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblNote = new JLabel("Note");
 		lblNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));

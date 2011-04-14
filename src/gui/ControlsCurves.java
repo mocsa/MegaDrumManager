@@ -66,12 +66,12 @@ public class ControlsCurves extends JPanel {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,}));
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		paintPanel = new CurvesPaint();
 		paintPanel.yValues = configCurves[curvePointer].yValues;
@@ -91,19 +91,19 @@ public class ControlsCurves extends JPanel {
 		JPanel panel = new JPanel();
 		add(panel, "1, 1, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("22dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("22dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("18dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("18dlu"),},
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),}));
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		button_get = new JButton("Get");
 		button_get.setMargin(new Insets(1, 4, 1, 4));
@@ -141,21 +141,21 @@ public class ControlsCurves extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("20dlu"),
+				ColumnSpec.decode("center:default"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("24dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("24dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("24dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("24dlu"),},
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("fill:12dlu"),}));
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblCurve = new JLabel("Curve");
-		lblCurve.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		panel_1.add(lblCurve, "2, 1, right, fill");
+		lblCurve.setFont(new Font("Segoe UI", Font.BOLD, 11));
+		panel_1.add(lblCurve, "2, 1");
 		
 		comboBox_curveNumber = new JComboBox();
 		comboBox_curveNumber.addItemListener(new ItemListener() {
@@ -172,8 +172,8 @@ public class ControlsCurves extends JPanel {
 		}
 		comboBox_curveNumber.setSelectedIndex(0);
 		comboBox_curveNumber.setMaximumRowCount(28);
-		comboBox_curveNumber.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_1.add(comboBox_curveNumber, "4, 1, fill, fill");
+		comboBox_curveNumber.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		panel_1.add(comboBox_curveNumber, "4, 1");
 		
 		button_first = new JButton("first");
 		button_first.addActionListener(new ActionListener() {
@@ -231,17 +231,17 @@ public class ControlsCurves extends JPanel {
 		JPanel panelControls = new JPanel();
 		add(panelControls, "1, 6, fill, fill");
 		panelControls.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("17dlu"),
-				ColumnSpec.decode("17dlu"),
-				ColumnSpec.decode("17dlu"),
-				ColumnSpec.decode("17dlu"),
-				ColumnSpec.decode("17dlu"),
-				ColumnSpec.decode("17dlu"),
-				ColumnSpec.decode("17dlu"),
-				ColumnSpec.decode("17dlu"),
-				ColumnSpec.decode("17dlu"),},
+				ColumnSpec.decode("36px"),
+				ColumnSpec.decode("36px"),
+				ColumnSpec.decode("36px"),
+				ColumnSpec.decode("36px"),
+				ColumnSpec.decode("36px"),
+				ColumnSpec.decode("36px"),
+				ColumnSpec.decode("36px"),
+				ColumnSpec.decode("36px"),
+				ColumnSpec.decode("36px"),},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),}));
+				RowSpec.decode("18px"),}));
 		
 		spinnerChangeListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {

@@ -80,23 +80,23 @@ public class ControlsPedal extends JPanel {
 		JPanel panel = new JPanel();
 		add(panel);
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("206px:grow"),},
+				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				RowSpec.decode("12dlu"),
+				FormFactory.DEFAULT_ROWSPEC,
 				RowSpec.decode("310px"),}));
 		
 		JPanel panel_buttons = new JPanel();
 		panel.add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("24dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("24dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("24dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("24dlu"),},
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("fill:12dlu"),}));
+				RowSpec.decode("fill:default"),}));
 		
 		btnGet = new JButton("Get");
 		btnGet.setMargin(new Insets(1, 4, 1, 4));
