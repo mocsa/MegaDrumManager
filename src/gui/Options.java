@@ -5,7 +5,12 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseAdapter;
@@ -49,15 +54,21 @@ public class Options extends JDialog {
 	private ConfigOptions configOptions;
 	private JCheckBox checkBox_autoOpen;
 	private JSpinner spinner_sysexDelay;
+	private JComboBox comboBox_lookAndFeel;
+	private LookAndFeelInfo[] lookAndFeelArray;
+	public LookAndFeelInfo lookAndFeel;
 	public int midi_port_out;
 	public int midi_port_in;
-	public boolean config_applied; 
+	public boolean config_applied;
+	//private JFrame topFrame;
+	//private Options thisFrame;
 
 	/**
 	 * Create the dialog.
 	 */
 	public Options(Midi_handler mh) {
 		midi_handler = mh;
+		lookAndFeelArray = UIManager.getInstalledLookAndFeels();
 		configOptions = new ConfigOptions();
 		setResizable(false);
 		setModalityType(ModalityType.APPLICATION_MODAL);
@@ -112,7 +123,6 @@ public class Options extends JDialog {
 				RowSpec.decode("fill:12dlu"),
 				RowSpec.decode("12dlu"),
 				RowSpec.decode("12dlu"),
-				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("12dlu"),}));
 		
 		comboBox_MIDI_Out = new JComboBox();
@@ -202,6 +212,36 @@ public class Options extends JDialog {
 		});
 		checkBox_saveOnClose.setHorizontalTextPosition(SwingConstants.LEADING);
 		panel_misc.add(checkBox_saveOnClose, "3, 1");
+		
+		JLabel lblLooknfeel = new JLabel("LookAndFeel");
+		lblLooknfeel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_misc.add(lblLooknfeel, "1, 2");
+		
+		comboBox_lookAndFeel = new JComboBox();
+		comboBox_lookAndFeel.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		comboBox_lookAndFeel.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+			        for (UIManager.LookAndFeelInfo lf : lookAndFeelArray) {
+			        	if (lf.getName().equals(comboBox_lookAndFeel.getSelectedItem().toString())){
+			        		lookAndFeel = lf;
+			        		firePropertyChange("UIchanged", false, true);
+			        	}
+			        }
+				}
+			}
+		});
+        for (UIManager.LookAndFeelInfo lf : lookAndFeelArray) {
+        	comboBox_lookAndFeel.addItem(lf.getName());
+        	/*
+            System.out.println("***"
+                + " " + lf.getName()
+                + " " + lf.getClassName()
+                + " " + uid.size() + " entries");
+            */
+        }
+
+		panel_misc.add(comboBox_lookAndFeel, "3, 2, fill, default");
 		
 		JLabel lblOpenOnStartup = new JLabel("Init Ports on Startup");
 		lblOpenOnStartup.setFont(new Font("Segoe UI", Font.PLAIN, 10));
