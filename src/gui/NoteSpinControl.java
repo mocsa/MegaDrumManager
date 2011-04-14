@@ -55,9 +55,9 @@ public class NoteSpinControl extends JPanel {
 			}
 		});
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("40px"),
-				ColumnSpec.decode("20dlu"),
-				FormFactory.PREF_COLSPEC,},
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("20px"),}));
 		spinner.setFont(new Font("Tahoma", Font.PLAIN, 11));

@@ -41,6 +41,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Member;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
+import javax.swing.border.MatteBorder;
 
 public class ControlsPads extends JPanel {
 	private JButton btnGet;
@@ -197,23 +201,24 @@ public class ControlsPads extends JPanel {
 		btnLoad = new JButton("Load");
 		btnLoad.setMargin(new Insets(1, 2, 1, 2));
 		btnLoad.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel_buttons.add(btnLoad, "9, 1");
+		panel_buttons.add(btnLoad, "9, 1, default, fill");
 		
 		btnSave = new JButton("Save");
 		btnSave.setMargin(new Insets(1, 2, 1, 2));
 		btnSave.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		panel_buttons.add(btnSave, "11, 1");
+		panel_buttons.add(btnSave, "11, 1, default, fill");
 		
 		panelCopyPad = new JPanel();
+		panelCopyPad.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelCopyPad.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel_buttons.add(panelCopyPad, "13, 1, fill, fill");
 		panelCopyPad.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
-				RowSpec.decode("fill:pref"),}));
+				RowSpec.decode("fill:default"),}));
 		
 		menuBar = new JMenuBar();
-		panelCopyPad.add(menuBar, "1, 1, left, top");
+		panelCopyPad.add(menuBar, "1, 1, left, fill");
 		
 		mnCopypadto = new JMenu("CopyPad");
 		mnCopypadto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
