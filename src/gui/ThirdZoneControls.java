@@ -70,15 +70,15 @@ public class ThirdZoneControls extends JPanel {
 		config3rd = new Config3rd();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:default"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("3px"),
 				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("3px"),
 				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("12dlu", true), Sizes.constant("12dlu", true)), 0),
 				ColumnSpec.decode("10dlu"),
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("3px"),
 				ColumnSpec.decode("60dlu"),
-				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("3px"),
 				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("12dlu", true), Sizes.constant("12dlu", true)), 0),},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,
