@@ -879,19 +879,21 @@ public class ControlsPads extends JPanel {
 		if (panel_head != null) {
 			switch_to_pad(0);
 		}
-		mnCopypadto.removeAll();
-		mnCopyhead.removeAll();
-		mnCopyrim.removeAll();
-		mnCopyrd.removeAll();
-		comboBox_padSelection.setMaximumRowCount((count+1)/2);
-		comboBox_padSelection.removeAllItems();
-		comboBox_padSelection.addItem("");
-		updatePadsSelection(0);
-        for(int i=1; i<count; i++){
-    		comboBox_padSelection.addItem("");
-    		updatePadsSelection(i);
-    		i++;
-        }
+		if (comboBox_padSelection.getItemCount() != (count+1)/2) {
+			mnCopypadto.removeAll();
+			mnCopyhead.removeAll();
+			mnCopyrim.removeAll();
+			mnCopyrd.removeAll();
+			comboBox_padSelection.setMaximumRowCount((count+1)/2);
+			comboBox_padSelection.removeAllItems();
+			comboBox_padSelection.addItem("");
+			updatePadsSelection(0);
+	        for(int i=1; i<count; i++){
+	    		comboBox_padSelection.addItem("");
+	    		updatePadsSelection(i);
+	    		i++;
+	        }
+		}
 	}
 
 	public JButton getBtnGetall() {

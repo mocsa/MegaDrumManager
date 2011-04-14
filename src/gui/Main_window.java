@@ -12,6 +12,7 @@ import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIDefaults;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import java.awt.BorderLayout;
 import javax.swing.BoxLayout;
@@ -127,23 +128,6 @@ public class Main_window {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					/*
-			        System.out.println(System.getProperty("os.name")
-			                + " " + System.getProperty("os.version")
-			                + " " + System.getProperty("java.version"));
-			            UIManager.LookAndFeelInfo[] lfa =
-			                UIManager.getInstalledLookAndFeels();
-			            for (UIManager.LookAndFeelInfo lf : lfa) {
-			                UIManager.setLookAndFeel(lf.getClassName());
-			                UIDefaults uid = UIManager.getLookAndFeelDefaults();
-			                System.out.println("***"
-			                    + " " + lf.getName()
-			                    + " " + lf.getClassName()
-			                    + " " + uid.size() + " entries");
-			            }
-			        */
-					//UIDefaults defaults = UIManager.getDefaults();
-					//defaults.put("JComponent.sizeVariant", "regular");
 					Main_window window = new Main_window();
 					window.frmMegadrummanager.setVisible(true);
 					window.dialog_options.setVisible(false);
@@ -197,6 +181,13 @@ public class Main_window {
 		});
 		frmMegadrummanager.setTitle("MegaDrumManager");
 		frmMegadrummanager.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		try {
+			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 		configOptions = new ConfigOptions(); // default options loaded with new
 		fullConfigs = new ConfigFull[Constants.CONFIGS_COUNT];
@@ -1208,7 +1199,6 @@ public class Main_window {
 			viewMenus[i].setConfigOptions(configOptions);
 		}
 		tglbtnLiveUpdates.setSelected(configOptions.interactive);
-		
 	}
 	
 	private void saveAndExit() {
