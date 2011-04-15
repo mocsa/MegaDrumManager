@@ -117,6 +117,7 @@ public class Main_window {
 	private JLabel lblVersion;
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox comboBoxCfg;
+	private boolean LookAndFeelChanged = false;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
 	
@@ -146,6 +147,7 @@ public class Main_window {
 		
 		initialize();
 		loadConfig();
+		LookAndFeelChanged = true;
 		resizeMainWindow();
 	}
 	
@@ -205,6 +207,7 @@ public class Main_window {
 				if (arg0.getPropertyName().equals("UIchanged")) {
 	        		try {
 						UIManager.setLookAndFeel(dialog_options.lookAndFeel.getClassName());
+						LookAndFeelChanged = true;
 					} catch (Exception e) {
 						Utils.show_error("Error setting LookAndFeel. Exiting.\n" +
 								"(" + e.getMessage() + ")");
@@ -1223,7 +1226,9 @@ public class Main_window {
 	private void resizeMainWindow() {
 		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
 		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
-			SwingUtilities.updateComponentTreeUI(framesDetached[i]);
+			if (LookAndFeelChanged) {
+				SwingUtilities.updateComponentTreeUI(framesDetached[i]);
+			}
 			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
 			if (i == 3) {
 				// Pause, start live MIDI log
@@ -1244,7 +1249,10 @@ public class Main_window {
 			}
 			framesDetached[i].pack();
 		}
-		SwingUtilities.updateComponentTreeUI(frmMegadrummanager);
+		if (LookAndFeelChanged) {
+			SwingUtilities.updateComponentTreeUI(frmMegadrummanager);
+		}
+		LookAndFeelChanged = false;
 		if (resizeWindow) {
 			frmMegadrummanager.pack();
 		}

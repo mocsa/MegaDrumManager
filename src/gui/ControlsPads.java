@@ -156,7 +156,7 @@ public class ControlsPads extends JPanel {
 				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
 				FormFactory.PREF_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JPanel panel_buttons = new JPanel();
