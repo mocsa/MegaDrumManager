@@ -1309,6 +1309,7 @@ public class Main_window {
 	
 	public void decodeShortMidi (byte [] buffer) {
 		Color color;
+		panelMidiLog.addRawMidi(buffer);
 		switch (buffer.length) {
 		case 1:
 			//shortMessage.setMessage(buf[0]);
