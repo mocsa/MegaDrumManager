@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Timer;
 import javax.swing.JSpinner;
 import javax.swing.JCheckBox;
@@ -41,14 +42,24 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.JSeparator;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 class LogStore {
 	public int note = 0;
 	public int level = 0;
 	public int timeDiff = 0;
 	public Color color = Color.BLUE;
+}
+
+class NoWrapTextPane extends JTextPane {
+	public boolean getScrollableTracksViewportWidth() {
+		// should not allow text to be wrapped
+		return false;
+	}
 }
 
 public class PanelMidiLog extends JPanel {
@@ -59,6 +70,8 @@ public class PanelMidiLog extends JPanel {
 	private int storePointer = 0;
 	private long prevTime;
 	private long prevTime2;
+	private Short rawLines = 0;
+	private ArrayList<String> rawStrings;
 	private JLabel lblHitsIntervalsmilliseconds;
 	private JLabel lblNotesNumbers;
 	private PanelMidiLevelBar panelHiHatBar;
@@ -101,7 +114,7 @@ public class PanelMidiLog extends JPanel {
 	private JTextPane txtpnTimeChData;
 	private JSeparator separator;
 	private JScrollPane scrollPaneText;
-	private JTextPane textPane;
+	private NoWrapTextPane textPane;
 
 
 	/**
@@ -290,14 +303,14 @@ public class PanelMidiLog extends JPanel {
 				
 				tableModelMidiRaw = new DefaultTableModel(
 						new Object[][] {
-							{null, null, null, null, null, null},
+							{null, null, null, null, null, null, null },
 						},
 						new String[] {
-							"Time delta", "Ch #", "Data1", "Data2", "Data3", "MIDI Message Name"
+							"Time delta", "Ch #", "Data1", "Data2", "Data3", "Note", "MIDI Message Name"
 						}
 					) {
 						Class[] columnTypes = new Class[] {
-							Float.class, Short.class, Short.class, Short.class, Short.class, String.class
+								String.class, String.class, String.class, String.class, String.class, String.class, String.class
 						};
 						public Class getColumnClass(int columnIndex) {
 							return columnTypes[columnIndex];
@@ -312,7 +325,7 @@ public class PanelMidiLog extends JPanel {
 				tabbedPaneMidi.addTab("Raw MIDI", null, panelRawMidi2, null);
 				panelRawMidi2.setLayout(new FormLayout(new ColumnSpec[] {
 						FormFactory.RELATED_GAP_COLSPEC,
-						ColumnSpec.decode("default:grow"),},
+						FormFactory.DEFAULT_COLSPEC,},
 					new RowSpec[] {
 						FormFactory.RELATED_GAP_ROWSPEC,
 						FormFactory.DEFAULT_ROWSPEC,
@@ -320,7 +333,8 @@ public class PanelMidiLog extends JPanel {
 						RowSpec.decode("top:default"),}));
 				
 				txtpnTimeChData = new JTextPane();
-				txtpnTimeChData.setText("Time    Ch#  Data1 Data2 Data3 Note   Message Name");
+				txtpnTimeChData.setEditable(false);
+				txtpnTimeChData.setText("TimeDelta  Ch#  Data1 Data2 Data3 Note   Message Name ");
 				txtpnTimeChData.setFont(new Font("Monospaced", Font.PLAIN, 11));
 				panelRawMidi2.add(txtpnTimeChData, "2, 2, fill, fill");
 				
@@ -328,17 +342,27 @@ public class PanelMidiLog extends JPanel {
 				panelRawMidi2.add(separator, "2, 3");
 				
 				scrollPaneText = new JScrollPane();
+				scrollPaneText.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 				panelRawMidi2.add(scrollPaneText, "2, 4, fill, fill");
 				
-				textPane = new JTextPane();
+				textPane = new NoWrapTextPane();
+				textPane.addFocusListener(new FocusAdapter() {
+					@Override
+					public void focusGained(FocusEvent arg0) {
+						textPane.setEditable(false);
+					}
+				});
+				textPane.setDisabledTextColor(Color.BLACK);
+				//textPane.setContentType("text/html");
 				textPane.setFont(new Font("Monospaced", Font.PLAIN, 11));
 				scrollPaneText.setViewportView(textPane);
 				tableRawMidi.getColumnModel().getColumn(0).setPreferredWidth(74);
-				tableRawMidi.getColumnModel().getColumn(1).setPreferredWidth(44);
-				tableRawMidi.getColumnModel().getColumn(2).setPreferredWidth(52);
+				tableRawMidi.getColumnModel().getColumn(1).setPreferredWidth(40);
+				tableRawMidi.getColumnModel().getColumn(2).setPreferredWidth(48);
 				tableRawMidi.getColumnModel().getColumn(3).setPreferredWidth(48);
-				tableRawMidi.getColumnModel().getColumn(4).setPreferredWidth(52);
-				tableRawMidi.getColumnModel().getColumn(5).setPreferredWidth(161);
+				tableRawMidi.getColumnModel().getColumn(4).setPreferredWidth(48);
+				tableRawMidi.getColumnModel().getColumn(5).setPreferredWidth(52);
+				tableRawMidi.getColumnModel().getColumn(6).setPreferredWidth(161);
 				tableModelMidiRaw.removeRow(0);
 		
 		panelScroll = new JPanel();
@@ -417,7 +441,7 @@ public class PanelMidiLog extends JPanel {
 		panelMidiScroll.reSetTimer((Integer)scrollBar.getValue());
 		prevTime = System.nanoTime();
 		prevTime2 = System.nanoTime();
-
+		rawStrings = new ArrayList<String>();
 	}
 	
 	public void showNewHit(int note, int level, Color color) {
@@ -470,16 +494,55 @@ public class PanelMidiLog extends JPanel {
 		tglbtnPause.setSelected(b);
 	}
 	
+	private Color msgToColor(byte [] buffer) {
+		Color color = Color.black;
+		
+		switch (buffer.length) {
+		case 1:
+			//shortMessage.setMessage(buf[0]);
+			break;
+		case 2:
+			//shortMessage.setMessage(buf[0], buf[1],0);
+			break;
+		default:
+			switch (buffer[0]&0xf0) {
+				case 0x80:
+					color = Color.yellow;
+					break;
+				case 0x90:
+					if (buffer[1] == 0) {
+						color = Color.yellow;
+					} else {
+						color = Color.green;
+					}
+					break;
+				default:
+					break;
+			}
+		}
+		
+		return color;
+	}
+	
 	public void addRawMidi (byte [] buffer) {
-		String time, ch, d1, d2, d3, note, name;
+		String time = "0";
+		String ch = "1";
+		String d1 = "0";
+		String d2 = "";
+		String d3 = "";
+		String note = "";
+		String name = "";
 		String appendString = "";
+		Color fontColor;
 		Float timeDiff;
 		
-		timeDiff = (Float)((float)(System.nanoTime() - prevTime)/1000000);
+		timeDiff = (Float)((float)(System.nanoTime() - prevTime)/1000000000);
 		prevTime = System.nanoTime();
-		time = String.format("%1f5.3", timeDiff);
+		time = String.format("%#9.3f", timeDiff);
 		
-		if (tableModelMidiRaw.getRowCount() > 500) {
+		fontColor = msgToColor(buffer);
+		
+		if (tableModelMidiRaw.getRowCount() > 200) {
 			tableModelMidiRaw.removeRow(0);
 		}
 		switch (buffer.length) {
@@ -491,25 +554,44 @@ public class PanelMidiLog extends JPanel {
 			break;
 		default:
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
-			tableModelMidiRaw.addRow(new Object [] {0,(buffer[0]&0x0f) + 1, buffer[0]&0xff, buffer[1]&0xff, buffer[2]&0xff, "Name"});
-			ch = String.format(" %d", (buffer[0]&0x0f) + 1);
-			d1 = String.format(" 0x%x2", buffer[0]&0xff);
-			d2 = String.format(" 0x%x2", buffer[1]&0xff);
-			d3 = String.format(" 0x%x2", buffer[2]&0xff);
-			note = " ?";
-			name = " Name";
-			appendString = time + ch + d1 + d2 +d3 + note + name + "\n\r";
+			ch = String.format("   %2d", (buffer[0]&0x0f) + 1);
+			d1 = String.format("  0x%2x", buffer[0]&0xff);
+			d2 = String.format("  0x%2x", buffer[1]&0xff);
+			d3 = String.format("  0x%2x", buffer[2]&0xff);
+			note = "     ?";
+			name = "     Name";
 			break;
 		}
 		
-		Document doc = textPane.getDocument();
-		textPane.setCaretPosition(doc.getLength());
-		textPane.replaceSelection(appendString);
-
+		appendString = time + ch + d1 + d2 + d3 + note + name;
+		tableModelMidiRaw.addRow(new Object [] {time, ch, d1, d2, d3, note, name});//		Document doc = textPane.getDocument();
 		JViewport viewport = (JViewport)tableRawMidi.getParent();
 		Rectangle rect = tableRawMidi.getCellRect(tableModelMidiRaw.getRowCount(), 0, true);
 		Point pt = viewport.getViewPosition();
 		rect.setLocation(rect.x - pt.x, rect.y - pt.y);
 		viewport.scrollRectToVisible(rect);
+
+		if (rawStrings.size()>10) {
+			rawStrings.remove(0);			
+		}
+		rawStrings.add(appendString);
+		
+		while (appendString.length() < 60) {
+			appendString += " ";
+		}
+		appendString += "\n\r";
+		Document doc = textPane.getDocument();
+		textPane.setEditable(true);
+		if (rawLines > 100) {
+			try {
+				doc.remove(0, 62);
+			} catch (BadLocationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		textPane.setCaretPosition(doc.getLength());
+		textPane.replaceSelection(appendString);
+		rawLines++;
 	}
 }
