@@ -64,6 +64,33 @@ public interface Constants {
 			"Sticks1", "Sticks2", "Sticks3", "HndClap1", "HndClap2", "HndClap3",
 			"FngrSnap", "Mtronome" 
 	};
+	
+	//public static final Color MIDI_NOTE_OFF_COLOR 	= Color.decode("0xff0000"); Red
+	//public static final Color MIDI_NOTE_OFF_COLOR 	= Color.decode("0x00ff00"); Green
+	//public static final Color MIDI_NOTE_OFF_COLOR 	= Color.decode("0x0000ff"); Blue
+	public static final Color MIDI_NOTE_ON_COLOR		= Color.decode("0x007f00");
+	public static final Color MIDI_NOTE_OFF_COLOR		= Color.decode("0x2fbf2f");
+	public static final Color MIDI_AFTERTOUCH_COLOR		= Color.decode("0x007f7f");
+	public static final Color MIDI_CC_COLOR				= Color.decode("0x7f7f00");
+	public static final Color MIDI_PC_COLOR				= Color.decode("0x7f007f");
+	public static final Color MIDI_CH_PR_COLOR			= Color.decode("0x00007f");
+	public static final Color MIDI_PITCH_COLOR			= Color.decode("0x7f0000");
+	
+	public static final String [] NOTES_NAMES = {
+		"C ",
+		"C#",
+		"D ",
+		"D#",
+		"E ",
+		"F ",
+		"F#",
+		"G ",
+		"G#",
+		"A ",
+		"A#",
+		"B "		
+	};
+	
 	public static final Color MD_HEAD_COLOR = Color.BLUE;
 	public static final Color MD_RIM_COLOR = Color.GREEN;
 	public static final Color MD_3RD_COLOR = Color.ORANGE;

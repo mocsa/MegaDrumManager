@@ -33,6 +33,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import javax.swing.border.LineBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
@@ -42,8 +43,12 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyleContext;
 import javax.swing.JSeparator;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -56,11 +61,75 @@ class LogStore {
 }
 
 class NoWrapTextPane extends JTextPane {
+
 	public boolean getScrollableTracksViewportWidth() {
 		// should not allow text to be wrapped
 		return false;
 	}
+
+	public void appendNaive(Color c, String s) { // naive implementation
+		// bad: instiantiates a new AttributeSet object on each call
+		SimpleAttributeSet aset = new SimpleAttributeSet();
+		StyleConstants.setForeground(aset, c);
+
+		int len = getText().length();
+		setCaretPosition(len); // place caret at the end (with no selection)
+		setCharacterAttributes(aset, false);
+		replaceSelection(s); // there is no selection, so inserts at caret
+	}
+
+	public void append(Color c, String s) { // better implementation--uses
+		// StyleContext
+		StyleContext sc = StyleContext.getDefaultStyleContext();
+		AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY,
+				StyleConstants.Foreground, c);
+
+		int len = getDocument().getLength(); // same value as
+		// getText().length();
+		setCaretPosition(len); // place caret at the end (with no selection)
+		setCharacterAttributes(aset, false);
+		replaceSelection(s); // there is no selection, so inserts at caret
+	}
+
+//	public static void main(String argv[]) {
+//
+//		ColorPane pane = new ColorPane();
+//		for (int n = 1; n <= 400; n += 1) {
+//			if (isPrime(n)) {
+//				pane.append(Color.red, String.valueOf(n) + ' ');
+//			} else if (isPerfectSquare(n)) {
+//				pane.append(Color.blue, String.valueOf(n) + ' ');
+//			} else {
+//				pane.append(Color.black, String.valueOf(n) + ' ');
+//			}
+//		}
+//
+//		JFrame f = new JFrame("ColorPane example");
+//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		f.setContentPane(new JScrollPane(pane));
+//		f.setSize(600, 400);
+//		f.setVisible(true);
+//	}
+
+	public static boolean isPrime(int n) {
+		if (n < 2)
+			return false;
+		double max = Math.sqrt(n);
+		for (int j = 2; j <= max; j += 1)
+			if (n % j == 0)
+				return false; // j is a factor
+		return true;
+	}
+
+	public static boolean isPerfectSquare(int n) {
+		int j = 1;
+		while (j * j < n && j * j > 0)
+			j += 1;
+		return (j * j == n);
+	}
+
 }
+
 
 public class PanelMidiLog extends JPanel {
 	private JPanel panelBars;
@@ -106,11 +175,11 @@ public class PanelMidiLog extends JPanel {
 	private JLabel lblUnknown;
 	private JPanel panelUnknownColor;
 	private JTabbedPane tabbedPaneMidi;
-	private JPanel panelRawMidi;
+	private JPanel panelRawMidiTable;
 	private JTable tableRawMidi;
 	private JScrollPane scrollPane;
 	private DefaultTableModel tableModelMidiRaw;
-	private JPanel panelRawMidi2;
+	private JPanel panelRawMidiText;
 	private JTextPane txtpnTimeChData;
 	private JSeparator separator;
 	private JScrollPane scrollPaneText;
@@ -289,17 +358,6 @@ public class PanelMidiLog extends JPanel {
 				
 				panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 132));
 				
-				panelRawMidi = new JPanel();
-				panelRawMidi.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-				tabbedPaneMidi.addTab("Raw MIDI", null, panelRawMidi, null);
-				panelRawMidi.setLayout(new FormLayout(new ColumnSpec[] {
-						FormFactory.GROWING_BUTTON_COLSPEC,},
-					new RowSpec[] {
-						RowSpec.decode("fill:default"),}));
-				
-				scrollPane = new JScrollPane();
-				panelRawMidi.add(scrollPane, "1, 1, left, top");
-				
 				
 				tableModelMidiRaw = new DefaultTableModel(
 						new Object[][] {
@@ -316,14 +374,10 @@ public class PanelMidiLog extends JPanel {
 							return columnTypes[columnIndex];
 						}
 					};
-
-				tableRawMidi = new JTable();
-				scrollPane.setViewportView(tableRawMidi);
-				tableRawMidi.setModel(tableModelMidiRaw);
 				
-				panelRawMidi2 = new JPanel();
-				tabbedPaneMidi.addTab("Raw MIDI", null, panelRawMidi2, null);
-				panelRawMidi2.setLayout(new FormLayout(new ColumnSpec[] {
+				panelRawMidiText = new JPanel();
+				tabbedPaneMidi.addTab("Raw MIDI", null, panelRawMidiText, null);
+				panelRawMidiText.setLayout(new FormLayout(new ColumnSpec[] {
 						FormFactory.RELATED_GAP_COLSPEC,
 						FormFactory.DEFAULT_COLSPEC,},
 					new RowSpec[] {
@@ -335,17 +389,18 @@ public class PanelMidiLog extends JPanel {
 				txtpnTimeChData = new JTextPane();
 				txtpnTimeChData.setEditable(false);
 				txtpnTimeChData.setText("TimeDelta  Ch#  Data1 Data2 Data3 Note   Message Name ");
-				txtpnTimeChData.setFont(new Font("Monospaced", Font.PLAIN, 11));
-				panelRawMidi2.add(txtpnTimeChData, "2, 2, fill, fill");
+				txtpnTimeChData.setFont(new Font("Monospaced", Font.PLAIN, 14));
+				panelRawMidiText.add(txtpnTimeChData, "2, 2, fill, fill");
 				
 				separator = new JSeparator();
-				panelRawMidi2.add(separator, "2, 3");
+				panelRawMidiText.add(separator, "2, 3");
 				
 				scrollPaneText = new JScrollPane();
 				scrollPaneText.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-				panelRawMidi2.add(scrollPaneText, "2, 4, fill, fill");
+				panelRawMidiText.add(scrollPaneText, "2, 4, fill, fill");
 				
 				textPane = new NoWrapTextPane();
+				textPane.setBackground(new Color(255, 255, 255));
 				textPane.addFocusListener(new FocusAdapter() {
 					@Override
 					public void focusGained(FocusEvent arg0) {
@@ -354,8 +409,24 @@ public class PanelMidiLog extends JPanel {
 				});
 				textPane.setDisabledTextColor(Color.BLACK);
 				//textPane.setContentType("text/html");
-				textPane.setFont(new Font("Monospaced", Font.PLAIN, 11));
+				textPane.setFont(new Font("Monospaced", Font.PLAIN, 14));
 				scrollPaneText.setViewportView(textPane);
+				
+				panelRawMidiTable = new JPanel();
+				panelRawMidiTable.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+				//Table raw MIDI tab is disabled for now
+				//tabbedPaneMidi.addTab("Raw MIDI", null, panelRawMidiTable, null);
+				panelRawMidiTable.setLayout(new FormLayout(new ColumnSpec[] {
+						FormFactory.GROWING_BUTTON_COLSPEC,},
+					new RowSpec[] {
+						RowSpec.decode("fill:default"),}));
+				
+				scrollPane = new JScrollPane();
+				panelRawMidiTable.add(scrollPane, "1, 1, left, top");
+				
+								tableRawMidi = new JTable();
+								scrollPane.setViewportView(tableRawMidi);
+								tableRawMidi.setModel(tableModelMidiRaw);
 				tableRawMidi.getColumnModel().getColumn(0).setPreferredWidth(74);
 				tableRawMidi.getColumnModel().getColumn(1).setPreferredWidth(40);
 				tableRawMidi.getColumnModel().getColumn(2).setPreferredWidth(48);
@@ -494,34 +565,280 @@ public class PanelMidiLog extends JPanel {
 		tglbtnPause.setSelected(b);
 	}
 	
-	private Color msgToColor(byte [] buffer) {
-		Color color = Color.black;
-		
-		switch (buffer.length) {
+	public String getControlChangeType (Integer n) {
+		String name = "";
+		switch (n) {
+		case 0:
+			name += "Bank Select";
+			break;
 		case 1:
-			//shortMessage.setMessage(buf[0]);
+			name += "Modulation Wheel";
 			break;
 		case 2:
-			//shortMessage.setMessage(buf[0], buf[1],0);
+			name += "Breath Controller";
+			break;
+		case 4:
+			name += "Foot Controller";
+			break;
+		case 5:
+			name += "Partamento Time";
+			break;
+		case 6:
+			name += "Data Entry MSB";
+			break;
+		case 7:
+			name += "Channel Volume";
+			break;
+		case 8:
+			name += "Balance";
+			break;
+		case 0xa:
+			name += "Pan";
+			break;
+		case 0xb:
+			name += "Expression Ctrl";
+			break;
+		case 0xc:
+			name += "Effect Control 1";
+			break;
+		case 0xd:
+			name += "Effect Control 2";
+			break;
+		case 0x10:
+			name += "General Controller 1";
+			break;
+		case 0x11:
+			name += "General Controller 2";
+			break;
+		case 0x12:
+			name += "General Controller 3";
+			break;
+		case 0x13:
+			name += "General Controller 4";
+			break;
+		case 0x20:
+			name += "LSB Control 0";
+			break;
+		case 0x21:
+			name += "LSB Control 1";
+			break;
+		case 0x22:
+			name += "LSB Control 2";
+			break;
+		case 0x23:
+			name += "LSB Control 3";
+			break;
+		case 0x24:
+			name += "LSB Control 4";
+			break;
+		case 0x25:
+			name += "LSB Control 5";
+			break;
+		case 0x26:
+			name += "LSB Control 6";
+			break;
+		case 0x27:
+			name += "LSB Control 7";
+			break;
+		case 0x28:
+			name += "LSB Control 8";
+			break;
+		case 0x29:
+			name += "LSB Control 9";
+			break;
+		case 0x2a:
+			name += "LSB Control 10";
+			break;
+		case 0x2b:
+			name += "LSB Control 11";
+			break;
+		case 0x2c:
+			name += "LSB Control 12";
+			break;
+		case 0x2d:
+			name += "LSB Control 13";
+			break;
+		case 0x2e:
+			name += "LSB Control 14";
+			break;
+		case 0x2f:
+			name += "LSB Control 15";
+			break;
+		case 0x30:
+			name += "LSB Control 16";
+			break;
+		case 0x31:
+			name += "LSB Control 17";
+			break;
+		case 0x32:
+			name += "LSB Control 18";
+			break;
+		case 0x33:
+			name += "LSB Control 19";
+			break;
+		case 0x34:
+			name += "LSB Control 20";
+			break;
+		case 0x35:
+			name += "LSB Control 21";
+			break;
+		case 0x36:
+			name += "LSB Control 22";
+			break;
+		case 0x37:
+			name += "LSB Control 23";
+			break;
+		case 0x38:
+			name += "LSB Control 24";
+			break;
+		case 0x39:
+			name += "LSB Control 25";
+			break;
+		case 0x3a:
+			name += "LSB Control 26";
+			break;
+		case 0x3b:
+			name += "LSB Control 27";
+			break;
+		case 0x3c:
+			name += "LSB Control 28";
+			break;
+		case 0x3d:
+			name += "LSB Control 29";
+			break;
+		case 0x3e:
+			name += "LSB Control 30";
+			break;
+		case 0x3f:
+			name += "LSB Control 31";
+			break;
+		case 0x40:
+			name += "Damper Pedal";
+			break;
+		case 0x41:
+			name += "Partamento";
+			break;
+		case 0x42:
+			name += "Sostenuto";
+			break;
+		case 0x43:
+			name += "Soft Pedal";
+			break;
+		case 0x44:
+			name += "Legato Footswitch";
+			break;
+		case 0x45:
+			name += "Hold 2";
+			break;
+		case 0x46:
+			name += "Sound Controller 1";
+			break;
+		case 0x47:
+			name += "Sound Controller 2";
+			break;
+		case 0x48:
+			name += "Sound Controller 3";
+			break;
+		case 0x49:
+			name += "Sound Controller 4";
+			break;
+		case 0x4a:
+			name += "Sound Controller 5";
+			break;
+		case 0x4b:
+			name += "Sound Controller 6";
+			break;
+		case 0x4c:
+			name += "Sound Controller 7";
+			break;
+		case 0x4d:
+			name += "Sound Controller 8";
+			break;
+		case 0x4e:
+			name += "Sound Controller 9";
+			break;
+		case 0x4f:
+			name += "Sound Controller 10";
+			break;
+		case 0x50:
+			name += "General Controller 5";
+			break;
+		case 0x51:
+			name += "General Controller 6";
+			break;
+		case 0x52:
+			name += "General Controller 7";
+			break;
+		case 0x53:
+			name += "General Controller 8";
+			break;
+		case 0x54:
+			name += "Partamento Control";
+			break;
+		case 0x58:
+			name += "Velocity Prefix";
+			break;
+		case 0x5b:
+			name += "Effects 1 Depth";
+			break;
+		case 0x5c:
+			name += "Effects 2 Depth";
+			break;
+		case 0x5d:
+			name += "Effects 3 Depth";
+			break;
+		case 0x5e:
+			name += "Effects 4 Depth";
+			break;
+		case 0x5f:
+			name += "Effects 5 Depth";
+			break;
+		case 0x60:
+			name += "Data Increment";
+			break;
+		case 0x61:
+			name += "Data Decrement";
+			break;
+		case 0x62:
+			name += "NRPN LSB";
+			break;
+		case 0x63:
+			name += "NRPN MSB";
+			break;
+		case 0x64:
+			name += "RPN LSB";
+			break;
+		case 0x65:
+			name += "RPN MSB";
+			break;
+		case 0x78:
+			name += "All Sound Off";
+			break;
+		case 0x79:
+			name += "Reset All";
+			break;
+		case 0x7a:
+			name += "Local Control";
+			break;
+		case 0x7b:
+			name += "All Notes Off";
+			break;
+		case 0x7c:
+			name += "Omni Mode Off";
+			break;
+		case 0x7d:
+			name += "Omni Mode On";
+			break;
+		case 0x7e:
+			name += "Mono Mode On";
+			break;
+		case 0x7f:
+			name += "Poly Mode On";
 			break;
 		default:
-			switch (buffer[0]&0xf0) {
-				case 0x80:
-					color = Color.yellow;
-					break;
-				case 0x90:
-					if (buffer[1] == 0) {
-						color = Color.yellow;
-					} else {
-						color = Color.green;
-					}
-					break;
-				default:
-					break;
-			}
+			break;
 		}
-		
-		return color;
+		return name;	
 	}
 	
 	public void addRawMidi (byte [] buffer) {
@@ -533,15 +850,13 @@ public class PanelMidiLog extends JPanel {
 		String note = "";
 		String name = "";
 		String appendString = "";
-		Color fontColor;
+		Color fontColor = Color.black;
 		Float timeDiff;
 		
 		timeDiff = (Float)((float)(System.nanoTime() - prevTime)/1000000000);
 		prevTime = System.nanoTime();
 		time = String.format("%#9.3f", timeDiff);
-		
-		fontColor = msgToColor(buffer);
-		
+				
 		if (tableModelMidiRaw.getRowCount() > 200) {
 			tableModelMidiRaw.removeRow(0);
 		}
@@ -551,15 +866,70 @@ public class PanelMidiLog extends JPanel {
 			break;
 		case 2:
 			//shortMessage.setMessage(buf[0], buf[1],0);
+			switch (buffer[0]&0xf0) {			
+			case 0xc0:
+				fontColor = Constants.MIDI_PC_COLOR;
+				name = "    Program Change";
+				break;
+			case 0xd0:
+				fontColor = Constants.MIDI_CH_PR_COLOR;
+				name = "    Channel Pressure";
+				break;
+			default:
+				break;
+			}
+			note = String.format(" %s% d", Constants.NOTES_NAMES[(buffer[1]&0x7f) % 12], ((buffer[1]&0x7f) / 12) - 1);
+			ch = String.format("   %2d", (buffer[0]&0x0f) + 1);
+			d1 = String.format("  0x%02x", buffer[0]&0xff);
+			d2 = String.format("  0x%02x", buffer[1]&0xff);
+			d3 = String.format("      ");
 			break;
 		default:
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
+			switch (buffer[0]&0xf0) {
+			case 0x80:
+				fontColor = Constants.MIDI_NOTE_OFF_COLOR;
+				name = "    Note Off";
+				break;
+			case 0x90:
+				if (buffer[1] == 0) {
+					fontColor = Constants.MIDI_NOTE_OFF_COLOR;
+					name = "    Note Off";
+				} else {
+					name = "    Note On";
+					fontColor = Constants.MIDI_NOTE_ON_COLOR;
+				}
+				break;
+			case 0xa0:
+				fontColor = Constants.MIDI_AFTERTOUCH_COLOR;
+				name = "    Aftertouch";
+				break;
+			case 0xb0:
+				fontColor = Constants.MIDI_CC_COLOR;
+				name = "    CC: ";
+				name += getControlChangeType(buffer[1]&0x7f);
+				break;
+			case 0xc0:
+				fontColor = Constants.MIDI_PC_COLOR;
+				name = "    Program Change";
+				break;
+			case 0xd0:
+				fontColor = Constants.MIDI_CH_PR_COLOR;
+				name = "    Channel Pressure";
+				break;
+			case 0xe0:
+				fontColor = Constants.MIDI_PITCH_COLOR;
+				name = "    Pitch Wheel";
+				break;
+			default:
+				break;
+			}
+			note = String.format(" %s% d", Constants.NOTES_NAMES[(buffer[1]&0x7f) % 12], ((buffer[1]&0x7f) / 12) - 1);
 			ch = String.format("   %2d", (buffer[0]&0x0f) + 1);
-			d1 = String.format("  0x%2x", buffer[0]&0xff);
-			d2 = String.format("  0x%2x", buffer[1]&0xff);
-			d3 = String.format("  0x%2x", buffer[2]&0xff);
-			note = "     ?";
-			name = "     Name";
+			d1 = String.format("  0x%02x", buffer[0]&0xff);
+			d2 = String.format("  0x%02x", buffer[1]&0xff);
+			d3 = String.format("  0x%02x", buffer[2]&0xff);
+			//note = "     ?";
 			break;
 		}
 		
@@ -576,7 +946,7 @@ public class PanelMidiLog extends JPanel {
 		}
 		rawStrings.add(appendString);
 		
-		while (appendString.length() < 60) {
+		while (appendString.length() < 70) {
 			appendString += " ";
 		}
 		appendString += "\n\r";
@@ -584,14 +954,15 @@ public class PanelMidiLog extends JPanel {
 		textPane.setEditable(true);
 		if (rawLines > 100) {
 			try {
-				doc.remove(0, 62);
+				doc.remove(0, 72);
 			} catch (BadLocationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		textPane.setCaretPosition(doc.getLength());
-		textPane.replaceSelection(appendString);
+		//textPane.setCaretPosition(doc.getLength());
+		//textPane.replaceSelection(appendString);
+		textPane.append(fontColor, appendString);
 		rawLines++;
 	}
 }
