@@ -379,12 +379,12 @@ public class PanelMidiLog extends JPanel {
 				tabbedPaneMidi.addTab("Raw MIDI", null, panelRawMidiText, null);
 				panelRawMidiText.setLayout(new FormLayout(new ColumnSpec[] {
 						FormFactory.RELATED_GAP_COLSPEC,
-						FormFactory.DEFAULT_COLSPEC,},
+						ColumnSpec.decode("default:grow"),},
 					new RowSpec[] {
 						FormFactory.RELATED_GAP_ROWSPEC,
 						FormFactory.DEFAULT_ROWSPEC,
 						RowSpec.decode("min(2dlu;default)"),
-						RowSpec.decode("top:default"),}));
+						RowSpec.decode("top:default:grow"),}));
 				
 				txtpnTimeChData = new JTextPane();
 				txtpnTimeChData.setEditable(false);
@@ -407,10 +407,14 @@ public class PanelMidiLog extends JPanel {
 						textPane.setEditable(false);
 					}
 				});
-				textPane.setDisabledTextColor(Color.BLACK);
-				//textPane.setContentType("text/html");
 				textPane.setFont(new Font("Monospaced", Font.PLAIN, 14));
 				scrollPaneText.setViewportView(textPane);
+				try {
+					textPane.getDocument().remove(0, textPane.getDocument().getLength());
+				} catch (BadLocationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
 				panelRawMidiTable = new JPanel();
 				panelRawMidiTable.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
