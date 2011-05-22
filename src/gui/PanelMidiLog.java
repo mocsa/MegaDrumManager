@@ -896,7 +896,7 @@ public class PanelMidiLog extends JPanel {
 				name = "    Note Off";
 				break;
 			case 0x90:
-				if (buffer[1] == 0) {
+				if (buffer[2] == 0) {
 					fontColor = Constants.MIDI_NOTE_OFF_COLOR;
 					name = "    Note Off";
 				} else {
