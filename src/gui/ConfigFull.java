@@ -12,11 +12,13 @@ public class ConfigFull implements java.io.Serializable {
 	public ConfigPad [] configPads;
 	public Config3rd [] config3rds;
 	public ConfigCurve [] configCurves;
+	public ConfigCustomName [] configCustomNames;
 	private static final String configMiscPrefix = "misc.";
 	private static final String configPedalPrefix = "pedal.";
 	private static final String configPadPrefix = "input";
 	private static final String config3rdPrefix = "pad3d_zone";
 	private static final String configCurvePrefix = "curve";
+	private static final String configCustomNamePrefix = "customName";
 	
 	public ConfigFull() {
 		
@@ -34,6 +36,10 @@ public class ConfigFull implements java.io.Serializable {
 		for (Integer i = 0; i < Constants.CURVES_COUNT;i++) {
 			configCurves[i] = new ConfigCurve();
 		}
+		configCustomNames = new ConfigCustomName[Constants.CUSTOM_NAMES_MAX];
+		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
+			configCustomNames[i] = new ConfigCustomName();
+		}
 	}
 	
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout) {
@@ -48,6 +54,9 @@ public class ConfigFull implements java.io.Serializable {
 		for (Integer i = 0; i < Constants.CURVES_COUNT;i++) {
 			configCurves[i].copyToPropertiesConfiguration(prop, layout,configCurvePrefix, i);
 		}
+		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
+			configCustomNames[i].copyToPropertiesConfiguration(prop, layout,configCustomNamePrefix, i);
+		}
 	}
 	
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop) throws ConversionException {
@@ -61,6 +70,9 @@ public class ConfigFull implements java.io.Serializable {
 		}
 		for (Integer i = 0; i < Constants.CURVES_COUNT;i++) {
 			configCurves[i].copyFromPropertiesConfiguration(prop, configCurvePrefix, i);
+		}
+		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
+			configCustomNames[i].copyFromPropertiesConfiguration(prop, configCustomNamePrefix, i);
 		}
 	}
 }

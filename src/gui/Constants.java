@@ -13,7 +13,7 @@ public interface Constants {
 	public static final int PANEL_SHOW = 1;
 	public static final int PANEL_DETACH = 2;
 	public static final int PANELS_COUNT = 5;
-	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Curve", "MIDI Log"};
+	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Pads Extra", "MIDI Log"};
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
 	public static final int Error_CRC = 0x22;
@@ -21,6 +21,7 @@ public interface Constants {
 	public static final String MD_MANAGER_CONFIG = System.getProperty("user.home") + System.getProperty("file.separator") + "megadrummanager.cfg";
 	public static final short PADS_COUNT = 55;
 	public static final short CURVES_COUNT = 4;
+	public static final short CUSTOM_NAMES_MAX = 32;
 	public static final short SYSEX_DELAY = 50;
 	public static final byte SYSEX_START = (byte)0xf0;
 	public static final byte SYSEX_END = (byte)0xf7;
@@ -37,6 +38,8 @@ public interface Constants {
 	public static final byte MD_SYSEX_VERSION_SIZE = 13;
 	public static final byte MD_SYSEX_CURVE = (byte)0x06;
 	public static final byte MD_SYSEX_CURVE_SIZE = 24;
+	public static final byte MD_SYSEX_CUSTOM_NAME = (byte)0x07;
+	public static final byte MD_SYSEX_CUSTOM_NAME_SIZE = 22;
 	public static final byte MD_SYSEX_SAVE_SLOT1 = (byte)0x7f;
 	public static final String[] CURVES_LIST = { "Linear", "Log1", "Log2", "Log3", "Log4",
 		"Exp1", "Exp2", "S1", "S2", "Strong1", "Strong2", "Max",

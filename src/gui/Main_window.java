@@ -98,7 +98,7 @@ public class Main_window {
 	private ControlsMisc controlsMisc;
 	private ControlsPedal controlsPedal;
 	private ControlsPads controlsPads;
-	private ControlsCurves controlsCurves;
+	private ControlsPadsExtra controlsPadsExtra;
 	private PanelMidiLog panelMidiLog;
 	private FrameDetached [] framesDetached;
 	private JPanel [] controlsPanels;
@@ -874,66 +874,66 @@ public class Main_window {
 		});
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
 		
-		controlsCurves = new ControlsCurves();
-		controlsCurves.getBtnSave().addActionListener(new ActionListener() {
+		controlsPadsExtra = new ControlsPadsExtra();
+		controlsPadsExtra.getBtnCurveSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(controlsCurves.getConfig(controlsCurves.getCurvePointer()), sysex, configOptions.chainId, controlsCurves.getCurvePointer());
+				Utils.copyConfigCurveToSysex(controlsPadsExtra.getConfig(controlsPadsExtra.getCurvePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
-		controlsCurves.getBtnLoad().addActionListener(new ActionListener() {
+		controlsPadsExtra.getBtnCurveLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(controlsCurves.getConfig(controlsCurves.getCurvePointer()), sysex, configOptions.chainId, controlsCurves.getCurvePointer());
+				Utils.copyConfigCurveToSysex(controlsPadsExtra.getConfig(controlsPadsExtra.getCurvePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
 				fileManager.loadSysex(sysex, configOptions);					
-				controlsCurves.setConfig(sysex, controlsCurves.getCurvePointer());
+				controlsPadsExtra.setConfig(sysex, controlsPadsExtra.getCurvePointer());
 			}
 		});
-		controlsCurves.addPropertyChangeListener(new PropertyChangeListener() {
+		controlsPadsExtra.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueChanged")) {
-						sendCurve(controlsCurves.getCurvePointer());
+						sendCurve(controlsPadsExtra.getCurvePointer());
 					}
 				}
 			}
 		});
-		controlsCurves.setBorder(new TitledBorder(null, "Curves", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		controlsCurves.getButton_get().addActionListener(new ActionListener() {
+		controlsPadsExtra.setBorder(new TitledBorder(null, "Pads Extra Settings", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		controlsPadsExtra.getButton_curveGet().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				getCurve(controlsCurves.getCurvePointer());
+				getCurve(controlsPadsExtra.getCurvePointer());
 			}
 		});
-		controlsCurves.getButton_send().addActionListener(new ActionListener() {
+		controlsPadsExtra.getButton_curveSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendCurve(controlsCurves.getCurvePointer());
+				sendCurve(controlsPadsExtra.getCurvePointer());
 			}
 		});
-		controlsCurves.getButton_getAll().addActionListener(new ActionListener() {
+		controlsPadsExtra.getButton_curveGetAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				getAllCurves();
 			}
 		});
-		controlsCurves.getButton_sendAll().addActionListener(new ActionListener() {
+		controlsPadsExtra.getButton_curveSendAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				sendAllCurves();
 			}
 		});
-		panel_main.add(controlsCurves, "4, 2, fill, top");
+		panel_main.add(controlsPadsExtra, "4, 2, fill, top");
 		
 		panelMidiLog = new PanelMidiLog(16);
 		panelMidiLog.setBorder(new TitledBorder(null, "MIDI Log", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_main.add(panelMidiLog, "5, 2, fill, fill");
 
-		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
+		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Pads Extra
 		framesDetached = new FrameDetached[Constants.PANELS_COUNT];
 		controlsPanels = new JPanel[Constants.PANELS_COUNT];
 		viewMenus = new ViewMenu[Constants.PANELS_COUNT];
 		controlsPanels[0] = controlsMisc;
 		controlsPanels[1] = controlsPedal;
 		controlsPanels[2] = controlsPads;
-		controlsPanels[3] = controlsCurves;
+		controlsPanels[3] = controlsPadsExtra;
 		controlsPanels[4] = panelMidiLog;
 		
 		for (int i=0;i<Constants.PANELS_COUNT;i++) {
@@ -1130,7 +1130,7 @@ public class Main_window {
 	
 	private void sendCurve(int curve_id) {
 		byte [] sysexCurve = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-		Utils.copyConfigCurveToSysex(controlsCurves.getConfig(curve_id), sysexCurve, configOptions.chainId, curve_id);
+		Utils.copyConfigCurveToSysex(controlsPadsExtra.getConfig(curve_id), sysexCurve, configOptions.chainId, curve_id);
 		midi_handler.sendSysex(sysexCurve);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1165,7 +1165,7 @@ public class Main_window {
 		controlsMisc.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);
 		controlsPedal.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);
 		controlsPads.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);		
-		controlsCurves.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);				
+		controlsPadsExtra.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);				
 	}
 	private void load_all() {
 		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
@@ -1224,7 +1224,7 @@ public class Main_window {
 	}
 	
 	private void resizeMainWindow() {
-		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
+		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Pads Extra, 4 - MIDI Log
 		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
 			if (LookAndFeelChanged) {
 				SwingUtilities.updateComponentTreeUI(framesDetached[i]);
@@ -1298,7 +1298,7 @@ public class Main_window {
 						}
 						break;
 					case Constants.MD_SYSEX_CURVE:
-						controlsCurves.setConfig(midi_handler.bufferIn, buffer[4]);
+						controlsPadsExtra.setConfig(midi_handler.bufferIn, buffer[4]);
 						break;
 					default:
 						break;
