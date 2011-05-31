@@ -32,6 +32,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTabbedPane;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
 
 public class ControlsPadsExtra extends JPanel {
 	private Boolean changeEventsAllowed = false;
@@ -46,6 +48,7 @@ public class ControlsPadsExtra extends JPanel {
 	private ConfigCustomName [] configCustomNames;
 	private int customNamePointer;
 	private int prevCustomNamePointer;
+	private int customNamesCount;
 	private JComboBox comboBox_curveNumber;
 	private JButton button_first;
 	private JButton button_prev;
@@ -86,6 +89,7 @@ public class ControlsPadsExtra extends JPanel {
         curvePointer = 0;
         prevCurvePointer = -1;
         
+        customNamesCount = Constants.CUSTOM_NAMES_MAX;
 		configCustomNames = new ConfigCustomName[Constants.CUSTOM_NAMES_MAX];
         for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
         	configCustomNames[i] = new ConfigCustomName();
@@ -351,6 +355,17 @@ public class ControlsPadsExtra extends JPanel {
 		panelNamesEdit.add(lblEditSelectedName, "1, 1, right, default");
 		
 		textFieldEditName = new JTextField();
+		textFieldEditName.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String text = textFieldEditName.getText();
+				text += "        ";
+				text = text.substring(0, 8);
+				int ind = comboBoxSelectName.getSelectedIndex();
+				configCustomNames[ind].name = text;
+				updateCustomNameControls(customNamesCount);
+				comboBoxSelectName.setSelectedIndex(ind);
+			}
+		});
 		textFieldEditName.setColumns(10);
 		panelNamesEdit.add(textFieldEditName, "3, 1, fill, default");
 		
@@ -458,6 +473,22 @@ public class ControlsPadsExtra extends JPanel {
 		paintPanel.repaint();
 		changeEventsAllowed = true;
 	}
+	
+	public void setCustomNameConfig(byte [] buffer,int nameId) {
+		changeEventsAllowed = false;
+		PropertiesConfiguration prop = new PropertiesConfiguration();
+		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
+		ConfigCustomName config = new ConfigCustomName();
+		configCustomNames[nameId].copyToPropertiesConfiguration(prop, layout, "", nameId);
+		config.copyFromPropertiesConfiguration(prop, "",nameId);		
+		Utils.copySysexToConfigCustomName(buffer, config);
+		config.copyToPropertiesConfiguration(prop, layout, "", nameId);
+		configCustomNames[nameId].copyFromPropertiesConfiguration(prop, "", nameId);		
+		updateCustomNameControls(customNamesCount);
+		comboBoxSelectName.setSelectedIndex(customNamePointer);
+		changeEventsAllowed = true;
+	}
+
 
 	public void loadFromConfigFull (ConfigFull config) {
 		changeEventsAllowed = false;

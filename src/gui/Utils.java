@@ -496,6 +496,7 @@ public class Utils {
 		sysex[i++] = sysex_byte[1];
 		sysex[i++] = Constants.SYSEX_END;
 	}
+
 	public static void copyConfigCurveToSysex(ConfigCurve config, byte [] sysex, int chainId, int curveId) {
 		byte [] sysex_byte = new byte[2];
 		int i = 0;
@@ -527,6 +528,39 @@ public class Utils {
 				}
 			}
 		}
+		
+	}
+
+	public static void copyConfigCustomNameToSysex(ConfigCustomName config, byte [] sysex, int chainId, int nameId) {
+		byte [] sysex_byte = new byte[2];
+		int i = 0;
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte) chainId;
+		sysex[i++] = Constants.MD_SYSEX_CUSTOM_NAME;
+		sysex[i++] = (byte)nameId;
+
+		for (int p = 0; p < 8;p++) {
+			sysex_byte = byte2sysex((byte)config.name.getBytes()[p]);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
+		sysex[i++] = Constants.SYSEX_END;
+
+	}
+	
+	public static void copySysexToConfigCustomName(byte [] sysex, ConfigCustomName config) {
+		byte [] sysex_byte = new byte[2];
+		byte [] bytes_string = { 1, 2, 3, 4, 5, 6, 7, 8 };
+		int i = 5;
+		if (sysex.length >= Constants.MD_SYSEX_CUSTOM_NAME_SIZE) {
+			for (int p = 0; p < 9;p++) {
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				bytes_string[p] = sysex2byte(sysex_byte);
+			}
+		}
+		config.name = bytes_string.toString();
 		
 	}
 

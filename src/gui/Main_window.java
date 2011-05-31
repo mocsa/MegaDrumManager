@@ -1300,6 +1300,9 @@ public class Main_window {
 					case Constants.MD_SYSEX_CURVE:
 						controlsPadsExtra.setCurveConfig(midi_handler.bufferIn, buffer[4]);
 						break;
+					case Constants.MD_SYSEX_CUSTOM_NAME:
+						controlsPadsExtra.setCustomNameConfig(midi_handler.bufferIn, buffer[4]);
+						break;
 					default:
 						break;
 				}
