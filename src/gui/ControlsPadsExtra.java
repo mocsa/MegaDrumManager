@@ -65,7 +65,7 @@ public class ControlsPadsExtra extends JPanel {
 	private JTextField textFieldEditName;
 	private JComboBox comboBoxSelectName;
 	private JLabel lblCustomNames;
-	private JComboBox comboBox_1;
+	private JComboBox comboBoxCustomNamesCount;
 	private JButton button;
 	private JButton button_1;
 	private JButton button_2;
@@ -89,7 +89,6 @@ public class ControlsPadsExtra extends JPanel {
 		configCustomNames = new ConfigCustomName[Constants.CUSTOM_NAMES_MAX];
         for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
         	configCustomNames[i] = new ConfigCustomName();
-        	configCustomNames[i].name = "Custom" + i.toString(); 
         }
         customNamePointer = 0;
         prevCustomNamePointer = -1;
@@ -302,10 +301,10 @@ public class ControlsPadsExtra extends JPanel {
 		lblCustomNames.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panelNamesGetSend.add(lblCustomNames, "1, 1, right, default");
 		
-		comboBox_1 = new JComboBox();
-		comboBox_1.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		comboBox_1.setModel(new DefaultComboBoxModel(new String[] {"2", "16", "32"}));
-		panelNamesGetSend.add(comboBox_1, "2, 1, fill, default");
+		comboBoxCustomNamesCount = new JComboBox();
+		comboBoxCustomNamesCount.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		comboBoxCustomNamesCount.setModel(new DefaultComboBoxModel(new String[] {"2", "16", "32"}));
+		panelNamesGetSend.add(comboBoxCustomNamesCount, "2, 1, fill, default");
 		
 		button = new JButton("Get");
 		button.setMargin(new Insets(1, 4, 1, 4));
@@ -368,10 +367,8 @@ public class ControlsPadsExtra extends JPanel {
 				}
 			}
 		});
-		for (int i = 0; i < Constants.CUSTOM_NAMES_MAX; i++) {
-			comboBoxSelectName.addItem(configCustomNames[i].name);
-		}
-		comboBoxSelectName.setSelectedIndex(0);
+		
+		updateCustomNameControls(Constants.CUSTOM_NAMES_MAX);
 		
 		panelNamesEdit.add(comboBoxSelectName, "3, 3, fill, default");
 
@@ -435,11 +432,19 @@ public class ControlsPadsExtra extends JPanel {
 		}
 	}
 	
-	public ConfigCurve getConfig(int curve_id) {
+	private void updateCustomNameControls(int count) {
+		comboBoxSelectName.removeAllItems();
+		for (int i = 0; i < count; i++) {
+			comboBoxSelectName.addItem(configCustomNames[i].name);
+		}		
+		comboBoxSelectName.setSelectedIndex(customNamePointer);
+	}
+	
+	public ConfigCurve getCurveConfig(int curve_id) {
 		return configCurves[curve_id];
 	}
 	
-	public void setConfig(byte [] buffer,int curveId) {
+	public void setCurveConfig(byte [] buffer,int curveId) {
 		changeEventsAllowed = false;
 		PropertiesConfiguration prop = new PropertiesConfiguration();
 		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
@@ -458,6 +463,13 @@ public class ControlsPadsExtra extends JPanel {
 		changeEventsAllowed = false;
 		configCurves = config.configCurves;
 		updateCurveControls();
+		configCustomNames = config.configCustomNames;
+		for (int i = 0; i < comboBoxCustomNamesCount.getItemCount(); i++) {
+			if (comboBoxCustomNamesCount.getItemAt(i).toString().equals(((Integer)config.customNamesCount).toString())) {
+				comboBoxCustomNamesCount.setSelectedIndex(i);
+			}
+		}		
+		updateCustomNameControls(config.customNamesCount);
 		changeEventsAllowed = true;
 	}
 	

@@ -13,6 +13,7 @@ public class ConfigFull implements java.io.Serializable {
 	public Config3rd [] config3rds;
 	public ConfigCurve [] configCurves;
 	public ConfigCustomName [] configCustomNames;
+	public int customNamesCount;
 	private static final String configMiscPrefix = "misc.";
 	private static final String configPedalPrefix = "pedal.";
 	private static final String configPadPrefix = "input";
@@ -39,7 +40,9 @@ public class ConfigFull implements java.io.Serializable {
 		configCustomNames = new ConfigCustomName[Constants.CUSTOM_NAMES_MAX];
 		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
 			configCustomNames[i] = new ConfigCustomName();
+        	configCustomNames[i].name = "Custom" + i.toString(); 
 		}
+		customNamesCount = Constants.CUSTOM_NAMES_MAX;
 	}
 	
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout) {
@@ -54,6 +57,7 @@ public class ConfigFull implements java.io.Serializable {
 		for (Integer i = 0; i < Constants.CURVES_COUNT;i++) {
 			configCurves[i].copyToPropertiesConfiguration(prop, layout,configCurvePrefix, i);
 		}
+		prop.setProperty(configCustomNamePrefix+"Count", customNamesCount);
 		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
 			configCustomNames[i].copyToPropertiesConfiguration(prop, layout,configCustomNamePrefix, i);
 		}
@@ -71,6 +75,7 @@ public class ConfigFull implements java.io.Serializable {
 		for (Integer i = 0; i < Constants.CURVES_COUNT;i++) {
 			configCurves[i].copyFromPropertiesConfiguration(prop, configCurvePrefix, i);
 		}
+		customNamesCount = Utils.validateInt(prop.getInt(configCustomNamePrefix+"Count", customNamesCount),2,32,customNamesCount);
 		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
 			configCustomNames[i].copyFromPropertiesConfiguration(prop, configCustomNamePrefix, i);
 		}

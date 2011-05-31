@@ -878,16 +878,16 @@ public class Main_window {
 		controlsPadsExtra.getBtnCurveSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(controlsPadsExtra.getConfig(controlsPadsExtra.getCurvePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
+				Utils.copyConfigCurveToSysex(controlsPadsExtra.getCurveConfig(controlsPadsExtra.getCurvePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsPadsExtra.getBtnCurveLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(controlsPadsExtra.getConfig(controlsPadsExtra.getCurvePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
+				Utils.copyConfigCurveToSysex(controlsPadsExtra.getCurveConfig(controlsPadsExtra.getCurvePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
 				fileManager.loadSysex(sysex, configOptions);					
-				controlsPadsExtra.setConfig(sysex, controlsPadsExtra.getCurvePointer());
+				controlsPadsExtra.setCurveConfig(sysex, controlsPadsExtra.getCurvePointer());
 			}
 		});
 		controlsPadsExtra.addPropertyChangeListener(new PropertyChangeListener() {
@@ -1130,7 +1130,7 @@ public class Main_window {
 	
 	private void sendCurve(int curve_id) {
 		byte [] sysexCurve = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-		Utils.copyConfigCurveToSysex(controlsPadsExtra.getConfig(curve_id), sysexCurve, configOptions.chainId, curve_id);
+		Utils.copyConfigCurveToSysex(controlsPadsExtra.getCurveConfig(curve_id), sysexCurve, configOptions.chainId, curve_id);
 		midi_handler.sendSysex(sysexCurve);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1298,7 +1298,7 @@ public class Main_window {
 						}
 						break;
 					case Constants.MD_SYSEX_CURVE:
-						controlsPadsExtra.setConfig(midi_handler.bufferIn, buffer[4]);
+						controlsPadsExtra.setCurveConfig(midi_handler.bufferIn, buffer[4]);
 						break;
 					default:
 						break;
