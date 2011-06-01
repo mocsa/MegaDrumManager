@@ -77,6 +77,8 @@ public class ControlsPadsExtra extends JPanel {
 	private JButton button_customNameSave;
 	private JLabel lblEditSelectedName;
 	private JLabel lblSelectNameTo;
+	private JPanel panel;
+	private JLabel lblwhenModifiedCustom;
 	
 	/**
 	 * Create the panel.
@@ -275,8 +277,10 @@ public class ControlsPadsExtra extends JPanel {
 		panelCustomNames = new JPanel();
 		tabbedPane.addTab("Custom Names", null, panelCustomNames, null);
 		panelCustomNames.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),}));
@@ -408,6 +412,18 @@ public class ControlsPadsExtra extends JPanel {
 		updateCustomNameControls(Constants.CUSTOM_NAMES_MAX);
 		
 		panelNamesEdit.add(comboBoxSelectName, "3, 3, fill, default");
+		
+		panel = new JPanel();
+		panelCustomNames.add(panel, "1, 5, fill, fill");
+		panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		lblwhenModifiedCustom = new JLabel("<html>When modified Custom Names will be truncated<br>to 8 charachters maximum</html>");
+		panel.add(lblwhenModifiedCustom, "2, 2");
 
 		paintPanel.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override

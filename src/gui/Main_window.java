@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.UIDefaults;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -133,6 +134,7 @@ public class Main_window {
 					Main_window window = new Main_window();
 					window.frmMegadrummanager.setVisible(true);
 					window.dialog_options.setVisible(false);
+					ToolTipManager.sharedInstance().setDismissDelay(20000);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -677,6 +679,7 @@ public class Main_window {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JButton btnGetAll = new JButton("Get All");
+		btnGetAll.setToolTipText("Get all settings from MegaDrum");
 		btnGetAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnGetAll.setMargin(new Insets(0, 1, 0, 1));
 		btnGetAll.addActionListener(new ActionListener() {
@@ -687,6 +690,7 @@ public class Main_window {
 		panel_top.add(btnGetAll, "2, 1");
 		
 		JButton btnSendAll = new JButton("Send All");
+		btnSendAll.setToolTipText("Send all settings to MegaDrum");
 		btnSendAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnSendAll.setMargin(new Insets(0, 1, 0, 1));
 		btnSendAll.addActionListener(new ActionListener() {
@@ -697,6 +701,7 @@ public class Main_window {
 		panel_top.add(btnSendAll, "4, 1");
 		
 		JButton btnLoadAll = new JButton("Load All");
+		btnLoadAll.setToolTipText("Load settings from a file");
 		btnLoadAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnLoadAll.setMargin(new Insets(0, 1, 0, 1));
 		btnLoadAll.addActionListener(new ActionListener() {
@@ -707,6 +712,7 @@ public class Main_window {
 		panel_top.add(btnLoadAll, "6, 1");
 		
 		JButton btnSaveAll = new JButton("Save All");
+		btnSaveAll.setToolTipText("Save all settings to a file");
 		btnSaveAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnSaveAll.setMargin(new Insets(0, 1, 0, 1));
 		btnSaveAll.addActionListener(new ActionListener() {
@@ -717,6 +723,7 @@ public class Main_window {
 		panel_top.add(btnSaveAll, "8, 1");
 		
 		JButton btnSaveToSlot = new JButton("Save To Slot1");
+		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin Slot1 of non-volatile memory.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom Slot1 on power up.\r\n</html>");
 		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnSaveToSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -727,6 +734,7 @@ public class Main_window {
 		panel_top.add(btnSaveToSlot, "10, 1");
 		
 		comboBoxCfg = new JComboBox();
+		comboBoxCfg.setToolTipText("<html>Select the current full config to use.<br>\r\nMegaDrumManager can hold up to 8<br>\r\nfull MegaDrum configs in memory<br>\r\nand you can quickly switch between them here<br>.\r\n</html>");
 		comboBoxCfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String text = comboBoxCfg.getSelectedItem().toString();
@@ -756,6 +764,7 @@ public class Main_window {
 		panel_top.add(comboBoxCfg, "12, 1, fill, default");
 		
 		JButton btnPrevcfg = new JButton("prevCfg");
+		btnPrevcfg.setToolTipText("<html>Switch to previous full MegaDrum config</html>");
 		btnPrevcfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (configOptions.lastConfig>0) {
@@ -769,6 +778,7 @@ public class Main_window {
 		panel_top.add(btnPrevcfg, "14, 1");
 		
 		JButton btnNextcfg = new JButton("nextCfg");
+		btnNextcfg.setToolTipText("<html>Switch to next full MegaDrum config</html>");
 		btnNextcfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (configOptions.lastConfig<(Constants.CONFIGS_COUNT-1)) {
@@ -809,6 +819,7 @@ public class Main_window {
 		panel.add(lblMidi, "2, 1");
 		
 		tglbtnMidi = new JToggleButton("Open MIDI");
+		tglbtnMidi.setToolTipText("<html>Open MIDI ports configured in Main->Options</html>");
 		panel.add(tglbtnMidi, "4, 1");
 		tglbtnMidi.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnMidi.setMargin(new Insets(1, 1, 1, 1));
@@ -818,6 +829,7 @@ public class Main_window {
 		panel.add(lblFirmwareVer, "6, 1");
 		
 		lblVersion = new JLabel("???????");
+		lblVersion.setToolTipText("<html>Shows the current firmware version<br>\r\nof the connected MegaDrum.\r\n</html>");
 		lblVersion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblVersion.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblVersion.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -829,6 +841,7 @@ public class Main_window {
 		panel.add(lblInputs, "10, 1");
 		
 		comboBox_inputsCount = new JComboBox();
+		comboBox_inputsCount.setToolTipText("<html>Select number of inputs used in MegaDrum.<br>\r\n<br>\r\nIt shoud match MaxInputs setting, which is only accessible<br>\r\nfrom MegaDrum menu.\r\n</html>");
 		comboBox_inputsCount.setMaximumRowCount(20);
 		panel.add(comboBox_inputsCount, "12, 1");
 		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 9));
@@ -837,6 +850,7 @@ public class Main_window {
 			comboBox_inputsCount.addItem((i*2) + Constants.MIN_INPUTS + 1);
 		}		
 		tglbtnLiveUpdates = new JToggleButton("Live updates");
+		tglbtnLiveUpdates.setToolTipText("<html>Enable live settingsupdates.<br>\r\n<br>\r\nWhen enabled, all changes to settings in MegaDrumManager<br>\r\nare sent to MegaDrum upon a change.\r\n</html>");
 		tglbtnLiveUpdates.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnLiveUpdates.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
