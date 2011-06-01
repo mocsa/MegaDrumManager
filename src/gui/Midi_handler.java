@@ -211,6 +211,18 @@ public class Midi_handler {
 		sendSysex(sx);
 	}
 
+	public void requestConfigCustomName(int name_id) {
+		byte [] sx = new byte[6];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)chainId;
+		sx[3] = Constants.MD_SYSEX_CUSTOM_NAME;
+		sx[4] = (byte)name_id;
+		sx[5] = Constants.SYSEX_END;
+		sendSysex(sx);
+	}
+
 	public void requestSaveSlot1() {
 		byte [] sx = new byte[6];
 		

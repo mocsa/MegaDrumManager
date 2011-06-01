@@ -551,17 +551,16 @@ public class Utils {
 	
 	public static void copySysexToConfigCustomName(byte [] sysex, ConfigCustomName config) {
 		byte [] sysex_byte = new byte[2];
-		byte [] bytes_string = { 1, 2, 3, 4, 5, 6, 7, 8 };
+		char [] bytes_string = { 1, 2, 3, 4, 5, 6, 7, 8 };
 		int i = 5;
 		if (sysex.length >= Constants.MD_SYSEX_CUSTOM_NAME_SIZE) {
-			for (int p = 0; p < 9;p++) {
+			for (int p = 0; p < 8;p++) {
 				sysex_byte[0] = sysex[i++];
 				sysex_byte[1] = sysex[i++];
-				bytes_string[p] = sysex2byte(sysex_byte);
+				bytes_string[p] = (char)sysex2byte(sysex_byte);
 			}
 		}
-		config.name = bytes_string.toString();
-		
+		config.name = String.copyValueOf(bytes_string);
 	}
 
 	public static int validateInt(int value, int min, int max, int fallBack){

@@ -69,12 +69,12 @@ public class ControlsPadsExtra extends JPanel {
 	private JComboBox comboBoxSelectName;
 	private JLabel lblCustomNames;
 	private JComboBox comboBoxCustomNamesCount;
-	private JButton button;
-	private JButton button_1;
-	private JButton button_2;
-	private JButton button_3;
-	private JButton button_4;
-	private JButton button_5;
+	private JButton button_customNameGet;
+	private JButton button_customNameSend;
+	private JButton button_customNamesGetAll;
+	private JButton button_customNamesSendAll;
+	private JButton button_customNameLoad;
+	private JButton button_customNameSave;
 	private JLabel lblEditSelectedName;
 	private JLabel lblSelectNameTo;
 	
@@ -310,35 +310,35 @@ public class ControlsPadsExtra extends JPanel {
 		comboBoxCustomNamesCount.setModel(new DefaultComboBoxModel(new String[] {"2", "16", "32"}));
 		panelNamesGetSend.add(comboBoxCustomNamesCount, "2, 1, fill, default");
 		
-		button = new JButton("Get");
-		button.setMargin(new Insets(1, 4, 1, 4));
-		button.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panelNamesGetSend.add(button, "4, 1");
+		button_customNameGet = new JButton("Get");
+		button_customNameGet.setMargin(new Insets(1, 4, 1, 4));
+		button_customNameGet.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelNamesGetSend.add(button_customNameGet, "4, 1");
 		
-		button_1 = new JButton("Send");
-		button_1.setMargin(new Insets(1, 4, 1, 4));
-		button_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panelNamesGetSend.add(button_1, "6, 1");
+		button_customNameSend = new JButton("Send");
+		button_customNameSend.setMargin(new Insets(1, 4, 1, 4));
+		button_customNameSend.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelNamesGetSend.add(button_customNameSend, "6, 1");
 		
-		button_2 = new JButton("GetAll");
-		button_2.setMargin(new Insets(1, 0, 1, 0));
-		button_2.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panelNamesGetSend.add(button_2, "8, 1");
+		button_customNamesGetAll = new JButton("GetAll");
+		button_customNamesGetAll.setMargin(new Insets(1, 0, 1, 0));
+		button_customNamesGetAll.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelNamesGetSend.add(button_customNamesGetAll, "8, 1");
 		
-		button_3 = new JButton("SendAll");
-		button_3.setMargin(new Insets(1, 0, 1, 0));
-		button_3.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panelNamesGetSend.add(button_3, "10, 1");
+		button_customNamesSendAll = new JButton("SendAll");
+		button_customNamesSendAll.setMargin(new Insets(1, 0, 1, 0));
+		button_customNamesSendAll.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelNamesGetSend.add(button_customNamesSendAll, "10, 1");
 		
-		button_4 = new JButton("Load");
-		button_4.setMargin(new Insets(1, 2, 1, 2));
-		button_4.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panelNamesGetSend.add(button_4, "12, 1");
+		button_customNameLoad = new JButton("Load");
+		button_customNameLoad.setMargin(new Insets(1, 2, 1, 2));
+		button_customNameLoad.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelNamesGetSend.add(button_customNameLoad, "12, 1");
 		
-		button_5 = new JButton("Save");
-		button_5.setMargin(new Insets(1, 2, 1, 2));
-		button_5.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panelNamesGetSend.add(button_5, "14, 1");
+		button_customNameSave = new JButton("Save");
+		button_customNameSave.setMargin(new Insets(1, 2, 1, 2));
+		button_customNameSave.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panelNamesGetSend.add(button_customNameSave, "14, 1");
 		
 		panelNamesEdit = new JPanel();
 		panelCustomNames.add(panelNamesEdit, "1, 3, fill, fill");
@@ -448,17 +448,22 @@ public class ControlsPadsExtra extends JPanel {
 	}
 	
 	private void updateCustomNameControls(int count) {
+		int pointer = customNamePointer;
 		comboBoxSelectName.removeAllItems();
 		for (int i = 0; i < count; i++) {
 			comboBoxSelectName.addItem(configCustomNames[i].name);
 		}		
-		comboBoxSelectName.setSelectedIndex(customNamePointer);
+		comboBoxSelectName.setSelectedIndex(pointer);
 	}
 	
 	public ConfigCurve getCurveConfig(int curve_id) {
 		return configCurves[curve_id];
 	}
 	
+	public ConfigCustomName getCustomNameConfig(int name_id) {
+		return configCustomNames[name_id];
+	}
+
 	public void setCurveConfig(byte [] buffer,int curveId) {
 		changeEventsAllowed = false;
 		PropertiesConfiguration prop = new PropertiesConfiguration();
@@ -485,7 +490,6 @@ public class ControlsPadsExtra extends JPanel {
 		config.copyToPropertiesConfiguration(prop, layout, "", nameId);
 		configCustomNames[nameId].copyFromPropertiesConfiguration(prop, "", nameId);		
 		updateCustomNameControls(customNamesCount);
-		comboBoxSelectName.setSelectedIndex(customNamePointer);
 		changeEventsAllowed = true;
 	}
 
@@ -507,6 +511,9 @@ public class ControlsPadsExtra extends JPanel {
 	public int getCurvePointer() {
 		return curvePointer;
 	}
+	public int getCustomNamePointer() {
+		return customNamePointer;
+	}
 	public JButton getButton_curveGet() {
 		return button_curveGet;
 	}
@@ -524,5 +531,23 @@ public class ControlsPadsExtra extends JPanel {
 	}
 	public JButton getBtnCurveSave() {
 		return btnCurveSave;
+	}
+	public JButton getButton_customNameGet() {
+		return button_customNameGet;
+	}
+	public JButton getButton_customNameSend() {
+		return button_customNameSend;
+	}
+	public JButton getButton_customNamesGetAll() {
+		return button_customNamesGetAll;
+	}
+	public JButton getButton_customNamesSendAll() {
+		return button_customNamesSendAll;
+	}
+	public JButton getButton_customNameLoad() {
+		return button_customNameLoad;
+	}
+	public JButton getButton_customNameSave() {
+		return button_customNameSave;
 	}
 }

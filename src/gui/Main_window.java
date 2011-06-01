@@ -890,6 +890,21 @@ public class Main_window {
 				controlsPadsExtra.setCurveConfig(sysex, controlsPadsExtra.getCurvePointer());
 			}
 		});
+		controlsPadsExtra.getButton_customNameSave().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
+				Utils.copyConfigCustomNameToSysex(controlsPadsExtra.getCustomNameConfig(controlsPadsExtra.getCustomNamePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
+				fileManager.saveSysex(sysex, configOptions);
+			}
+		});
+		controlsPadsExtra.getButton_customNameLoad().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
+				Utils.copyConfigCustomNameToSysex(controlsPadsExtra.getCustomNameConfig(controlsPadsExtra.getCustomNamePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
+				fileManager.loadSysex(sysex, configOptions);					
+				controlsPadsExtra.setCustomNameConfig(sysex, controlsPadsExtra.getCustomNamePointer());
+			}
+		});
 		controlsPadsExtra.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
@@ -918,6 +933,26 @@ public class Main_window {
 		controlsPadsExtra.getButton_curveSendAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				sendAllCurves();
+			}
+		});
+		controlsPadsExtra.getButton_customNameGet().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getCustomName(controlsPadsExtra.getCustomNamePointer());
+			}
+		});
+		controlsPadsExtra.getButton_customNameSend().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendCustomName(controlsPadsExtra.getCustomNamePointer());
+			}
+		});
+		controlsPadsExtra.getButton_customNamesGetAll().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getAllCustomNames();
+			}
+		});
+		controlsPadsExtra.getButton_customNamesSendAll().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendAllCustomNames();
 			}
 		});
 		panel_main.add(controlsPadsExtra, "4, 2, fill, top");
@@ -1122,6 +1157,30 @@ public class Main_window {
         t.run();
 	}
 
+	private void getCustomName(int name_id) {
+		//midi_handler.clear_midi_input();
+		midi_handler.requestConfigCustomName(name_id);
+		delayMs(configOptions.sysexDelay);
+	}
+
+	private void sendCustomName(int name_id) {
+		byte [] sysexCustomName = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
+		Utils.copyConfigCustomNameToSysex(controlsPadsExtra.getCustomNameConfig(name_id), sysexCustomName, configOptions.chainId, name_id);
+		midi_handler.sendSysex(sysexCustomName);
+		delayMs(configOptions.sysexDelay);
+	}
+
+	private void getAllCustomNames() {
+		for (int i = 0; i<Constants.CUSTOM_NAMES_MAX; i++) {
+			getCustomName(i);
+		}
+	}
+		
+	private void sendAllCustomNames() {
+		for (int i = 0; i<Constants.CUSTOM_NAMES_MAX; i++) {
+			sendCustomName(i);
+		}
+	}
 	private void getCurve(int curve_id) {
 		//midi_handler.clear_midi_input();
 		midi_handler.requestConfigCurve(curve_id);
@@ -1152,6 +1211,7 @@ public class Main_window {
 		getPedal();
 		getAllPads();
 		getAllCurves();
+		getAllCustomNames();
 	}
 	
 	private void sendAll() {
@@ -1159,6 +1219,7 @@ public class Main_window {
 		sendPedal();
 		sendAllPads();
 		sendAllCurves();
+		sendAllCustomNames();
 	}
 
 	private void loadAllFromConfigFull() {

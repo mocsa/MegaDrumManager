@@ -57,6 +57,7 @@ public class ConfigFull implements java.io.Serializable {
 		for (Integer i = 0; i < Constants.CURVES_COUNT;i++) {
 			configCurves[i].copyToPropertiesConfiguration(prop, layout,configCurvePrefix, i);
 		}
+		layout.setComment(configCustomNamePrefix+"Count", "\n#Custom Pads Names");
 		prop.setProperty(configCustomNamePrefix+"Count", customNamesCount);
 		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
 			configCustomNames[i].copyToPropertiesConfiguration(prop, layout,configCustomNamePrefix, i);
