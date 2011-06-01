@@ -499,6 +499,9 @@ public class ControlsPadsExtra extends JPanel {
 		}		
 		comboBoxSelectName.setSelectedIndex(pointer);
 		customNamesCount = count;
+		if (changeEventsAllowed) {
+			firePropertyChange("CustomNamesChanged", false, true);
+		}
 	}
 	
 	public ConfigCurve getCurveConfig(int curve_id) {
@@ -555,6 +558,10 @@ public class ControlsPadsExtra extends JPanel {
 	
 	public int getCustomNamesCount() {
 		return customNamesCount;
+	}
+	
+	public ConfigCustomName [] getConfigCustomNames() {
+		return configCustomNames;
 	}
 	
 	public int getCurvePointer() {

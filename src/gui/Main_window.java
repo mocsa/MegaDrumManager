@@ -929,6 +929,9 @@ public class Main_window {
 					if (arg0.getPropertyName().equals("valueCustomNameChanged")) {
 						sendCustomName(controlsPadsExtra.getCustomNamePointer());
 					}
+					if (arg0.getPropertyName().equals("CustomNamesChanged")) {
+						updateCustomNamesControls();
+					}
 				}
 			}
 		});
@@ -1021,6 +1024,7 @@ public class Main_window {
 				}
 			});
 		}
+		controlsPads.updateCustomNamesList(fullConfigs[configOptions.lastConfig].configCustomNames, fullConfigs[configOptions.lastConfig].customNamesCount);
 	}
 	
 	private void delayMs(int delay) {
@@ -1442,6 +1446,10 @@ public class Main_window {
 				    "Warning",
 				    JOptionPane.INFORMATION_MESSAGE);
 		}		
+	}
+	
+	private void updateCustomNamesControls() {
+		controlsPads.updateCustomNamesList(controlsPadsExtra.getConfigCustomNames(), controlsPadsExtra.getCustomNamesCount());
 	}
 }
 

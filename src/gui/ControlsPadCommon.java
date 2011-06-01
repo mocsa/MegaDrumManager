@@ -122,7 +122,10 @@ public class ControlsPadCommon extends JPanel {
 	private PadButton padButton_dynTime;
 	private PadButton padButton_minScan;
 	private PadButton padButton_type;
+	private String [] customNamesList;
+	private int customNamesCount;
 	public String pressedPadButtonName;
+	
 	
 	/**
 	 * Create the panel.
@@ -162,6 +165,11 @@ public class ControlsPadCommon extends JPanel {
 		lblName.setToolTipText("Input Name");
 		add(lblName, "1, 1, right, center");
 		
+		customNamesCount = Constants.CUSTOM_NAMES_MAX;
+		customNamesList = new String[Constants.CUSTOM_NAMES_MAX];
+        for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
+        	customNamesList[i] = "Custom" + i.toString();
+        }
 		comboBox_name = new ComboBoxCustom();
 		comboBox_name.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -170,10 +178,7 @@ public class ControlsPadCommon extends JPanel {
 				}
 			}
 		});
-		comboBox_name.addItem("");
-		for (String string : Constants.CUSTOM_PADS_NAMES_LIST) {
-			comboBox_name.addItem(string);
-			}
+		updatePadsNames(0);
 		add(comboBox_name, "3, 1, fill, center");
 		
 		padButton__name = new PadButton("name",head_rim_pad);
@@ -569,9 +574,29 @@ public class ControlsPadCommon extends JPanel {
 		head_rim_pad = pad_type;
 		configPad = config;
 		updateControls();
+		updatePadsNames(pad_id);
 		comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[pad_id], 0);
 		comboBox_name.removeItemAt(1);
 		changeEventsAllowed = true;
+	}
+	
+	public void updateCustomNamesList(ConfigCustomName [] configCustomNames, int count) {
+		customNamesCount = count;
+		for (int i = 0; i < customNamesCount; i++) {
+			customNamesList[i] = configCustomNames[i].name;
+		}		
+	}
+	
+	public void updatePadsNames(int pad_id) {
+		comboBox_name.removeAllItems();
+		//comboBox_name.addItem("");
+		comboBox_name.addItem(Constants.PADS_NAMES_LIST[pad_id]);
+		for (String string : Constants.CUSTOM_PADS_NAMES_LIST) {
+			comboBox_name.addItem(string);
+			}
+		for (int i = 0; i < customNamesCount; i++) {
+			comboBox_name.addItem(customNamesList[i]);
+		}
 	}
 	
 	public boolean getHeadRim() {

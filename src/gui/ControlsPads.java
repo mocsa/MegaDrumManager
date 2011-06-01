@@ -931,5 +931,13 @@ public class ControlsPads extends JPanel {
 			}
 		});
 	}
+
+	public void updateCustomNamesList(ConfigCustomName [] configCustomNames, int count) {
+		panel_head.updateCustomNamesList(configCustomNames, count);
+		panel_head.updatePadsNames(padPointer);
+		panel_rim.updateCustomNamesList(configCustomNames, count);
+		panel_rim.updatePadsNames(padPointer+1);
+	}
+	
 		
 }
