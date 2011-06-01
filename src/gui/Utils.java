@@ -533,15 +533,20 @@ public class Utils {
 
 	public static void copyConfigCustomNameToSysex(ConfigCustomName config, byte [] sysex, int chainId, int nameId) {
 		byte [] sysex_byte = new byte[2];
+		String name;
+		byte [] nameBytes;
 		int i = 0;
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = (byte) chainId;
 		sysex[i++] = Constants.MD_SYSEX_CUSTOM_NAME;
 		sysex[i++] = (byte)nameId;
-
+		
+		name = config.name + "        ";
+		name = name.substring(0, 8);
+		nameBytes = name.getBytes();
 		for (int p = 0; p < 8;p++) {
-			sysex_byte = byte2sysex((byte)config.name.getBytes()[p]);
+			sysex_byte = byte2sysex(nameBytes[p]);
 			sysex[i++] = sysex_byte[0];
 			sysex[i++] = sysex_byte[1];
 		}
@@ -560,7 +565,7 @@ public class Utils {
 				bytes_string[p] = (char)sysex2byte(sysex_byte);
 			}
 		}
-		config.name = String.copyValueOf(bytes_string);
+		config.name = String.copyValueOf(bytes_string).trim();
 	}
 
 	public static int validateInt(int value, int min, int max, int fallBack){

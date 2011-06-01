@@ -847,6 +847,7 @@ public class Main_window {
 		panel.add(tglbtnLiveUpdates, "14, 1");
 		
 		progressBar = new JProgressBar();
+		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panel.add(progressBar, "16, 1");
 		progressBar.setVisible(false);
 		
@@ -908,8 +909,11 @@ public class Main_window {
 		controlsPadsExtra.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
-					if (arg0.getPropertyName().equals("valueChanged")) {
+					if (arg0.getPropertyName().equals("valueCurveChanged")) {
 						sendCurve(controlsPadsExtra.getCurvePointer());
+					}
+					if (arg0.getPropertyName().equals("valueCustomNameChanged")) {
+						sendCustomName(controlsPadsExtra.getCustomNamePointer());
 					}
 				}
 			}
@@ -1171,13 +1175,13 @@ public class Main_window {
 	}
 
 	private void getAllCustomNames() {
-		for (int i = 0; i<Constants.CUSTOM_NAMES_MAX; i++) {
+		for (int i = 0; i < controlsPadsExtra.getCustomNamesCount(); i++) {
 			getCustomName(i);
 		}
 	}
 		
 	private void sendAllCustomNames() {
-		for (int i = 0; i<Constants.CUSTOM_NAMES_MAX; i++) {
+		for (int i = 0; i < controlsPadsExtra.getCustomNamesCount(); i++) {
 			sendCustomName(i);
 		}
 	}

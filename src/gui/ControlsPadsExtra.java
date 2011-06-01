@@ -306,6 +306,25 @@ public class ControlsPadsExtra extends JPanel {
 		panelNamesGetSend.add(lblCustomNames, "1, 1, right, default");
 		
 		comboBoxCustomNamesCount = new JComboBox();
+		comboBoxCustomNamesCount.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+					int count;
+					switch (comboBoxCustomNamesCount.getSelectedIndex()) {
+						case 0:
+							count = 2;
+							break;
+						case 1:
+							count = 16;
+							break;
+						default:
+							count = 32;
+							break;
+					}
+					updateCustomNameControls(count);
+				}
+			}
+		});
 		comboBoxCustomNamesCount.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		comboBoxCustomNamesCount.setModel(new DefaultComboBoxModel(new String[] {"2", "16", "32"}));
 		panelNamesGetSend.add(comboBoxCustomNamesCount, "2, 1, fill, default");
@@ -358,12 +377,15 @@ public class ControlsPadsExtra extends JPanel {
 		textFieldEditName.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String text = textFieldEditName.getText();
+				text = text.trim();
 				text += "        ";
 				text = text.substring(0, 8);
+				text = text.trim();
 				int ind = comboBoxSelectName.getSelectedIndex();
 				configCustomNames[ind].name = text;
 				updateCustomNameControls(customNamesCount);
 				comboBoxSelectName.setSelectedIndex(ind);
+				valueCustomNameChanged();
 			}
 		});
 		textFieldEditName.setColumns(10);
@@ -410,7 +432,7 @@ public class ControlsPadsExtra extends JPanel {
 				configCurves[curvePointer].yValues[id] = ((Integer)((CSpinner)arg0.getSource()).getValue());
 				//paintPanel.yValues = yValues;
 				paintPanel.repaint();
-				valueChanged();
+				valueCurveChanged();
 			}
 		};
 		
@@ -425,9 +447,15 @@ public class ControlsPadsExtra extends JPanel {
 		changeEventsAllowed = true;
 	}    
 
-	private void valueChanged() {
+	private void valueCurveChanged() {
 		if (changeEventsAllowed) {
-			firePropertyChange("valueChanged", false, true);
+			firePropertyChange("valueCurveChanged", false, true);
+		}
+	}
+
+	private void valueCustomNameChanged() {
+		if (changeEventsAllowed) {
+			firePropertyChange("valueCustomNameChanged", false, true);
 		}
 	}
 
@@ -454,6 +482,7 @@ public class ControlsPadsExtra extends JPanel {
 			comboBoxSelectName.addItem(configCustomNames[i].name);
 		}		
 		comboBoxSelectName.setSelectedIndex(pointer);
+		customNamesCount = count;
 	}
 	
 	public ConfigCurve getCurveConfig(int curve_id) {
@@ -506,6 +535,10 @@ public class ControlsPadsExtra extends JPanel {
 		}		
 		updateCustomNameControls(config.customNamesCount);
 		changeEventsAllowed = true;
+	}
+	
+	public int getCustomNamesCount() {
+		return customNamesCount;
 	}
 	
 	public int getCurvePointer() {
