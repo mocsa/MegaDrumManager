@@ -345,6 +345,7 @@ public class Utils {
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
 			config.softChicks = ((flags&1) != 0);
+			config.ccRdcLvl = (short)((flags&0x06)>>1);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.semiOpenLevel = sysex2byte(sysex_byte);
@@ -444,6 +445,7 @@ public class Utils {
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		flags = (byte) ((config.softChicks)?1:0);
+		flags = (byte) (flags|(config.ccRdcLvl<<1));
 		sysex_byte = byte2sysex((byte)flags);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];

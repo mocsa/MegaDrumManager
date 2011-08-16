@@ -11,6 +11,7 @@ public class ConfigPedal {
 	public short curve;
 	public short chickDelay;
 	public short cc;
+	public short ccRdcLvl;
 	public int lowLevel;
 	public int highLevel;
 	public short openLevel;
@@ -47,6 +48,7 @@ public class ConfigPedal {
 		prop.setProperty(prefix+"curve", curve);
 		prop.setProperty(prefix+"chickDelay", chickDelay);
 		prop.setProperty(prefix+"cc", cc);
+		prop.setProperty(prefix+"ccRdcLvl", ccRdcLvl);
 		prop.setProperty(prefix+"lowLevel", lowLevel);		
 		prop.setProperty(prefix+"highLevel", highLevel);
 		prop.setProperty(prefix+"openLevel", openLevel);
@@ -82,6 +84,7 @@ public class ConfigPedal {
 		curve = Utils.validateShort(prop.getShort(prefix+"curve", curve),0,15,curve);
 		chickDelay = Utils.validateShort(prop.getShort(prefix+"chickDelay", chickDelay),0,127,chickDelay);
 		cc = Utils.validateShort(prop.getShort(prefix+"cc", cc),0,127,cc);
+		ccRdcLvl = Utils.validateShort(prop.getShort(prefix+"ccRdcLvl", ccRdcLvl),0,127,ccRdcLvl);
 		lowLevel = Utils.validateInt(prop.getInt(prefix+"lowLevel", lowLevel),0,1023,lowLevel);		
 		highLevel = Utils.validateInt(prop.getInt(prefix+"highLevel", highLevel),0,1023,highLevel);
 		openLevel = Utils.validateShort(prop.getShort(prefix+"openLevel", openLevel),0,127,openLevel);

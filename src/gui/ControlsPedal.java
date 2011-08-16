@@ -43,6 +43,7 @@ public class ControlsPedal extends JPanel {
 	private JCheckBox checkBox_autoLevels;
 	private Spin127Control spin127Control_chickDelay;
 	private Spin127Control spin127Control_cc;
+	private Spin127Control spin127Control_ccRdcLvl;
 	private Spin1023Control spin1023Control_lowLevel;
 	private Spin1023Control spin1023Control_highLevel;
 	private Spin127Control spin127Control_openLevel;
@@ -135,6 +136,7 @@ public class ControlsPedal extends JPanel {
 				RowSpec.decode("12dlu"),
 				RowSpec.decode("12dlu"),
 				RowSpec.decode("12dlu"),
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
@@ -275,6 +277,20 @@ public class ControlsPedal extends JPanel {
 			}
 		});
 		panel_misc.add(spin127Control_cc, "3, 9, fill, fill");
+		
+		JLabel lblCcRdcLvl = new JLabel("CC Reduction Lvl");
+		lblCcRdcLvl.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_misc.add(lblCcRdcLvl, "1, 10");
+		
+		spin127Control_ccRdcLvl = new Spin127Control();
+		spin127Control_ccRdcLvl.getSpinner().addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				configPedal.ccRdcLvl = ((Integer)spin127Control_ccRdcLvl.getSpinner().getValue()).shortValue();
+				valueChanged();
+			}
+		});
+		spin127Control_ccRdcLvl.getSpinner().setModel(new SpinnerNumberModel(0, 0, 3, 1));
+		panel_misc.add(spin127Control_ccRdcLvl, "3, 10, fill, fill");
 		
 		JPanel panel_levels = new JPanel();
 		tabbedPane.addTab("Levels", null, panel_levels, null);
@@ -619,6 +635,7 @@ public class ControlsPedal extends JPanel {
 		checkBox_autoLevels.setSelected(configPedal.autoLevels);
 		spin127Control_chickDelay.getSpinner().setValue((int)configPedal.chickDelay);
 		spin127Control_cc.getSpinner().setValue((int)configPedal.cc);
+		spin127Control_ccRdcLvl.getSpinner().setValue((int)configPedal.ccRdcLvl);
 		spin1023Control_lowLevel.getSpinner().setValue(configPedal.lowLevel);
 		spin1023Control_highLevel.getSpinner().setValue(configPedal.highLevel);
 		spin127Control_openLevel.getSpinner().setValue((int)configPedal.openLevel);
