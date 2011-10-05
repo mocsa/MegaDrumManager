@@ -7,6 +7,7 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 public class ConfigFull implements java.io.Serializable {
 
+	public ConfigGlobalMisc configGlobalMisc;
 	public ConfigMisc configMisc;
 	public ConfigPedal configPedal;
 	public ConfigPad [] configPads;
@@ -14,6 +15,7 @@ public class ConfigFull implements java.io.Serializable {
 	public ConfigCurve [] configCurves;
 	public ConfigCustomName [] configCustomNames;
 	public int customNamesCount;
+	private static final String configGlobalMiscPrefix = "global_misc.";
 	private static final String configMiscPrefix = "misc.";
 	private static final String configPedalPrefix = "pedal.";
 	private static final String configPadPrefix = "input";
@@ -23,6 +25,7 @@ public class ConfigFull implements java.io.Serializable {
 	
 	public ConfigFull() {
 		
+		configGlobalMisc = new ConfigGlobalMisc();
 		configMisc = new ConfigMisc();
 		configPedal = new ConfigPedal();
 		configPads = new ConfigPad[Constants.PADS_COUNT];
@@ -46,6 +49,7 @@ public class ConfigFull implements java.io.Serializable {
 	}
 	
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout) {
+		configGlobalMisc.copyToPropertiesConfiguration(prop, layout,configGlobalMiscPrefix);
 		configMisc.copyToPropertiesConfiguration(prop, layout,configMiscPrefix);
 		configPedal.copyToPropertiesConfiguration(prop, layout,configPedalPrefix);
 		for (Integer i = 0; i < Constants.PADS_COUNT;i++) {
@@ -65,6 +69,7 @@ public class ConfigFull implements java.io.Serializable {
 	}
 	
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop) throws ConversionException {
+		configGlobalMisc.copyFromPropertiesConfiguration(prop, configGlobalMiscPrefix);
 		configMisc.copyFromPropertiesConfiguration(prop, configMiscPrefix);
 		configPedal.copyFromPropertiesConfiguration(prop, configPedalPrefix);
 		for (Integer i = 0; i < Constants.PADS_COUNT;i++) {

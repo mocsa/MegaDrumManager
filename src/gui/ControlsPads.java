@@ -242,7 +242,7 @@ public class ControlsPads extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("70dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
@@ -250,7 +250,8 @@ public class ControlsPads extends JPanel {
 				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("40dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("fill:default"),}));
 		

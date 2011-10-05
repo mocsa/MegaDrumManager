@@ -808,6 +808,10 @@ public class Main_window {
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("30dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("18dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),},
@@ -857,12 +861,21 @@ public class Main_window {
 				configOptions.interactive = tglbtnLiveUpdates.isSelected(); 
 			}
 		});
+		
+		JLabel lblLCDcontrast = new JLabel("LCD contrast:");
+		lblLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panel.add(lblLCDcontrast, "14, 1");
+		
+		JSpinner spinnerLCDcontrast = new JSpinner();
+		spinnerLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		spinnerLCDcontrast.setModel(new SpinnerNumberModel(50, 1, 100, 1));
+		panel.add(spinnerLCDcontrast, "16, 1");
 		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
-		panel.add(tglbtnLiveUpdates, "14, 1");
+		panel.add(tglbtnLiveUpdates, "18, 1");
 		
 		progressBar = new JProgressBar();
 		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel.add(progressBar, "16, 1");
+		panel.add(progressBar, "20, 1");
 		progressBar.setVisible(false);
 		
 		progressBar.setStringPainted(true);

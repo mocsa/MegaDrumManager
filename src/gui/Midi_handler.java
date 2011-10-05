@@ -142,6 +142,17 @@ public class Midi_handler {
 		}
 	}
 
+	public void requestConfigGlobalMisc() {
+		byte [] sx = new byte[5];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)chainId;
+		sx[3] = Constants.MD_SYSEX_GLOBAL_MISC;
+		sx[4] = Constants.SYSEX_END;
+		sendSysex(sx);
+	}
+
 	public void requestConfigMisc() {
 		byte [] sx = new byte[5];
 		

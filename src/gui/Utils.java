@@ -179,7 +179,6 @@ public class Utils {
 
 	public static void copyConfig3rdToSysex(Config3rd config, byte [] sysex, int chainId, int padId) {
 		byte [] sysex_byte = new byte[2];
-		byte [] sysex_short = new byte[4];
 		int i = 0;
 
 		sysex[i++] = Constants.SYSEX_START;
@@ -208,7 +207,6 @@ public class Utils {
 	
 	public static void copySysexToConfig3rd(byte [] sysex, Config3rd config) {
 		byte [] sysex_byte = new byte[2];
-		byte [] sysex_short = new byte[4];
 		int i = 5;
 		if (sysex.length >= Constants.MD_SYSEX_3RD_SIZE) {
 			sysex_byte[0] = sysex[i++];
@@ -226,6 +224,38 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.dampenedNote = sysex2byte(sysex_byte);
+		}
+		
+	}
+
+	public static void copyConfigGlobalMiscToSysex(ConfigGlobalMisc config, byte [] sysex, int chainId) {
+		byte [] sysex_byte = new byte[2];
+		int i = 0;
+
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte)chainId;
+		sysex[i++] = Constants.MD_SYSEX_GLOBAL_MISC;
+		
+		sysex_byte = byte2sysex((byte)config.lcd_contrast);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.max_inputs);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex[i++] = Constants.SYSEX_END;		
+	}
+	
+	public static void copySysexToConfigGlobalMisc(byte [] sysex, ConfigGlobalMisc config) {
+		byte [] sysex_byte = new byte[2];
+		int i = 4;
+		if (sysex.length >= Constants.MD_SYSEX_GLOBAL_MISC_SIZE) {
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			config.lcd_contrast = sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			config.max_inputs = sysex2byte(sysex_byte);
 		}
 		
 	}
