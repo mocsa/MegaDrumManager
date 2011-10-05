@@ -237,7 +237,7 @@ public class Utils {
 		sysex[i++] = (byte)chainId;
 		sysex[i++] = Constants.MD_SYSEX_GLOBAL_MISC;
 		
-		sysex_byte = byte2sysex((byte)config.lcd_contrast);
+		sysex_byte = byte2sysex((byte)(100 - config.lcd_contrast));
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex_byte = byte2sysex((byte)config.inputs_count);
@@ -252,7 +252,7 @@ public class Utils {
 		if (sysex.length >= Constants.MD_SYSEX_GLOBAL_MISC_SIZE) {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			config.lcd_contrast = sysex2byte(sysex_byte);
+			config.lcd_contrast = (short) (100 - sysex2byte(sysex_byte));
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.inputs_count = sysex2byte(sysex_byte);

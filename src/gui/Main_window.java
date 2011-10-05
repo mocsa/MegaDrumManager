@@ -874,7 +874,7 @@ public class Main_window {
 		spinnerLCDcontrast = new JSpinner();
 		spinnerLCDcontrast.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast = (short) (100 - ((Short)spinnerLCDcontrast.getValue()).shortValue());
+				fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast = ((Short)spinnerLCDcontrast.getValue()).shortValue();
 				if (configOptions.interactive) {
 					sendGlobalMisc();
 				}
@@ -1460,7 +1460,7 @@ public class Main_window {
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configGlobalMisc);
 						comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-						spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
+						spinnerLCDcontrast.setValue(fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast);
 						break;
 					default:
 						break;
