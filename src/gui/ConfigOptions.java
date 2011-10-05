@@ -21,7 +21,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public String MidiOutName = "";
 	public String MidiThruName = "";
 	public int chainId = 0;
-	public int inputsCount = 55;
+	//public int inputsCount = 56;
 	public int sysexDelay = 30;
 	public String LookAndFeelName = "";
 	public Point mainWindowPosition = new Point(10,10);
@@ -56,7 +56,7 @@ public class ConfigOptions implements java.io.Serializable {
 		prop.setProperty("MidiOutName", MidiOutName);
 		prop.setProperty("MidiThruName", MidiThruName);
 		prop.setProperty("chainId", chainId);
-		prop.setProperty("inputsCount", inputsCount);
+		//prop.setProperty("inputsCount", inputsCount);
 		prop.setProperty("sysexDelay", sysexDelay);
 		prop.setProperty("LookAndFeelName", LookAndFeelName);
 		prop.setProperty("mainWindowPositionX", mainWindowPosition.x);
@@ -86,7 +86,7 @@ public class ConfigOptions implements java.io.Serializable {
 		MidiOutName = prop.getString("MidiOutName", MidiOutName);
 		MidiThruName = prop.getString("MidiThruName", MidiThruName);
 		chainId = Utils.validateInt(prop.getInt("chainId", chainId),0,3,chainId);
-		inputsCount = Utils.validateInt(prop.getInt("inputsCount", inputsCount),21,56,inputsCount);
+		//inputsCount = Utils.validateInt(prop.getInt("inputsCount", inputsCount),18,56,inputsCount);
 		sysexDelay = Utils.validateInt(prop.getInt("sysexDelay", sysexDelay),10,100,sysexDelay);
 		LookAndFeelName = prop.getString("LookAndFeelName", LookAndFeelName);
 		mainWindowPosition = new Point(

@@ -113,6 +113,7 @@ public class Main_window {
 	private JMenu mnView;
 	private JProgressBar progressBar;
 	private JComboBox comboBox_inputsCount;
+	private JSpinner spinnerLCDcontrast;
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
 	private JLabel lblVersion;
@@ -811,6 +812,10 @@ public class Main_window {
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("18dlu"),
+				ColumnSpec.decode("2dlu"),
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("1dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -851,7 +856,7 @@ public class Main_window {
 		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		comboBox_inputsCount.removeAllItems();
 		for (int i=0;i<((Constants.MAX_INPUTS-Constants.MIN_INPUTS)/2 + 1);i++) {
-			comboBox_inputsCount.addItem((i*2) + Constants.MIN_INPUTS + 1);
+			comboBox_inputsCount.addItem((i*2) + Constants.MIN_INPUTS);
 		}		
 		tglbtnLiveUpdates = new JToggleButton("Live updates");
 		tglbtnLiveUpdates.setToolTipText("<html>Enable live settingsupdates.<br>\r\n<br>\r\nWhen enabled, all changes to settings in MegaDrumManager<br>\r\nare sent to MegaDrum upon a change.\r\n</html>");
@@ -866,24 +871,57 @@ public class Main_window {
 		lblLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblLCDcontrast, "14, 1");
 		
-		JSpinner spinnerLCDcontrast = new JSpinner();
+		spinnerLCDcontrast = new JSpinner();
+		spinnerLCDcontrast.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast = (short) (100 - ((Short)spinnerLCDcontrast.getValue()).shortValue());
+				if (configOptions.interactive) {
+					sendGlobalMisc();
+				}
+			}
+		});
 		spinnerLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		spinnerLCDcontrast.setModel(new SpinnerNumberModel(50, 1, 100, 1));
+		spinnerLCDcontrast.setModel(new SpinnerNumberModel(new Short((short) 50), new Short((short) 1), new Short((short) 100), new Short((short) 1)));
 		panel.add(spinnerLCDcontrast, "16, 1");
+		
+		JButton btnGet = new JButton("Get");
+		btnGet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getGlobalMisc();
+			}
+		});
+		btnGet.setToolTipText("Get global misc settings (number of inputs, LCD contrast)");
+		btnGet.setMargin(new Insets(1, 1, 1, 1));
+		btnGet.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel.add(btnGet, "18, 1");
+		
+		JButton btnSend = new JButton("Send");
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendGlobalMisc();
+			}
+		});
+		btnSend.setToolTipText("Send global misc settings (number of inputs, LCD contrast)");
+		btnSend.setMargin(new Insets(1, 1, 1, 1));
+		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel.add(btnSend, "20, 1");
 		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
-		panel.add(tglbtnLiveUpdates, "18, 1");
+		panel.add(tglbtnLiveUpdates, "22, 1");
 		
 		progressBar = new JProgressBar();
 		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel.add(progressBar, "20, 1");
+		panel.add(progressBar, "24, 1");
 		progressBar.setVisible(false);
 		
 		progressBar.setStringPainted(true);
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-		        	configOptions.inputsCount = (comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS;
+		        	fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count = (short)((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
 		        	updateInputsCountControls();
+					if (configOptions.interactive) {
+						sendGlobalMisc();
+					}
 		        }
 			}
 		});
@@ -1065,6 +1103,19 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 	}
 	
+	private void getGlobalMisc() {
+		//midi_handler.clear_midi_input();
+		midi_handler.requestConfigGlobalMisc();					
+		delayMs(configOptions.sysexDelay);
+	}
+
+	private void sendGlobalMisc() {
+		byte [] sysexGlobalMisc = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
+		Utils.copyConfigGlobalMiscToSysex(fullConfigs[configOptions.lastConfig].configGlobalMisc, sysexGlobalMisc, configOptions.chainId);
+		midi_handler.sendSysex(sysexGlobalMisc);
+		delayMs(configOptions.sysexDelay);
+	}
+
 	private void getMisc() {
 		//midi_handler.clear_midi_input();
 		midi_handler.requestConfigMisc();					
@@ -1132,8 +1183,8 @@ public class Main_window {
                 		int i;
                         resizeWindow = false;
                 		progressBar.setMinimum(0);
-                		progressBar.setMaximum(configOptions.inputsCount - 2);
-                		for (i = 0; i<(configOptions.inputsCount - 1); i++) {
+                		progressBar.setMaximum(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - 3);
+                		for (i = 0; i<(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - 2); i++) {
                 			progressBar.setValue(i);
                 			Rectangle progressRect = progressBar.getBounds();
                 			progressRect.x = 0;
@@ -1168,8 +1219,8 @@ public class Main_window {
                 		int i;
                         resizeWindow = false;
                 		progressBar.setMinimum(0);
-                		progressBar.setMaximum(configOptions.inputsCount - 2);
-                		for (i = 0; i<(configOptions.inputsCount - 1); i++) {
+                		progressBar.setMaximum(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - 3);
+                		for (i = 0; i<(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - 2); i++) {
                 			progressBar.setValue(i);
                 			Rectangle progressRect = progressBar.getBounds();
                 			progressRect.x = 0;
@@ -1242,6 +1293,7 @@ public class Main_window {
 	}
 
 	private void getAll() {
+		getGlobalMisc();
 		getMisc();
 		getPedal();
 		getAllPads();
@@ -1250,6 +1302,7 @@ public class Main_window {
 	}
 	
 	private void sendAll() {
+		sendGlobalMisc();
 		sendMisc();
 		sendPedal();
 		sendAllPads();
@@ -1287,7 +1340,7 @@ public class Main_window {
 			tglbtnMidi.setSelected(midi_handler.isMidiOpen());
 		}
 		midi_handler.chainId = configOptions.chainId;
-		comboBox_inputsCount.setSelectedIndex((configOptions.inputsCount - Constants.MIN_INPUTS)/2);
+		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		updateInputsCountControls();
 		if (!configOptions.lastFullPathConfig.equals("")) {
 			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
@@ -1315,8 +1368,8 @@ public class Main_window {
 	}
 	
 	private void updateInputsCountControls() {
-		controlsPedal.updateInputCountsControls(configOptions.inputsCount);
-		controlsPads.updateInputCountsControls(configOptions.inputsCount);
+		controlsPedal.updateInputCountsControls(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count);
+		controlsPads.updateInputCountsControls(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count);
 	}
 	
 	private void resizeMainWindow() {
@@ -1398,6 +1451,11 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_CUSTOM_NAME:
 						controlsPadsExtra.setCustomNameConfig(midi_handler.bufferIn, buffer[4]);
+						break;
+					case Constants.MD_SYSEX_GLOBAL_MISC:
+						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configGlobalMisc);
+						comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+						spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
 						break;
 					default:
 						break;

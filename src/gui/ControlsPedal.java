@@ -699,7 +699,7 @@ public class ControlsPedal extends JPanel {
 	
 	public void updateInputCountsControls(int count) {
 		comboBox_input.removeAllItems();
-        for(int i=2; i<count; i++){
+        for(int i=2; i<(count - 1); i++){
         	comboBox_input.addItem(((Integer)i).toString());
         	i++;
         }

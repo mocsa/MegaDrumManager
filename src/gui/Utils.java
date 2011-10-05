@@ -240,7 +240,7 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)config.lcd_contrast);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.max_inputs);
+		sysex_byte = byte2sysex((byte)config.inputs_count);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex[i++] = Constants.SYSEX_END;		
@@ -255,7 +255,7 @@ public class Utils {
 			config.lcd_contrast = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			config.max_inputs = sysex2byte(sysex_byte);
+			config.inputs_count = sysex2byte(sysex_byte);
 		}
 		
 	}
