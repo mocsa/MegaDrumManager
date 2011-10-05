@@ -1311,6 +1311,8 @@ public class Main_window {
 	}
 
 	private void loadAllFromConfigFull() {
+		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+		spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
 		controlsMisc.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);
 		controlsPedal.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);
 		controlsPads.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);		
@@ -1340,12 +1342,13 @@ public class Main_window {
 			tglbtnMidi.setSelected(midi_handler.isMidiOpen());
 		}
 		midi_handler.chainId = configOptions.chainId;
-		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-		updateInputsCountControls();
+		//comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+		//updateInputsCountControls();
 		if (!configOptions.lastFullPathConfig.equals("")) {
 			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
 			loadAllFromConfigFull();
 		}
+		updateInputsCountControls();
 		frmMegadrummanager.setLocation(configOptions.mainWindowPosition);
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			framesDetached[i].setLocation(configOptions.framesPositions[i]);
@@ -1368,6 +1371,8 @@ public class Main_window {
 	}
 	
 	private void updateInputsCountControls() {
+		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+		spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
 		controlsPedal.updateInputCountsControls(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count);
 		controlsPads.updateInputCountsControls(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count);
 	}

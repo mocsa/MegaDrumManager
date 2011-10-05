@@ -27,7 +27,7 @@ public class ConfigMisc {
 	}
 	
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix) {
-		layout.setComment(prefix+"note_off", "Misc settings");
+		layout.setComment(prefix+"note_off", "\n#Misc settings");
 		prop.setProperty(prefix+"note_off", note_off);
 		prop.setProperty(prefix+"latency", latency);
 		prop.setProperty(prefix+"pressroll", pressroll);
