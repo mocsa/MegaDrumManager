@@ -436,7 +436,8 @@ public class ControlsPadCommon extends JPanel {
 					}
 				});
 			}
-			if (control.getClass().equals(JComboBox.class)) {
+			//if (control.getClass().equals (JComboBox.class)) {
+			if (control instanceof JComboBox) {
 				((JComboBox) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
 						if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -454,7 +455,7 @@ public class ControlsPadCommon extends JPanel {
 				});
 				
 			}
-			if (control.getClass().equals(NoteSpinControl.class)) {
+			if (control.getClass().equals (NoteSpinControl.class)) {
 				((NoteSpinControl) control).getSpinner().addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
 						valueChanged();
