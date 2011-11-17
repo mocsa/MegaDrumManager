@@ -598,6 +598,7 @@ public class ControlsPadCommon extends JPanel {
 		for (int i = 0; i < customNamesCount; i++) {
 			comboBox_name.addItem(customNamesList[i]);
 		}
+		comboBox_name.setSelectedIndex(configPad.name);
 	}
 	
 	public boolean getHeadRim() {
