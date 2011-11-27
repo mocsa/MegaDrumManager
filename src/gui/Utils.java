@@ -268,9 +268,11 @@ public class Utils {
 		//System.out.printf("sysex_byte size: %d\n", sysex_byte.length);
 		//System.out.printf("sx size: %d\n", sx.length);
 		if (sysex.length >= Constants.MD_SYSEX_MISC_SIZE) {
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.note_off = sysex2byte(sysex_byte);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = 0;
+			sysex_short[3] = 0;
+			config.note_off = sysex2short(sysex_short);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.latency = sysex2byte(sysex_byte);
@@ -279,9 +281,11 @@ public class Utils {
 			sysex_short[2] = sysex[i++];
 			sysex_short[3] = sysex[i++];
 			flags = sysex2short(sysex_short);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.pressroll = sysex2byte(sysex_byte);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = 0;
+			sysex_short[3] = 0;
+			config.pressroll = sysex2short(sysex_short);
 			
 			config.all_gains_low = ((flags&1) != 0);
 			config.big_vu_meter = ((flags&(1<<2)) != 0);
