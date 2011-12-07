@@ -57,7 +57,7 @@ public class ControlsMisc extends JPanel {
 	 * Create the panel.
 	 */
 	public ControlsMisc() {
-		configMisc = new ConfigMisc();
+		//configMisc = new ConfigMisc();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
@@ -294,7 +294,7 @@ public class ControlsMisc extends JPanel {
 		}
 	}
 	
-	private void updateControls() {
+	public void updateControls() {
 		spinner_noteoff.setValue((short)(configMisc.note_off*10));
 		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (configMisc.pressroll*10)),
 				new Short((short) 0),
@@ -310,24 +310,14 @@ public class ControlsMisc extends JPanel {
 		checkBox_MidiThru.setSelected(configMisc.midi_thru);		
 		checkBox_customNamesEn.setSelected(configMisc.custom_names_en);		
 	}
-	
-	public void setConfig(byte [] sysex) {
-		changeEventsAllowed = false;
-		PropertiesConfiguration prop = new PropertiesConfiguration();
-		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
-		ConfigMisc config = new ConfigMisc();
-		configMisc.copyToPropertiesConfiguration(prop, layout, "");
-		config.copyFromPropertiesConfiguration(prop, "");
-		Utils.copySysexToConfigMisc(sysex, config);
-		config.copyToPropertiesConfiguration(prop, layout, "");
-		configMisc.copyFromPropertiesConfiguration(prop, "");
-		updateControls();
-		changeEventsAllowed = true;
-	}
-	
-	public ConfigMisc getConfig() {
-		return configMisc;
-	}
+
+public void setConfig(ConfigMisc config)
+{
+	changeEventsAllowed = false;
+	configMisc = config;
+	updateControls();
+	changeEventsAllowed = true;
+}
 
 	public JButton getBtnGet() {
 		return btnGet;
@@ -336,17 +326,6 @@ public class ControlsMisc extends JPanel {
 		return btnSend;
 	}
 
-//	public void copyToConfigFull (ConfigFull config, int chain_id) {
-//		//Utils.copyConfigMiscToSysex(configMisc, config.sysex_misc, chain_id);
-//	}
-	
-	public void loadFromConfigFull (ConfigFull config) {
-		changeEventsAllowed = false;
-		configMisc = config.configMisc;
-		//Utils.copySysexToConfigMisc(config.sysex_misc, configMisc);
-		updateControls();
-		changeEventsAllowed = true;
-	}
 	public JButton getBtnLoad() {
 		return btnLoad;
 	}

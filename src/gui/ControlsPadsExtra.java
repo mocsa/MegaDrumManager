@@ -84,18 +84,19 @@ public class ControlsPadsExtra extends JPanel {
 	 * Create the panel.
 	 */
 	public ControlsPadsExtra() {
-		configCurves = new ConfigCurve[Constants.CURVES_COUNT];
-        for(int i=0; i<Constants.CURVES_COUNT; i++){
-        	configCurves[i] = new ConfigCurve();
-        }
+//		configCurves = new ConfigCurve[Constants.CURVES_COUNT];
+//        for(int i=0; i<Constants.CURVES_COUNT; i++){
+//        	configCurves[i] = new ConfigCurve();
+//        }
         curvePointer = 0;
         prevCurvePointer = -1;
         
-        customNamesCount = Constants.CUSTOM_NAMES_MAX;
-		configCustomNames = new ConfigCustomName[Constants.CUSTOM_NAMES_MAX];
-        for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
-        	configCustomNames[i] = new ConfigCustomName();
-        }
+//        customNamesCount = Constants.CUSTOM_NAMES_MAX;
+        customNamesCount = 2;
+//		configCustomNames = new ConfigCustomName[Constants.CUSTOM_NAMES_MAX];
+//        for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
+//        	configCustomNames[i] = new ConfigCustomName();
+//        }
         customNamePointer = 0;
         prevCustomNamePointer = -1;
 
@@ -257,8 +258,10 @@ public class ControlsPadsExtra extends JPanel {
 		
 		paintPanel = new CurvesPaint();
 		panelCurves.add(paintPanel, "1, 3, left, default");
-		paintPanel.yValues = configCurves[curvePointer].yValues;
-		
+		if (configCurves != null)
+		{
+			paintPanel.yValues = configCurves[curvePointer].yValues;
+		}
 		JPanel panelControls = new JPanel();
 		panelCurves.add(panelControls, "1, 4, left, default");
 		panelControls.setLayout(new FormLayout(new ColumnSpec[] {
@@ -324,6 +327,11 @@ public class ControlsPadsExtra extends JPanel {
 						default:
 							count = 32;
 							break;
+					}
+					if (customNamePointer > count)
+					{
+						customNamePointer = 0;
+				        prevCustomNamePointer = -1;
 					}
 					updateCustomNameControls(count);
 				}
@@ -455,7 +463,10 @@ public class ControlsPadsExtra extends JPanel {
 		spinners = new CSpinner[9];
 		for (int i = 0; i < 9; i++ ) {
 			spinners[i] = new CSpinner(i);
-			spinners[i].setModel(new SpinnerNumberModel(configCurves[curvePointer].yValues[i], 2, 255, 1));
+			if (configCurves != null)
+			{
+				spinners[i].setModel(new SpinnerNumberModel(configCurves[curvePointer].yValues[i], 2, 255, 1));
+			}
 			spinners[i].addChangeListener(spinnerChangeListener);
 			panelControls.add(spinners[i], ((Integer)(i+1)).toString() + ", 1");
 		}
@@ -475,7 +486,7 @@ public class ControlsPadsExtra extends JPanel {
 		}
 	}
 
-	private void updateCurveControls() {
+	public void updateCurveControls() {
     	paintPanel.yValues = configCurves[curvePointer].yValues;
     	comboBox_curveNumber.setSelectedIndex(curvePointer);
     	updateYvalues();
@@ -491,70 +502,87 @@ public class ControlsPadsExtra extends JPanel {
 		}
 	}
 	
-	private void updateCustomNameControls(int count) {
-		int pointer = customNamePointer;
-		comboBoxSelectName.removeAllItems();
-		for (int i = 0; i < count; i++) {
-			comboBoxSelectName.addItem(configCustomNames[i].name);
-		}		
-		comboBoxSelectName.setSelectedIndex(pointer);
-		customNamesCount = count;
-		if (changeEventsAllowed) {
-			firePropertyChange("CustomNamesChanged", false, true);
+	public void updateCustomNameControls(int count) {
+		if (configCustomNames != null)
+		{
+			int pointer = customNamePointer;
+			comboBoxSelectName.removeAllItems();
+			for (int i = 0; i < count; i++) {
+				comboBoxSelectName.addItem(configCustomNames[i].name);
+			}		
+			comboBoxSelectName.setSelectedIndex(pointer);
+			customNamesCount = count;
+			if (changeEventsAllowed) {
+				firePropertyChange("CustomNamesChanged", false, true);
+			}
 		}
 	}
 	
-	public ConfigCurve getCurveConfig(int curve_id) {
-		return configCurves[curve_id];
-	}
+//	public ConfigCurve getCurveConfig(int curve_id) {
+//		return configCurves[curve_id];
+//	}
 	
-	public ConfigCustomName getCustomNameConfig(int name_id) {
-		return configCustomNames[name_id];
-	}
+//	public ConfigCustomName getCustomNameConfig(int name_id) {
+//		return configCustomNames[name_id];
+//	}
 
-	public void setCurveConfig(byte [] buffer,int curveId) {
+//	public void setCurveConfig(byte [] buffer,int curveId) {
+//		changeEventsAllowed = false;
+//		PropertiesConfiguration prop = new PropertiesConfiguration();
+//		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
+//		ConfigCurve config = new ConfigCurve();
+//		configCurves[curveId].copyToPropertiesConfiguration(prop, layout, "", curveId);
+//		config.copyFromPropertiesConfiguration(prop, "",curveId);		
+//		Utils.copySysexToConfigCurve(buffer, config);
+//		config.copyToPropertiesConfiguration(prop, layout, "", curveId);
+//		configCurves[curveId].copyFromPropertiesConfiguration(prop, "", curveId);		
+//		updateYvalues();
+//		paintPanel.repaint();
+//		changeEventsAllowed = true;
+//	}
+	
+	public void setCurveConfigs(ConfigCurve configs[]) {
 		changeEventsAllowed = false;
-		PropertiesConfiguration prop = new PropertiesConfiguration();
-		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
-		ConfigCurve config = new ConfigCurve();
-		configCurves[curveId].copyToPropertiesConfiguration(prop, layout, "", curveId);
-		config.copyFromPropertiesConfiguration(prop, "",curveId);		
-		Utils.copySysexToConfigCurve(buffer, config);
-		config.copyToPropertiesConfiguration(prop, layout, "", curveId);
-		configCurves[curveId].copyFromPropertiesConfiguration(prop, "", curveId);		
+		configCurves = configs;
 		updateYvalues();
 		paintPanel.repaint();
 		changeEventsAllowed = true;
 	}
-	
-	public void setCustomNameConfig(byte [] buffer,int nameId) {
+
+//	public void setCustomNameConfig(byte [] buffer,int nameId) {
+//		changeEventsAllowed = false;
+//		PropertiesConfiguration prop = new PropertiesConfiguration();
+//		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
+//		ConfigCustomName config = new ConfigCustomName();
+//		configCustomNames[nameId].copyToPropertiesConfiguration(prop, layout, "", nameId);
+//		config.copyFromPropertiesConfiguration(prop, "",nameId);		
+//		Utils.copySysexToConfigCustomName(buffer, config);
+//		config.copyToPropertiesConfiguration(prop, layout, "", nameId);
+//		configCustomNames[nameId].copyFromPropertiesConfiguration(prop, "", nameId);		
+//		updateCustomNameControls(customNamesCount);
+//		changeEventsAllowed = true;
+//	}
+
+	public void setCustomNameConfigs(ConfigCustomName configs[]) {
 		changeEventsAllowed = false;
-		PropertiesConfiguration prop = new PropertiesConfiguration();
-		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
-		ConfigCustomName config = new ConfigCustomName();
-		configCustomNames[nameId].copyToPropertiesConfiguration(prop, layout, "", nameId);
-		config.copyFromPropertiesConfiguration(prop, "",nameId);		
-		Utils.copySysexToConfigCustomName(buffer, config);
-		config.copyToPropertiesConfiguration(prop, layout, "", nameId);
-		configCustomNames[nameId].copyFromPropertiesConfiguration(prop, "", nameId);		
+		configCustomNames = configs;
 		updateCustomNameControls(customNamesCount);
 		changeEventsAllowed = true;
 	}
 
-
-	public void loadFromConfigFull (ConfigFull config) {
-		changeEventsAllowed = false;
-		configCurves = config.configCurves;
-		updateCurveControls();
-		configCustomNames = config.configCustomNames;
-		for (int i = 0; i < comboBoxCustomNamesCount.getItemCount(); i++) {
-			if (comboBoxCustomNamesCount.getItemAt(i).toString().equals(((Integer)config.customNamesCount).toString())) {
-				comboBoxCustomNamesCount.setSelectedIndex(i);
-			}
-		}		
-		updateCustomNameControls(config.customNamesCount);
-		changeEventsAllowed = true;
-	}
+//	public void loadFromConfigFull (ConfigFull config) {
+//		changeEventsAllowed = false;
+//		configCurves = config.configCurves;
+//		updateCurveControls();
+//		configCustomNames = config.configCustomNames;
+//		for (int i = 0; i < comboBoxCustomNamesCount.getItemCount(); i++) {
+//			if (comboBoxCustomNamesCount.getItemAt(i).toString().equals(((Integer)config.customNamesCount).toString())) {
+//				comboBoxCustomNamesCount.setSelectedIndex(i);
+//			}
+//		}		
+//		updateCustomNameControls(config.customNamesCount);
+//		changeEventsAllowed = true;
+//	}
 	
 	public int getCustomNamesCount() {
 		return customNamesCount;

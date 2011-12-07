@@ -76,7 +76,7 @@ public class ControlsPedal extends JPanel {
 	 * Create the panel.
 	 */
 	public ControlsPedal() {
-		configPedal = new ConfigPedal();
+		//configPedal = new ConfigPedal();
 		setLayout(new GridLayout(1, 0, 0, 0));		
 		JPanel panel = new JPanel();
 		add(panel);
@@ -148,8 +148,11 @@ public class ControlsPedal extends JPanel {
 		comboBox_type.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configPedal.type = (comboBox_type.getSelectedIndex() != 0);
-					valueChanged();
+					if (configPedal != null)
+					{
+						configPedal.type = (comboBox_type.getSelectedIndex() != 0);
+						valueChanged();
+					}
 				}
 			}
 		});
@@ -167,8 +170,11 @@ public class ControlsPedal extends JPanel {
 		comboBox_curve.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configPedal.curve = (short)comboBox_curve.getSelectedIndex();
-					valueChanged();
+					if (configPedal != null)
+					{
+						configPedal.curve = (short)comboBox_curve.getSelectedIndex();
+						valueChanged();
+					}
 				}
 			}
 		});
@@ -187,8 +193,11 @@ public class ControlsPedal extends JPanel {
 		comboBox_input.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
-					valueChanged();
+					if (configPedal != null)
+					{
+						configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
+						valueChanged();
+					}
 				}
 			}
 		});
@@ -625,7 +634,7 @@ public class ControlsPedal extends JPanel {
 		}
 	}
 
-	private void updateControls() {
+	public void updateControls() {
 		comboBox_type.setSelectedIndex(configPedal.type?1:0);
 		comboBox_curve.setSelectedIndex(configPedal.curve);
 		comboBox_input.setSelectedIndex((configPedal.hhInput-2)/2);
@@ -660,41 +669,18 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_splash.getSpinner().setValue(configPedal.splashNote);
 	}
 	
-	public void setConfig(byte [] sysex) {
+	public void setConfig(ConfigPedal config) {
 		changeEventsAllowed = false;
-		PropertiesConfiguration prop = new PropertiesConfiguration();
-		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
-		ConfigPedal config = new ConfigPedal();
-		configPedal.copyToPropertiesConfiguration(prop, layout, "");
-		config.copyFromPropertiesConfiguration(prop, "");
-		Utils.copySysexToConfigPedal(sysex, config);
-		config.copyToPropertiesConfiguration(prop, layout, "");
-		configPedal.copyFromPropertiesConfiguration(prop, "");
+		configPedal = config;
 		updateControls();
 		changeEventsAllowed = true;
 	}
 	
-	public ConfigPedal getConfig() {
-		return configPedal;
-	}
-
 	public JButton getBtnGet() {
 		return btnGet;
 	}
 	public JButton getBtnSend() {
 		return btnSend;
-	}
-	
-//	public void copyToConfigFull (ConfigFull config, int chain_id) {
-//		Utils.copyConfigPedalToSysex(configPedal, config.sysex_pedal, chain_id);
-//	}
-	
-	public void loadFromConfigFull (ConfigFull config) {
-		changeEventsAllowed = false;
-		configPedal = config.configPedal;
-		//Utils.copySysexToConfigPedal(config.sysex_pedal, configPedal);
-		updateControls();
-		changeEventsAllowed = true;
 	}
 	
 	public void updateInputCountsControls(int count) {

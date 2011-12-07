@@ -120,6 +120,7 @@ public class Main_window {
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox comboBoxCfg;
 	private boolean LookAndFeelChanged = false;
+	private boolean sendSysexEnabled = true;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
 	
@@ -230,6 +231,7 @@ public class Main_window {
 			@Override
 			public void midiEventOccurred(MidiEvent evt) {
 				if (!upgradeDialog.isVisible()) {
+					sendSysexEnabled = false;
 					midi_handler.getMidi();
 					if (midi_handler.sysexReceived) {
 						midi_handler.sysexReceived = false;
@@ -238,6 +240,7 @@ public class Main_window {
 						decodeShortMidi(midi_handler.bufferIn);
 					}
 					midi_handler.bufferIn = null;
+					sendSysexEnabled = true;
 				}
 			}
 		});		
@@ -461,16 +464,17 @@ public class Main_window {
 		controlsMisc.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
-				Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysex, configOptions.chainId);
+				Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsMisc.getBtnLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
-				Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysex, configOptions.chainId);
+				Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
 				fileManager.loadSysex(sysex, configOptions);
-				controlsMisc.setConfig(sysex);
+				Utils.copySysexToConfigMisc(sysex, fullConfigs[configOptions.lastConfig].configMisc);
+				controlsMisc.updateControls();
 			}
 		});
 		controlsMisc.addPropertyChangeListener(new PropertyChangeListener() {
@@ -499,16 +503,17 @@ public class Main_window {
 		controlsPedal.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-				Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysex, configOptions.chainId);
+				Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsPedal.getBtnLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-				Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysex, configOptions.chainId);
+				Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
 				fileManager.loadSysex(sysex, configOptions);
-				controlsPedal.setConfig(sysex);
+				Utils.copySysexToConfigPedal(sysex, fullConfigs[configOptions.lastConfig].configPedal);
+				controlsPedal.updateControls();
 			}
 		});
 		controlsPedal.addPropertyChangeListener(new PropertyChangeListener() {
@@ -604,7 +609,7 @@ public class Main_window {
 		});
 		controlsPads.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
-				if ((configOptions != null) && configOptions.interactive) {
+				if ((configOptions != null) && configOptions.interactive && sendSysexEnabled) {
 					if (arg0.getPropertyName().equals("headValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer());
 					}
@@ -944,31 +949,52 @@ public class Main_window {
 		controlsPadsExtra.getBtnCurveSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(controlsPadsExtra.getCurveConfig(controlsPadsExtra.getCurvePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
+				Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[controlsPadsExtra.getCurvePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsPadsExtra.getBtnCurveLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(controlsPadsExtra.getCurveConfig(controlsPadsExtra.getCurvePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
-				fileManager.loadSysex(sysex, configOptions);					
-				controlsPadsExtra.setCurveConfig(sysex, controlsPadsExtra.getCurvePointer());
+				Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[controlsPadsExtra.getCurvePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
+				fileManager.loadSysex(sysex, configOptions);
+				Utils.copySysexToConfigCurve(sysex, fullConfigs[configOptions.lastConfig].configCurves[controlsPadsExtra.getCurvePointer()]);
+				controlsPadsExtra.updateCurveControls();
 			}
 		});
+/*
+ 		controlsPedal.getBtnSave().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
+				Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
+				fileManager.saveSysex(sysex, configOptions);
+			}
+		});
+		controlsPedal.getBtnLoad().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
+				Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
+				fileManager.loadSysex(sysex, configOptions);
+				Utils.copySysexToConfigPedal(sysex, fullConfigs[configOptions.lastConfig].configPedal);
+				controlsPedal.updateControls();
+			}
+		});
+
+ */
 		controlsPadsExtra.getButton_customNameSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-				Utils.copyConfigCustomNameToSysex(controlsPadsExtra.getCustomNameConfig(controlsPadsExtra.getCustomNamePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
+				Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[controlsPadsExtra.getCustomNamePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsPadsExtra.getButton_customNameLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-				Utils.copyConfigCustomNameToSysex(controlsPadsExtra.getCustomNameConfig(controlsPadsExtra.getCustomNamePointer()), sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
+				Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[controlsPadsExtra.getCustomNamePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
 				fileManager.loadSysex(sysex, configOptions);					
-				controlsPadsExtra.setCustomNameConfig(sysex, controlsPadsExtra.getCustomNamePointer());
+				Utils.copySysexToConfigCustomName(sysex, fullConfigs[configOptions.lastConfig].configCustomNames[controlsPadsExtra.getCustomNamePointer()]);
+				controlsPadsExtra.updateCustomNameControls(controlsPadsExtra.getCustomNamesCount());
 			}
 		});
 		controlsPadsExtra.addPropertyChangeListener(new PropertyChangeListener() {
@@ -1098,7 +1124,7 @@ public class Main_window {
 	
 	private void sendPedal() {
 		byte [] sysexPedal = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-		Utils.copyConfigPedalToSysex(controlsPedal.getConfig(), sysexPedal, configOptions.chainId);
+		Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysexPedal, configOptions.chainId);
 		midi_handler.sendSysex(sysexPedal);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1124,7 +1150,7 @@ public class Main_window {
 	
 	private void sendMisc() {
 		byte [] sysexMisc = new byte[Constants.MD_SYSEX_MISC_SIZE];
-		Utils.copyConfigMiscToSysex(controlsMisc.getConfig(), sysexMisc, configOptions.chainId);
+		Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysexMisc, configOptions.chainId);
 		midi_handler.sendSysex(sysexMisc);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1251,7 +1277,7 @@ public class Main_window {
 
 	private void sendCustomName(int name_id) {
 		byte [] sysexCustomName = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-		Utils.copyConfigCustomNameToSysex(controlsPadsExtra.getCustomNameConfig(name_id), sysexCustomName, configOptions.chainId, name_id);
+		Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[name_id], sysexCustomName, configOptions.chainId, name_id);
 		midi_handler.sendSysex(sysexCustomName);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1275,7 +1301,7 @@ public class Main_window {
 	
 	private void sendCurve(int curve_id) {
 		byte [] sysexCurve = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-		Utils.copyConfigCurveToSysex(controlsPadsExtra.getCurveConfig(curve_id), sysexCurve, configOptions.chainId, curve_id);
+		Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[curve_id], sysexCurve, configOptions.chainId, curve_id);
 		midi_handler.sendSysex(sysexCurve);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1313,10 +1339,11 @@ public class Main_window {
 	private void loadAllFromConfigFull() {
 		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
-		controlsMisc.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);
-		controlsPedal.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);
+		controlsMisc.setConfig(fullConfigs[configOptions.lastConfig].configMisc);
+		controlsPedal.setConfig(fullConfigs[configOptions.lastConfig].configPedal);
 		controlsPads.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);		
-		controlsPadsExtra.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);				
+		controlsPadsExtra.setCurveConfigs(fullConfigs[configOptions.lastConfig].configCurves);
+		controlsPadsExtra.setCustomNameConfigs(fullConfigs[configOptions.lastConfig].configCustomNames);		
 	}
 	private void load_all() {
 		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
@@ -1428,10 +1455,12 @@ public class Main_window {
 			if (buffer[2] == (byte) configOptions.chainId) {
 				switch (buffer[3]) {
 					case Constants.MD_SYSEX_MISC:
-						controlsMisc.setConfig(midi_handler.bufferIn);
+						Utils.copySysexToConfigMisc(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configMisc);
+						controlsMisc.updateControls();
 						break;
 					case Constants.MD_SYSEX_PEDAL:
-						controlsPedal.setConfig(midi_handler.bufferIn);
+						Utils.copySysexToConfigPedal(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configPedal);
+						controlsPedal.updateControls();
 						break;
 					case Constants.MD_SYSEX_PAD:
 						controlsPads.setConfig(midi_handler.bufferIn, buffer[4] - 1);
@@ -1452,10 +1481,12 @@ public class Main_window {
 						}
 						break;
 					case Constants.MD_SYSEX_CURVE:
-						controlsPadsExtra.setCurveConfig(midi_handler.bufferIn, buffer[4]);
+						Utils.copySysexToConfigCurve(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configCurves[buffer[4]]);
+						controlsPadsExtra.updateCurveControls();
 						break;
 					case Constants.MD_SYSEX_CUSTOM_NAME:
-						controlsPadsExtra.setCustomNameConfig(midi_handler.bufferIn, buffer[4]);
+						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configCustomNames[buffer[4]]);
+						controlsPadsExtra.updateCustomNameControls(controlsPadsExtra.getCustomNamesCount());
 						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configGlobalMisc);

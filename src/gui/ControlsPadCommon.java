@@ -571,13 +571,17 @@ public class ControlsPadCommon extends JPanel {
 	}
 	
 	public void setConfig(ConfigPad config, boolean pad_type, int pad_id) {
+		int index;
+		
 		changeEventsAllowed = false;
+		index = config.name;;
 		head_rim_pad = pad_type;
 		configPad = config;
 		updateControls();
 		updatePadsNames(pad_id);
 		comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[pad_id], 0);
 		comboBox_name.removeItemAt(1);
+		comboBox_name.setSelectedIndex(index);
 		changeEventsAllowed = true;
 	}
 	

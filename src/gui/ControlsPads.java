@@ -56,6 +56,7 @@ public class ControlsPads extends JPanel {
 	
 	public ConfigPad [] configPads;
 	public Config3rd [] config3rds;
+
 	private int padPointer;
 	private int prevPadPointer;
 	private int thirdPointer;
