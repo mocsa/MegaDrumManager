@@ -1339,8 +1339,8 @@ public class Main_window {
 	private void loadAllFromConfigFull() {
 		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
-		controlsMisc.setConfig(fullConfigs[configOptions.lastConfig].configMisc);
-		controlsPedal.setConfig(fullConfigs[configOptions.lastConfig].configPedal);
+		controlsMisc.setConfig(fullConfigs[configOptions.lastConfig]);
+		controlsPedal.setConfig(fullConfigs[configOptions.lastConfig]);
 		controlsPads.loadFromConfigFull(fullConfigs[configOptions.lastConfig]);		
 		controlsPadsExtra.setCurveConfigs(fullConfigs[configOptions.lastConfig].configCurves);
 		controlsPadsExtra.setCustomNameConfigs(fullConfigs[configOptions.lastConfig].configCustomNames);		
