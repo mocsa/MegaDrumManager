@@ -332,7 +332,7 @@ public class ControlsPads extends JPanel {
 						//configPads[padPointer].copyVarsFrom(panel_head.getConfig());
 						panel_head.updateConfig();
 						updatePadsSelection(padPointer);
-						comboBox_padSelection.setSelectedIndex(index);
+						//comboBox_padSelection.setSelectedIndex(index);
 					}
 				}
 				if (arg0.getPropertyName().equals("typeChanged")) {
@@ -372,7 +372,7 @@ public class ControlsPads extends JPanel {
 							//configPads[padPointer+1].copyVarsFrom(panel_rim.getConfig());
 							panel_rim.updateConfig();
 							updatePadsSelection(padPointer + 1);
-							comboBox_padSelection.setSelectedIndex(index);
+							//comboBox_padSelection.setSelectedIndex(index);
 						}
 					}
 				}

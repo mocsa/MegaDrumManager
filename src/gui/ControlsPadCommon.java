@@ -181,7 +181,9 @@ public class ControlsPadCommon extends JPanel {
 		comboBox_name.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					firePropertyChange("nameChanged", false, true);
+					//if (changeEventsAllowed) {
+						firePropertyChange("nameChanged", false, true);
+					//}
 				}
 			}
 		});
@@ -424,7 +426,9 @@ public class ControlsPadCommon extends JPanel {
 		comboBox_type.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					firePropertyChange("typeChanged", false, true);
+					//if (changeEventsAllowed) {
+						firePropertyChange("typeChanged", false, true);
+					//}
 				}
 			}
 		});
@@ -439,7 +443,9 @@ public class ControlsPadCommon extends JPanel {
 				((PadButton)control).addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						pressedPadButtonName = ((PadButton)arg0.getSource()).getName();
-						firePropertyChange("copyButton", false, true);
+						if (changeEventsAllowed) {
+							firePropertyChange("copyButton", false, true);
+						}
 					}
 				});
 			}
@@ -581,10 +587,8 @@ public class ControlsPadCommon extends JPanel {
 	}
 	
 	public void setConfigIndex(boolean pad_type, int pad_id) {
-		int index;
 		
 		configIndex = pad_id;
-		index = configFull.configPads[configIndex].name;
 		head_rim_pad = pad_type;
 		updateControls();
 		changeEventsAllowed = false;

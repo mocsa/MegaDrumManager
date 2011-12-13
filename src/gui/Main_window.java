@@ -484,10 +484,10 @@ public class Main_window {
 					if (arg0.getPropertyName().equals("valueChanged")) {
 						sendMisc();
 					}
-					if (arg0.getPropertyName().equals("octaveValueChanged")) {
-						controlsPedal.updateControls();
-						controlsPads.updateControls();
-					}
+				}
+				if (arg0.getPropertyName().equals("octaveValueChanged")) {
+					controlsPedal.updateControls();
+					controlsPads.updateControls();
 				}
 			}
 		});
