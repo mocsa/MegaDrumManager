@@ -465,16 +465,16 @@ public class Main_window {
 		controlsMisc.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
-				Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
+				Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsMisc.getBtnLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
-				Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
+				Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
 				fileManager.loadSysex(sysex, configOptions);
-				Utils.copySysexToConfigMisc(sysex, fullConfigs[configOptions.lastConfig].configMisc);
+				Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
 				controlsMisc.updateControls();
 			}
 		});
@@ -504,16 +504,16 @@ public class Main_window {
 		controlsPedal.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-				Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
+				Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsPedal.getBtnLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-				Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
+				Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
 				fileManager.loadSysex(sysex, configOptions);
-				Utils.copySysexToConfigPedal(sysex, fullConfigs[configOptions.lastConfig].configPedal);
+				Utils.copySysexToConfigPedal(sysex, configFull.configPedal);
 				controlsPedal.updateControls();
 			}
 		});
@@ -547,21 +547,21 @@ public class Main_window {
 				byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE];
 				int padId = controlsPads.getPadPointer();
 				if (padId > 0 ) {
-					Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[padId], sysex, configOptions.chainId, padId);
+					Utils.copyConfigPadToSysex(configFull.configPads[padId], sysex, configOptions.chainId, padId);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[i] = sysex[i];
 					}
-					Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[padId+1], sysex, configOptions.chainId, padId+1);
+					Utils.copyConfigPadToSysex(configFull.configPads[padId+1], sysex, configOptions.chainId, padId+1);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
 					}
-					Utils.copyConfig3rdToSysex(fullConfigs[configOptions.lastConfig].config3rds[(padId-1)/2], sysex3rd, configOptions.chainId, (padId-1)/2);
+					Utils.copyConfig3rdToSysex(configFull.config3rds[(padId-1)/2], sysex3rd, configOptions.chainId, (padId-1)/2);
 					for (int i = 0; i<sysex3rd.length;i++) {
 						sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
 					}
 					fileManager.saveSysex(sysexPad, configOptions);
 				} else {
-					Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[0], sysex, configOptions.chainId, 0);
+					Utils.copyConfigPadToSysex(configFull.configPads[0], sysex, configOptions.chainId, 0);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[i] = sysex[i];
 					}					
@@ -576,15 +576,15 @@ public class Main_window {
 				byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE*2 + Constants.MD_SYSEX_3RD_SIZE];
 				int padId = controlsPads.getPadPointer();
 				if (padId > 0 ) {
-					Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[padId], sysex, configOptions.chainId, padId);
+					Utils.copyConfigPadToSysex(configFull.configPads[padId], sysex, configOptions.chainId, padId);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[i] = sysex[i];
 					}
-					Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[padId+1], sysex, configOptions.chainId, padId+1);
+					Utils.copyConfigPadToSysex(configFull.configPads[padId+1], sysex, configOptions.chainId, padId+1);
 					for (int i = 0; i<sysex.length;i++) {
 						sysexPad[Constants.MD_SYSEX_PAD_SIZE + i] = sysex[i];
 					}
-					Utils.copyConfig3rdToSysex(fullConfigs[configOptions.lastConfig].config3rds[(padId-1)/2], sysex3rd, configOptions.chainId, (padId-1)/2);
+					Utils.copyConfig3rdToSysex(configFull.config3rds[(padId-1)/2], sysex3rd, configOptions.chainId, (padId-1)/2);
 					for (int i = 0; i<sysex3rd.length;i++) {
 						sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i] = sysex3rd[i];
 					}
@@ -592,22 +592,22 @@ public class Main_window {
 					for (int i = 0; i<sysex.length;i++) {
 						sysex[i] = sysexPad[i];
 					}
-					Utils.copySysexToConfigPad(sysex, fullConfigs[configOptions.lastConfig].configPads[padId]);
+					Utils.copySysexToConfigPad(sysex, configFull.configPads[padId]);
 					controlsPads.updatePadControls(padId);
 					for (int i = 0; i<sysex.length;i++) {
 						sysex[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE + i];
 					}
-					Utils.copySysexToConfigPad(sysex, fullConfigs[configOptions.lastConfig].configPads[padId+1]);
+					Utils.copySysexToConfigPad(sysex, configFull.configPads[padId+1]);
 					controlsPads.updatePadControls(padId+1);
 					for (int i = 0; i<sysex3rd.length;i++) {
 						sysex3rd[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i];
 					}
-					Utils.copySysexToConfig3rd(sysex3rd, fullConfigs[configOptions.lastConfig].config3rds[(padId-1)/2]);
+					Utils.copySysexToConfig3rd(sysex3rd, configFull.config3rds[(padId-1)/2]);
 					controlsPads.updateThirdControls((padId-1)/2);
 				} else {
-					Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[0], sysex, configOptions.chainId, 0);
+					Utils.copyConfigPadToSysex(configFull.configPads[0], sysex, configOptions.chainId, 0);
 					fileManager.loadSysex(sysex, configOptions);					
-					Utils.copySysexToConfigPad(sysex, fullConfigs[configOptions.lastConfig].configPads[0]);
+					Utils.copySysexToConfigPad(sysex, configFull.configPads[0]);
 					controlsPads.updatePadControls(0);
 				}
 			}
@@ -616,9 +616,9 @@ public class Main_window {
 		controlsPedal.getBtnLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-				Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
+				Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
 				fileManager.loadSysex(sysex, configOptions);
-				Utils.copySysexToConfigPedal(sysex, fullConfigs[configOptions.lastConfig].configPedal);
+				Utils.copySysexToConfigPedal(sysex, configFull.configPedal);
 				controlsPedal.updateControls();
 			}
 		});
@@ -894,7 +894,7 @@ public class Main_window {
 		spinnerLCDcontrast = new JSpinner();
 		spinnerLCDcontrast.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast = ((Short)spinnerLCDcontrast.getValue()).shortValue();
+				configFull.configGlobalMisc.lcd_contrast = (short) (100 - ((Short)spinnerLCDcontrast.getValue()).shortValue());
 				if (configOptions.interactive) {
 					sendGlobalMisc();
 				}
@@ -937,7 +937,7 @@ public class Main_window {
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-		        	fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count = (short)((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
+		        	configFull.configGlobalMisc.inputs_count = (short)((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
 		        	updateInputsCountControls();
 					if (configOptions.interactive) {
 						sendGlobalMisc();
@@ -964,16 +964,16 @@ public class Main_window {
 		controlsPadsExtra.getBtnCurveSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[controlsPadsExtra.getCurvePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
+				Utils.copyConfigCurveToSysex(configFull.configCurves[controlsPadsExtra.getCurvePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsPadsExtra.getBtnCurveLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-				Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[controlsPadsExtra.getCurvePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
+				Utils.copyConfigCurveToSysex(configFull.configCurves[controlsPadsExtra.getCurvePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
 				fileManager.loadSysex(sysex, configOptions);
-				Utils.copySysexToConfigCurve(sysex, fullConfigs[configOptions.lastConfig].configCurves[controlsPadsExtra.getCurvePointer()]);
+				Utils.copySysexToConfigCurve(sysex, configFull.configCurves[controlsPadsExtra.getCurvePointer()]);
 				controlsPadsExtra.updateControls();
 			}
 		});
@@ -999,16 +999,16 @@ public class Main_window {
 		controlsPadsExtra.getButton_customNameSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-				Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[controlsPadsExtra.getCustomNamePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
+				Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[controlsPadsExtra.getCustomNamePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
 				fileManager.saveSysex(sysex, configOptions);
 			}
 		});
 		controlsPadsExtra.getButton_customNameLoad().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-				Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[controlsPadsExtra.getCustomNamePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
+				Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[controlsPadsExtra.getCustomNamePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
 				fileManager.loadSysex(sysex, configOptions);					
-				Utils.copySysexToConfigCustomName(sysex, fullConfigs[configOptions.lastConfig].configCustomNames[controlsPadsExtra.getCustomNamePointer()]);
+				Utils.copySysexToConfigCustomName(sysex, configFull.configCustomNames[controlsPadsExtra.getCustomNamePointer()]);
 				controlsPadsExtra.updateControls();
 			}
 		});
@@ -1116,7 +1116,7 @@ public class Main_window {
 				}
 			});
 		}
-		controlsPads.updateCustomNamesList(fullConfigs[configOptions.lastConfig].configCustomNames, fullConfigs[configOptions.lastConfig].customNamesCount);
+		controlsPads.updateCustomNamesList(configFull.configCustomNames, configFull.customNamesCount);
 	}
 	
 	private void delayMs(int delay) {
@@ -1139,7 +1139,7 @@ public class Main_window {
 	
 	private void sendPedal() {
 		byte [] sysexPedal = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
-		Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysexPedal, configOptions.chainId);
+		Utils.copyConfigPedalToSysex(configFull.configPedal, sysexPedal, configOptions.chainId);
 		midi_handler.sendSysex(sysexPedal);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1152,7 +1152,7 @@ public class Main_window {
 
 	private void sendGlobalMisc() {
 		byte [] sysexGlobalMisc = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
-		Utils.copyConfigGlobalMiscToSysex(fullConfigs[configOptions.lastConfig].configGlobalMisc, sysexGlobalMisc, configOptions.chainId);
+		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysexGlobalMisc, configOptions.chainId);
 		midi_handler.sendSysex(sysexGlobalMisc);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1165,7 +1165,7 @@ public class Main_window {
 	
 	private void sendMisc() {
 		byte [] sysexMisc = new byte[Constants.MD_SYSEX_MISC_SIZE];
-		Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysexMisc, configOptions.chainId);
+		Utils.copyConfigMiscToSysex(configFull.configMisc, sysexMisc, configOptions.chainId);
 		midi_handler.sendSysex(sysexMisc);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1188,7 +1188,7 @@ public class Main_window {
 	private void sendPadOneZone(int pad_id) {
 		byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE];
 		
-		Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[pad_id], sysexPad, configOptions.chainId, pad_id);
+		Utils.copyConfigPadToSysex(configFull.configPads[pad_id], sysexPad, configOptions.chainId, pad_id);
 		midi_handler.sendSysex(sysexPad);
 		delayMs(configOptions.sysexDelay);		
 	}
@@ -1197,7 +1197,7 @@ public class Main_window {
 		byte [] sysex3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
 		
 		pad_id = (pad_id - 1)/2;
-		Utils.copyConfig3rdToSysex(fullConfigs[configOptions.lastConfig].config3rds[pad_id], sysex3rd, configOptions.chainId, pad_id);
+		Utils.copyConfig3rdToSysex(configFull.config3rds[pad_id], sysex3rd, configOptions.chainId, pad_id);
 		midi_handler.sendSysex(sysex3rd);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1224,8 +1224,8 @@ public class Main_window {
                 		int i;
                         resizeWindow = false;
                 		progressBar.setMinimum(0);
-                		progressBar.setMaximum(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - 3);
-                		for (i = 0; i<(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - 2); i++) {
+                		progressBar.setMaximum(configFull.configGlobalMisc.inputs_count - 3);
+                		for (i = 0; i<(configFull.configGlobalMisc.inputs_count - 2); i++) {
                 			progressBar.setValue(i);
                 			Rectangle progressRect = progressBar.getBounds();
                 			progressRect.x = 0;
@@ -1260,8 +1260,8 @@ public class Main_window {
                 		int i;
                         resizeWindow = false;
                 		progressBar.setMinimum(0);
-                		progressBar.setMaximum(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - 3);
-                		for (i = 0; i<(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - 2); i++) {
+                		progressBar.setMaximum(configFull.configGlobalMisc.inputs_count - 3);
+                		for (i = 0; i<(configFull.configGlobalMisc.inputs_count - 2); i++) {
                 			progressBar.setValue(i);
                 			Rectangle progressRect = progressBar.getBounds();
                 			progressRect.x = 0;
@@ -1292,7 +1292,7 @@ public class Main_window {
 
 	private void sendCustomName(int name_id) {
 		byte [] sysexCustomName = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
-		Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[name_id], sysexCustomName, configOptions.chainId, name_id);
+		Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[name_id], sysexCustomName, configOptions.chainId, name_id);
 		midi_handler.sendSysex(sysexCustomName);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1316,7 +1316,7 @@ public class Main_window {
 	
 	private void sendCurve(int curve_id) {
 		byte [] sysexCurve = new byte[Constants.MD_SYSEX_CURVE_SIZE];
-		Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[curve_id], sysexCurve, configOptions.chainId, curve_id);
+		Utils.copyConfigCurveToSysex(configFull.configCurves[curve_id], sysexCurve, configOptions.chainId, curve_id);
 		midi_handler.sendSysex(sysexCurve);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1354,6 +1354,9 @@ public class Main_window {
 	private void copyConfigToLastConfig() {
 		byte [] sysex = new byte[256];
 
+		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysex, configOptions.chainId);
+		Utils.copySysexToConfigGlobalMisc(sysex, fullConfigs[configOptions.lastConfig].configGlobalMisc);
+
 		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
 		Utils.copySysexToConfigMisc(sysex, fullConfigs[configOptions.lastConfig].configMisc);
 
@@ -1383,12 +1386,13 @@ public class Main_window {
 			Utils.copySysexToConfigCustomName(sysex, fullConfigs[configOptions.lastConfig].configCustomNames[i]);					
 		}
 	}
-	
+
 	private void loadAllFromConfigFull() {
 		byte [] sysex = new byte[256];
 
-		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-		spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
+		Utils.copyConfigGlobalMiscToSysex(fullConfigs[configOptions.lastConfig].configGlobalMisc, sysex, configOptions.chainId);
+		Utils.copySysexToConfigGlobalMisc(sysex, configFull.configGlobalMisc);
+		updateInputsCountControls();
 
 		Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
 		Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
@@ -1434,7 +1438,7 @@ public class Main_window {
 	}
 
 	private void save_all() {
-		fileManager.save_all(fullConfigs[configOptions.lastConfig], configOptions);
+		fileManager.save_all(configFull, configOptions);
 	}
 	
 	private void loadConfig() {
@@ -1481,10 +1485,10 @@ public class Main_window {
 	}
 	
 	private void updateInputsCountControls() {
-		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-		spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
-		controlsPedal.updateInputCountsControls(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count);
-		controlsPads.updateInputCountsControls(fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count);
+		comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+		spinnerLCDcontrast.setValue((short)(100 - configFull.configGlobalMisc.lcd_contrast));
+		controlsPedal.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
+		controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
 	}
 	
 	private void resizeMainWindow() {
@@ -1538,19 +1542,19 @@ public class Main_window {
 			if (buffer[2] == (byte) configOptions.chainId) {
 				switch (buffer[3]) {
 					case Constants.MD_SYSEX_MISC:
-						Utils.copySysexToConfigMisc(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configMisc);
+						Utils.copySysexToConfigMisc(midi_handler.bufferIn, configFull.configMisc);
 						controlsMisc.updateControls();
 						break;
 					case Constants.MD_SYSEX_PEDAL:
-						Utils.copySysexToConfigPedal(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configPedal);
+						Utils.copySysexToConfigPedal(midi_handler.bufferIn, configFull.configPedal);
 						controlsPedal.updateControls();
 						break;
 					case Constants.MD_SYSEX_PAD:
-						Utils.copySysexToConfigPad(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configPads[buffer[4] - 1]);
+						Utils.copySysexToConfigPad(midi_handler.bufferIn, configFull.configPads[buffer[4] - 1]);
 						controlsPads.updatePadControls(buffer[4] - 1);
 						break;
 					case Constants.MD_SYSEX_3RD:
-						Utils.copySysexToConfig3rd(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].config3rds[buffer[4]]);
+						Utils.copySysexToConfig3rd(midi_handler.bufferIn, configFull.config3rds[buffer[4]]);
 						controlsPads.updateThirdControls(buffer[4]);
 						break;
 					case Constants.MD_SYSEX_VERSION:
@@ -1566,17 +1570,17 @@ public class Main_window {
 						}
 						break;
 					case Constants.MD_SYSEX_CURVE:
-						Utils.copySysexToConfigCurve(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configCurves[buffer[4]]);
+						Utils.copySysexToConfigCurve(midi_handler.bufferIn, configFull.configCurves[buffer[4]]);
 						controlsPadsExtra.updateControls();
 						break;
 					case Constants.MD_SYSEX_CUSTOM_NAME:
-						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configCustomNames[buffer[4]]);
+						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, configFull.configCustomNames[buffer[4]]);
 						controlsPadsExtra.updateControls();
 						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
-						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configGlobalMisc);
-						comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-						spinnerLCDcontrast.setValue(fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast);
+						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
+						comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+						spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);
 						break;
 					default:
 						break;
@@ -1599,10 +1603,10 @@ public class Main_window {
 			//shortMessage.setMessage(buf[0], buf[1],buf[2]);
 			if (((buffer[0]&0xf0) == 0x90) && (buffer[2] > 0)) {
 				color = Constants.MD_UNKNOWN_COLOR;
-				for (int i = 0; i< fullConfigs[configOptions.lastConfig].configPads.length;i++) {
-					if ((buffer[1]==fullConfigs[configOptions.lastConfig].configPads[i].note) ||
-							(buffer[1]==fullConfigs[configOptions.lastConfig].configPads[i].altNote) ||
-							(buffer[1]==fullConfigs[configOptions.lastConfig].configPads[i].pressrollNote)) {
+				for (int i = 0; i< configFull.configPads.length;i++) {
+					if ((buffer[1]==configFull.configPads[i].note) ||
+							(buffer[1]==configFull.configPads[i].altNote) ||
+							(buffer[1]==configFull.configPads[i].pressrollNote)) {
 						if (i==0) {
 							color = Constants.MD_HEAD_COLOR;
 						} else {
@@ -1610,10 +1614,10 @@ public class Main_window {
 						}
 					}
 					if ((i&0x01) == 1) {
-						if ((buffer[1]==fullConfigs[configOptions.lastConfig].config3rds[(i-1)/2].note) ||
-								(buffer[1]==fullConfigs[configOptions.lastConfig].config3rds[(i-1)/2].altNote) ||
-								(buffer[1]==fullConfigs[configOptions.lastConfig].config3rds[(i-1)/2].pressrollNote) ||
-								(buffer[1]==fullConfigs[configOptions.lastConfig].config3rds[(i-1)/2].dampenedNote)) {
+						if ((buffer[1]==configFull.config3rds[(i-1)/2].note) ||
+								(buffer[1]==configFull.config3rds[(i-1)/2].altNote) ||
+								(buffer[1]==configFull.config3rds[(i-1)/2].pressrollNote) ||
+								(buffer[1]==configFull.config3rds[(i-1)/2].dampenedNote)) {
 									color = Constants.MD_3RD_COLOR;
 						}						
 					}
@@ -1641,7 +1645,7 @@ public class Main_window {
 	}
 	
 	private void updateCustomNamesControls() {
-		controlsPads.updateCustomNamesList(fullConfigs[configOptions.lastConfig].configCustomNames, controlsPadsExtra.getCustomNamesCount());
+		controlsPads.updateCustomNamesList(configFull.configCustomNames, controlsPadsExtra.getCustomNamesCount());
 	}
 }
 
