@@ -42,7 +42,7 @@ public class NoteSpinControl extends JPanel {
 				String note_text;
 				note_number = ((Short)spinner.getValue()).shortValue();
 				if (note_number > 0) {
-					octave = note_number/12;
+					octave = note_number/12 ;
 					base = (short)(octave*12);
 					note_pointer = note_number - base;
 					note_text = note_names[note_pointer] + " " + Integer.toString(octave - 1);

@@ -14,6 +14,7 @@ public class ConfigMisc {
 	public short note_off = 20;
 	public short latency = 40;
 	public short pressroll = 0;
+	public short octave_shift = 2;
 	public boolean all_gains_low = false;
 	public boolean big_vu_meter = false;
 	public boolean big_vu_split = false;
@@ -31,6 +32,7 @@ public class ConfigMisc {
 		prop.setProperty(prefix+"note_off", note_off);
 		prop.setProperty(prefix+"latency", latency);
 		prop.setProperty(prefix+"pressroll", pressroll);
+		prop.setProperty(prefix+"octave_shift", octave_shift);
 		prop.setProperty(prefix+"all_gains_low", all_gains_low);
 		prop.setProperty(prefix+"big_vu_meter", big_vu_meter);
 		prop.setProperty(prefix+"big_vu_split", big_vu_split);
@@ -45,6 +47,7 @@ public class ConfigMisc {
 		note_off = Utils.validateShort(prop.getShort(prefix+"note_off", note_off),10,200,note_off);
 		latency = Utils.validateShort(prop.getShort(prefix+"latency", latency),10,100,latency);
 		pressroll = Utils.validateShort(prop.getShort(prefix+"pressroll", pressroll),0,note_off,pressroll);
+		octave_shift = Utils.validateShort(prop.getShort(prefix+"octave_shift", octave_shift),0,4,octave_shift);
 		all_gains_low = prop.getBoolean(prefix+"all_gains_low", all_gains_low);
 		big_vu_meter = prop.getBoolean(prefix+"big_vu_meter", big_vu_meter);
 		big_vu_split = prop.getBoolean(prefix+"big_vu_split", big_vu_split);

@@ -286,6 +286,10 @@ public class Utils {
 			sysex_short[2] = 0;
 			sysex_short[3] = 0;
 			config.pressroll = sysex2short(sysex_short);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			config.octave_shift = sysex2byte(sysex_byte);
+			
 			
 			config.all_gains_low = ((flags&1) != 0);
 			config.big_vu_meter = ((flags&(1<<2)) != 0);
@@ -324,6 +328,9 @@ public class Utils {
 		sysex[i++] = sysex_short[2];
 		sysex[i++] = sysex_short[3];
 		sysex_byte = byte2sysex((byte)config.pressroll);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.octave_shift);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex[i++] = Constants.SYSEX_END;		

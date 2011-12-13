@@ -52,6 +52,8 @@ public class ControlsMisc extends JPanel {
 	private JLabel lblMidiThruEnabled;
 	private JLabel labelCustomNamesEn;
 	private JCheckBox checkBox_customNamesEn;
+	private JSpinner spinner_octaveShift;
+	private JLabel lblOctaveShift;
 
 	/**
 	 * Create the panel.
@@ -119,6 +121,7 @@ public class ControlsMisc extends JPanel {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblNoteOffDelay = new JLabel("Note Off Delay");
@@ -173,9 +176,24 @@ public class ControlsMisc extends JPanel {
 		spinner_latency.setModel(new SpinnerNumberModel(new Short((short) 40), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
 		panel.add(spinner_latency, "3, 3");
 		
+		lblOctaveShift = new JLabel("Notes Names Shift");
+		lblOctaveShift.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel.add(lblOctaveShift, "1, 4");
+		
+		spinner_octaveShift = new JSpinner();
+		spinner_octaveShift.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				short value = ((Short)spinner_octaveShift.getValue()).shortValue();
+				configMisc.octave_shift = (short)value;
+				valueChanged();
+			}
+		});
+		spinner_octaveShift.setModel(new SpinnerNumberModel(new Short((short) 2), new Short((short) 0), new Short((short) 2), new Short((short) 1)));
+		panel.add(spinner_octaveShift, "3, 4");
+		
 		JLabel lblBigVuMeter = new JLabel("Big VU meter");
 		lblBigVuMeter.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblBigVuMeter, "1, 4");
+		panel.add(lblBigVuMeter, "1, 5");
 		
 		checkBox_bigVuMeter = new JCheckBox("");
 		checkBox_bigVuMeter.setToolTipText("<html>When disabled (default) each of 32 blocks on an LCD<br>\r\nis used as an individual VU meter for every input.<br>\r\nThe resolution of each of these small VU meters is 16,<br>\r\ni.e. one bar per 16 adjacent MIDI levels giving 8 bars for 128 MIDI levels.<br>\r\nThe resolution of the Big VU Meter is much better, approximately 100 bars<br>\r\nfor 128 MIDI levels. </html>");
@@ -185,11 +203,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_bigVuMeter, "3, 4");
+		panel.add(checkBox_bigVuMeter, "3, 5");
 		
 		lblBigVuSplit = new JLabel("Big VU split");
 		lblBigVuSplit.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblBigVuSplit, "1, 5");
+		panel.add(lblBigVuSplit, "1, 6");
 		
 		checkBox_bigVuSplit = new JCheckBox("");
 		checkBox_bigVuSplit.setToolTipText("<html>When disabled (and Big VU Meter is enabled)<br>\r\nthe whole top row of the LCD is dedicated to HiHat pedal position<br>\r\nand the whole bottom row of the LCD shows hit levels from all inputs<br>\r\non a big single VU meter.<br>\r\nWhen enabled (and Big VU Meter is enabled) the whole top row<br>\r\nshows hit levels from all even (Head/Bow) inputs and the whole<br>\r\nbottom row of the LCD shows hit levels on odd (Rim/Edge) inputs.<br>\r\nThe HiHat pedal position is not shown in this mode.</html>");
@@ -199,11 +217,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_bigVuSplit, "3, 5");
+		panel.add(checkBox_bigVuSplit, "3, 6");
 		
 		JLabel lblQuickAccess = new JLabel("Quick Access");
 		lblQuickAccess.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblQuickAccess, "1, 6");
+		panel.add(lblQuickAccess, "1, 7");
 		
 		checkBox_quickAccess = new JCheckBox("");
 		checkBox_quickAccess.setToolTipText("<html>When enabled you can quickly jump between inputs<br>\r\nin the MegaDrum menu rather than navigate to each input<br>\r\nusing LEFT/RIGHT keys.<br>\r\n<br>\r\nTo use it when enabled, first enter the Menu, then press<br>\r\nthe HiHat pedal and then hit a pad you want to configure.<br>\r\nWhenever you hit another pad while still holding the HiHat pedal pressed<br>\r\nand still in the Menu, it will jump to the last hit pad input.<br>\r\nWhen disabled you can quickly load next/previous drum map by<br>\r\npressing keys UP/DOWN while not in the Menu and holding<br>\r\nthe HiHat pedal pressed. May be useful for live performances<br>\r\nto quickly load different drum maps?</html>");
@@ -213,11 +231,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_quickAccess, "3, 6");
+		panel.add(checkBox_quickAccess, "3, 7");
 		
 		JLabel lblAltFalsetrsuppression = new JLabel("AltFalseTrSupp");
 		lblAltFalsetrsuppression.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblAltFalsetrsuppression, "1, 7");
+		panel.add(lblAltFalsetrsuppression, "1, 8");
 		
 		checkBox_altFalseTrSupp = new JCheckBox("");
 		checkBox_altFalseTrSupp.setToolTipText("<html>When enabled, MegaDrum uses alternative algorithm<br>\r\nfor false triggering suppression. It has effect on<br>\r\nXTalk/Rettriger/DynLvl/DynTime settings. May be better<br>\r\nthan the original algorithm for certain types of pads/cymbals/kits.</html>");
@@ -227,11 +245,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_altFalseTrSupp, "3, 7");
+		panel.add(checkBox_altFalseTrSupp, "3, 8");
 		
 		JLabel lblInputsPriority = new JLabel("Inputs Priority");
 		lblInputsPriority.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblInputsPriority, "1, 8");
+		panel.add(lblInputsPriority, "1, 9");
 		
 		checkBox_inputsPriority = new JCheckBox("");
 		checkBox_inputsPriority.setToolTipText("<html>When enabled the first 3/4th of Head/Bow inputs are given<br>\r\nslightly higher priority (sampled more often) then the rest of inputs.</html>");
@@ -241,11 +259,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_inputsPriority, "3, 8");
+		panel.add(checkBox_inputsPriority, "3, 9");
 		
 		JLabel lblAllGainsLow = new JLabel("All Gains Low");
 		lblAllGainsLow.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblAllGainsLow, "1, 9");
+		panel.add(lblAllGainsLow, "1, 10");
 		
 		checkBox_allGainsLow = new JCheckBox("");
 		checkBox_allGainsLow.setToolTipText("<html>When enabled, it will disable all individual input Gain levels<br>\r\nand make Gain even lower than 'Gain Level' 0.<br>\r\nIt could be used if all your pads are 'hot' and to get<br>\r\na better dynamic range with such pads.</html>");
@@ -255,11 +273,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_allGainsLow, "3, 9");
+		panel.add(checkBox_allGainsLow, "3, 10");
 		
 		lblMidiThruEnabled = new JLabel("MIDI Thru");
 		lblMidiThruEnabled.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(lblMidiThruEnabled, "1, 10");
+		panel.add(lblMidiThruEnabled, "1, 11");
 		
 		checkBox_MidiThru = new JCheckBox("");
 		checkBox_MidiThru.setToolTipText("<html>When enabled MegaDrum will send out all MIDI messages<br>\r\nit receives over MIDI.<br>\r\nIf MIDI routing is not correct, it can create MIDI loops<br>\r\nand cause all MIDI devices in the loop, including MegaDrum,<br>\r\nto misbehave.</html>");
@@ -269,11 +287,11 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		panel.add(checkBox_MidiThru, "3, 10");
+		panel.add(checkBox_MidiThru, "3, 11");
 		
 		labelCustomNamesEn = new JLabel("CustomNamesEn");
 		labelCustomNamesEn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(labelCustomNamesEn, "1, 11");
+		panel.add(labelCustomNamesEn, "1, 12");
 		
 		checkBox_customNamesEn = new JCheckBox("");
 		checkBox_customNamesEn.addItemListener(new ItemListener() {
@@ -283,7 +301,7 @@ public class ControlsMisc extends JPanel {
 			}
 		});
 		checkBox_customNamesEn.setToolTipText("<html>Check this box to enable saving Custom Pads Names<br>\r\nin MegaDrum non-volatile memory.<br><br>\r\nWhen enabled, MegaDrum can store fewer Configs/Drum maps<br>\r\nin non-volatile memory.</html>");
-		panel.add(checkBox_customNamesEn, "3, 11");
+		panel.add(checkBox_customNamesEn, "3, 12");
 		changeEventsAllowed = true;
 
 	}
@@ -301,6 +319,7 @@ public class ControlsMisc extends JPanel {
 				new Short((short) (configMisc.note_off*10)),
 				new Short((short) 10)));
 		spinner_latency.setValue((short)(configMisc.latency));
+		spinner_octaveShift.setValue((short)(configMisc.octave_shift));
 		checkBox_bigVuMeter.setSelected(configMisc.big_vu_meter);
 		checkBox_quickAccess.setSelected(configMisc.quick_access);
 		checkBox_bigVuSplit.setSelected(configMisc.big_vu_split);
