@@ -179,7 +179,7 @@ public class ControlsMisc extends JPanel {
 		spinner_latency.setModel(new SpinnerNumberModel(new Short((short) 40), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
 		panel.add(spinner_latency, "3, 3");
 		
-		lblOctaveShift = new JLabel("Notes Names Shift");
+		lblOctaveShift = new JLabel("Notes Octave Shift");
 		lblOctaveShift.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblOctaveShift, "1, 4");
 		

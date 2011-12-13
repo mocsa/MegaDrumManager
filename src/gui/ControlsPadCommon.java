@@ -123,8 +123,8 @@ public class ControlsPadCommon extends JPanel {
 	private PadButton padButton_dynTime;
 	private PadButton padButton_minScan;
 	private PadButton padButton_type;
-	private String [] customNamesList;
-	private int customNamesCount;
+	//private String [] customNamesList;
+	//private int customNamesCount;
 	public String pressedPadButtonName;
 	
 	
@@ -172,11 +172,11 @@ public class ControlsPadCommon extends JPanel {
 		lblName.setToolTipText("Input Name");
 		add(lblName, "1, 1, right, center");
 		
-		customNamesCount = Constants.CUSTOM_NAMES_MAX;
-		customNamesList = new String[Constants.CUSTOM_NAMES_MAX];
-        for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
-        	customNamesList[i] = "Custom" + i.toString();
-        }
+//		customNamesCount = Constants.CUSTOM_NAMES_MAX;
+//		customNamesList = new String[Constants.CUSTOM_NAMES_MAX];
+//        for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
+//        	customNamesList[i] = "Custom" + i.toString();
+//        }
 		comboBox_name = new ComboBoxCustom();
 		comboBox_name.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -185,7 +185,7 @@ public class ControlsPadCommon extends JPanel {
 				}
 			}
 		});
-		updatePadsNames(0);
+		updatePadsNames();
 		add(comboBox_name, "3, 1, fill, center");
 		
 		padButton__name = new PadButton("name",head_rim_pad);
@@ -489,6 +489,8 @@ public class ControlsPadCommon extends JPanel {
 	}
 
 	public void updateControls() {
+		changeEventsAllowed = false;
+
 		comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);
 		noteSpinControl_note.setValue(configFull.configPads[configIndex].note);
 		noteSpinControl_altNote.setValue(configFull.configPads[configIndex].altNote);
@@ -528,6 +530,7 @@ public class ControlsPadCommon extends JPanel {
 				comboBox_type.setSelectedIndex(1);
 			}
 		}
+		changeEventsAllowed = true;
 	}
 	
 	public void updateConfig() {
@@ -580,34 +583,27 @@ public class ControlsPadCommon extends JPanel {
 	public void setConfigIndex(boolean pad_type, int pad_id) {
 		int index;
 		
-		changeEventsAllowed = false;
 		configIndex = pad_id;
 		index = configFull.configPads[configIndex].name;
 		head_rim_pad = pad_type;
 		updateControls();
-		updatePadsNames(pad_id);
-		comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[pad_id], 0);
-		comboBox_name.removeItemAt(1);
-		comboBox_name.setSelectedIndex(index);
+		changeEventsAllowed = false;
+		updatePadsNames();
+		//comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[configIndex], 0);
+		//comboBox_name.removeItemAt(1);
+		//comboBox_name.setSelectedIndex(index);
 		changeEventsAllowed = true;
 	}
 	
-	public void updateCustomNamesList(ConfigCustomName [] configCustomNames, int count) {
-		customNamesCount = count;
-		for (int i = 0; i < customNamesCount; i++) {
-			customNamesList[i] = configCustomNames[i].name;
-		}		
-	}
-	
-	public void updatePadsNames(int pad_id) {
+	public void updatePadsNames() {
 		comboBox_name.removeAllItems();
 		//comboBox_name.addItem("");
-		comboBox_name.addItem(Constants.PADS_NAMES_LIST[pad_id]);
+		comboBox_name.addItem(Constants.PADS_NAMES_LIST[configIndex]);
 		for (String string : Constants.CUSTOM_PADS_NAMES_LIST) {
 			comboBox_name.addItem(string);
 			}
-		for (int i = 0; i < customNamesCount; i++) {
-			comboBox_name.addItem(customNamesList[i]);
+		for (int i = 0; i < configFull.customNamesCount; i++) {
+			comboBox_name.addItem(configFull.configCustomNames[i].name);
 		}
 		comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);			
 	}

@@ -896,7 +896,8 @@ public class Main_window {
 		spinnerLCDcontrast = new JSpinner();
 		spinnerLCDcontrast.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configGlobalMisc.lcd_contrast = (short) (100 - ((Short)spinnerLCDcontrast.getValue()).shortValue());
+				//configFull.configGlobalMisc.lcd_contrast = (short) (100 - ((Short)spinnerLCDcontrast.getValue()).shortValue());
+				configFull.configGlobalMisc.lcd_contrast = ((Short)spinnerLCDcontrast.getValue()).shortValue();
 				if (configOptions.interactive) {
 					sendGlobalMisc();
 				}
@@ -1023,9 +1024,9 @@ public class Main_window {
 					if (arg0.getPropertyName().equals("valueCustomNameChanged")) {
 						sendCustomName(controlsPadsExtra.getCustomNamePointer());
 					}
-					if (arg0.getPropertyName().equals("CustomNamesChanged")) {
-						updateCustomNamesControls();
-					}
+				}
+				if (arg0.getPropertyName().equals("CustomNamesChanged")) {
+					updateCustomNamesControls();
 				}
 			}
 		});
@@ -1118,7 +1119,7 @@ public class Main_window {
 				}
 			});
 		}
-		controlsPads.updateCustomNamesList(configFull.configCustomNames, configFull.customNamesCount);
+		controlsPads.updateCustomNamesList();
 	}
 	
 	private void delayMs(int delay) {
@@ -1300,13 +1301,13 @@ public class Main_window {
 	}
 
 	private void getAllCustomNames() {
-		for (int i = 0; i < controlsPadsExtra.getCustomNamesCount(); i++) {
+		for (int i = 0; i < configFull.customNamesCount; i++) {
 			getCustomName(i);
 		}
 	}
 		
 	private void sendAllCustomNames() {
-		for (int i = 0; i < controlsPadsExtra.getCustomNamesCount(); i++) {
+		for (int i = 0; i < configFull.customNamesCount; i++) {
 			sendCustomName(i);
 		}
 	}
@@ -1642,7 +1643,7 @@ public class Main_window {
 	}
 	
 	private void updateCustomNamesControls() {
-		controlsPads.updateCustomNamesList(configFull.configCustomNames, controlsPadsExtra.getCustomNamesCount());
+		controlsPads.updateCustomNamesList();
 	}
 }
 

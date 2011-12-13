@@ -484,16 +484,16 @@ public class ControlsPads extends JPanel {
 	private String getPadName(int pad_id) {
 		String result;
 		String head_rim = ((pad_id&0x01) > 0)?"H":"R";
-		if (configFull != null) {
-			if (configFull.configPads[pad_id].name > 0) {
-				result = Constants.CUSTOM_PADS_NAMES_LIST[configFull.configPads[pad_id].name - 1] + head_rim;
+		if (configFull.configPads[pad_id].name > 0) {
+			if ((configFull.configPads[pad_id].name-1) >= Constants.CUSTOM_PADS_NAMES_LIST.length) {
+				result = configFull.configCustomNames[configFull.configPads[pad_id].name - 1 - Constants.CUSTOM_PADS_NAMES_LIST.length].name;
 			} else {
-				result = Constants.PADS_NAMES_LIST[pad_id];
+				result = Constants.CUSTOM_PADS_NAMES_LIST[configFull.configPads[pad_id].name - 1] + head_rim;
 			}
-			return result;
 		} else {
-			return "";
+			result = Constants.PADS_NAMES_LIST[pad_id];
 		}
+		return result;
 	}
 	
 	private void copyPad(int index, boolean copyHead, boolean copyRim, boolean copy3rd) {
@@ -899,11 +899,9 @@ public class ControlsPads extends JPanel {
 		});
 	}
 
-	public void updateCustomNamesList(ConfigCustomName [] configCustomNames, int count) {
-		panel_head.updateCustomNamesList(configCustomNames, count);
-		panel_head.updatePadsNames(padPointer);
-		panel_rim.updateCustomNamesList(configCustomNames, count);
-		panel_rim.updatePadsNames(padPointer+1);
+	public void updateCustomNamesList() {
+		panel_head.updatePadsNames();
+		panel_rim.updatePadsNames();
 	}
 	
 		

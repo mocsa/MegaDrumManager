@@ -46,7 +46,6 @@ public class ControlsPadsExtra extends JPanel {
 	private ConfigFull configFull;
 	private int customNamePointer;
 	private int prevCustomNamePointer;
-	private int customNamesCount;
 	private JComboBox comboBox_curveNumber;
 	private JButton button_first;
 	private JButton button_prev;
@@ -87,7 +86,7 @@ public class ControlsPadsExtra extends JPanel {
         prevCurvePointer = -1;
         
 //        customNamesCount = Constants.CUSTOM_NAMES_MAX;
-        customNamesCount = 2;
+        configFull.customNamesCount = 2;
         customNamePointer = 0;
         prevCustomNamePointer = -1;
 
@@ -304,24 +303,23 @@ public class ControlsPadsExtra extends JPanel {
 		comboBoxCustomNamesCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					int count;
 					switch (comboBoxCustomNamesCount.getSelectedIndex()) {
 						case 0:
-							count = 2;
+							configFull.customNamesCount = 2;
 							break;
 						case 1:
-							count = 16;
+							configFull.customNamesCount = 16;
 							break;
 						default:
-							count = 32;
+							configFull.customNamesCount = 32;
 							break;
 					}
-					if (customNamePointer > count)
+					if (customNamePointer > configFull.customNamesCount)
 					{
 						customNamePointer = 0;
 				        prevCustomNamePointer = -1;
 					}
-					updateCustomNameControls(count);
+					updateCustomNameControls();
 				}
 			}
 		});
@@ -383,7 +381,7 @@ public class ControlsPadsExtra extends JPanel {
 				text = text.trim();
 				int ind = comboBoxSelectName.getSelectedIndex();
 				configFull.configCustomNames[ind].name = text;
-				updateCustomNameControls(customNamesCount);
+				updateCustomNameControls();
 				comboBoxSelectName.setSelectedIndex(ind);
 				valueCustomNameChanged();
 			}
@@ -405,7 +403,7 @@ public class ControlsPadsExtra extends JPanel {
 			}
 		});
 		
-		updateCustomNameControls(Constants.CUSTOM_NAMES_MAX);
+		updateCustomNameControls();
 		
 		panelNamesEdit.add(comboBoxSelectName, "3, 3, fill, default");
 		
@@ -486,14 +484,13 @@ public class ControlsPadsExtra extends JPanel {
     	paintPanel.repaint();
 	}
 	
-	private void updateCustomNameControls(int count) {
+	private void updateCustomNameControls() {
 		int pointer = customNamePointer;
 		comboBoxSelectName.removeAllItems();
-		for (int i = 0; i < count; i++) {
+		for (int i = 0; i < configFull.customNamesCount; i++) {
 			comboBoxSelectName.addItem(configFull.configCustomNames[i].name);
 		}		
 		comboBoxSelectName.setSelectedIndex(pointer);
-		customNamesCount = count;
 		if (changeEventsAllowed) {
 			firePropertyChange("CustomNamesChanged", false, true);
 		}
@@ -502,12 +499,8 @@ public class ControlsPadsExtra extends JPanel {
 	public void updateControls() {
 		changeEventsAllowed = false;
 		updateCurveControls();
-		updateCustomNameControls(getCustomNamesCount());
+		updateCustomNameControls();
 		changeEventsAllowed = true;		
-	}
-	
-	public int getCustomNamesCount() {
-		return customNamesCount;
 	}
 	
 	public int getCurvePointer() {
