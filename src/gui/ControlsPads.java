@@ -339,6 +339,9 @@ public class ControlsPads extends JPanel {
 		        	if ((panel_head.getComboBox_type().getSelectedIndex() > 0) != panel_3rd_zone_prevVisible) {
 		        		panel_3rd_zone_prevVisible = (panel_head.getComboBox_type().getSelectedIndex() > 0);
 		        		panel_3rd_zone.setVisible(panel_3rd_zone_prevVisible);
+//		        		for (Component c : panel_3rd_zone.getComponents()) {
+//		        			c.setEnabled(panel_3rd_zone_prevVisible);
+//		        		}
 		        		panel_rim.getComboBox_type().setEnabled(panel_3rd_zone_prevVisible);
 		        		firePropertyChange("resize", false, true);
 		        	}					
@@ -418,6 +421,9 @@ public class ControlsPads extends JPanel {
 		};
 		panel_3rd_zone.addPropertyChangeListener(ZoneButtonPropertyChangeListener);
 		panel_3rd_zone.setVisible(false);
+//		for (Component c : panel_3rd_zone.getComponents()) {
+//			c.setEnabled(false);
+//		}
 		add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
@@ -436,7 +442,7 @@ public class ControlsPads extends JPanel {
 		return padPointer;
 	}
 	
-	public void updatePadControls(int pointer) {
+	private void updatePadControls(int pointer) {
 		if (pointer > 0) {
 			if (pointer == padPointer) {
 				panel_head.setConfigIndex(head_pad, pointer);				
@@ -451,12 +457,18 @@ public class ControlsPads extends JPanel {
 		}		
 	}
 	
-	public void updateThirdControls(int pointer) {
+	private void updateThirdControls(int pointer) {
 		if (padPointer > 0 ) {
 			if (pointer == thirdPointer) {
 				panel_3rd_zone.setConfigIndex(pointer);
 			}
 		}
+	}
+
+	public void updateControls() {
+		updatePadControls(padPointer);
+		updatePadControls(padPointer+1);
+		updateThirdControls(thirdPointer);
 	}
 	
 	public void setPadPointer(int pointer) {

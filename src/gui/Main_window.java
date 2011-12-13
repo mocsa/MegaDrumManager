@@ -484,6 +484,10 @@ public class Main_window {
 					if (arg0.getPropertyName().equals("valueChanged")) {
 						sendMisc();
 					}
+					if (arg0.getPropertyName().equals("octaveValueChanged")) {
+						controlsPedal.updateControls();
+						controlsPads.updateControls();
+					}
 				}
 			}
 		});
@@ -593,22 +597,20 @@ public class Main_window {
 						sysex[i] = sysexPad[i];
 					}
 					Utils.copySysexToConfigPad(sysex, configFull.configPads[padId]);
-					controlsPads.updatePadControls(padId);
 					for (int i = 0; i<sysex.length;i++) {
 						sysex[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE + i];
 					}
 					Utils.copySysexToConfigPad(sysex, configFull.configPads[padId+1]);
-					controlsPads.updatePadControls(padId+1);
 					for (int i = 0; i<sysex3rd.length;i++) {
 						sysex3rd[i] = sysexPad[Constants.MD_SYSEX_PAD_SIZE*2 + i];
 					}
 					Utils.copySysexToConfig3rd(sysex3rd, configFull.config3rds[(padId-1)/2]);
-					controlsPads.updateThirdControls((padId-1)/2);
+					controlsPads.updateControls();
 				} else {
 					Utils.copyConfigPadToSysex(configFull.configPads[0], sysex, configOptions.chainId, 0);
 					fileManager.loadSysex(sysex, configOptions);					
 					Utils.copySysexToConfigPad(sysex, configFull.configPads[0]);
-					controlsPads.updatePadControls(0);
+					controlsPads.updateControls();
 				}
 			}
 		});
@@ -1413,13 +1415,8 @@ public class Main_window {
 			Utils.copySysexToConfig3rd(sysex, configFull.config3rds[i]);
 			configFull.config3rds[i].altNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].altNote_linked;
 			configFull.config3rds[i].pressrollNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].pressrollNote_linked;
-		}		
-		controlsPads.updatePadControls(controlsPads.getPadPointer());
-		controlsPads.updatePadControls(controlsPads.getPadPointer()+1);
-		if (controlsPads.getPadPointer() > 1)
-		{
-			controlsPads.updateThirdControls((controlsPads.getPadPointer() - 1)/2);
-		}
+		}				
+		controlsPads.updateControls();
 		
 		for (int i=0; i < (Constants.CURVES_COUNT); i++) {
 			Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[i], sysex, configOptions.chainId, i);
@@ -1551,11 +1548,11 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_PAD:
 						Utils.copySysexToConfigPad(midi_handler.bufferIn, configFull.configPads[buffer[4] - 1]);
-						controlsPads.updatePadControls(buffer[4] - 1);
+						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_3RD:
 						Utils.copySysexToConfig3rd(midi_handler.bufferIn, configFull.config3rds[buffer[4]]);
-						controlsPads.updateThirdControls(buffer[4]);
+						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_VERSION:
 						int ver = 0;

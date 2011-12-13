@@ -24,6 +24,7 @@ import javax.swing.JCheckBox;
 public class NoteSpinControl extends JPanel {
 	private JLabel lblNoteName;
 	private JSpinner spinner;
+	private ConfigFull configFull;
 
 	private int octave;
 	private int note_pointer;
@@ -32,26 +33,13 @@ public class NoteSpinControl extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public NoteSpinControl() {
+	public NoteSpinControl(ConfigFull config) {
+		configFull = config;
 		
 		spinner = new JSpinner();
 		spinner.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				short note_number;
-				short base;
-				String note_text;
-				note_number = ((Short)spinner.getValue()).shortValue();
-				if (note_number > 0) {
-					octave = note_number/12 ;
-					base = (short)(octave*12);
-					note_pointer = note_number - base;
-					note_text = note_names[note_pointer] + " " + Integer.toString(octave - 1);
-					lblNoteName.setText(note_text);
-					lblNoteName.setToolTipText("Note = " + note_text);
-				} else {
-					lblNoteName.setText("Disbld");
-					lblNoteName.setToolTipText("Note Disabled");
-				}
+				updateNoteName();
 			}
 		});
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -74,6 +62,24 @@ public class NoteSpinControl extends JPanel {
 		add(checkBox, "3, 1");
 	}
 
+	private void updateNoteName() {
+		short note_number;
+		short base;
+		String note_text;
+		note_number = ((Short)spinner.getValue()).shortValue();
+		if (note_number > 0) {
+			octave = note_number/12 ;
+			base = (short)(octave*12);
+			note_pointer = note_number - base;
+			note_text = note_names[note_pointer] + " " + Integer.toString(octave - 3 + configFull.configMisc.octave_shift);
+			lblNoteName.setText(note_text);
+			lblNoteName.setToolTipText("Note = " + note_text);
+		} else {
+			lblNoteName.setText("Disbld");
+			lblNoteName.setToolTipText("Note Disabled");
+		}		
+	}
+	
 	public SpinnerModel getSpinnerModel() {
 		return spinner.getModel();
 	}
@@ -89,6 +95,7 @@ public class NoteSpinControl extends JPanel {
 		if ((value >= 0 ) && (value < 128)) {
 			spinner.setValue(value);
 		}
+		updateNoteName();
 	}
 	public JSpinner getSpinner() {
 		return spinner;

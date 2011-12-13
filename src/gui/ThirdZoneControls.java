@@ -93,14 +93,14 @@ public class ThirdZoneControls extends JPanel {
 		lblNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblNote, "1, 1, right, default");
 		
-		noteSpinControl_note = new NoteSpinControl();
+		noteSpinControl_note = new NoteSpinControl(configFull);
 		noteSpinControl_note.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
-					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+					noteSpinControl_altNote.setValue(noteSpinControl_note.getValue());
 				}
 				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
-					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+					noteSpinControl_pressrollNote.setValue(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -137,12 +137,12 @@ public class ThirdZoneControls extends JPanel {
 		lblAltNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblAltNote, "1, 2, right, default");
 		
-		noteSpinControl_altNote = new NoteSpinControl();
+		noteSpinControl_altNote = new NoteSpinControl(configFull);
 		noteSpinControl_altNote.getCheckBox().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				noteSpinControl_altNote.getSpinner().setEnabled(!noteSpinControl_altNote.getCheckBox().isSelected());
 				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
-					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+					noteSpinControl_altNote.setValue(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -176,12 +176,12 @@ public class ThirdZoneControls extends JPanel {
 		lblPressrollNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblPressrollNote, "1, 3, right, default");
 		
-		noteSpinControl_pressrollNote = new NoteSpinControl();
+		noteSpinControl_pressrollNote = new NoteSpinControl(configFull);
 		noteSpinControl_pressrollNote.getCheckBox().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				noteSpinControl_pressrollNote.getSpinner().setEnabled(!noteSpinControl_pressrollNote.getCheckBox().isSelected());
 				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
-					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+					noteSpinControl_pressrollNote.setValue(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -215,7 +215,7 @@ public class ThirdZoneControls extends JPanel {
 		lblDampenedNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblDampenedNote, "1, 4");
 		
-		noteSpinControl_dampenedNote = new NoteSpinControl();
+		noteSpinControl_dampenedNote = new NoteSpinControl(configFull);
 		//noteSpinControl_dampenedNote.getCheckBox().setVisible(true);
 		controls.add(noteSpinControl_dampenedNote.getSpinner());
 		add(noteSpinControl_dampenedNote, "3, 4, fill, fill");
@@ -270,10 +270,10 @@ public class ThirdZoneControls extends JPanel {
 		if (allInitialized) {
 			if (!inUpdate) {
 				inUpdate = true;
-				noteSpinControl_note.getSpinner().setValue(configFull.config3rds[configIndex].note);
-				noteSpinControl_altNote.getSpinner().setValue(configFull.config3rds[configIndex].altNote);
-				noteSpinControl_pressrollNote.getSpinner().setValue(configFull.config3rds[configIndex].pressrollNote);
-				noteSpinControl_dampenedNote.getSpinner().setValue(configFull.config3rds[configIndex].dampenedNote);
+				noteSpinControl_note.setValue(configFull.config3rds[configIndex].note);
+				noteSpinControl_altNote.setValue(configFull.config3rds[configIndex].altNote);
+				noteSpinControl_pressrollNote.setValue(configFull.config3rds[configIndex].pressrollNote);
+				noteSpinControl_dampenedNote.setValue(configFull.config3rds[configIndex].dampenedNote);
 				noteSpinControl_altNote.getCheckBox().setSelected(configFull.config3rds[configIndex].altNote_linked);
 				noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.config3rds[configIndex].pressrollNote_linked);
 				spinner_threshold.setValue(configFull.config3rds[configIndex].threshold);
@@ -286,10 +286,10 @@ public class ThirdZoneControls extends JPanel {
 	}
 	
 	public void updateConfig() {
-		configFull.config3rds[configIndex].note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
-		configFull.config3rds[configIndex].altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
-		configFull.config3rds[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
-		configFull.config3rds[configIndex].dampenedNote = ((Short)noteSpinControl_dampenedNote.getSpinner().getValue()).shortValue();
+		configFull.config3rds[configIndex].note = ((Short)noteSpinControl_note.getValue()).shortValue();
+		configFull.config3rds[configIndex].altNote = ((Short)noteSpinControl_altNote.getValue()).shortValue();
+		configFull.config3rds[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getValue()).shortValue();
+		configFull.config3rds[configIndex].dampenedNote = ((Short)noteSpinControl_dampenedNote.getValue()).shortValue();
 		configFull.config3rds[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
 		configFull.config3rds[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
 		configFull.config3rds[configIndex].threshold = (Short)spinner_threshold.getValue();

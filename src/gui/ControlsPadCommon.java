@@ -194,14 +194,14 @@ public class ControlsPadCommon extends JPanel {
 		LabelCustom lblNote = new LabelCustom("Note");
 		add(lblNote, "1, 2, right, center");
 		
-		noteSpinControl_note = new NoteSpinControl();
+		noteSpinControl_note = new NoteSpinControl(configFull);
 		noteSpinControl_note.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
-					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+					noteSpinControl_altNote.setValue(noteSpinControl_note.getValue());
 				}
 				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
-					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+					noteSpinControl_pressrollNote.setValue(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -214,14 +214,14 @@ public class ControlsPadCommon extends JPanel {
 		LabelCustom lblAltNote = new LabelCustom("Alt Note");
 		add(lblAltNote, "1, 3, right, center");
 		
-		noteSpinControl_altNote = new NoteSpinControl();
+		noteSpinControl_altNote = new NoteSpinControl(configFull);
 		add(noteSpinControl_altNote, "3, 3");
 		noteSpinControl_altNote.getCheckBox().setVisible(true);
 		noteSpinControl_altNote.getCheckBox().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				noteSpinControl_altNote.getSpinner().setEnabled(!noteSpinControl_altNote.getCheckBox().isSelected());
 				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
-					noteSpinControl_altNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+					noteSpinControl_altNote.setValue(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -233,14 +233,14 @@ public class ControlsPadCommon extends JPanel {
 		LabelCustom lblPressrollNote = new LabelCustom("Pressroll Note");
 		add(lblPressrollNote, "1, 4, right, center");
 		
-		noteSpinControl_pressrollNote = new NoteSpinControl();
+		noteSpinControl_pressrollNote = new NoteSpinControl(configFull);
 		add(noteSpinControl_pressrollNote, "3, 4");
 		noteSpinControl_pressrollNote.getCheckBox().setVisible(true);
 		noteSpinControl_pressrollNote.getCheckBox().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				noteSpinControl_pressrollNote.getSpinner().setEnabled(!noteSpinControl_pressrollNote.getCheckBox().isSelected());
 				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
-					noteSpinControl_pressrollNote.getSpinner().setValue(noteSpinControl_note.getSpinner().getValue());
+					noteSpinControl_pressrollNote.setValue(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -490,10 +490,10 @@ public class ControlsPadCommon extends JPanel {
 
 	public void updateControls() {
 		comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);
-		noteSpinControl_note.getSpinner().setValue(configFull.configPads[configIndex].note);
-		noteSpinControl_altNote.getSpinner().setValue(configFull.configPads[configIndex].altNote);
+		noteSpinControl_note.setValue(configFull.configPads[configIndex].note);
+		noteSpinControl_altNote.setValue(configFull.configPads[configIndex].altNote);
 		noteSpinControl_altNote.getCheckBox().setSelected(configFull.configPads[configIndex].altNote_linked);
-		noteSpinControl_pressrollNote.getSpinner().setValue(configFull.configPads[configIndex].pressrollNote);
+		noteSpinControl_pressrollNote.setValue(configFull.configPads[configIndex].pressrollNote);
 		noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.configPads[configIndex].pressrollNote_linked);
 		spinner_channel.setValue(configFull.configPads[configIndex].channel + 1);
 		checkBox_special.setSelected(configFull.configPads[configIndex].special);
@@ -532,10 +532,10 @@ public class ControlsPadCommon extends JPanel {
 	
 	public void updateConfig() {
 		configFull.configPads[configIndex].name = (short)comboBox_name.getSelectedIndex();
-		configFull.configPads[configIndex].note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
-		configFull.configPads[configIndex].altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
+		configFull.configPads[configIndex].note = ((Short)noteSpinControl_note.getValue()).shortValue();
+		configFull.configPads[configIndex].altNote = ((Short)noteSpinControl_altNote.getValue()).shortValue();
 		configFull.configPads[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
-		configFull.configPads[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
+		configFull.configPads[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getValue()).shortValue();
 		configFull.configPads[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
 		configFull.configPads[configIndex].channel = (short)(((Integer)spinner_channel.getValue()).shortValue() - 1);
 		configFull.configPads[configIndex].special = checkBox_special.isSelected();

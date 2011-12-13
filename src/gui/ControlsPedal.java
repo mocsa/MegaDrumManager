@@ -256,6 +256,7 @@ public class ControlsPedal extends JPanel {
 		panel_misc.add(lblChickDelay, "1, 8");
 		
 		spin127Control_chickDelay = new Spin127Control();
+		spin127Control_chickDelay.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_chickDelay.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configFull.configPedal.chickDelay = ((Integer)spin127Control_chickDelay.getSpinner().getValue()).shortValue();
@@ -269,6 +270,7 @@ public class ControlsPedal extends JPanel {
 		panel_misc.add(lblCcNumber, "1, 9");
 		
 		spin127Control_cc = new Spin127Control();
+		spin127Control_cc.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_cc.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configFull.configPedal.cc = ((Integer)spin127Control_cc.getSpinner().getValue()).shortValue();
@@ -282,6 +284,7 @@ public class ControlsPedal extends JPanel {
 		panel_misc.add(lblCcRdcLvl, "1, 10");
 		
 		spin127Control_ccRdcLvl = new Spin127Control();
+		spin127Control_ccRdcLvl.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_ccRdcLvl.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configFull.configPedal.ccRdcLvl = ((Integer)spin127Control_ccRdcLvl.getSpinner().getValue()).shortValue();
@@ -437,10 +440,10 @@ public class ControlsPedal extends JPanel {
 		lblBowSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBowSemiopen, "1, 1");
 		
-		noteSpinControl_bowSemiOpen = new NoteSpinControl();
+		noteSpinControl_bowSemiOpen = new NoteSpinControl(configFull);
 		noteSpinControl_bowSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.bowSemiOpenNote = ((Short)noteSpinControl_bowSemiOpen.getSpinner().getValue()).shortValue();
+				configFull.configPedal.bowSemiOpenNote = ((Short)noteSpinControl_bowSemiOpen.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -450,10 +453,10 @@ public class ControlsPedal extends JPanel {
 		lblEdgeSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblEdgeSemiopen, "1, 2");
 		
-		noteSpinControl_edgeSemiOpen = new NoteSpinControl();
+		noteSpinControl_edgeSemiOpen = new NoteSpinControl(configFull);
 		noteSpinControl_edgeSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.edgeSemiOpenNote = ((Short)noteSpinControl_edgeSemiOpen.getSpinner().getValue()).shortValue();
+				configFull.configPedal.edgeSemiOpenNote = ((Short)noteSpinControl_edgeSemiOpen.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -463,10 +466,10 @@ public class ControlsPedal extends JPanel {
 		lblBellSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBellSemiopen, "1, 3");
 		
-		noteSpinControl_bellSemiOpen = new NoteSpinControl();
+		noteSpinControl_bellSemiOpen = new NoteSpinControl(configFull);
 		noteSpinControl_bellSemiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.bellSemiOpenNote = ((Short)noteSpinControl_bellSemiOpen.getSpinner().getValue()).shortValue();
+				configFull.configPedal.bellSemiOpenNote = ((Short)noteSpinControl_bellSemiOpen.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -476,10 +479,10 @@ public class ControlsPedal extends JPanel {
 		lblBowHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBowHalfopen, "1, 4");
 		
-		noteSpinControl_bowHalfOpen = new NoteSpinControl();
+		noteSpinControl_bowHalfOpen = new NoteSpinControl(configFull);
 		noteSpinControl_bowHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.bowHalfOpenNote = ((Short)noteSpinControl_bowHalfOpen.getSpinner().getValue()).shortValue();
+				configFull.configPedal.bowHalfOpenNote = ((Short)noteSpinControl_bowHalfOpen.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -489,10 +492,10 @@ public class ControlsPedal extends JPanel {
 		lblEdgeHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblEdgeHalfopen, "1, 5");
 		
-		noteSpinControl_edgeHalfOpen = new NoteSpinControl();
+		noteSpinControl_edgeHalfOpen = new NoteSpinControl(configFull);
 		noteSpinControl_edgeHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.edgeHalfOpenNote = ((Short)noteSpinControl_edgeHalfOpen.getSpinner().getValue()).shortValue();
+				configFull.configPedal.edgeHalfOpenNote = ((Short)noteSpinControl_edgeHalfOpen.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -502,10 +505,10 @@ public class ControlsPedal extends JPanel {
 		lblBellHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBellHalfopen, "1, 6");
 		
-		noteSpinControl_bellHalfOpen = new NoteSpinControl();
+		noteSpinControl_bellHalfOpen = new NoteSpinControl(configFull);
 		noteSpinControl_bellHalfOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.bellHalfOpenNote = ((Short)noteSpinControl_bellHalfOpen.getSpinner().getValue()).shortValue();
+				configFull.configPedal.bellHalfOpenNote = ((Short)noteSpinControl_bellHalfOpen.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -515,10 +518,10 @@ public class ControlsPedal extends JPanel {
 		lblBowSemiclosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBowSemiclosed, "1, 7");
 		
-		noteSpinControl_bowSemiClosed = new NoteSpinControl();
+		noteSpinControl_bowSemiClosed = new NoteSpinControl(configFull);
 		noteSpinControl_bowSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.bowSemiClosedNote = ((Short)noteSpinControl_bowSemiClosed.getSpinner().getValue()).shortValue();
+				configFull.configPedal.bowSemiClosedNote = ((Short)noteSpinControl_bowSemiClosed.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -528,10 +531,10 @@ public class ControlsPedal extends JPanel {
 		lblEdgeSemiclosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblEdgeSemiclosed, "1, 8");
 		
-		noteSpinControl_edgeSemiClosed = new NoteSpinControl();
+		noteSpinControl_edgeSemiClosed = new NoteSpinControl(configFull);
 		noteSpinControl_edgeSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.edgeSemiClosedNote = ((Short)noteSpinControl_edgeSemiClosed.getSpinner().getValue()).shortValue();
+				configFull.configPedal.edgeSemiClosedNote = ((Short)noteSpinControl_edgeSemiClosed.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -541,10 +544,10 @@ public class ControlsPedal extends JPanel {
 		lblBellSemiclosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBellSemiclosed, "1, 9");
 		
-		noteSpinControl_bellSemiClosed = new NoteSpinControl();
+		noteSpinControl_bellSemiClosed = new NoteSpinControl(configFull);
 		noteSpinControl_bellSemiClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.bellSemiClosedNote = ((Short)noteSpinControl_bellSemiClosed.getSpinner().getValue()).shortValue();
+				configFull.configPedal.bellSemiClosedNote = ((Short)noteSpinControl_bellSemiClosed.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -554,10 +557,10 @@ public class ControlsPedal extends JPanel {
 		lblBowClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBowClosed, "1, 10");
 		
-		noteSpinControl_bowClosed = new NoteSpinControl();
+		noteSpinControl_bowClosed = new NoteSpinControl(configFull);
 		noteSpinControl_bowClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.bowClosedNote = ((Short)noteSpinControl_bowClosed.getSpinner().getValue()).shortValue();
+				configFull.configPedal.bowClosedNote = ((Short)noteSpinControl_bowClosed.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -567,10 +570,10 @@ public class ControlsPedal extends JPanel {
 		lblEdgeClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblEdgeClosed, "1, 11");
 		
-		noteSpinControl_edgeClosed = new NoteSpinControl();
+		noteSpinControl_edgeClosed = new NoteSpinControl(configFull);
 		noteSpinControl_edgeClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.edgeClosedNote = ((Short)noteSpinControl_edgeClosed.getSpinner().getValue()).shortValue();
+				configFull.configPedal.edgeClosedNote = ((Short)noteSpinControl_edgeClosed.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -580,10 +583,10 @@ public class ControlsPedal extends JPanel {
 		lblBellClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBellClosed, "1, 12");
 		
-		noteSpinControl_bellClosed = new NoteSpinControl();
+		noteSpinControl_bellClosed = new NoteSpinControl(configFull);
 		noteSpinControl_bellClosed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.bellClosedNote = ((Short)noteSpinControl_bellClosed.getSpinner().getValue()).shortValue();
+				configFull.configPedal.bellClosedNote = ((Short)noteSpinControl_bellClosed.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -593,10 +596,10 @@ public class ControlsPedal extends JPanel {
 		lblChick.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblChick, "1, 13");
 		
-		noteSpinControl_chick = new NoteSpinControl();
+		noteSpinControl_chick = new NoteSpinControl(configFull);
 		noteSpinControl_chick.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.chickNote = ((Short)noteSpinControl_chick.getSpinner().getValue()).shortValue();
+				configFull.configPedal.chickNote = ((Short)noteSpinControl_chick.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -606,10 +609,10 @@ public class ControlsPedal extends JPanel {
 		lblSplash.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblSplash, "1, 14");
 		
-		noteSpinControl_splash = new NoteSpinControl();
+		noteSpinControl_splash = new NoteSpinControl(configFull);
 		noteSpinControl_splash.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.splashNote = ((Short)noteSpinControl_splash.getSpinner().getValue()).shortValue();
+				configFull.configPedal.splashNote = ((Short)noteSpinControl_splash.getValue()).shortValue();
 				valueChanged();
 			}
 		});
@@ -644,20 +647,20 @@ public class ControlsPedal extends JPanel {
 		spin127Control_closed.getSpinner().setValue((int)configFull.configPedal.closedLevel);
 		spin127Control_shortThres.getSpinner().setValue((int)configFull.configPedal.shortThres);
 		spin127Control_longThres.getSpinner().setValue((int)configFull.configPedal.longThres);
-		noteSpinControl_bowSemiOpen.getSpinner().setValue(configFull.configPedal.bowSemiOpenNote);
-		noteSpinControl_edgeSemiOpen.getSpinner().setValue(configFull.configPedal.edgeSemiOpenNote);
-		noteSpinControl_bellSemiOpen.getSpinner().setValue(configFull.configPedal.bellSemiOpenNote);
-		noteSpinControl_bowHalfOpen.getSpinner().setValue(configFull.configPedal.bowHalfOpenNote);
-		noteSpinControl_edgeHalfOpen.getSpinner().setValue(configFull.configPedal.edgeHalfOpenNote);
-		noteSpinControl_bellHalfOpen.getSpinner().setValue(configFull.configPedal.bellHalfOpenNote);
-		noteSpinControl_bowSemiClosed.getSpinner().setValue(configFull.configPedal.bowSemiClosedNote);
-		noteSpinControl_edgeSemiClosed.getSpinner().setValue(configFull.configPedal.edgeSemiClosedNote);
-		noteSpinControl_bellSemiClosed.getSpinner().setValue(configFull.configPedal.bellSemiClosedNote);
-		noteSpinControl_bowClosed.getSpinner().setValue(configFull.configPedal.bowClosedNote);
-		noteSpinControl_edgeClosed.getSpinner().setValue(configFull.configPedal.edgeClosedNote);
-		noteSpinControl_bellClosed.getSpinner().setValue(configFull.configPedal.bellClosedNote);
-		noteSpinControl_chick.getSpinner().setValue(configFull.configPedal.chickNote);
-		noteSpinControl_splash.getSpinner().setValue(configFull.configPedal.splashNote);
+		noteSpinControl_bowSemiOpen.setValue(configFull.configPedal.bowSemiOpenNote);
+		noteSpinControl_edgeSemiOpen.setValue(configFull.configPedal.edgeSemiOpenNote);
+		noteSpinControl_bellSemiOpen.setValue(configFull.configPedal.bellSemiOpenNote);
+		noteSpinControl_bowHalfOpen.setValue(configFull.configPedal.bowHalfOpenNote);
+		noteSpinControl_edgeHalfOpen.setValue(configFull.configPedal.edgeHalfOpenNote);
+		noteSpinControl_bellHalfOpen.setValue(configFull.configPedal.bellHalfOpenNote);
+		noteSpinControl_bowSemiClosed.setValue(configFull.configPedal.bowSemiClosedNote);
+		noteSpinControl_edgeSemiClosed.setValue(configFull.configPedal.edgeSemiClosedNote);
+		noteSpinControl_bellSemiClosed.setValue(configFull.configPedal.bellSemiClosedNote);
+		noteSpinControl_bowClosed.setValue(configFull.configPedal.bowClosedNote);
+		noteSpinControl_edgeClosed.setValue(configFull.configPedal.edgeClosedNote);
+		noteSpinControl_bellClosed.setValue(configFull.configPedal.bellClosedNote);
+		noteSpinControl_chick.setValue(configFull.configPedal.chickNote);
+		noteSpinControl_splash.setValue(configFull.configPedal.splashNote);
 		changeEventsAllowed = true;
 	}
 	

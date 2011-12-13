@@ -129,6 +129,7 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblNoteOffDelay, "1, 1");
 		
 		spinner_noteoff = new JSpinner();
+		spinner_noteoff.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spinner_noteoff.setToolTipText("<html>Delay in milliseconds of a Note Off message<br>\r\nafter a Note On message</html>");
 		spinner_noteoff.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -149,6 +150,7 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblPressrollTimeout, "1, 2");
 		
 		spinner_pressroll = new JSpinner();
+		spinner_pressroll.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spinner_pressroll.setToolTipText("<html>Timeout in milliseconds for Pressroll detection.<br>\r\n<br>\r\nIf subsequent hits on a pad are within this timeout<br>\r\nMegaDrum will send Pressroll Notes  instead of<br>\r\nNotes or Alt Notes. \r\n</html>");
 		spinner_pressroll.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -165,6 +167,7 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblLatency, "1, 3");
 		
 		spinner_latency = new JSpinner();
+		spinner_latency.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spinner_latency.setToolTipText("<html>Internally MegaDrum scans all inputs every 10-30 microseconds for presence of signals.<br>\r\nThen, very simplified, every <Latency> period MegaDrum<br>\r\nscans input states to see if any of the inputs registered signals<br>\r\nand sends MIDI messages for triggered inputs. Lowering this setting<br>\r\nwill reduce latency and may degrade level detection precision.<br>\r\nRaising this setting may improve level detection precision and will increase latency.<br> Latency can be changed between 10 and 100 which corresponds to 1 and 10 milliseconds.<br>\r\nDefault is 40 - 4 millisecond.</html>");
 		spinner_latency.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -181,11 +184,13 @@ public class ControlsMisc extends JPanel {
 		panel.add(lblOctaveShift, "1, 4");
 		
 		spinner_octaveShift = new JSpinner();
+		spinner_octaveShift.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spinner_octaveShift.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				short value = ((Short)spinner_octaveShift.getValue()).shortValue();
 				configFull.configMisc.octave_shift = (short)value;
 				valueChanged();
+				octaveValueChanged();
 			}
 		});
 		spinner_octaveShift.setModel(new SpinnerNumberModel(new Short((short) 2), new Short((short) 0), new Short((short) 2), new Short((short) 1)));
@@ -306,6 +311,12 @@ public class ControlsMisc extends JPanel {
 
 	}
 
+	private void octaveValueChanged() {
+		if (changeEventsAllowed) {
+			firePropertyChange("octaveValueChanged", false, true);
+		}
+	}
+	
 	private void valueChanged() {
 		if (changeEventsAllowed) {
 			firePropertyChange("valueChanged", false, true);
