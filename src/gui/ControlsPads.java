@@ -102,18 +102,12 @@ public class ControlsPads extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsPads() {
-//		configPads = new ConfigPad[Constants.PADS_COUNT];
-//        for(int i=0; i<Constants.PADS_COUNT; i++){
-//        	configPads[i] = new ConfigPad();
-//        }
+	public ControlsPads(ConfigFull config) {
+		configFull = config;
+		
         padPointer = 0;
         prevPadPointer = -1;
 
-//		config3rds = new Config3rd[(Constants.PADS_COUNT - 1)/2];
-//        for(int i=0; i<((Constants.PADS_COUNT - 1)/2); i++){
-//        	config3rds[i] = new Config3rd();
-//        }
         thirdPointer = 0;
         prevThirdPointer = -1;
 		
@@ -326,8 +320,8 @@ public class ControlsPads extends JPanel {
 		
 		JPanel panel_head_rim = new JPanel();
 		add(panel_head_rim, "1, 4, fill, fill");
-		
-		panel_head = new ControlsPadCommon(head_pad);
+
+		panel_head = new ControlsPadCommon(head_pad, configFull);
 		panel_head.addPropertyChangeListener( new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("nameChanged")) {
@@ -362,8 +356,8 @@ public class ControlsPads extends JPanel {
 
 		panel_head_rim.add(panel_head, "1, 1, fill, fill");
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		
-		panel_rim = new ControlsPadCommon(rim_pad);
+
+		panel_rim = new ControlsPadCommon(rim_pad, configFull);
 		panel_rim.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("nameChanged")) {
@@ -406,7 +400,7 @@ public class ControlsPads extends JPanel {
 		panel_head_rim.add(panel_rim, "2, 1, fill, fill");
 		panel_rim.setBorder(new TitledBorder(null, "Rim/Edge", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		panel_3rd_zone = new ThirdZoneControls();
+		panel_3rd_zone = new ThirdZoneControls(configFull);
 		panel_3rd_zone.addPropertyChangeListener( new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("valueChanged")) {
@@ -427,7 +421,6 @@ public class ControlsPads extends JPanel {
 		add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		//panel_head.setConfig(configFull.configPads[0], head_pad, 0);
 		comboBox_padSelection.setSelectedIndex(0);		
 	}
 	
@@ -475,17 +468,7 @@ public class ControlsPads extends JPanel {
 		thirdPointer = pointer;
 		updateThirdControls(pointer);
 	}
-	
-	public void setConfig(ConfigFull config) {
-		configFull = config;
-		panel_3rd_zone.setConfig(config);
-		panel_3rd_zone.setConfigIndex(0);
-		panel_head.setConfig(config);
-		panel_head.setConfigIndex(head_pad, 0);
-		panel_rim.setConfig(config);
-		panel_rim.setConfigIndex(rim_pad,2);
-	}
-		
+			
 	private String getPadName(int pad_id) {
 		String result;
 		String head_rim = ((pad_id&0x01) > 0)?"H":"R";

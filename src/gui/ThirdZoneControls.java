@@ -67,7 +67,9 @@ public class ThirdZoneControls extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ThirdZoneControls() {
+	public ThirdZoneControls(ConfigFull config) {
+		configFull = config;
+		configIndex = 0;
 		controls = new ArrayList<Object>();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:default"),
@@ -116,11 +118,8 @@ public class ThirdZoneControls extends JPanel {
 		controls.add(slider_midPoint);
 		slider_midPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				if (configFull != null)
-				{
-					configFull.config3rds[configIndex].threshold = (short)((configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4));
-					updateControls();
-				}
+				configFull.config3rds[configIndex].threshold = (short)((configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4));
+				updateControls();
 			}
 		});
 		slider_midPoint.setPaintLabels(true);
@@ -267,6 +266,7 @@ public class ThirdZoneControls extends JPanel {
 	}
 
 	public void updateControls() {
+		changeEventsAllowed = false;
 		if (allInitialized) {
 			if (!inUpdate) {
 				inUpdate = true;
@@ -280,6 +280,7 @@ public class ThirdZoneControls extends JPanel {
 				inUpdate = false;
 			}
 		}
+		changeEventsAllowed = true;		
 	}
 	
 	public void updateConfig() {
@@ -297,14 +298,8 @@ public class ThirdZoneControls extends JPanel {
 	}
 
 	public void setConfigIndex(int index) {
-		changeEventsAllowed = false;
 		configIndex = index;
 		updateControls();
-		changeEventsAllowed = true;		
-	}
-	
-	public void setConfig(ConfigFull config) {
-		configFull = config;
 	}
 	
 }

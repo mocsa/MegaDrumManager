@@ -539,7 +539,7 @@ public class Main_window {
 			}
 		});
 		
-		controlsPads = new ControlsPads();
+		controlsPads = new ControlsPads(configFull);
 		controlsPads.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];
@@ -1360,6 +1360,15 @@ public class Main_window {
 		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
 		Utils.copySysexToConfigPedal(sysex, fullConfigs[configOptions.lastConfig].configPedal);		
 
+		for (int i=0; i < (Constants.MAX_INPUTS - 1); i++) {
+			Utils.copyConfigPadToSysex(configFull.configPads[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigPad(sysex, fullConfigs[configOptions.lastConfig].configPads[i]);					
+		}
+		
+		for (int i=0; i < ((Constants.MAX_INPUTS/2) - 1); i++) {
+			Utils.copyConfig3rdToSysex(configFull.config3rds[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfig3rd(sysex, fullConfigs[configOptions.lastConfig].config3rds[i]);					
+		}
 	}
 	
 	private void loadAllFromConfigFull() {
@@ -1376,7 +1385,21 @@ public class Main_window {
 		Utils.copySysexToConfigPedal(sysex, configFull.configPedal);		
 		controlsPedal.updateControls();
 
-		controlsPads.setConfig(fullConfigs[configOptions.lastConfig]);		
+		for (int i=0; i < (Constants.MAX_INPUTS - 1); i++) {
+			Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigPad(sysex, configFull.configPads[i]);					
+		}
+		for (int i=0; i < ((Constants.MAX_INPUTS/2) - 1); i++) {
+			Utils.copyConfig3rdToSysex(fullConfigs[configOptions.lastConfig].config3rds[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfig3rd(sysex, configFull.config3rds[i]);					
+		}		
+		controlsPads.updatePadControls(controlsPads.getPadPointer());
+		controlsPads.updatePadControls(controlsPads.getPadPointer()+1);
+		if (controlsPads.getPadPointer() > 1)
+		{
+			controlsPads.updateThirdControls((controlsPads.getPadPointer() - 1)/2);
+		}
+		
 		controlsPadsExtra.setConfig(fullConfigs[configOptions.lastConfig]);
 	}
 	

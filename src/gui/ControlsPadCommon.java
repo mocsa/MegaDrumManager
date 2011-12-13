@@ -101,7 +101,6 @@ public class ControlsPadCommon extends JPanel {
 	private static final boolean head_pad = true;
 	private static final boolean rim_pad = false;
 	
-	//private ConfigPad configPad;
 	private ConfigFull configFull;
 	private int	configIndex;
 	private PadButton padButton__name;
@@ -132,9 +131,15 @@ public class ControlsPadCommon extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsPadCommon(boolean pad_type) {
+	public ControlsPadCommon(boolean pad_type, ConfigFull config) {
 		head_rim_pad = pad_type;
-		//configPad = new ConfigPad();
+		configFull = config;
+		if (pad_type == head_pad)
+		{
+			configIndex = 0;
+		} else {
+			configIndex = 1;
+		}
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
@@ -526,7 +531,6 @@ public class ControlsPadCommon extends JPanel {
 	}
 	
 	public void updateConfig() {
-		if (configFull == null) return;
 		configFull.configPads[configIndex].name = (short)comboBox_name.getSelectedIndex();
 		configFull.configPads[configIndex].note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
 		configFull.configPads[configIndex].altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
@@ -576,7 +580,6 @@ public class ControlsPadCommon extends JPanel {
 	public void setConfigIndex(boolean pad_type, int pad_id) {
 		int index;
 		
-		if (configFull == null) return;
 		changeEventsAllowed = false;
 		configIndex = pad_id;
 		index = configFull.configPads[configIndex].name;
@@ -589,11 +592,6 @@ public class ControlsPadCommon extends JPanel {
 		changeEventsAllowed = true;
 	}
 	
-	public void setConfig(ConfigFull config)
-	{
-		configFull = config;
-	}
-		
 	public void updateCustomNamesList(ConfigCustomName [] configCustomNames, int count) {
 		customNamesCount = count;
 		for (int i = 0; i < customNamesCount; i++) {
@@ -611,9 +609,7 @@ public class ControlsPadCommon extends JPanel {
 		for (int i = 0; i < customNamesCount; i++) {
 			comboBox_name.addItem(customNamesList[i]);
 		}
-		if (configFull != null) {
-			comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);			
-		}
+		comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);			
 	}
 	
 	public boolean getHeadRim() {
