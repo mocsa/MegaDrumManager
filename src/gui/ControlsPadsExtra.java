@@ -39,13 +39,10 @@ public class ControlsPadsExtra extends JPanel {
 	private Boolean changeEventsAllowed = false;
 	
 	private CurvesPaint paintPanel;
-	//private int [] yValues = {2, 32, 64, 96, 128, 160, 192, 224, 255};
 	private ChangeListener spinnerChangeListener;
 	private JSpinner [] spinners;
-	//private ConfigCurve [] configCurves;
 	private int curvePointer;
 	private int prevCurvePointer;
-	//private ConfigCustomName [] configCustomNames;
 	private ConfigFull configFull;
 	private int customNamePointer;
 	private int prevCustomNamePointer;
@@ -84,20 +81,13 @@ public class ControlsPadsExtra extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsPadsExtra() {
-//		configCurves = new ConfigCurve[Constants.CURVES_COUNT];
-//        for(int i=0; i<Constants.CURVES_COUNT; i++){
-//        	configCurves[i] = new ConfigCurve();
-//        }
+	public ControlsPadsExtra(ConfigFull config) {
+		configFull = config;
         curvePointer = 0;
         prevCurvePointer = -1;
         
 //        customNamesCount = Constants.CUSTOM_NAMES_MAX;
         customNamesCount = 2;
-//		configCustomNames = new ConfigCustomName[Constants.CUSTOM_NAMES_MAX];
-//        for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
-//        	configCustomNames[i] = new ConfigCustomName();
-//        }
         customNamePointer = 0;
         prevCustomNamePointer = -1;
 
@@ -259,10 +249,7 @@ public class ControlsPadsExtra extends JPanel {
 		
 		paintPanel = new CurvesPaint();
 		panelCurves.add(paintPanel, "1, 3, left, default");
-		if (configFull != null)
-		{
-			paintPanel.yValues = configFull.configCurves[curvePointer].yValues;
-		}
+		paintPanel.yValues = configFull.configCurves[curvePointer].yValues;
 		JPanel panelControls = new JPanel();
 		panelCurves.add(panelControls, "1, 4, left, default");
 		panelControls.setLayout(new FormLayout(new ColumnSpec[] {
@@ -464,10 +451,7 @@ public class ControlsPadsExtra extends JPanel {
 		spinners = new CSpinner[9];
 		for (int i = 0; i < 9; i++ ) {
 			spinners[i] = new CSpinner(i);
-			if (configFull != null)
-			{
-				spinners[i].setModel(new SpinnerNumberModel(configFull.configCurves[curvePointer].yValues[i], 2, 255, 1));
-			}
+			spinners[i].setModel(new SpinnerNumberModel(configFull.configCurves[curvePointer].yValues[i], 2, 255, 1));
 			spinners[i].addChangeListener(spinnerChangeListener);
 			panelControls.add(spinners[i], ((Integer)(i+1)).toString() + ", 1");
 		}
@@ -487,49 +471,40 @@ public class ControlsPadsExtra extends JPanel {
 		}
 	}
 
-	public void updateCurveControls() {
+	private void updateYvalues() {
+		if (spinners != null) {
+			for (int i = 0; i < 9; i++) {
+				spinners[i].setValue(configFull.configCurves[curvePointer].yValues[i]);
+			}
+		}
+	}
+	
+	private void updateCurveControls() {
     	paintPanel.yValues = configFull.configCurves[curvePointer].yValues;
     	comboBox_curveNumber.setSelectedIndex(curvePointer);
     	updateYvalues();
     	paintPanel.repaint();
 	}
 	
-	private void updateYvalues() {
-		if (configFull != null)
-		{
-			if (spinners != null) {
-				for (int i = 0; i < 9; i++) {
-					spinners[i].setValue(configFull.configCurves[curvePointer].yValues[i]);
-				}
-			}
+	private void updateCustomNameControls(int count) {
+		int pointer = customNamePointer;
+		comboBoxSelectName.removeAllItems();
+		for (int i = 0; i < count; i++) {
+			comboBoxSelectName.addItem(configFull.configCustomNames[i].name);
+		}		
+		comboBoxSelectName.setSelectedIndex(pointer);
+		customNamesCount = count;
+		if (changeEventsAllowed) {
+			firePropertyChange("CustomNamesChanged", false, true);
 		}
 	}
 	
-	public void updateCustomNameControls(int count) {
-		if (configFull != null)
-		{
-			int pointer = customNamePointer;
-			comboBoxSelectName.removeAllItems();
-			for (int i = 0; i < count; i++) {
-				comboBoxSelectName.addItem(configFull.configCustomNames[i].name);
-			}		
-			comboBoxSelectName.setSelectedIndex(pointer);
-			customNamesCount = count;
-			if (changeEventsAllowed) {
-				firePropertyChange("CustomNamesChanged", false, true);
-			}
-		}
-	}
-		
-	public void setConfig(ConfigFull config) {
+	public void updateControls() {
 		changeEventsAllowed = false;
-		configFull = config;
-		updateYvalues();
-		paintPanel.repaint();
-		updateCustomNameControls(customNamesCount);
+		updateCurveControls();
+		updateCustomNameControls(getCustomNamesCount());
 		changeEventsAllowed = true;		
 	}
-	
 	
 	public int getCustomNamesCount() {
 		return customNamesCount;

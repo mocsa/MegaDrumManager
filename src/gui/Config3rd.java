@@ -9,6 +9,8 @@ public class Config3rd {
 	public short pressrollNote;
 	public short altNote;
 	public short dampenedNote;
+	public boolean pressrollNote_linked = false;
+	public boolean altNote_linked = false;
 
 	public Config3rd () {
 	}
@@ -23,6 +25,8 @@ public class Config3rd {
 		prop.setProperty(prefix+"altNote", altNote);
 		prop.setProperty(prefix+"pressrollNote", pressrollNote);
 		prop.setProperty(prefix+"dampenedNote", dampenedNote);
+		prop.setProperty(prefix+"altNote_linked", altNote_linked);
+		prop.setProperty(prefix+"pressrollNote_linked", pressrollNote_linked);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix, Integer id) {
@@ -34,6 +38,7 @@ public class Config3rd {
 		altNote = Utils.validateShort(prop.getShort(prefix+"altNote", altNote),0,127,altNote);
 		pressrollNote = Utils.validateShort(prop.getShort(prefix+"pressrollNote", pressrollNote),0,127,pressrollNote);
 		dampenedNote = Utils.validateShort(prop.getShort(prefix+"dampenedNote", dampenedNote),0,127,dampenedNote);
-	}	
-	
+		altNote_linked = prop.getBoolean(prefix+"altNote_linked", altNote_linked);
+		pressrollNote_linked = prop.getBoolean(prefix+"pressrollNote_linked", pressrollNote_linked);				
+	}		
 }

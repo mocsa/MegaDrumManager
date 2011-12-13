@@ -274,6 +274,8 @@ public class ThirdZoneControls extends JPanel {
 				noteSpinControl_altNote.getSpinner().setValue(configFull.config3rds[configIndex].altNote);
 				noteSpinControl_pressrollNote.getSpinner().setValue(configFull.config3rds[configIndex].pressrollNote);
 				noteSpinControl_dampenedNote.getSpinner().setValue(configFull.config3rds[configIndex].dampenedNote);
+				noteSpinControl_altNote.getCheckBox().setSelected(configFull.config3rds[configIndex].altNote_linked);
+				noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.config3rds[configIndex].pressrollNote_linked);
 				spinner_threshold.setValue(configFull.config3rds[configIndex].threshold);
 				spinner_midPointWidth.setValue((short)(configFull.config3rds[configIndex].threshold&0x0f));
 				slider_midPoint.setValue((short)((configFull.config3rds[configIndex].threshold&0xf0)>>4));
@@ -288,6 +290,8 @@ public class ThirdZoneControls extends JPanel {
 		configFull.config3rds[configIndex].altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
 		configFull.config3rds[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
 		configFull.config3rds[configIndex].dampenedNote = ((Short)noteSpinControl_dampenedNote.getSpinner().getValue()).shortValue();
+		configFull.config3rds[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
+		configFull.config3rds[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
 		configFull.config3rds[configIndex].threshold = (Short)spinner_threshold.getValue();
 	}
 	

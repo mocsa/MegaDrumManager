@@ -960,7 +960,7 @@ public class Main_window {
 		});
 		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
 		
-		controlsPadsExtra = new ControlsPadsExtra();
+		controlsPadsExtra = new ControlsPadsExtra(configFull);
 		controlsPadsExtra.getBtnCurveSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
@@ -974,7 +974,7 @@ public class Main_window {
 				Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[controlsPadsExtra.getCurvePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCurvePointer());
 				fileManager.loadSysex(sysex, configOptions);
 				Utils.copySysexToConfigCurve(sysex, fullConfigs[configOptions.lastConfig].configCurves[controlsPadsExtra.getCurvePointer()]);
-				controlsPadsExtra.updateCurveControls();
+				controlsPadsExtra.updateControls();
 			}
 		});
 /*
@@ -1009,7 +1009,7 @@ public class Main_window {
 				Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[controlsPadsExtra.getCustomNamePointer()], sysex, configOptions.chainId, controlsPadsExtra.getCustomNamePointer());
 				fileManager.loadSysex(sysex, configOptions);					
 				Utils.copySysexToConfigCustomName(sysex, fullConfigs[configOptions.lastConfig].configCustomNames[controlsPadsExtra.getCustomNamePointer()]);
-				controlsPadsExtra.updateCustomNameControls(controlsPadsExtra.getCustomNamesCount());
+				controlsPadsExtra.updateControls();
 			}
 		});
 		controlsPadsExtra.addPropertyChangeListener(new PropertyChangeListener() {
@@ -1363,11 +1363,24 @@ public class Main_window {
 		for (int i=0; i < (Constants.MAX_INPUTS - 1); i++) {
 			Utils.copyConfigPadToSysex(configFull.configPads[i], sysex, configOptions.chainId, i);
 			Utils.copySysexToConfigPad(sysex, fullConfigs[configOptions.lastConfig].configPads[i]);					
+			fullConfigs[configOptions.lastConfig].configPads[i].altNote_linked = configFull.configPads[i].altNote_linked;
+			fullConfigs[configOptions.lastConfig].configPads[i].pressrollNote_linked = configFull.configPads[i].pressrollNote_linked;
 		}
 		
 		for (int i=0; i < ((Constants.MAX_INPUTS/2) - 1); i++) {
 			Utils.copyConfig3rdToSysex(configFull.config3rds[i], sysex, configOptions.chainId, i);
 			Utils.copySysexToConfig3rd(sysex, fullConfigs[configOptions.lastConfig].config3rds[i]);					
+			fullConfigs[configOptions.lastConfig].config3rds[i].altNote_linked = configFull.config3rds[i].altNote_linked;
+			fullConfigs[configOptions.lastConfig].config3rds[i].pressrollNote_linked = configFull.config3rds[i].pressrollNote_linked;
+		}
+
+		for (int i=0; i < (Constants.CURVES_COUNT); i++) {
+			Utils.copyConfigCurveToSysex(configFull.configCurves[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigCurve(sysex, fullConfigs[configOptions.lastConfig].configCurves[i]);					
+		}
+		for (int i=0; i < (Constants.CUSTOM_NAMES_MAX); i++) {
+			Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigCustomName(sysex, fullConfigs[configOptions.lastConfig].configCustomNames[i]);					
 		}
 	}
 	
@@ -1387,11 +1400,15 @@ public class Main_window {
 
 		for (int i=0; i < (Constants.MAX_INPUTS - 1); i++) {
 			Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[i], sysex, configOptions.chainId, i);
-			Utils.copySysexToConfigPad(sysex, configFull.configPads[i]);					
+			Utils.copySysexToConfigPad(sysex, configFull.configPads[i]);
+			configFull.configPads[i].altNote_linked = fullConfigs[configOptions.lastConfig].configPads[i].altNote_linked;
+			configFull.configPads[i].pressrollNote_linked = fullConfigs[configOptions.lastConfig].configPads[i].pressrollNote_linked;
 		}
 		for (int i=0; i < ((Constants.MAX_INPUTS/2) - 1); i++) {
 			Utils.copyConfig3rdToSysex(fullConfigs[configOptions.lastConfig].config3rds[i], sysex, configOptions.chainId, i);
-			Utils.copySysexToConfig3rd(sysex, configFull.config3rds[i]);					
+			Utils.copySysexToConfig3rd(sysex, configFull.config3rds[i]);
+			configFull.config3rds[i].altNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].altNote_linked;
+			configFull.config3rds[i].pressrollNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].pressrollNote_linked;
 		}		
 		controlsPads.updatePadControls(controlsPads.getPadPointer());
 		controlsPads.updatePadControls(controlsPads.getPadPointer()+1);
@@ -1400,7 +1417,15 @@ public class Main_window {
 			controlsPads.updateThirdControls((controlsPads.getPadPointer() - 1)/2);
 		}
 		
-		controlsPadsExtra.setConfig(fullConfigs[configOptions.lastConfig]);
+		for (int i=0; i < (Constants.CURVES_COUNT); i++) {
+			Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigCurve(sysex, configFull.configCurves[i]);					
+		}
+		for (int i=0; i < (Constants.CUSTOM_NAMES_MAX); i++) {
+			Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigCustomName(sysex, configFull.configCustomNames[i]);					
+		}
+		controlsPadsExtra.updateControls();
 	}
 	
 	private void load_all() {
@@ -1542,11 +1567,11 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_CURVE:
 						Utils.copySysexToConfigCurve(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configCurves[buffer[4]]);
-						controlsPadsExtra.updateCurveControls();
+						controlsPadsExtra.updateControls();
 						break;
 					case Constants.MD_SYSEX_CUSTOM_NAME:
 						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configCustomNames[buffer[4]]);
-						controlsPadsExtra.updateCustomNameControls(controlsPadsExtra.getCustomNamesCount());
+						controlsPadsExtra.updateControls();
 						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, fullConfigs[configOptions.lastConfig].configGlobalMisc);
