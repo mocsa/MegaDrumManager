@@ -101,7 +101,9 @@ public class ControlsPadCommon extends JPanel {
 	private static final boolean head_pad = true;
 	private static final boolean rim_pad = false;
 	
-	private ConfigPad configPad;
+	//private ConfigPad configPad;
+	private ConfigFull configFull;
+	private int	configIndex;
 	private PadButton padButton__name;
 	private PadButton padButton__note;
 	private PadButton padButton_altNote;
@@ -132,7 +134,7 @@ public class ControlsPadCommon extends JPanel {
 	 */
 	public ControlsPadCommon(boolean pad_type) {
 		head_rim_pad = pad_type;
-		configPad = new ConfigPad();
+		//configPad = new ConfigPad();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
@@ -482,101 +484,103 @@ public class ControlsPadCommon extends JPanel {
 	}
 
 	public void updateControls() {
-		comboBox_name.setSelectedIndex(configPad.name);
-		noteSpinControl_note.getSpinner().setValue(configPad.note);
-		noteSpinControl_altNote.getSpinner().setValue(configPad.altNote);
-		noteSpinControl_altNote.getCheckBox().setSelected(configPad.altNote_linked);
-		noteSpinControl_pressrollNote.getSpinner().setValue(configPad.pressrollNote);
-		noteSpinControl_pressrollNote.getCheckBox().setSelected(configPad.pressrollNote_linked);
-		spinner_channel.setValue(configPad.channel + 1);
-		checkBox_special.setSelected(configPad.special);
-		comboBox_curve.setSelectedIndex(configPad.curve);
-		comboBox_compression.setSelectedIndex(configPad.compression);
-		comboBox_shift.setSelectedIndex(configPad.shift);
-		comboBox_xtalkLevel.setSelectedIndex(configPad.xtalkLevel);
-		comboBox_xtalkGroup.setSelectedIndex(configPad.xtalkGroup);
-		spinner_threshold.setValue(configPad.threshold);
-		comboBox_gain.setSelectedIndex(configPad.gain);
-		checkBox_autoLevel.setSelected(configPad.autoLevel);
-		spinner_highLevel.setValue(configPad.levelMax);
-		spinner_retrigger.setValue(configPad.retrigger);
-		comboBox_dynLevel.setSelectedIndex(configPad.dynLevel);
-		comboBox_dynTime.setSelectedIndex(configPad.dynTime);
-		spinner_minScan.setValue(configPad.minScan);
+		comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);
+		noteSpinControl_note.getSpinner().setValue(configFull.configPads[configIndex].note);
+		noteSpinControl_altNote.getSpinner().setValue(configFull.configPads[configIndex].altNote);
+		noteSpinControl_altNote.getCheckBox().setSelected(configFull.configPads[configIndex].altNote_linked);
+		noteSpinControl_pressrollNote.getSpinner().setValue(configFull.configPads[configIndex].pressrollNote);
+		noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.configPads[configIndex].pressrollNote_linked);
+		spinner_channel.setValue(configFull.configPads[configIndex].channel + 1);
+		checkBox_special.setSelected(configFull.configPads[configIndex].special);
+		comboBox_curve.setSelectedIndex(configFull.configPads[configIndex].curve);
+		comboBox_compression.setSelectedIndex(configFull.configPads[configIndex].compression);
+		comboBox_shift.setSelectedIndex(configFull.configPads[configIndex].shift);
+		comboBox_xtalkLevel.setSelectedIndex(configFull.configPads[configIndex].xtalkLevel);
+		comboBox_xtalkGroup.setSelectedIndex(configFull.configPads[configIndex].xtalkGroup);
+		spinner_threshold.setValue(configFull.configPads[configIndex].threshold);
+		comboBox_gain.setSelectedIndex(configFull.configPads[configIndex].gain);
+		checkBox_autoLevel.setSelected(configFull.configPads[configIndex].autoLevel);
+		spinner_highLevel.setValue(configFull.configPads[configIndex].levelMax);
+		spinner_retrigger.setValue(configFull.configPads[configIndex].retrigger);
+		comboBox_dynLevel.setSelectedIndex(configFull.configPads[configIndex].dynLevel);
+		comboBox_dynTime.setSelectedIndex(configFull.configPads[configIndex].dynTime);
+		spinner_minScan.setValue(configFull.configPads[configIndex].minScan);
 		comboBox_type.removeAllItems();
 		if (head_rim_pad == head_pad) {
 			comboBox_type.addItem("Single Piezo");
 			comboBox_type.addItem("Dual or 3way Yamaha");
 			comboBox_type.addItem("3way Roland");
-			if (configPad.dual) {
+			if (configFull.configPads[configIndex].dual) {
 				comboBox_type.setSelectedIndex(1);
 			}
-			if (configPad.threeWay) {
+			if (configFull.configPads[configIndex].threeWay) {
 				comboBox_type.setSelectedIndex(2);
 			}			
 		} else {
 			comboBox_type.addItem("Piezo");
 			comboBox_type.addItem("Switch");
-			if (configPad.type) {
+			if (configFull.configPads[configIndex].type) {
 				comboBox_type.setSelectedIndex(1);
 			}
 		}
 	}
 	
 	public void updateConfig() {
-		configPad.name = (short)comboBox_name.getSelectedIndex();
-		configPad.note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
-		configPad.altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
-		configPad.altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
-		configPad.pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
-		configPad.pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
-		configPad.channel = (short)(((Integer)spinner_channel.getValue()).shortValue() - 1);
-		configPad.special = checkBox_special.isSelected();
-		configPad.curve = (short)comboBox_curve.getSelectedIndex();
-		configPad.compression = (short)comboBox_compression.getSelectedIndex();
-		configPad.shift = (short)comboBox_shift.getSelectedIndex();
-		configPad.xtalkLevel = (short)comboBox_xtalkLevel.getSelectedIndex();
-		configPad.xtalkGroup = (short)comboBox_xtalkGroup.getSelectedIndex();
-		configPad.threshold = (Short)spinner_threshold.getValue();
-		configPad.gain = (short)comboBox_gain.getSelectedIndex();
-		configPad.autoLevel = checkBox_autoLevel.isSelected();
-		configPad.levelMax = (Short)spinner_highLevel.getValue();
-		configPad.retrigger = (Short)spinner_retrigger.getValue();
-		configPad.dynLevel = (short)comboBox_dynLevel.getSelectedIndex();
-		configPad.dynTime = (short)comboBox_dynTime.getSelectedIndex();
-		configPad.minScan = (Short)spinner_minScan.getValue();
+		if (configFull == null) return;
+		configFull.configPads[configIndex].name = (short)comboBox_name.getSelectedIndex();
+		configFull.configPads[configIndex].note = ((Short)noteSpinControl_note.getSpinner().getValue()).shortValue();
+		configFull.configPads[configIndex].altNote = ((Short)noteSpinControl_altNote.getSpinner().getValue()).shortValue();
+		configFull.configPads[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
+		configFull.configPads[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getSpinner().getValue()).shortValue();
+		configFull.configPads[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
+		configFull.configPads[configIndex].channel = (short)(((Integer)spinner_channel.getValue()).shortValue() - 1);
+		configFull.configPads[configIndex].special = checkBox_special.isSelected();
+		configFull.configPads[configIndex].curve = (short)comboBox_curve.getSelectedIndex();
+		configFull.configPads[configIndex].compression = (short)comboBox_compression.getSelectedIndex();
+		configFull.configPads[configIndex].shift = (short)comboBox_shift.getSelectedIndex();
+		configFull.configPads[configIndex].xtalkLevel = (short)comboBox_xtalkLevel.getSelectedIndex();
+		configFull.configPads[configIndex].xtalkGroup = (short)comboBox_xtalkGroup.getSelectedIndex();
+		configFull.configPads[configIndex].threshold = (Short)spinner_threshold.getValue();
+		configFull.configPads[configIndex].gain = (short)comboBox_gain.getSelectedIndex();
+		configFull.configPads[configIndex].autoLevel = checkBox_autoLevel.isSelected();
+		configFull.configPads[configIndex].levelMax = (Short)spinner_highLevel.getValue();
+		configFull.configPads[configIndex].retrigger = (Short)spinner_retrigger.getValue();
+		configFull.configPads[configIndex].dynLevel = (short)comboBox_dynLevel.getSelectedIndex();
+		configFull.configPads[configIndex].dynTime = (short)comboBox_dynTime.getSelectedIndex();
+		configFull.configPads[configIndex].minScan = (Short)spinner_minScan.getValue();
 		if (head_rim_pad == head_pad) {
-			configPad.type = false;
+			configFull.configPads[configIndex].type = false;
 			switch (comboBox_type.getSelectedIndex()) {
 			case 1:
-				configPad.dual = true;
-				configPad.threeWay = false;
+				configFull.configPads[configIndex].dual = true;
+				configFull.configPads[configIndex].threeWay = false;
 				break;
 			case 2:
-				configPad.dual = false;
-				configPad.threeWay = true;
+				configFull.configPads[configIndex].dual = false;
+				configFull.configPads[configIndex].threeWay = true;
 				break;
 			default:
-				configPad.dual = false;
-				configPad.threeWay = false;
+				configFull.configPads[configIndex].dual = false;
+				configFull.configPads[configIndex].threeWay = false;
 				break;
 			}
 		} else {
 			if (comboBox_type.getSelectedIndex() == 0) {
-				configPad.type = false;
+				configFull.configPads[configIndex].type = false;
 			} else {
-				configPad.type = true;
+				configFull.configPads[configIndex].type = true;
 			}
 		}
 	}
 	
-	public void setConfig(ConfigPad config, boolean pad_type, int pad_id) {
+	public void setConfigIndex(boolean pad_type, int pad_id) {
 		int index;
 		
+		if (configFull == null) return;
 		changeEventsAllowed = false;
-		index = config.name;;
+		configIndex = pad_id;
+		index = configFull.configPads[configIndex].name;
 		head_rim_pad = pad_type;
-		configPad = config;
 		updateControls();
 		updatePadsNames(pad_id);
 		comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[pad_id], 0);
@@ -585,6 +589,11 @@ public class ControlsPadCommon extends JPanel {
 		changeEventsAllowed = true;
 	}
 	
+	public void setConfig(ConfigFull config)
+	{
+		configFull = config;
+	}
+		
 	public void updateCustomNamesList(ConfigCustomName [] configCustomNames, int count) {
 		customNamesCount = count;
 		for (int i = 0; i < customNamesCount; i++) {
@@ -602,7 +611,9 @@ public class ControlsPadCommon extends JPanel {
 		for (int i = 0; i < customNamesCount; i++) {
 			comboBox_name.addItem(customNamesList[i]);
 		}
-		comboBox_name.setSelectedIndex(configPad.name);
+		if (configFull != null) {
+			comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);			
+		}
 	}
 	
 	public boolean getHeadRim() {

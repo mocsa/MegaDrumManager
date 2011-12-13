@@ -54,8 +54,9 @@ public class ControlsPads extends JPanel {
 	private ControlsPadCommon panel_rim;
 	private ThirdZoneControls panel_3rd_zone;
 	
-	public ConfigPad [] configPads;
-	public Config3rd [] config3rds;
+	//public ConfigPad [] configPads;
+	//public Config3rd [] config3rds;
+	private ConfigFull configFull;
 
 	private int padPointer;
 	private int prevPadPointer;
@@ -102,17 +103,17 @@ public class ControlsPads extends JPanel {
 	 * Create the panel.
 	 */
 	public ControlsPads() {
-		configPads = new ConfigPad[Constants.PADS_COUNT];
-        for(int i=0; i<Constants.PADS_COUNT; i++){
-        	configPads[i] = new ConfigPad();
-        }
+//		configPads = new ConfigPad[Constants.PADS_COUNT];
+//        for(int i=0; i<Constants.PADS_COUNT; i++){
+//        	configPads[i] = new ConfigPad();
+//        }
         padPointer = 0;
         prevPadPointer = -1;
 
-		config3rds = new Config3rd[(Constants.PADS_COUNT - 1)/2];
-        for(int i=0; i<((Constants.PADS_COUNT - 1)/2); i++){
-        	config3rds[i] = new Config3rd();
-        }
+//		config3rds = new Config3rd[(Constants.PADS_COUNT - 1)/2];
+//        for(int i=0; i<((Constants.PADS_COUNT - 1)/2); i++){
+//        	config3rds[i] = new Config3rd();
+//        }
         thirdPointer = 0;
         prevThirdPointer = -1;
 		
@@ -426,10 +427,8 @@ public class ControlsPads extends JPanel {
 		add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		panel_head.setConfig(configPads[0], head_pad, 0);
-		comboBox_padSelection.setSelectedIndex(0);
-
-		
+		//panel_head.setConfig(configFull.configPads[0], head_pad, 0);
+		comboBox_padSelection.setSelectedIndex(0);		
 	}
 	
 	public JButton getBtnGet() {
@@ -444,90 +443,62 @@ public class ControlsPads extends JPanel {
 		return padPointer;
 	}
 	
-	public void setPadPointer(int pointer) {
-		padPointer = pointer;
-	}
-	
-	public ConfigPad getConfig(int pad_id) {
-		if (pad_id > 0) {
-			if (pad_id == padPointer) {
-				//configPads[pad_id].copyVarsFrom(panel_head.getConfig());
-				panel_head.updateConfig();
+	public void updatePadControls(int pointer) {
+		if (pointer > 0) {
+			if (pointer == padPointer) {
+				panel_head.setConfigIndex(head_pad, pointer);				
 			}
-			if (pad_id == (padPointer + 1)) {
-				//configPads[pad_id].copyVarsFrom(panel_rim.getConfig());
-				panel_rim.updateConfig();
+			if (pointer == (padPointer + 1)) {
+				panel_rim.setConfigIndex(rim_pad, pointer);
 			}
 		} else {
-			if (padPointer == 0) {
-				//configPads[pad_id].copyVarsFrom(panel_head.getConfig());
-				panel_head.updateConfig();
+			if (pointer == padPointer) {
+				panel_head.setConfigIndex(head_pad, pointer);
 			}
 		}		
-		return configPads[pad_id];
-	}
-
-	public ConfigPad [] getConfigs() {
-		return configPads;
 	}
 	
-	public void setConfig(byte[] buffer, int pad_id) {
-		PropertiesConfiguration prop = new PropertiesConfiguration();
-		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
-		ConfigPad config = new ConfigPad();
-		configPads[pad_id].copyToPropertiesConfiguration(prop, layout, "", pad_id);
-		config.copyFromPropertiesConfiguration(prop, "",pad_id);		
-		Utils.copySysexToConfigPad(buffer, config);
-		config.copyToPropertiesConfiguration(prop, layout, "", pad_id);
-		configPads[pad_id].copyFromPropertiesConfiguration(prop, "", pad_id);		
-		if (pad_id > 0) {
-			if (pad_id == padPointer) {
-				panel_head.setConfig(configPads[pad_id], head_pad, pad_id);				
-			}
-			if (pad_id == (padPointer + 1)) {
-				panel_rim.setConfig(configPads[pad_id], rim_pad, pad_id);
-			}
-		} else {
-			if (pad_id == padPointer) {
-				panel_head.setConfig(configPads[pad_id], head_pad, pad_id);
-			}
-		}
-	}
-
-
-	public Config3rd getConfig3rd(int third_id) {
-		if (third_id == thirdPointer) {
-			panel_3rd_zone.updateConfig();
-		}
-		return config3rds[third_id];
-	}
-
-	public void setConfig3rd(byte [] buffer, int third_id) {
-		PropertiesConfiguration prop = new PropertiesConfiguration();
-		PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(prop);
-		Config3rd config = new Config3rd();
-		config3rds[third_id].copyToPropertiesConfiguration(prop, layout, "", third_id);
-		config.copyFromPropertiesConfiguration(prop, "",third_id);		
-		Utils.copySysexToConfig3rd(buffer, config);
-		config.copyToPropertiesConfiguration(prop, layout, "", third_id);
-		config3rds[third_id].copyFromPropertiesConfiguration(prop, "", third_id);		
+	public void updateThirdControls(int pointer) {
 		if (padPointer > 0 ) {
-			if (third_id == thirdPointer) {
-				panel_3rd_zone.setConfig(config3rds[third_id]);
+			if (pointer == thirdPointer) {
+				panel_3rd_zone.setConfigIndex(pointer);
 			}
 		}
 	}
 	
+	public void setPadPointer(int pointer) {
+		padPointer = pointer;
+		updatePadControls(pointer);		
+	}
+	
+	public void setThirdPointer(int pointer) {
+		thirdPointer = pointer;
+		updateThirdControls(pointer);
+	}
+	
+	public void setConfig(ConfigFull config) {
+		configFull = config;
+		panel_3rd_zone.setConfig(config);
+		panel_3rd_zone.setConfigIndex(0);
+		panel_head.setConfig(config);
+		panel_head.setConfigIndex(head_pad, 0);
+		panel_rim.setConfig(config);
+		panel_rim.setConfigIndex(rim_pad,2);
+	}
+		
 	private String getPadName(int pad_id) {
 		String result;
 		String head_rim = ((pad_id&0x01) > 0)?"H":"R";
-		if (configPads[pad_id].name > 0) {
-			result = Constants.CUSTOM_PADS_NAMES_LIST[configPads[pad_id].name - 1] + head_rim;
+		if (configFull != null) {
+			if (configFull.configPads[pad_id].name > 0) {
+				result = Constants.CUSTOM_PADS_NAMES_LIST[configFull.configPads[pad_id].name - 1] + head_rim;
+			} else {
+				result = Constants.PADS_NAMES_LIST[pad_id];
+			}
+			return result;
 		} else {
-			result = Constants.PADS_NAMES_LIST[pad_id];
+			return "";
 		}
-		
-		return result;
 	}
 	
 	private void copyPad(int index, boolean copyHead, boolean copyRim, boolean copy3rd) {
@@ -538,10 +509,10 @@ public class ControlsPads extends JPanel {
 		PropertiesConfigurationLayout layoutHead = new PropertiesConfigurationLayout(propSrcHead);		
 		PropertiesConfigurationLayout layoutRim = new PropertiesConfigurationLayout(propSrcRim);		
 		PropertiesConfigurationLayout layout3rd = new PropertiesConfigurationLayout(propSrc3rd);		
-		configPads[padPointer].copyToPropertiesConfiguration(propSrcHead, layoutHead, "copy", 0);
+		configFull.configPads[padPointer].copyToPropertiesConfiguration(propSrcHead, layoutHead, "copy", 0);
 		if (padPointer > 0) {
-			configPads[padPointer+1].copyToPropertiesConfiguration(propSrcRim, layoutRim, "copy", 0);			
-			config3rds[(padPointer-1)/2].copyToPropertiesConfiguration(propSrc3rd, layoutRim, "copy", 0);			
+			configFull.configPads[padPointer+1].copyToPropertiesConfiguration(propSrcRim, layoutRim, "copy", 0);			
+			configFull.config3rds[(padPointer-1)/2].copyToPropertiesConfiguration(propSrc3rd, layoutRim, "copy", 0);			
 		}
 		
 		if (index > 0) {
@@ -550,23 +521,23 @@ public class ControlsPads extends JPanel {
 				dst = (index-2)*2+1;
 				if (dst != padPointer) {
 					if (copyHead) {
-						configPads[dst].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
+						configFull.configPads[dst].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
 					}
 					if (padPointer  > 0) {
 						if (copyRim) {
-							configPads[dst+1].copyFromPropertiesConfiguration(propSrcRim, "copy", 0);
+							configFull.configPads[dst+1].copyFromPropertiesConfiguration(propSrcRim, "copy", 0);
 						}
 						if (copy3rd) {
-							config3rds[(dst-1)/2].copyFromPropertiesConfiguration(propSrc3rd, "copy", 0);
+							configFull.config3rds[(dst-1)/2].copyFromPropertiesConfiguration(propSrc3rd, "copy", 0);
 						}
 					}
 				}
 			} else {
 				if (padPointer != 0) {
 					if (copyHead) {
-						configPads[0].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
-						configPads[0].dual = false;
-						configPads[0].threeWay = false;
+						configFull.configPads[0].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
+						configFull.configPads[0].dual = false;
+						configFull.configPads[0].threeWay = false;
 					}
 				}
 			}
@@ -575,22 +546,22 @@ public class ControlsPads extends JPanel {
 				if (i != padPointer) {
 					if (i>0){
 						if (copyHead) {
-							configPads[i].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
+							configFull.configPads[i].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
 						}
 						i++;
 						if (padPointer>0) {
 							if (copyRim) {
-								configPads[i].copyFromPropertiesConfiguration(propSrcRim, "copy", 0);
+								configFull.configPads[i].copyFromPropertiesConfiguration(propSrcRim, "copy", 0);
 							}
 							if (copy3rd) {
-								config3rds[(i-2)/2].copyFromPropertiesConfiguration(propSrc3rd, "copy", 0);
+								configFull.config3rds[(i-2)/2].copyFromPropertiesConfiguration(propSrc3rd, "copy", 0);
 							}
 						}
 					} else {
 						if (copyHead) {
-							configPads[i].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
-							configPads[i].dual = false;
-							configPads[i].threeWay = false;
+							configFull.configPads[i].copyFromPropertiesConfiguration(propSrcHead, "copy", 0);
+							configFull.configPads[i].dual = false;
+							configFull.configPads[i].threeWay = false;
 						}
 					}
 				} else {
@@ -717,9 +688,9 @@ public class ControlsPads extends JPanel {
 			thirdPointer = (pad_id - 1)/2;
 			panel_rim.setVisible(true);
 			//panel_3rd_zone.setVisible(true);
-			panel_rim.setConfig(configPads[padPointer+1], rim_pad, padPointer+1);
-			panel_3rd_zone.setConfig(config3rds[thirdPointer]);
-			panel_3rd_zone.setAsSwitch(configPads[padPointer+1].type);
+			panel_rim.setConfigIndex(rim_pad, padPointer+1);
+			panel_3rd_zone.setConfigIndex(thirdPointer);
+			panel_3rd_zone.setAsSwitch(configFull.configPads[padPointer+1].type);
 			comboBox_pointer = ((pad_id - 1)>>1) + 1;
 		} else {
 			padPointer = 0;
@@ -731,7 +702,7 @@ public class ControlsPads extends JPanel {
 		}
 		prevPadPointer = padPointer;
 		prevThirdPointer = thirdPointer;
-		panel_head.setConfig(configPads[padPointer], head_pad, padPointer);
+		panel_head.setConfigIndex(head_pad, padPointer);
 		panel_head.getComboBox_type().setEnabled((padPointer != 0));
 		//panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
 		panel_rim.getComboBox_type().setEnabled(panel_head.getComboBox_type().getSelectedIndex() > 0);
@@ -743,77 +714,77 @@ public class ControlsPads extends JPanel {
 		//}
 	}
 	
-	public void loadFromConfigFull (ConfigFull config) {
-		configPads = config.configPads;
-		config3rds = config.config3rds;
-		prevPadPointer = -1;
-		switch_to_pad(padPointer);
-	}
+//	public void loadFromConfigFull (ConfigFull config) {
+//		configPads = config.configPads;
+//		config3rds = config.config3rds;
+//		prevPadPointer = -1;
+//		switch_to_pad(padPointer);
+//	}
 	
 	private void copyPadVar(String varName, int pad_id, ConfigPad config) {
 		if (varName.equals("name")) {
-			configPads[pad_id].name = config.name;	
+			configFull.configPads[pad_id].name = config.name;	
 		}
 		if (varName.equals("note")) {
-			configPads[pad_id].note = config.note;	
+			configFull.configPads[pad_id].note = config.note;	
 		}
 		if (varName.equals("altNote")) {
-			configPads[pad_id].altNote = config.altNote;	
+			configFull.configPads[pad_id].altNote = config.altNote;	
 		}
 		if (varName.equals("pressrollNote")) {
-			configPads[pad_id].pressrollNote = config.pressrollNote;	
+			configFull.configPads[pad_id].pressrollNote = config.pressrollNote;	
 		}
 		if (varName.equals("channel")) {
-			configPads[pad_id].channel = config.channel;	
+			configFull.configPads[pad_id].channel = config.channel;	
 		}
 		if (varName.equals("curve")) {
-			configPads[pad_id].curve = config.curve;	
+			configFull.configPads[pad_id].curve = config.curve;	
 		}
 		if (varName.equals("threshold")) {
-			configPads[pad_id].threshold = config.threshold;	
+			configFull.configPads[pad_id].threshold = config.threshold;	
 		}
 		if (varName.equals("retrigger")) {
-			configPads[pad_id].retrigger = config.retrigger;	
+			configFull.configPads[pad_id].retrigger = config.retrigger;	
 		}
 		if (varName.equals("highLevel")) {
-			configPads[pad_id].levelMax = config.levelMax;	
+			configFull.configPads[pad_id].levelMax = config.levelMax;	
 		}
 		if (varName.equals("minScan")) {
-			configPads[pad_id].minScan = config.minScan;	
+			configFull.configPads[pad_id].minScan = config.minScan;	
 		}
 		if (varName.equals("type")) {
 			if (pad_id>0) {
-				configPads[pad_id].type = config.type;	
-				configPads[pad_id].dual = config.dual;	
-				configPads[pad_id].threeWay = config.threeWay;
+				configFull.configPads[pad_id].type = config.type;	
+				configFull.configPads[pad_id].dual = config.dual;	
+				configFull.configPads[pad_id].threeWay = config.threeWay;
 			}
 		}
 		if (varName.equals("autoLevel")) {
-			configPads[pad_id].autoLevel = config.autoLevel;	
+			configFull.configPads[pad_id].autoLevel = config.autoLevel;	
 		}
 		if (varName.equals("special")) {
-			configPads[pad_id].special = config.special;	
+			configFull.configPads[pad_id].special = config.special;	
 		}
 		if (varName.equals("gain")) {
-			configPads[pad_id].gain = config.gain;	
+			configFull.configPads[pad_id].gain = config.gain;	
 		}
 		if (varName.equals("xtalkLevel")) {
-			configPads[pad_id].xtalkLevel = config.xtalkLevel;	
+			configFull.configPads[pad_id].xtalkLevel = config.xtalkLevel;	
 		}
 		if (varName.equals("xtalkGroup")) {
-			configPads[pad_id].xtalkGroup = config.xtalkGroup;	
+			configFull.configPads[pad_id].xtalkGroup = config.xtalkGroup;	
 		}
 		if (varName.equals("dynTime")) {
-			configPads[pad_id].dynTime = config.dynTime;	
+			configFull.configPads[pad_id].dynTime = config.dynTime;	
 		}
 		if (varName.equals("dynLevel")) {
-			configPads[pad_id].dynLevel = config.dynLevel;	
+			configFull.configPads[pad_id].dynLevel = config.dynLevel;	
 		}
 		if (varName.equals("compression")) {
-			configPads[pad_id].compression = config.compression;	
+			configFull.configPads[pad_id].compression = config.compression;	
 		}
 		if (varName.equals("shift")) {
-			configPads[pad_id].shift = config.shift;	
+			configFull.configPads[pad_id].shift = config.shift;	
 		}
 	}
 	
@@ -823,16 +794,15 @@ public class ControlsPads extends JPanel {
 		if (head_rim == head_pad) {
 			for (int i = 0; i<Constants.PADS_COUNT;i++) {
 				if (i != input) {
-					copyPadVar(varName, i, configPads[input]);
+					copyPadVar(varName, i, configFull.configPads[input]);
 				}
-		
 			}
 		} else {
 			panel_rim.updateConfig();
 			for (int i = 1; i<Constants.PADS_COUNT - 1;i++) {
 				if (i != input) {
-					copyPadVar(varName, i, configPads[input]);
-					copyPadVar(varName, i+1, configPads[input+1]);
+					copyPadVar(varName, i, configFull.configPads[input]);
+					copyPadVar(varName, i+1, configFull.configPads[input+1]);
 				}
 				i++;
 			}
@@ -845,27 +815,27 @@ public class ControlsPads extends JPanel {
 	
 	private void copy3rdVar(String varName, int third_id, Config3rd config) {
 		if (varName.equals("note")) {
-			config3rds[third_id].note = config.note;	
+			configFull.config3rds[third_id].note = config.note;	
 		}
 		if (varName.equals("altNote")) {
-			config3rds[third_id].altNote = config.altNote;	
+			configFull.config3rds[third_id].altNote = config.altNote;	
 		}
 		if (varName.equals("pressrollNote")) {
-			config3rds[third_id].pressrollNote = config.pressrollNote;	
+			configFull.config3rds[third_id].pressrollNote = config.pressrollNote;	
 		}
 		if (varName.equals("dampenedNote")) {
-			config3rds[third_id].dampenedNote = config.dampenedNote;	
+			configFull.config3rds[third_id].dampenedNote = config.dampenedNote;	
 		}
 		if (varName.equals("threshold")) {
-			config3rds[third_id].threshold = config.threshold;	
+			configFull.config3rds[third_id].threshold = config.threshold;	
 		}
 		if (varName.equals("midpoint")) {
-			config3rds[third_id].threshold = (short) (((short)(config3rds[third_id].threshold&0x0f))
+			configFull.config3rds[third_id].threshold = (short) (((short)(configFull.config3rds[third_id].threshold&0x0f))
 			|
 			((short)(config.threshold&0xf0)));
 		}
 		if (varName.equals("midwidth")) {
-			config3rds[third_id].threshold = (short) (((short)(config3rds[third_id].threshold&0xf0))
+			configFull.config3rds[third_id].threshold = (short) (((short)(configFull.config3rds[third_id].threshold&0xf0))
 					|
 					((short)(config.threshold&0x0f)));
 		}
@@ -876,7 +846,7 @@ public class ControlsPads extends JPanel {
 		panel_3rd_zone.updateConfig();
 		for (int i = 0; i<((Constants.PADS_COUNT - 1)/2);i++) {
 			if (i != input) {
-				copy3rdVar(varName, i, config3rds[input]);
+				copy3rdVar(varName, i, configFull.config3rds[input]);
 			}
 	
 		}
