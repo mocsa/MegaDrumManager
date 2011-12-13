@@ -67,8 +67,6 @@ public class ControlsPedal extends JPanel {
 	private NoteSpinControl noteSpinControl_chick;
 	private NoteSpinControl noteSpinControl_splash;
 	
-	
-	//private configFull.configPedal configFull.configPedal;
 	private ConfigFull configFull;
 	private JButton btnLoad;
 	private JButton btnSave;
@@ -76,8 +74,8 @@ public class ControlsPedal extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsPedal() {
-		//configFull.configPedal = new configFull.configPedal();
+	public ControlsPedal(ConfigFull config) {
+		configFull = config;
 		setLayout(new GridLayout(1, 0, 0, 0));		
 		JPanel panel = new JPanel();
 		add(panel);
@@ -149,11 +147,8 @@ public class ControlsPedal extends JPanel {
 		comboBox_type.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					if (configFull != null)
-					{
-						configFull.configPedal.type = (comboBox_type.getSelectedIndex() != 0);
-						valueChanged();
-					}
+					configFull.configPedal.type = (comboBox_type.getSelectedIndex() != 0);
+					valueChanged();
 				}
 			}
 		});
@@ -171,11 +166,8 @@ public class ControlsPedal extends JPanel {
 		comboBox_curve.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					if (configFull != null)
-					{
-						configFull.configPedal.curve = (short)comboBox_curve.getSelectedIndex();
-						valueChanged();
-					}
+					configFull.configPedal.curve = (short)comboBox_curve.getSelectedIndex();
+					valueChanged();
 				}
 			}
 		});
@@ -194,11 +186,8 @@ public class ControlsPedal extends JPanel {
 		comboBox_input.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					if (configFull != null)
-					{
-						configFull.configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
-						valueChanged();
-					}
+					configFull.configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
+					valueChanged();
 				}
 			}
 		});
@@ -636,6 +625,7 @@ public class ControlsPedal extends JPanel {
 	}
 
 	public void updateControls() {
+		changeEventsAllowed = false;
 		comboBox_type.setSelectedIndex(configFull.configPedal.type?1:0);
 		comboBox_curve.setSelectedIndex(configFull.configPedal.curve);
 		comboBox_input.setSelectedIndex((configFull.configPedal.hhInput-2)/2);
@@ -668,12 +658,6 @@ public class ControlsPedal extends JPanel {
 		noteSpinControl_bellClosed.getSpinner().setValue(configFull.configPedal.bellClosedNote);
 		noteSpinControl_chick.getSpinner().setValue(configFull.configPedal.chickNote);
 		noteSpinControl_splash.getSpinner().setValue(configFull.configPedal.splashNote);
-	}
-	
-	public void setConfig(ConfigFull config) {
-		changeEventsAllowed = false;
-		configFull = config;
-		updateControls();
 		changeEventsAllowed = true;
 	}
 	

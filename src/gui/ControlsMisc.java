@@ -33,7 +33,6 @@ public class ControlsMisc extends JPanel {
 
 	private Boolean changeEventsAllowed = false;
 	
-	//private ConfigMisc configMisc;
 	private ConfigFull configFull;
 	private JSpinner spinner_noteoff;
 	private JSpinner spinner_pressroll;
@@ -59,8 +58,8 @@ public class ControlsMisc extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsMisc() {
-		//configMisc = new ConfigMisc();
+	public ControlsMisc(ConfigFull config) {
+		configFull = config;
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
@@ -314,6 +313,7 @@ public class ControlsMisc extends JPanel {
 	}
 	
 	public void updateControls() {
+		changeEventsAllowed = false;
 		spinner_noteoff.setValue((short)(configFull.configMisc.note_off*10));
 		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (configFull.configMisc.pressroll*10)),
 				new Short((short) 0),
@@ -329,15 +329,8 @@ public class ControlsMisc extends JPanel {
 		checkBox_allGainsLow.setSelected(configFull.configMisc.all_gains_low);		
 		checkBox_MidiThru.setSelected(configFull.configMisc.midi_thru);		
 		checkBox_customNamesEn.setSelected(configFull.configMisc.custom_names_en);		
+		changeEventsAllowed = true;
 	}
-
-public void setConfig(ConfigFull config)
-{
-	changeEventsAllowed = false;
-	configFull = config;
-	updateControls();
-	changeEventsAllowed = true;
-}
 
 	public JButton getBtnGet() {
 		return btnGet;

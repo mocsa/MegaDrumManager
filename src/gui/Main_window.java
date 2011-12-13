@@ -104,7 +104,7 @@ public class Main_window {
 	private FrameDetached [] framesDetached;
 	private JPanel [] controlsPanels;
 	private ViewMenu [] viewMenus;
-	//private ConfigFull configFull;
+	private ConfigFull configFull;
 	private ConfigFull [] fullConfigs;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
@@ -177,6 +177,7 @@ public class Main_window {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		configFull = new ConfigFull();
 		frmMegadrummanager = new JFrame();
 		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/icons/megadrum-manager128.png")));
 		frmMegadrummanager.setResizable(false);
@@ -460,7 +461,7 @@ public class Main_window {
 				FormFactory.LINE_GAP_ROWSPEC,
 				RowSpec.decode("pref:grow"),}));
 		
-		controlsMisc = new ControlsMisc();
+		controlsMisc = new ControlsMisc(configFull);
 		controlsMisc.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
@@ -499,7 +500,7 @@ public class Main_window {
 			}
 		});
 		
-		controlsPedal = new ControlsPedal();
+		controlsPedal = new ControlsPedal(configFull);
 		controlsPedal.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
@@ -774,6 +775,7 @@ public class Main_window {
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					if (comboBoxCfg.getSelectedIndex()>-1) {
+						copyConfigToLastConfig();
 						configOptions.lastConfig = comboBoxCfg.getSelectedIndex();
 						loadAllFromConfigFull();
 					}
@@ -789,8 +791,7 @@ public class Main_window {
 		btnPrevcfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (configOptions.lastConfig>0) {
-					configOptions.lastConfig--;
-					comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
+					comboBoxCfg.setSelectedIndex(configOptions.lastConfig - 1);
 				}
 			}
 		});
@@ -803,8 +804,7 @@ public class Main_window {
 		btnNextcfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (configOptions.lastConfig<(Constants.CONFIGS_COUNT-1)) {
-					configOptions.lastConfig++;
-					comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
+					comboBoxCfg.setSelectedIndex(configOptions.lastConfig + 1);
 				}
 			}
 		});
@@ -1351,14 +1351,35 @@ public class Main_window {
 		sendAllCustomNames();
 	}
 
+	private void copyConfigToLastConfig() {
+		byte [] sysex = new byte[256];
+
+		Utils.copyConfigMiscToSysex(configFull.configMisc, sysex, configOptions.chainId);
+		Utils.copySysexToConfigMisc(sysex, fullConfigs[configOptions.lastConfig].configMisc);
+
+		Utils.copyConfigPedalToSysex(configFull.configPedal, sysex, configOptions.chainId);
+		Utils.copySysexToConfigPedal(sysex, fullConfigs[configOptions.lastConfig].configPedal);		
+
+	}
+	
 	private void loadAllFromConfigFull() {
+		byte [] sysex = new byte[256];
+
 		comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		spinnerLCDcontrast.setValue((short)(100 - fullConfigs[configOptions.lastConfig].configGlobalMisc.lcd_contrast));
-		controlsMisc.setConfig(fullConfigs[configOptions.lastConfig]);
-		controlsPedal.setConfig(fullConfigs[configOptions.lastConfig]);
+
+		Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
+		Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
+		controlsMisc.updateControls();
+
+		Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
+		Utils.copySysexToConfigPedal(sysex, configFull.configPedal);		
+		controlsPedal.updateControls();
+
 		controlsPads.setConfig(fullConfigs[configOptions.lastConfig]);		
 		controlsPadsExtra.setConfig(fullConfigs[configOptions.lastConfig]);
 	}
+	
 	private void load_all() {
 		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
 		loadAllFromConfigFull();
