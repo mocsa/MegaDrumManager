@@ -96,7 +96,7 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)((config.dynLevel<<4)|(config.dynTime)));
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)(((config.special?1:0)<<6)|(config.shift<<3)|(config.compression)));
+		sysex_byte = byte2sysex((byte)(((config.function)<<6)|(config.shift<<3)|(config.compression)));
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];		
 		sysex_byte = byte2sysex((byte)config.name);
@@ -164,7 +164,7 @@ public class Utils {
 			flags = sysex2byte(sysex_byte);
 			config.shift = (short)((flags&0x38)>>3);
 			config.compression = (short)(flags&0x07);
-			config.special = ((flags&(1<<6)) != 0);
+			config.function = (short)((flags&0xc0)>>6);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.name = sysex2byte(sysex_byte);

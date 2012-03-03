@@ -18,7 +18,7 @@ public class ConfigPad {
 	public boolean autoLevel = true;
 	public boolean dual = false;
 	public boolean threeWay = false;
-	public boolean special = false;
+	public short function = 0;
 	public short gain = 0;
 	public short xtalkLevel = 3;
 	public short xtalkGroup = 0;
@@ -51,7 +51,7 @@ public class ConfigPad {
 		prop.setProperty(prefix+"autoLevel", autoLevel);
 		prop.setProperty(prefix+"dual", dual);
 		prop.setProperty(prefix+"threeWay", threeWay);
-		prop.setProperty(prefix+"special", special);
+		prop.setProperty(prefix+"function", function);
 		prop.setProperty(prefix+"gain", gain);
 		prop.setProperty(prefix+"xtalkLevel", xtalkLevel);
 		prop.setProperty(prefix+"xtalkGroup", xtalkGroup);
@@ -80,7 +80,7 @@ public class ConfigPad {
 		autoLevel = prop.getBoolean(prefix+"autoLevel", autoLevel);
 		dual = prop.getBoolean(prefix+"dual", dual);
 		threeWay = prop.getBoolean(prefix+"threeWay", threeWay);
-		special = prop.getBoolean(prefix+"special", special);
+		function = Utils.validateShort(prop.getShort(prefix+"function", function),0,2,function);
 		gain = Utils.validateShort(prop.getShort(prefix+"gain", gain),0,8,gain);
 		xtalkLevel = Utils.validateShort(prop.getShort(prefix+"xtalkLevel", xtalkLevel),0,7,xtalkLevel);
 		xtalkGroup = Utils.validateShort(prop.getShort(prefix+"xtalkGroup", xtalkGroup),0,7,xtalkGroup);

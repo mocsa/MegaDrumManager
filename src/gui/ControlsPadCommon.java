@@ -82,7 +82,6 @@ public class ControlsPadCommon extends JPanel {
 	private NoteSpinControl noteSpinControl_altNote;
 	private NoteSpinControl noteSpinControl_pressrollNote;
 	private JSpinner spinner_channel;
-	private JCheckBox checkBox_special;
 	private ComboBoxCustom comboBox_curve;
 	private ComboBoxCustom comboBox_compression;
 	private ComboBoxCustom comboBox_shift;
@@ -108,7 +107,7 @@ public class ControlsPadCommon extends JPanel {
 	private PadButton padButton_altNote;
 	private PadButton padButton_pressrollNote;
 	private PadButton padButton_channel;
-	private PadButton padButton_special;
+	private PadButton padButton_function;
 	private PadButton padButton_curve;
 	private PadButton padButton_compression;
 	private PadButton padButton_shift;
@@ -126,6 +125,7 @@ public class ControlsPadCommon extends JPanel {
 	//private String [] customNamesList;
 	//private int customNamesCount;
 	public String pressedPadButtonName;
+	private ComboBoxCustom comboBox_function;
 	
 	
 	/**
@@ -143,7 +143,7 @@ public class ControlsPadCommon extends JPanel {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("default:grow"),
 				ColumnSpec.decode("2dlu"),
 				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("12dlu", true), Sizes.constant("12dlu", true)), 0),},
 			new RowSpec[] {
@@ -261,14 +261,19 @@ public class ControlsPadCommon extends JPanel {
 		padButton_channel = new PadButton("channel", head_rim_pad);
 		add(padButton_channel, "5, 5");
 		
-		LabelCustom lblSpecialFunction = new LabelCustom("Special Function");
-		add(lblSpecialFunction, "1, 6, right, default");
+		LabelCustom lblFunction = new LabelCustom("Special Function");
+		lblFunction.setText("Function");
+		add(lblFunction, "1, 6, right, default");
 		
-		checkBox_special = new JCheckBox("");
-		add(checkBox_special, "3, 6");
+		comboBox_function = new ComboBoxCustom();
+		add(comboBox_function, "3, 6, fill, default");
+		comboBox_function.addItem("Normal");
+		comboBox_function.addItem("ProgramChange");
+		comboBox_function.addItem("CutOff");
+		comboBox_function.setSelectedIndex(0);
 		
-		padButton_special = new PadButton("special", head_rim_pad);
-		add(padButton_special, "5, 6");
+		padButton_function = new PadButton("function", head_rim_pad);
+		add(padButton_function, "5, 6");
 		
 		LabelCustom lblCurve_1 = new LabelCustom("Curve");
 		add(lblCurve_1, "1, 7, right, center");
@@ -504,7 +509,7 @@ public class ControlsPadCommon extends JPanel {
 		noteSpinControl_pressrollNote.setValue(configFull.configPads[configIndex].pressrollNote);
 		noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.configPads[configIndex].pressrollNote_linked);
 		spinner_channel.setValue(configFull.configPads[configIndex].channel + 1);
-		checkBox_special.setSelected(configFull.configPads[configIndex].special);
+		comboBox_function.setSelectedIndex(configFull.configPads[configIndex].function);
 		comboBox_curve.setSelectedIndex(configFull.configPads[configIndex].curve);
 		comboBox_compression.setSelectedIndex(configFull.configPads[configIndex].compression);
 		comboBox_shift.setSelectedIndex(configFull.configPads[configIndex].shift);
@@ -547,7 +552,7 @@ public class ControlsPadCommon extends JPanel {
 		configFull.configPads[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getValue()).shortValue();
 		configFull.configPads[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
 		configFull.configPads[configIndex].channel = (short)(((Integer)spinner_channel.getValue()).shortValue() - 1);
-		configFull.configPads[configIndex].special = checkBox_special.isSelected();
+		configFull.configPads[configIndex].function = (short)comboBox_function.getSelectedIndex();
 		configFull.configPads[configIndex].curve = (short)comboBox_curve.getSelectedIndex();
 		configFull.configPads[configIndex].compression = (short)comboBox_compression.getSelectedIndex();
 		configFull.configPads[configIndex].shift = (short)comboBox_shift.getSelectedIndex();

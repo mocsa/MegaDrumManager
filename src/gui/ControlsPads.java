@@ -757,8 +757,8 @@ public class ControlsPads extends JPanel {
 		if (varName.equals("autoLevel")) {
 			configFull.configPads[pad_id].autoLevel = config.autoLevel;	
 		}
-		if (varName.equals("special")) {
-			configFull.configPads[pad_id].special = config.special;	
+		if (varName.equals("function")) {
+			configFull.configPads[pad_id].function = config.function;	
 		}
 		if (varName.equals("gain")) {
 			configFull.configPads[pad_id].gain = config.gain;	
