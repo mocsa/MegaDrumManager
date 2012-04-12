@@ -62,6 +62,11 @@ class LogStore {
 
 class NoWrapTextPane extends JTextPane {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4709909057357466382L;
+
 	public boolean getScrollableTracksViewportWidth() {
 		// should not allow text to be wrapped
 		return false;
@@ -132,13 +137,17 @@ class NoWrapTextPane extends JTextPane {
 
 
 public class PanelMidiLog extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3519093945847340399L;
 	private JPanel panelBars;
 	private PanelMidiBar [] panelsMidiBar;  
-	private ColumnSpec [] columnSpecs;
+	//private ColumnSpec [] columnSpecs;
 	private LogStore [] logStore; 
 	private int storePointer = 0;
 	private long prevTime;
-	private long prevTime2;
+	//private long prevTime2;
 	private Short rawLines = 0;
 	private ArrayList<String> rawStrings;
 	private JLabel lblHitsIntervalsmilliseconds;
@@ -367,6 +376,10 @@ public class PanelMidiLog extends JPanel {
 							"Time delta", "Ch #", "Data1", "Data2", "Data3", "Note", "MIDI Message Name"
 						}
 					) {
+						/**
+						 * 
+						 */
+						private static final long serialVersionUID = -4891186049381935054L;
 						Class[] columnTypes = new Class[] {
 								String.class, String.class, String.class, String.class, String.class, String.class, String.class
 						};
@@ -515,7 +528,7 @@ public class PanelMidiLog extends JPanel {
 		panelMidiScroll.autoPause = checkBoxAutoPause.isSelected();
 		panelMidiScroll.reSetTimer((Integer)scrollBar.getValue());
 		prevTime = System.nanoTime();
-		prevTime2 = System.nanoTime();
+		//prevTime2 = System.nanoTime();
 		rawStrings = new ArrayList<String>();
 	}
 	

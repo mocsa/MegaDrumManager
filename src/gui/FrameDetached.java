@@ -11,6 +11,10 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 
 public class FrameDetached extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7320746619808327651L;
 	public int controlsId;
 	public boolean isDetached;
 	

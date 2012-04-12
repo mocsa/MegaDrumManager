@@ -17,6 +17,10 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class PanelMidiScroll extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8050241906763079637L;
 	private Color bgColor = Color.WHITE;
 	private BufferedImage offImage;	
 	private Graphics2D g2offScreen;

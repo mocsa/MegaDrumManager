@@ -4,9 +4,21 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
-	<classpathentry kind="lib" path="commons-configuration-1.6.jar" sourcepath="commons-configuration-1.6-sources.jar"/>
-	<classpathentry kind="lib" path="commons-lang-2.6.jar" sourcepath="commons-lang-2.6-sources.jar"/>
-	<classpathentry kind="lib" path="commons-collections-3.2.1.jar" sourcepath="commons-collections-3.2.1-sources.jar"/>
-	<classpathentry kind="lib" path="commons-logging-1.1.1.jar" sourcepath="commons-logging-1.1.1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/dmitri/Projects/MegaDrumManager/commons-lang-2.6.jar" sourcepath="commons-lang-2.6-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/dmitri/Projects/MegaDrumManager/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/dmitri/Projects/MegaDrumManager/commons-collections-3.2.1.jar" sourcepath="commons-collections-3.2.1-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/dmitri/Projects/MegaDrumManager/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/dmitri/Projects/MegaDrumManager/commons-logging-1.1.1.jar" sourcepath="commons-logging-1.1.1-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/dmitri/Projects/MegaDrumManager/commons-configuration-1.8.jar" sourcepath="/Users/dmitri/Projects/MegaDrumManager/commons-configuration-1.8-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/Users/dmitri/Projects/MegaDrumManager/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

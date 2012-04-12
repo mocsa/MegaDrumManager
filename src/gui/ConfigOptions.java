@@ -6,6 +6,10 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 public class ConfigOptions implements java.io.Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4465922793257742902L;
 	public boolean useSamePort = false;
 	public boolean useThruPort = false;
 	public boolean autoOpenPorts = false;

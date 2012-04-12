@@ -36,16 +36,21 @@ import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 
 public class ControlsPadsExtra extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9179308222155600591L;
+
 	private Boolean changeEventsAllowed = false;
 	
 	private CurvesPaint paintPanel;
 	private ChangeListener spinnerChangeListener;
 	private JSpinner [] spinners;
 	private int curvePointer;
-	private int prevCurvePointer;
+	//private int prevCurvePointer;
 	private ConfigFull configFull;
 	private int customNamePointer;
-	private int prevCustomNamePointer;
+	//private int prevCustomNamePointer;
 	private JComboBox comboBox_curveNumber;
 	private JButton button_first;
 	private JButton button_prev;
@@ -83,12 +88,12 @@ public class ControlsPadsExtra extends JPanel {
 	public ControlsPadsExtra(ConfigFull config) {
 		configFull = config;
         curvePointer = 0;
-        prevCurvePointer = -1;
+        //prevCurvePointer = -1;
         
 //        customNamesCount = Constants.CUSTOM_NAMES_MAX;
         configFull.customNamesCount = 2;
         customNamePointer = 0;
-        prevCustomNamePointer = -1;
+        //prevCustomNamePointer = -1;
 
         setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
@@ -182,7 +187,7 @@ public class ControlsPadsExtra extends JPanel {
 		comboBox_curveNumber.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-		        	prevCurvePointer = curvePointer;
+		        	//prevCurvePointer = curvePointer;
 		        	curvePointer = comboBox_curveNumber.getSelectedIndex();
 		        	updateCurveControls();
 		        }
@@ -197,7 +202,7 @@ public class ControlsPadsExtra extends JPanel {
 		button_first = new JButton("first");
 		button_first.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-	        	prevCurvePointer = curvePointer;
+	        	//prevCurvePointer = curvePointer;
 	        	curvePointer = 0;
 	        	updateCurveControls();
 			}
@@ -209,7 +214,7 @@ public class ControlsPadsExtra extends JPanel {
 		button_prev = new JButton("prev");
 		button_prev.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-	        	prevCurvePointer = curvePointer;
+	        	//prevCurvePointer = curvePointer;
 	        	if (curvePointer > 0) {
 	        		curvePointer--;
 	        	}
@@ -223,7 +228,7 @@ public class ControlsPadsExtra extends JPanel {
 		button_next = new JButton("next");
 		button_next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-	        	prevCurvePointer = curvePointer;
+	        	//prevCurvePointer = curvePointer;
 	        	if (curvePointer < (Constants.CURVES_COUNT - 1)) {
 	        		curvePointer++;
 	        	}
@@ -237,7 +242,7 @@ public class ControlsPadsExtra extends JPanel {
 		button_last = new JButton("last");
 		button_last.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-	        	prevCurvePointer = curvePointer;
+	        	//prevCurvePointer = curvePointer;
 	        	curvePointer = Constants.CURVES_COUNT - 1;
 	        	updateCurveControls();
 			}
@@ -317,7 +322,7 @@ public class ControlsPadsExtra extends JPanel {
 					if (customNamePointer > configFull.customNamesCount)
 					{
 						customNamePointer = 0;
-				        prevCustomNamePointer = -1;
+				        //prevCustomNamePointer = -1;
 					}
 					updateCustomNameControls();
 				}
@@ -396,7 +401,7 @@ public class ControlsPadsExtra extends JPanel {
 		comboBoxSelectName.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					prevCustomNamePointer = customNamePointer;
+					//prevCustomNamePointer = customNamePointer;
 					customNamePointer = comboBoxSelectName.getSelectedIndex();
 					textFieldEditName.setText(configFull.configCustomNames[comboBoxSelectName.getSelectedIndex()].name);
 				}

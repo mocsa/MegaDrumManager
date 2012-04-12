@@ -32,6 +32,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class Upgrade extends JDialog {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4617003899287250352L;
 	private Midi_handler midi_handler;
 	private JTextField textField_fileName;
 	private FileManager fileManager;
@@ -44,7 +48,7 @@ public class Upgrade extends JDialog {
 	private JProgressBar progressBar;
 	private Color pbBgColor;
 	private Color pbFgColor;
-	private Thread midiThread;
+	//private Thread midiThread;
 	ExecutorService backgroundExec = Executors.newCachedThreadPool();
 	Future<?>  midiTask = null;
 	

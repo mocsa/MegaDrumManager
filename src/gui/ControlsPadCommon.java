@@ -38,6 +38,10 @@ import java.util.ArrayList;
 import com.jgoodies.forms.layout.Sizes;
 
 class PadButton extends JButton {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4456630182374346049L;
 	private String name;
 
 	/**
@@ -60,6 +64,11 @@ class PadButton extends JButton {
 
 class ComboBoxCustom extends JComboBox {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2832411917427792044L;
+
 	public ComboBoxCustom () {
 		this.setMaximumRowCount(30);
 		this.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -68,6 +77,11 @@ class ComboBoxCustom extends JComboBox {
 
 class LabelCustom extends JLabel {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3027309691790261621L;
+
 	public LabelCustom (String name) {
 		this.setText(name);
 		this.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -75,6 +89,11 @@ class LabelCustom extends JLabel {
 }
 
 public class ControlsPadCommon extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8180680885905840242L;
+
 	private Boolean changeEventsAllowed = false;
 	
 	private ComboBoxCustom comboBox_name;
@@ -98,7 +117,7 @@ public class ControlsPadCommon extends JPanel {
 	private ComboBoxCustom comboBox_type;
 	private boolean head_rim_pad;
 	private static final boolean head_pad = true;
-	private static final boolean rim_pad = false;
+	//private static final boolean rim_pad = false;
 	
 	private ConfigFull configFull;
 	private int	configIndex;

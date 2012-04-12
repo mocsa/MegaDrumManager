@@ -13,6 +13,10 @@ import com.jgoodies.forms.layout.RowSpec;
 
 public class PanelMidiLevelBar extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 364879549805262702L;
 	private Color bgColor = Color.WHITE;
 	private Color fontColor = Color.BLACK;
 	private int barWidth = 16;

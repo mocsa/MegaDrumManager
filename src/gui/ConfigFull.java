@@ -7,6 +7,10 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 public class ConfigFull implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4402239785688415814L;
 	public ConfigGlobalMisc configGlobalMisc;
 	public ConfigMisc configMisc;
 	public ConfigPedal configPedal;

@@ -61,9 +61,9 @@ public class FileManager {
 	private ConfigFileFilter configFileFilter;
 	private SysexFileFilter sysexFileFilter;
 	private BinFileFilter binFileFilter;
-	private Properties prop;
+	//private Properties prop;
 	private PropertiesConfiguration fullConfig;
-	private CombinedConfiguration cc;
+	//private CombinedConfiguration cc;
 	
 	public FileManager (JFrame parentFrame) {
 		fileChooser = new JFileChooser();
@@ -71,7 +71,7 @@ public class FileManager {
 		configFileFilter = new ConfigFileFilter();
 		sysexFileFilter = new SysexFileFilter();
 		binFileFilter = new BinFileFilter();
-		prop = new Properties();
+		//prop = new Properties();
 		//fullConfig = new PropertiesConfiguration();
 	}
 

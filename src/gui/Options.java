@@ -41,6 +41,11 @@ import javax.swing.SpinnerNumberModel;
 
 public class Options extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4800659190252147998L;
+
 	private final JPanel contentPanel = new JPanel();
 	
 	private Midi_handler midi_handler;

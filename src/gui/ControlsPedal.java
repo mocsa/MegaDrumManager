@@ -30,6 +30,11 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 public class ControlsPedal extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9188782839444156764L;
+
 	private Boolean changeEventsAllowed = false;
 
 	private JButton btnGet;

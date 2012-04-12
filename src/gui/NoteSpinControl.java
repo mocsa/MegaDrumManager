@@ -22,6 +22,10 @@ import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JCheckBox;
 
 public class NoteSpinControl extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7376057410282732208L;
 	private JLabel lblNoteName;
 	private JSpinner spinner;
 	private ConfigFull configFull;

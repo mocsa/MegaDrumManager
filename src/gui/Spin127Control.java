@@ -21,6 +21,10 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
 public class Spin127Control extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3468936253020850255L;
 	private JSpinner spinner;
 
 	/**

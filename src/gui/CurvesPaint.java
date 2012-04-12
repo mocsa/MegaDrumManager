@@ -14,7 +14,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 public class CurvesPaint extends JPanel {
-	   private Color lineColor = Color.BLACK;
+	   /**
+	 * 
+	 */
+	private static final long serialVersionUID = -4294823124594943932L;
+	private Color lineColor = Color.BLACK;
 	   private Color bgColor = Color.WHITE;
 	   private Color gridColor = Color.LIGHT_GRAY;
 	   private Color tickColor = Color.BLACK;

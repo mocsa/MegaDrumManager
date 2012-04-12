@@ -109,7 +109,7 @@ public class Main_window {
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
 	//private int chainId;
-	private JMenuItem menuItem;
+	//private JMenuItem menuItem;
 	private JMenu mnView;
 	private JProgressBar progressBar;
 	private JComboBox comboBox_inputsCount;

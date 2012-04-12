@@ -13,6 +13,10 @@ import java.awt.Color;
 import java.awt.Font;
 
 public class PanelMidiBar extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6935942765123326328L;
 	private PanelMidiLevelBar panelMidiLevelBar;
 	private JLabel lblTime;
 	private JLabel lblNote;

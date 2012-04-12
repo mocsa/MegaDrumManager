@@ -3,7 +3,12 @@ package gui;
 import java.util.EventObject;
 
 public class MidiEvent extends EventObject {
-    public MidiEvent(Object source) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5177491652573679931L;
+
+	public MidiEvent(Object source) {
         super(source);
     }
 }

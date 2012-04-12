@@ -5,6 +5,10 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.Font;
 
 public class CSpinner extends JSpinner {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3742566974360755672L;
 	private int index;
 	
 	/**

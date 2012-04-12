@@ -21,6 +21,10 @@ import javax.swing.event.ChangeEvent;
 import com.jgoodies.forms.layout.Sizes;
 
 class ZoneButton extends JButton {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7344379698600413547L;
 	private String name;
 	/**
 	 * Create the panel.
@@ -37,6 +41,11 @@ class ZoneButton extends JButton {
 }
 
 public class ThirdZoneControls extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2928331841555596211L;
+
 	private Boolean changeEventsAllowed = false;
 
 	private NoteSpinControl noteSpinControl_note;

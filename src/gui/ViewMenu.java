@@ -8,10 +8,14 @@ import javax.swing.JRadioButtonMenuItem;
 
 public class ViewMenu extends JMenu {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5916757511373377344L;
 	private JRadioButtonMenuItem radioHide;
 	private JRadioButtonMenuItem radioShow;
 	private JRadioButtonMenuItem radioDetach;
-	private String panelName;
+	//private String panelName;
 	private ConfigOptions configOptions;
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves
 	public int panelPointer;
@@ -21,7 +25,7 @@ public class ViewMenu extends JMenu {
 	 * Create the panel.
 	 */
 	public ViewMenu(String name, int panel) {
-		panelName = name;
+		//panelName = name;
 		panelPointer = panel;
 		setText(name);
 		radioHide = new JRadioButtonMenuItem("Hide");

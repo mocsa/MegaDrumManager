@@ -12,14 +12,14 @@ public class ConfigCustomName {
 
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix, Integer id) {
 		id++;
-		Integer c;
+		//Integer c;
 		prefix = prefix+"["+id.toString()+"]";
 		prop.setProperty(prefix, name);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix, Integer id) {
 		id++;
-		Integer c;
+		//Integer c;
 		prefix = prefix+"["+id.toString()+"]";
 		name = prop.getString(prefix, name);
 	}	

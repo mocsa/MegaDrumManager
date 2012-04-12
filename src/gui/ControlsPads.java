@@ -47,6 +47,10 @@ import java.awt.Color;
 import javax.swing.border.MatteBorder;
 
 public class ControlsPads extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7163944275522270789L;
 	private JButton btnGet;
 	private JButton btnSend;
 	private JComboBox comboBox_padSelection;
@@ -61,13 +65,13 @@ public class ControlsPads extends JPanel {
 	private int padPointer;
 	private int prevPadPointer;
 	private int thirdPointer;
-	private int prevThirdPointer;
+	//private int prevThirdPointer;
 	private JButton btnFirst;
 	private JButton btnPrev;
 	private JButton btnNext;
 	private JButton btnLast;
 	private int padSelection;
-	private int prevPadSelection;
+	//private int prevPadSelection;
 	private PropertyChangeListener padButtonPropertyChangeListener;
 	private PropertyChangeListener ZoneButtonPropertyChangeListener;
 	private boolean switchingPad = false;
@@ -81,7 +85,7 @@ public class ControlsPads extends JPanel {
 	private JButton btnLoad;
 	private JButton btnSave;
 	private JPanel panelCopyPad;
-	private JMenu menu;
+	//private JMenu menu;
 	private JMenuBar menuBar;
 	private JMenu mnCopypadto;
 	private JMenu mnCopyhead;
@@ -93,7 +97,7 @@ public class ControlsPads extends JPanel {
 	private JMenu mnCopyRim;
 	private JMenu mnCopy3rd;
 	//private ArrayList<JMenu> settingsMenu;
-	private JMenu menu_1;
+	//private JMenu menu_1;
 	
 	//private ArrayList<Field> configPadFields; 
 	//private ArrayList<Field> config3rdFields; 
@@ -109,7 +113,7 @@ public class ControlsPads extends JPanel {
         prevPadPointer = -1;
 
         thirdPointer = 0;
-        prevThirdPointer = -1;
+        //prevThirdPointer = -1;
 		
 //        configPadFields = new ArrayList<Field>();
 //        config3rdFields = new ArrayList<Field>();
@@ -265,7 +269,7 @@ public class ControlsPads extends JPanel {
 					//if (padSelection != prevPadSelection) {
 					if (!switchingPad) {
 						switchingPad = true;
-						prevPadSelection = padSelection;						
+						//prevPadSelection = padSelection;						
 						if (padSelection > 0 ) {
 							padSelection = ((padSelection - 1)*2) + 1;
 							switch_to_pad(padSelection);
@@ -326,8 +330,8 @@ public class ControlsPads extends JPanel {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("nameChanged")) {
 					if (!switchingPad) {
-						int index;
-						index = comboBox_padSelection.getSelectedIndex();
+						//int index;
+						//index = comboBox_padSelection.getSelectedIndex();
 						//System.out.printf("Renaming head at padPointer = %d\n", padPointer + 1);
 						//configPads[padPointer].copyVarsFrom(panel_head.getConfig());
 						panel_head.updateConfig();
@@ -366,8 +370,8 @@ public class ControlsPads extends JPanel {
 				if (arg0.getPropertyName().equals("nameChanged")) {
 					if (!switchingPad) {
 						if (padPointer > 0 ) {
-							int index;
-							index = comboBox_padSelection.getSelectedIndex();
+							//int index;
+							//index = comboBox_padSelection.getSelectedIndex();
 							//System.out.printf("Renaming rim at padPointer = %d\n", padPointer + 1);
 							//configPads[padPointer+1].copyVarsFrom(panel_rim.getConfig());
 							panel_rim.updateConfig();
@@ -503,7 +507,7 @@ public class ControlsPads extends JPanel {
 		
 		PropertiesConfigurationLayout layoutHead = new PropertiesConfigurationLayout(propSrcHead);		
 		PropertiesConfigurationLayout layoutRim = new PropertiesConfigurationLayout(propSrcRim);		
-		PropertiesConfigurationLayout layout3rd = new PropertiesConfigurationLayout(propSrc3rd);		
+		//PropertiesConfigurationLayout layout3rd = new PropertiesConfigurationLayout(propSrc3rd);		
 		configFull.configPads[padPointer].copyToPropertiesConfiguration(propSrcHead, layoutHead, "copy", 0);
 		if (padPointer > 0) {
 			configFull.configPads[padPointer+1].copyToPropertiesConfiguration(propSrcRim, layoutRim, "copy", 0);			
@@ -696,7 +700,7 @@ public class ControlsPads extends JPanel {
 			updatePadsSelection(prevPadPointer);
 		}
 		prevPadPointer = padPointer;
-		prevThirdPointer = thirdPointer;
+		//prevThirdPointer = thirdPointer;
 		panel_head.setConfigIndex(head_pad, padPointer);
 		panel_head.getComboBox_type().setEnabled((padPointer != 0));
 		//panel_3rd_zone.setVisible(panel_head.getComboBox_type().getSelectedIndex() > 0);
