@@ -330,13 +330,11 @@ public class ControlsPads extends JPanel {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("nameChanged")) {
 					if (!switchingPad) {
-						//int index;
-						//index = comboBox_padSelection.getSelectedIndex();
-						//System.out.printf("Renaming head at padPointer = %d\n", padPointer + 1);
-						//configPads[padPointer].copyVarsFrom(panel_head.getConfig());
 						panel_head.updateConfig();
 						updatePadsSelection(padPointer);
-						//comboBox_padSelection.setSelectedIndex(index);
+						switchingPad = true;
+						switch_to_pad(padPointer);
+						switchingPad = false;
 					}
 				}
 				if (arg0.getPropertyName().equals("typeChanged")) {
@@ -370,13 +368,11 @@ public class ControlsPads extends JPanel {
 				if (arg0.getPropertyName().equals("nameChanged")) {
 					if (!switchingPad) {
 						if (padPointer > 0 ) {
-							//int index;
-							//index = comboBox_padSelection.getSelectedIndex();
-							//System.out.printf("Renaming rim at padPointer = %d\n", padPointer + 1);
-							//configPads[padPointer+1].copyVarsFrom(panel_rim.getConfig());
 							panel_rim.updateConfig();
 							updatePadsSelection(padPointer + 1);
-							//comboBox_padSelection.setSelectedIndex(index);
+							switchingPad = true;
+							switch_to_pad(padPointer);
+							switchingPad = false;
 						}
 					}
 				}
@@ -471,8 +467,12 @@ public class ControlsPads extends JPanel {
 
 	public void updateControls() {
 		updatePadControls(padPointer);
-		updatePadControls(padPointer+1);
-		updateThirdControls(thirdPointer);
+		if (padPointer > 0) {
+			updatePadControls(padPointer+1);
+			updateThirdControls(thirdPointer);
+		}
+		//updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
+		switch_to_pad(padPointer);
 	}
 	
 	public void setPadPointer(int pointer) {

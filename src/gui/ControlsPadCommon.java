@@ -200,9 +200,9 @@ public class ControlsPadCommon extends JPanel {
 		comboBox_name.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					//if (changeEventsAllowed) {
+					if (changeEventsAllowed) {
 						firePropertyChange("nameChanged", false, true);
-					//}
+					}
 				}
 			}
 		});
