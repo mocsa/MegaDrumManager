@@ -34,6 +34,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
 import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ControlsPadsExtra extends JPanel {
 	/**
@@ -367,7 +369,7 @@ public class ControlsPadsExtra extends JPanel {
 		panelNamesEdit.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("max(151dlu;default):grow"),},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -377,8 +379,9 @@ public class ControlsPadsExtra extends JPanel {
 		panelNamesEdit.add(lblEditSelectedName, "1, 1, right, default");
 		
 		textFieldEditName = new JTextField();
-		textFieldEditName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		textFieldEditName.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
 				String text = textFieldEditName.getText();
 				text = text.trim();
 				text += "        ";
