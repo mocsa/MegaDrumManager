@@ -172,7 +172,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		comboBox_curve.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configFull.configPedal.curve = (short)comboBox_curve.getSelectedIndex();
+					configFull.configPedal.curve = comboBox_curve.getSelectedIndex();
 					valueChanged();
 				}
 			}
@@ -192,7 +192,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		comboBox_input.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configFull.configPedal.hhInput = (short)(comboBox_input.getSelectedIndex()*2 + 2);
+					configFull.configPedal.hhInput = (comboBox_input.getSelectedIndex()*2 + 2);
 					valueChanged();
 				}
 			}
@@ -265,7 +265,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_chickDelay.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_chickDelay.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.chickDelay = ((Integer)spin127Control_chickDelay.getSpinner().getValue()).shortValue();
+				configFull.configPedal.chickDelay = (Integer)spin127Control_chickDelay.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -279,7 +279,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_cc.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_cc.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.cc = ((Integer)spin127Control_cc.getSpinner().getValue()).shortValue();
+				configFull.configPedal.cc = (Integer)spin127Control_cc.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -293,7 +293,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_ccRdcLvl.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_ccRdcLvl.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.ccRdcLvl = ((Integer)spin127Control_ccRdcLvl.getSpinner().getValue()).shortValue();
+				configFull.configPedal.ccRdcLvl = (Integer)spin127Control_ccRdcLvl.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -323,7 +323,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin1023Control_lowLevel = new Spin1023Control();
 		spin1023Control_lowLevel.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.lowLevel = ((Integer)spin1023Control_lowLevel.getSpinner().getValue()).shortValue();
+				configFull.configPedal.lowLevel = (Integer)spin1023Control_lowLevel.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -336,7 +336,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin1023Control_highLevel = new Spin1023Control();
 		spin1023Control_highLevel.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.highLevel = ((Integer)spin1023Control_highLevel.getSpinner().getValue()).shortValue();
+				configFull.configPedal.highLevel = (Integer)spin1023Control_highLevel.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -349,7 +349,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_openLevel = new Spin127Control();
 		spin127Control_openLevel.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.openLevel = ((Integer)spin127Control_openLevel.getSpinner().getValue()).shortValue();
+				configFull.configPedal.openLevel = (Integer)spin127Control_openLevel.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -362,7 +362,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_semiOpen = new Spin127Control();
 		spin127Control_semiOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.semiOpenLevel = ((Integer)spin127Control_semiOpen.getSpinner().getValue()).shortValue();
+				configFull.configPedal.semiOpenLevel = (Integer)spin127Control_semiOpen.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -375,7 +375,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_halfOpen = new Spin127Control();
 		spin127Control_halfOpen.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.halfOpenLevel = ((Integer)spin127Control_halfOpen.getSpinner().getValue()).shortValue();
+				configFull.configPedal.halfOpenLevel = (Integer)spin127Control_halfOpen.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -388,7 +388,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_closed = new Spin127Control();
 		spin127Control_closed.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.closedLevel = ((Integer)spin127Control_closed.getSpinner().getValue()).shortValue();
+				configFull.configPedal.closedLevel = (Integer)spin127Control_closed.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -401,7 +401,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_shortThres = new Spin127Control();
 		spin127Control_shortThres.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.shortThres = ((Integer)spin127Control_shortThres.getSpinner().getValue()).shortValue();
+				configFull.configPedal.shortThres = (Integer)spin127Control_shortThres.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -414,7 +414,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_longThres = new Spin127Control();
 		spin127Control_longThres.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configPedal.longThres = ((Integer)spin127Control_longThres.getSpinner().getValue()).shortValue();
+				configFull.configPedal.longThres = (Integer)spin127Control_longThres.getSpinner().getValue();
 				valueChanged();
 			}
 		});
@@ -599,20 +599,20 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	
 	public void updateConfig() {
 		if (controlsInited) {
-			configFull.configPedal.bowSemiOpenNote = ((Short)noteSpinControl_bowSemiOpen.getValue()).shortValue();		
-			configFull.configPedal.edgeSemiOpenNote = ((Short)noteSpinControl_edgeSemiOpen.getValue()).shortValue();
-			configFull.configPedal.bellSemiOpenNote = ((Short)noteSpinControl_bellSemiOpen.getValue()).shortValue();
-			configFull.configPedal.bowHalfOpenNote = ((Short)noteSpinControl_bowHalfOpen.getValue()).shortValue();
-			configFull.configPedal.edgeHalfOpenNote = ((Short)noteSpinControl_edgeHalfOpen.getValue()).shortValue();
-			configFull.configPedal.bellHalfOpenNote = ((Short)noteSpinControl_bellHalfOpen.getValue()).shortValue();
-			configFull.configPedal.bowSemiClosedNote = ((Short)noteSpinControl_bowSemiClosed.getValue()).shortValue();
-			configFull.configPedal.edgeSemiClosedNote = ((Short)noteSpinControl_edgeSemiClosed.getValue()).shortValue();
-			configFull.configPedal.bellSemiClosedNote = ((Short)noteSpinControl_bellSemiClosed.getValue()).shortValue();
-			configFull.configPedal.bowClosedNote = ((Short)noteSpinControl_bowClosed.getValue()).shortValue();
-			configFull.configPedal.edgeClosedNote = ((Short)noteSpinControl_edgeClosed.getValue()).shortValue();
-			configFull.configPedal.bellClosedNote = ((Short)noteSpinControl_bellClosed.getValue()).shortValue();
-			configFull.configPedal.chickNote = ((Short)noteSpinControl_chick.getValue()).shortValue();
-			configFull.configPedal.splashNote = ((Short)noteSpinControl_splash.getValue()).shortValue();			
+			configFull.configPedal.bowSemiOpenNote = (Integer)noteSpinControl_bowSemiOpen.getValue();		
+			configFull.configPedal.edgeSemiOpenNote = (Integer)noteSpinControl_edgeSemiOpen.getValue();
+			configFull.configPedal.bellSemiOpenNote = (Integer)noteSpinControl_bellSemiOpen.getValue();
+			configFull.configPedal.bowHalfOpenNote = (Integer)noteSpinControl_bowHalfOpen.getValue();
+			configFull.configPedal.edgeHalfOpenNote = (Integer)noteSpinControl_edgeHalfOpen.getValue();
+			configFull.configPedal.bellHalfOpenNote = (Integer)noteSpinControl_bellHalfOpen.getValue();
+			configFull.configPedal.bowSemiClosedNote = (Integer)noteSpinControl_bowSemiClosed.getValue();
+			configFull.configPedal.edgeSemiClosedNote = (Integer)noteSpinControl_edgeSemiClosed.getValue();
+			configFull.configPedal.bellSemiClosedNote = (Integer)noteSpinControl_bellSemiClosed.getValue();
+			configFull.configPedal.bowClosedNote = (Integer)noteSpinControl_bowClosed.getValue();
+			configFull.configPedal.edgeClosedNote = (Integer)noteSpinControl_edgeClosed.getValue();
+			configFull.configPedal.bellClosedNote = (Integer)noteSpinControl_bellClosed.getValue();
+			configFull.configPedal.chickNote = (Integer)noteSpinControl_chick.getValue();
+			configFull.configPedal.splashNote = (Integer)noteSpinControl_splash.getValue();			
 		}
 	}
 	

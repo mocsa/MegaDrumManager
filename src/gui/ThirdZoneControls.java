@@ -127,7 +127,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		controls.add(slider_midPoint);
 		slider_midPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.config3rds[configIndex].threshold = (short)((configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4));
+				configFull.config3rds[configIndex].threshold = (configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4);
 				updateControls();
 			}
 		});
@@ -171,11 +171,11 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		controls.add(spinner_midPointWidth);
 		spinner_midPointWidth.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.config3rds[configIndex].threshold = (short)((configFull.config3rds[configIndex].threshold&0xf0)|((Short)spinner_midPointWidth.getValue()&0x0f));
+				configFull.config3rds[configIndex].threshold = (configFull.config3rds[configIndex].threshold&0xf0)|((Integer)spinner_midPointWidth.getValue()&0x0f);
 				updateControls();
 			}
 		});
-		spinner_midPointWidth.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 15), new Short((short) 1)));
+		spinner_midPointWidth.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(15), new Integer(1)));
 		add(spinner_midPointWidth, "9, 2, left, fill");
 		
 		zoneButton_midwidth = new ZoneButton("midwidth");
@@ -210,11 +210,11 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		controls.add(spinner_threshold);
 		spinner_threshold.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.config3rds[configIndex].threshold = (short)(Short)(spinner_threshold.getValue());
+				configFull.config3rds[configIndex].threshold = (Integer)(spinner_threshold.getValue());
 				updateControls();
 		}
 		});
-		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 255), new Short((short) 1)));
+		spinner_threshold.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(255), new Integer(1)));
 		add(spinner_threshold, "9, 3, left, fill");
 		
 		zoneButton_threshold = new ZoneButton("threshold");
@@ -285,8 +285,8 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 				noteSpinControl_altNote.getCheckBox().setSelected(configFull.config3rds[configIndex].altNote_linked);
 				noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.config3rds[configIndex].pressrollNote_linked);
 				spinner_threshold.setValue(configFull.config3rds[configIndex].threshold);
-				spinner_midPointWidth.setValue((short)(configFull.config3rds[configIndex].threshold&0x0f));
-				slider_midPoint.setValue((short)((configFull.config3rds[configIndex].threshold&0xf0)>>4));
+				spinner_midPointWidth.setValue(configFull.config3rds[configIndex].threshold&0x0f);
+				slider_midPoint.setValue((configFull.config3rds[configIndex].threshold&0xf0)>>4);
 				inUpdate = false;
 			}
 		}
@@ -294,13 +294,13 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	
 	public void updateConfig() {
 		if (controlsInited) {
-			configFull.config3rds[configIndex].note = ((Short)noteSpinControl_note.getValue()).shortValue();
-			configFull.config3rds[configIndex].altNote = ((Short)noteSpinControl_altNote.getValue()).shortValue();
-			configFull.config3rds[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getValue()).shortValue();
-			configFull.config3rds[configIndex].dampenedNote = ((Short)noteSpinControl_dampenedNote.getValue()).shortValue();
+			configFull.config3rds[configIndex].note = (Integer)noteSpinControl_note.getValue();
+			configFull.config3rds[configIndex].altNote = (Integer)noteSpinControl_altNote.getValue();
+			configFull.config3rds[configIndex].pressrollNote = (Integer)noteSpinControl_pressrollNote.getValue();
+			configFull.config3rds[configIndex].dampenedNote = (Integer)noteSpinControl_dampenedNote.getValue();
 			configFull.config3rds[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
 			configFull.config3rds[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
-			configFull.config3rds[configIndex].threshold = (Short)spinner_threshold.getValue();
+			configFull.config3rds[configIndex].threshold = (Integer)spinner_threshold.getValue();
 		}
 	}
 	

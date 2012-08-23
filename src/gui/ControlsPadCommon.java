@@ -109,20 +109,20 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
 	private NoteSpinControl noteSpinControl_pressrollNote;
-	private JSpinner spinner_channel;
+	private JSpinnerCustom spinner_channel;
 	private ComboBoxCustom comboBox_curve;
 	private ComboBoxCustom comboBox_compression;
 	private ComboBoxCustom comboBox_shift;
 	private ComboBoxCustom comboBox_xtalkLevel;
 	private ComboBoxCustom comboBox_xtalkGroup;
-	private JSpinner spinner_threshold;
+	private JSpinnerCustom spinner_threshold;
 	private ComboBoxCustom comboBox_gain;
 	private JCheckBox checkBox_autoLevel;
-	private JSpinner spinner_highLevel;
-	private JSpinner spinner_retrigger;
+	private JSpinnerCustom spinner_highLevel;
+	private JSpinnerCustom spinner_retrigger;
 	private ComboBoxCustom comboBox_dynLevel;
 	private ComboBoxCustom comboBox_dynTime;
-	private JSpinner spinner_minScan;
+	private JSpinnerCustom spinner_minScan;
 	private ComboBoxCustom comboBox_type;
 	private boolean head_rim_pad;
 	private static final boolean head_pad = true;
@@ -284,7 +284,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblCurve = new LabelCustom("Channel");
 		add(lblCurve, "1, 5, right, center");
 		
-		spinner_channel = new JSpinner();
+		spinner_channel = new JSpinnerCustom(this);
 		spinner_channel.setModel(new SpinnerNumberModel(1, 1, 16, 1));
 		add(spinner_channel, "3, 5, left, center");
 		
@@ -368,8 +368,8 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblThreshold = new LabelCustom("Threshold");
 		add(lblThreshold, "1, 12, right, center");
 		
-		spinner_threshold = new JSpinner();
-		spinner_threshold.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
+		spinner_threshold = new JSpinnerCustom(this);
+		spinner_threshold.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(127), new Integer(1)));
 		add(spinner_threshold, "3, 12, left, center");
 		
 		padButton_threshold = new PadButton("threshold", head_rim_pad);
@@ -399,8 +399,8 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblHighlevel = new LabelCustom("HighLevel");
 		add(lblHighlevel, "1, 15, right, center");
 				
-		spinner_highLevel = new JSpinner();
-		spinner_highLevel.setModel(new SpinnerNumberModel(new Short((short) 64), new Short((short) 64), new Short((short) 1023), new Short((short) 1)));
+		spinner_highLevel = new JSpinnerCustom(this);
+		spinner_highLevel.setModel(new SpinnerNumberModel(new Integer(64), new Integer(64), new Integer(1023), new Integer(1)));
 		JSpinner.NumberEditor jsne_spinner_highLevel = new JSpinner.NumberEditor(spinner_highLevel,"#");
 		spinner_highLevel.setEditor(jsne_spinner_highLevel);
 		add(spinner_highLevel, "3, 15, left, default");
@@ -411,8 +411,8 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblRetriggerMask = new LabelCustom("Retrigger Mask");
 		add(lblRetriggerMask, "1, 16, right, center");
 		
-		spinner_retrigger = new JSpinner();
-		spinner_retrigger.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
+		spinner_retrigger = new JSpinnerCustom(this);
+		spinner_retrigger.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(127), new Integer(1)));
 		add(spinner_retrigger, "3, 16, left, center");
 		
 		padButton_retrigger = new PadButton("retrigger", head_rim_pad);
@@ -447,8 +447,8 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblMinscan = new LabelCustom("MinScan");
 		add(lblMinscan, "1, 19, right, center");
 		
-		spinner_minScan = new JSpinner();
-		spinner_minScan.setModel(new SpinnerNumberModel(new Short((short) 10), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
+		spinner_minScan = new JSpinnerCustom(this);
+		spinner_minScan.setModel(new SpinnerNumberModel(new Integer(10), new Integer(10), new Integer(100), new Integer(1)));
 		add(spinner_minScan, "3, 19, left, center");
 		
 		padButton_minScan = new PadButton("minScan", head_rim_pad);
@@ -503,25 +503,18 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 							}
 						}
 					}
-				});
-				
+				});			
 			} else if (control.getClass().equals(JCheckBox.class)) {
 				((JCheckBox) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
 						//valueChanged();
 					}
-				});
-				
+				});	
 			} else if (control.getClass().equals (NoteSpinControl.class)) {
 				NoteSpinControl noteSpinControl = ((NoteSpinControl) control);
 				noteSpinControl.setEventListener(this);
-			} else if (control.getClass().equals(JSpinner.class)) {
-				((JSpinner) control).setFont(new Font("Tahoma", Font.PLAIN, 11));
-				((JSpinner) control).addChangeListener(new ChangeListener() {
-					public void stateChanged(ChangeEvent arg0) {
-						//valueChanged();
-					}
-				});				
+			} else if (control.getClass().equals(JSpinnerCustom.class)) {
+				((JSpinnerCustom) control).setFont(new Font("Tahoma", Font.PLAIN, 11));
 			}
 		}
 		controlsInited = true;
@@ -540,21 +533,21 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		noteSpinControl_altNote.getCheckBox().setSelected(configFull.configPads[configIndex].altNote_linked);
 		noteSpinControl_pressrollNote.setValueWithoutEvents(configFull.configPads[configIndex].pressrollNote);
 		noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.configPads[configIndex].pressrollNote_linked);
-		spinner_channel.setValue(configFull.configPads[configIndex].channel + 1);
+		spinner_channel.setValueWithoutEvent(configFull.configPads[configIndex].channel + 1);
 		comboBox_function.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].function);
 		comboBox_curve.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].curve);
 		comboBox_compression.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].compression);
 		comboBox_shift.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].shift);
 		comboBox_xtalkLevel.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].xtalkLevel);
 		comboBox_xtalkGroup.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].xtalkGroup);
-		spinner_threshold.setValue(configFull.configPads[configIndex].threshold);
+		spinner_threshold.setValueWithoutEvent(configFull.configPads[configIndex].threshold);
 		comboBox_gain.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].gain);
 		checkBox_autoLevel.setSelected(configFull.configPads[configIndex].autoLevel);
-		spinner_highLevel.setValue(configFull.configPads[configIndex].levelMax);
-		spinner_retrigger.setValue(configFull.configPads[configIndex].retrigger);
+		spinner_highLevel.setValueWithoutEvent(configFull.configPads[configIndex].levelMax);
+		spinner_retrigger.setValueWithoutEvent(configFull.configPads[configIndex].retrigger);
 		comboBox_dynLevel.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].dynLevel);
 		comboBox_dynTime.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].dynTime);
-		spinner_minScan.setValue(configFull.configPads[configIndex].minScan);
+		spinner_minScan.setValueWithoutEvent(configFull.configPads[configIndex].minScan);
 		if (head_rim_pad == head_pad) {
 			if (configFull.configPads[configIndex].dual) {
 				comboBox_type.setSelectedIndexWithoutEvent(1);
@@ -574,27 +567,27 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	
 	public void updateConfig() {
 		if (controlsInited) {
-			configFull.configPads[configIndex].name = (short)comboBox_name.getSelectedIndex();
-			configFull.configPads[configIndex].note = ((Short)noteSpinControl_note.getValue()).shortValue();
-			configFull.configPads[configIndex].altNote = ((Short)noteSpinControl_altNote.getValue()).shortValue();
+			configFull.configPads[configIndex].name = comboBox_name.getSelectedIndex();
+			configFull.configPads[configIndex].note = (Integer)noteSpinControl_note.getValue();
+			configFull.configPads[configIndex].altNote = (Integer)noteSpinControl_altNote.getValue();
 			configFull.configPads[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
-			configFull.configPads[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getValue()).shortValue();
+			configFull.configPads[configIndex].pressrollNote = (Integer)noteSpinControl_pressrollNote.getValue();
 			configFull.configPads[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
-			configFull.configPads[configIndex].channel = (short)(((Integer)spinner_channel.getValue()).shortValue() - 1);
-			configFull.configPads[configIndex].function = (short)comboBox_function.getSelectedIndex();
-			configFull.configPads[configIndex].curve = (short)comboBox_curve.getSelectedIndex();
-			configFull.configPads[configIndex].compression = (short)comboBox_compression.getSelectedIndex();
-			configFull.configPads[configIndex].shift = (short)comboBox_shift.getSelectedIndex();
-			configFull.configPads[configIndex].xtalkLevel = (short)comboBox_xtalkLevel.getSelectedIndex();
-			configFull.configPads[configIndex].xtalkGroup = (short)comboBox_xtalkGroup.getSelectedIndex();
-			configFull.configPads[configIndex].threshold = (Short)spinner_threshold.getValue();
-			configFull.configPads[configIndex].gain = (short)comboBox_gain.getSelectedIndex();
+			configFull.configPads[configIndex].channel = ((Integer)spinner_channel.getValue() - 1);
+			configFull.configPads[configIndex].function = comboBox_function.getSelectedIndex();
+			configFull.configPads[configIndex].curve = comboBox_curve.getSelectedIndex();
+			configFull.configPads[configIndex].compression = comboBox_compression.getSelectedIndex();
+			configFull.configPads[configIndex].shift = comboBox_shift.getSelectedIndex();
+			configFull.configPads[configIndex].xtalkLevel = comboBox_xtalkLevel.getSelectedIndex();
+			configFull.configPads[configIndex].xtalkGroup = comboBox_xtalkGroup.getSelectedIndex();
+			configFull.configPads[configIndex].threshold = (Integer)spinner_threshold.getValue();
+			configFull.configPads[configIndex].gain = comboBox_gain.getSelectedIndex();
 			configFull.configPads[configIndex].autoLevel = checkBox_autoLevel.isSelected();
-			configFull.configPads[configIndex].levelMax = (Short)spinner_highLevel.getValue();
-			configFull.configPads[configIndex].retrigger = (Short)spinner_retrigger.getValue();
-			configFull.configPads[configIndex].dynLevel = (short)comboBox_dynLevel.getSelectedIndex();
-			configFull.configPads[configIndex].dynTime = (short)comboBox_dynTime.getSelectedIndex();
-			configFull.configPads[configIndex].minScan = (Short)spinner_minScan.getValue();
+			configFull.configPads[configIndex].levelMax = (Integer)spinner_highLevel.getValue();
+			configFull.configPads[configIndex].retrigger = (Integer)spinner_retrigger.getValue();
+			configFull.configPads[configIndex].dynLevel = comboBox_dynLevel.getSelectedIndex();
+			configFull.configPads[configIndex].dynTime = comboBox_dynTime.getSelectedIndex();
+			configFull.configPads[configIndex].minScan = (Integer)spinner_minScan.getValue();
 			if (head_rim_pad == head_pad) {
 				configFull.configPads[configIndex].type = false;
 				switch (comboBox_type.getSelectedIndex()) {

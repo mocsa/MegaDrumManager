@@ -57,7 +57,7 @@ public class NoteSpinControl extends JPanel {
 			new RowSpec[] {
 				RowSpec.decode("20px"),}));
 		spinner.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		spinner.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 127), new Short((short) 1)));
+		spinner.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(127), new Integer(1)));
 		add(spinner, "1, 1, fill, fill");
 		
 		lblNoteName = new JLabel("Disbld");
@@ -71,13 +71,13 @@ public class NoteSpinControl extends JPanel {
 	}
 
 	private void updateNoteName() {
-		short note_number;
-		short base;
+		int note_number;
+		int base;
 		String note_text;
-		note_number = ((Short)spinner.getValue()).shortValue();
+		note_number = (Integer)spinner.getValue();
 		if (note_number > 0) {
 			octave = note_number/12 ;
-			base = (short)(octave*12);
+			base = octave*12;
 			note_pointer = note_number - base;
 			note_text = note_names[note_pointer] + " " + Integer.toString(octave - 3 + configFull.configMisc.octave_shift);
 			lblNoteName.setText(note_text);
@@ -95,8 +95,8 @@ public class NoteSpinControl extends JPanel {
 		spinner.setModel(model);
 	}
 	
-	public short getValue() {
-		return ((Short)spinner.getValue()).shortValue();
+	public int getValue() {
+		return (Integer)spinner.getValue();
 	}
 	
 	public void addChangeListener(ChangeListener listener) {
@@ -117,7 +117,7 @@ public class NoteSpinControl extends JPanel {
 
 	}
 	
-	public void setValueWithoutEvents(short value) {
+	public void setValueWithoutEvents(int value) {
 		if ((value >= 0 ) && (value < 128)) {
 			stateChangeEventsDisabled = 1;
 			spinner.setValue(value);
@@ -125,7 +125,7 @@ public class NoteSpinControl extends JPanel {
 		updateNoteName();
 	}
 
-	private void setValue(short value) {
+	private void setValue(int value) {
 		if ((value >= 0 ) && (value < 128)) {
 			spinner.setValue(value);
 		}
