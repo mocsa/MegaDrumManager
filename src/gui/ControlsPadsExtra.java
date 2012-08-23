@@ -93,7 +93,7 @@ public class ControlsPadsExtra extends JPanel {
         //prevCurvePointer = -1;
         
 //        customNamesCount = Constants.CUSTOM_NAMES_MAX;
-        configFull.customNamesCount = 2;
+        configFull.customNamesCount = 32;
         customNamePointer = 0;
         //prevCustomNamePointer = -1;
 
@@ -307,6 +307,8 @@ public class ControlsPadsExtra extends JPanel {
 		panelNamesGetSend.add(lblCustomNames, "1, 1, right, default");
 		
 		comboBoxCustomNamesCount = new JComboBox();
+		comboBoxCustomNamesCount.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		comboBoxCustomNamesCount.setModel(new DefaultComboBoxModel(new String[] {"2", "16", "32"}));
 		comboBoxCustomNamesCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -330,8 +332,7 @@ public class ControlsPadsExtra extends JPanel {
 				}
 			}
 		});
-		comboBoxCustomNamesCount.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		comboBoxCustomNamesCount.setModel(new DefaultComboBoxModel(new String[] {"2", "16", "32"}));
+		comboBoxCustomNamesCount.setSelectedIndex(2);
 		panelNamesGetSend.add(comboBoxCustomNamesCount, "2, 1, fill, default");
 		
 		button_customNameGet = new JButton("Get");
@@ -494,13 +495,15 @@ public class ControlsPadsExtra extends JPanel {
 	
 	private void updateCustomNameControls() {
 		int pointer = customNamePointer;
-		comboBoxSelectName.removeAllItems();
-		for (int i = 0; i < configFull.customNamesCount; i++) {
-			comboBoxSelectName.addItem(configFull.configCustomNames[i].name);
-		}		
-		comboBoxSelectName.setSelectedIndex(pointer);
-		if (changeEventsAllowed) {
-			firePropertyChange("CustomNamesChanged", false, true);
+		if (comboBoxSelectName != null) {
+			comboBoxSelectName.removeAllItems();
+			for (int i = 0; i < configFull.customNamesCount; i++) {
+				comboBoxSelectName.addItem(configFull.configCustomNames[i].name);
+			}		
+			comboBoxSelectName.setSelectedIndex(pointer);
+			if (changeEventsAllowed) {
+				firePropertyChange("CustomNamesChanged", false, true);
+			}
 		}
 	}
 	
