@@ -829,14 +829,14 @@ public class ControlsPads extends JPanel {
 			configFull.config3rds[third_id].threshold = config.threshold;	
 		}
 		if (varName.equals("midpoint")) {
-			configFull.config3rds[third_id].threshold = (short) (((short)(configFull.config3rds[third_id].threshold&0x0f))
+			configFull.config3rds[third_id].threshold = (configFull.config3rds[third_id].threshold&0x0f)
 			|
-			((short)(config.threshold&0xf0)));
+			(config.threshold&0xf0);
 		}
 		if (varName.equals("midwidth")) {
-			configFull.config3rds[third_id].threshold = (short) (((short)(configFull.config3rds[third_id].threshold&0xf0))
+			configFull.config3rds[third_id].threshold = ((configFull.config3rds[third_id].threshold&0xf0)
 					|
-					((short)(config.threshold&0x0f)));
+					(config.threshold&0x0f));
 		}
 	}
 	

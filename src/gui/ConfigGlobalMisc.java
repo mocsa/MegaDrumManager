@@ -11,8 +11,8 @@ public class ConfigGlobalMisc {
 	
 	public boolean changed; 
 	
-	public short lcd_contrast = 50;
-	public short inputs_count = 18;
+	public int lcd_contrast = 50;
+	public int inputs_count = 18;
 
 	public ConfigGlobalMisc (){
 	}
@@ -24,7 +24,7 @@ public class ConfigGlobalMisc {
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
-		lcd_contrast = Utils.validateShort(prop.getShort(prefix+"lcd_contrast", lcd_contrast),1,100,lcd_contrast);
-		inputs_count = Utils.validateShort(prop.getShort(prefix+"inputs_count", inputs_count),18,56,inputs_count);
+		lcd_contrast = Utils.validateInt(prop.getInt(prefix+"lcd_contrast", lcd_contrast),1,100,lcd_contrast);
+		inputs_count = Utils.validateInt(prop.getInt(prefix+"inputs_count", inputs_count),18,56,inputs_count);
 	}
 }

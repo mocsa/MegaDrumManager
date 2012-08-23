@@ -48,11 +48,11 @@ public class Spin1023Control extends JPanel {
 		spinner.setModel(model);
 	}
 	
-	public short getValue() {
-		return ((Short)spinner.getValue()).shortValue();
+	public int getValue() {
+		return (Integer)spinner.getValue();
 	}
 	
-	public void setValue(short value) {
+	public void setValue(int value) {
 		if ((value >= 0 ) && (value < 1024)) {
 			spinner.setValue(value);
 		}

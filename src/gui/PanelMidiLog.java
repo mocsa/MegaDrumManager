@@ -148,7 +148,7 @@ public class PanelMidiLog extends JPanel {
 	private int storePointer = 0;
 	private long prevTime;
 	//private long prevTime2;
-	private Short rawLines = 0;
+	private int rawLines = 0;
 	private ArrayList<String> rawStrings;
 	private JLabel lblHitsIntervalsmilliseconds;
 	private JLabel lblNotesNumbers;

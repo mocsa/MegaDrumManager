@@ -133,16 +133,16 @@ public class ControlsMisc extends JPanel {
 		spinner_noteoff.setToolTipText("<html>Delay in milliseconds of a Note Off message<br>\r\nafter a Note On message</html>");
 		spinner_noteoff.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				short value = ((Short)spinner_noteoff.getValue()).shortValue();
-				configFull.configMisc.note_off = (short)(value/10);
+				int value = (Integer)spinner_noteoff.getValue();
+				configFull.configMisc.note_off = (value/10);
 				if (configFull.configMisc.note_off < configFull.configMisc.pressroll) {
 					configFull.configMisc.pressroll = configFull.configMisc.note_off; 
 				}
-				spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (configFull.configMisc.pressroll*10)), new Short((short) 0), new Short((short) (configFull.configMisc.note_off*10)), new Short((short) 10)));
+				spinner_pressroll.setModel(new SpinnerNumberModel(new Integer(configFull.configMisc.pressroll*10), new Integer(0), new Integer(configFull.configMisc.note_off*10), new Integer(10)));
 				valueChanged();
 			}
 		});
-		spinner_noteoff.setModel(new SpinnerNumberModel(new Short((short) 200), new Short((short) 100), new Short((short) 2000), new Short((short) 10)));
+		spinner_noteoff.setModel(new SpinnerNumberModel(new Integer(200), new Integer(100), new Integer(2000), new Integer(10)));
 		panel.add(spinner_noteoff, "3, 1");
 		
 		JLabel lblPressrollTimeout = new JLabel("Pressroll timeout");
@@ -154,12 +154,12 @@ public class ControlsMisc extends JPanel {
 		spinner_pressroll.setToolTipText("<html>Timeout in milliseconds for Pressroll detection.<br>\r\n<br>\r\nIf subsequent hits on a pad are within this timeout<br>\r\nMegaDrum will send Pressroll Notes  instead of<br>\r\nNotes or Alt Notes. \r\n</html>");
 		spinner_pressroll.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				short value = ((Short)spinner_pressroll.getValue()).shortValue();
-				configFull.configMisc.pressroll = (short)(value/10);
+				int value = (Integer)spinner_pressroll.getValue();
+				configFull.configMisc.pressroll = (value/10);
 				valueChanged();
 			}
 		});
-		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) 0), new Short((short) 0), new Short((short) 200), new Short((short) 10)));
+		spinner_pressroll.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(200), new Integer(10)));
 		panel.add(spinner_pressroll, "3, 2");
 		
 		JLabel lblLatency = new JLabel("Latency");
@@ -171,12 +171,12 @@ public class ControlsMisc extends JPanel {
 		spinner_latency.setToolTipText("<html>Internally MegaDrum scans all inputs every 10-30 microseconds for presence of signals.<br>\r\nThen, very simplified, every <Latency> period MegaDrum<br>\r\nscans input states to see if any of the inputs registered signals<br>\r\nand sends MIDI messages for triggered inputs. Lowering this setting<br>\r\nwill reduce latency and may degrade level detection precision.<br>\r\nRaising this setting may improve level detection precision and will increase latency.<br> Latency can be changed between 10 and 100 which corresponds to 1 and 10 milliseconds.<br>\r\nDefault is 40 - 4 millisecond.</html>");
 		spinner_latency.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				short value = ((Short)spinner_latency.getValue()).shortValue();
-				configFull.configMisc.latency = (short)value;
+				int value = (Integer)spinner_latency.getValue();
+				configFull.configMisc.latency = value;
 				valueChanged();
 			}
 		});
-		spinner_latency.setModel(new SpinnerNumberModel(new Short((short) 40), new Short((short) 10), new Short((short) 100), new Short((short) 1)));
+		spinner_latency.setModel(new SpinnerNumberModel(new Integer(40), new Integer(10), new Integer(100), new Integer(1)));
 		panel.add(spinner_latency, "3, 3");
 		
 		lblOctaveShift = new JLabel("Notes Octave Shift");
@@ -187,13 +187,13 @@ public class ControlsMisc extends JPanel {
 		spinner_octaveShift.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spinner_octaveShift.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				short value = ((Short)spinner_octaveShift.getValue()).shortValue();
-				configFull.configMisc.octave_shift = (short)value;
+				int value = (Integer)spinner_octaveShift.getValue();
+				configFull.configMisc.octave_shift = value;
 				valueChanged();
 				octaveValueChanged();
 			}
 		});
-		spinner_octaveShift.setModel(new SpinnerNumberModel(new Short((short) 2), new Short((short) 0), new Short((short) 2), new Short((short) 1)));
+		spinner_octaveShift.setModel(new SpinnerNumberModel(new Integer(2), new Integer(0), new Integer(2), new Integer(1)));
 		panel.add(spinner_octaveShift, "3, 4");
 		
 		JLabel lblBigVuMeter = new JLabel("Big VU meter");
@@ -325,13 +325,13 @@ public class ControlsMisc extends JPanel {
 	
 	public void updateControls() {
 		changeEventsAllowed = false;
-		spinner_noteoff.setValue((short)(configFull.configMisc.note_off*10));
-		spinner_pressroll.setModel(new SpinnerNumberModel(new Short((short) (configFull.configMisc.pressroll*10)),
-				new Short((short) 0),
-				new Short((short) (configFull.configMisc.note_off*10)),
-				new Short((short) 10)));
-		spinner_latency.setValue((short)(configFull.configMisc.latency));
-		spinner_octaveShift.setValue((short)(configFull.configMisc.octave_shift));
+		spinner_noteoff.setValue(configFull.configMisc.note_off*10);
+		spinner_pressroll.setModel(new SpinnerNumberModel(new Integer(configFull.configMisc.pressroll*10),
+				new Integer(0),
+				new Integer(configFull.configMisc.note_off*10),
+				new Integer(10)));
+		spinner_latency.setValue(configFull.configMisc.latency);
+		spinner_octaveShift.setValue(configFull.configMisc.octave_shift);
 		checkBox_bigVuMeter.setSelected(configFull.configMisc.big_vu_meter);
 		checkBox_quickAccess.setSelected(configFull.configMisc.quick_access);
 		checkBox_bigVuSplit.setSelected(configFull.configMisc.big_vu_split);

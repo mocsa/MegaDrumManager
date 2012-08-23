@@ -896,15 +896,14 @@ public class Main_window {
 		spinnerLCDcontrast = new JSpinner();
 		spinnerLCDcontrast.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				//configFull.configGlobalMisc.lcd_contrast = (short) (100 - ((Short)spinnerLCDcontrast.getValue()).shortValue());
-				configFull.configGlobalMisc.lcd_contrast = ((Short)spinnerLCDcontrast.getValue()).shortValue();
+				configFull.configGlobalMisc.lcd_contrast = (Integer)spinnerLCDcontrast.getValue();
 				if (configOptions.interactive) {
 					sendGlobalMisc();
 				}
 			}
 		});
 		spinnerLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		spinnerLCDcontrast.setModel(new SpinnerNumberModel(new Short((short) 50), new Short((short) 1), new Short((short) 100), new Short((short) 1)));
+		spinnerLCDcontrast.setModel(new SpinnerNumberModel(new Integer(50), new Integer(1), new Integer(100), new Integer(1)));
 		panel.add(spinnerLCDcontrast, "16, 1");
 		
 		JButton btnGet = new JButton("Get");
@@ -940,7 +939,7 @@ public class Main_window {
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-		        	configFull.configGlobalMisc.inputs_count = (short)((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
+		        	configFull.configGlobalMisc.inputs_count = ((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
 		        	updateInputsCountControls();
 					if (configOptions.interactive) {
 						sendGlobalMisc();
@@ -1484,7 +1483,7 @@ public class Main_window {
 	
 	private void updateInputsCountControls() {
 		comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-		spinnerLCDcontrast.setValue((short)(100 - configFull.configGlobalMisc.lcd_contrast));
+		spinnerLCDcontrast.setValue(100 - configFull.configGlobalMisc.lcd_contrast);
 		controlsPedal.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
 		controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
 	}

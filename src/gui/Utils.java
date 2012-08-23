@@ -125,8 +125,8 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
-			config.curve = (short)(flags&0x0f);
-			config.channel = (short)((flags&0xf0)>>4);
+			config.curve = (flags&0x0f);
+			config.channel = ((flags&0xf0)>>4);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.threshold = sysex2byte(sysex_byte);
@@ -144,7 +144,7 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
-			config.gain = (short)((flags&0xf0)>>4);
+			config.gain = ((flags&0xf0)>>4);
 			config.type = ((flags&1) != 0);
 			config.autoLevel = ((flags&(1<<1)) != 0);
 			config.dual = ((flags&(1<<2)) != 0);
@@ -152,19 +152,19 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
-			config.xtalkGroup = (short)((flags&0x38)>>3);
-			config.xtalkLevel = (short)(flags&0x07);
+			config.xtalkGroup = ((flags&0x38)>>3);
+			config.xtalkLevel = (flags&0x07);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
-			config.dynTime = (short)(flags&0x0f);
-			config.dynLevel = (short)((flags&0xf0)>>4);
+			config.dynTime = (flags&0x0f);
+			config.dynLevel = ((flags&0xf0)>>4);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
-			config.shift = (short)((flags&0x38)>>3);
-			config.compression = (short)(flags&0x07);
-			config.function = (short)((flags&0xc0)>>6);
+			config.shift = ((flags&0x38)>>3);
+			config.compression = (flags&0x07);
+			config.function = ((flags&0xc0)>>6);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.name = sysex2byte(sysex_byte);
@@ -252,7 +252,7 @@ public class Utils {
 		if (sysex.length >= Constants.MD_SYSEX_GLOBAL_MISC_SIZE) {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			config.lcd_contrast = (short) (100 - sysex2byte(sysex_byte));
+			config.lcd_contrast = (100 - sysex2byte(sysex_byte));
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.inputs_count = sysex2byte(sysex_byte);
@@ -349,7 +349,7 @@ public class Utils {
 			config.autoLevels = ((flags&(1<<1)) != 0);
 			config.altIn = ((flags&(1<<2)) != 0);
 			config.reverseLevels = ((flags&(1<<3)) != 0);
-			config.curve = (short)((flags&0xf0)>>4);
+			config.curve = ((flags&0xf0)>>4);
 			
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -386,7 +386,7 @@ public class Utils {
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
 			config.softChicks = ((flags&1) != 0);
-			config.ccRdcLvl = (short)((flags&0x06)>>1);
+			config.ccRdcLvl = ((flags&0x06)>>1);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.semiOpenLevel = sysex2byte(sysex_byte);
