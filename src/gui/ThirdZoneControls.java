@@ -40,13 +40,14 @@ class ZoneButton extends JButton {
 	}
 }
 
-public class ThirdZoneControls extends JPanel {
+public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2928331841555596211L;
 
-	private Boolean changeEventsAllowed = false;
+	//private Boolean changeEventsAllowed = false;
+	private Boolean controlsInited = false;
 
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
@@ -60,7 +61,6 @@ public class ThirdZoneControls extends JPanel {
 	private ConfigFull configFull;
 	private int	configIndex = 0;
 	private boolean inUpdate = false;
-	private boolean allInitialized = false;
 
 	private ArrayList<Object> controls; 
 	private ZoneButton zoneButton_note;
@@ -106,10 +106,10 @@ public class ThirdZoneControls extends JPanel {
 		noteSpinControl_note.getSpinner().addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
-					noteSpinControl_altNote.setValue(noteSpinControl_note.getValue());
+					noteSpinControl_altNote.setValueWithoutEvents(noteSpinControl_note.getValue());
 				}
 				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
-					noteSpinControl_pressrollNote.setValue(noteSpinControl_note.getValue());
+					noteSpinControl_pressrollNote.setValueWithoutEvents(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -151,7 +151,7 @@ public class ThirdZoneControls extends JPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				noteSpinControl_altNote.getSpinner().setEnabled(!noteSpinControl_altNote.getCheckBox().isSelected());
 				if (noteSpinControl_altNote.getCheckBox().isSelected()) {
-					noteSpinControl_altNote.setValue(noteSpinControl_note.getValue());
+					noteSpinControl_altNote.setValueWithoutEvents(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -190,7 +190,7 @@ public class ThirdZoneControls extends JPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				noteSpinControl_pressrollNote.getSpinner().setEnabled(!noteSpinControl_pressrollNote.getCheckBox().isSelected());
 				if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
-					noteSpinControl_pressrollNote.setValue(noteSpinControl_note.getValue());
+					noteSpinControl_pressrollNote.setValueWithoutEvents(noteSpinControl_note.getValue());
 				}
 			}
 		});
@@ -240,14 +240,16 @@ public class ThirdZoneControls extends JPanel {
 					}
 				});
 				
-			}
-			if (control.getClass().equals(JSpinner.class)) {
+			} else if (control.getClass().equals (NoteSpinControl.class)) {
+				NoteSpinControl noteSpinControl = ((NoteSpinControl) control);
+				noteSpinControl.setEventListener(this);
+			} else if (control.getClass().equals(JSpinner.class)) {
+				((JSpinner) control).setFont(new Font("Tahoma", Font.PLAIN, 11));
 				((JSpinner) control).addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
-						valueChanged();
+						//valueChanged();
 					}
-				});
-				
+				});				
 			}
 		}
 
@@ -264,25 +266,22 @@ public class ThirdZoneControls extends JPanel {
 			}
 		}
 		
-		allInitialized = true;
+		controlsInited = true;
 	}
 
-	private void valueChanged() {
-		if (changeEventsAllowed) {
-			updateConfig();
-			firePropertyChange("valueChanged", false, true);
-		}
+	public void valueChanged() {
+		updateConfig();
+		firePropertyChange("valueChanged", false, true);
 	}
 
 	public void updateControls() {
-		changeEventsAllowed = false;
-		if (allInitialized) {
+		if (controlsInited) {
 			if (!inUpdate) {
 				inUpdate = true;
-				noteSpinControl_note.setValue(configFull.config3rds[configIndex].note);
-				noteSpinControl_altNote.setValue(configFull.config3rds[configIndex].altNote);
-				noteSpinControl_pressrollNote.setValue(configFull.config3rds[configIndex].pressrollNote);
-				noteSpinControl_dampenedNote.setValue(configFull.config3rds[configIndex].dampenedNote);
+				noteSpinControl_note.setValueWithoutEvents(configFull.config3rds[configIndex].note);
+				noteSpinControl_altNote.setValueWithoutEvents(configFull.config3rds[configIndex].altNote);
+				noteSpinControl_pressrollNote.setValueWithoutEvents(configFull.config3rds[configIndex].pressrollNote);
+				noteSpinControl_dampenedNote.setValueWithoutEvents(configFull.config3rds[configIndex].dampenedNote);
 				noteSpinControl_altNote.getCheckBox().setSelected(configFull.config3rds[configIndex].altNote_linked);
 				noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.config3rds[configIndex].pressrollNote_linked);
 				spinner_threshold.setValue(configFull.config3rds[configIndex].threshold);
@@ -291,17 +290,18 @@ public class ThirdZoneControls extends JPanel {
 				inUpdate = false;
 			}
 		}
-		changeEventsAllowed = true;		
 	}
 	
 	public void updateConfig() {
-		configFull.config3rds[configIndex].note = ((Short)noteSpinControl_note.getValue()).shortValue();
-		configFull.config3rds[configIndex].altNote = ((Short)noteSpinControl_altNote.getValue()).shortValue();
-		configFull.config3rds[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getValue()).shortValue();
-		configFull.config3rds[configIndex].dampenedNote = ((Short)noteSpinControl_dampenedNote.getValue()).shortValue();
-		configFull.config3rds[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
-		configFull.config3rds[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
-		configFull.config3rds[configIndex].threshold = (Short)spinner_threshold.getValue();
+		if (controlsInited) {
+			configFull.config3rds[configIndex].note = ((Short)noteSpinControl_note.getValue()).shortValue();
+			configFull.config3rds[configIndex].altNote = ((Short)noteSpinControl_altNote.getValue()).shortValue();
+			configFull.config3rds[configIndex].pressrollNote = ((Short)noteSpinControl_pressrollNote.getValue()).shortValue();
+			configFull.config3rds[configIndex].dampenedNote = ((Short)noteSpinControl_dampenedNote.getValue()).shortValue();
+			configFull.config3rds[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
+			configFull.config3rds[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
+			configFull.config3rds[configIndex].threshold = (Short)spinner_threshold.getValue();
+		}
 	}
 	
 	public void setAsSwitch(boolean switch_pad) {

@@ -34,6 +34,10 @@ public class NoteSpinControl extends JPanel {
 	private int note_pointer;
 	private static final String [] note_names = {"C ", "C#", "D ", "D#", "E ", "F ", "F#", "G ", "G#", "A ", "A#", "B "};
 	private JCheckBox checkBox;
+	private ValueChangedListener valueChangedListener;
+	
+	public int stateChangeEventsDisabled = 0;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -95,7 +99,33 @@ public class NoteSpinControl extends JPanel {
 		return ((Short)spinner.getValue()).shortValue();
 	}
 	
-	public void setValue(short value) {
+	public void addChangeListener(ChangeListener listener) {
+		spinner.addChangeListener(listener);
+	}
+	
+	public void setEventListener(ValueChangedListener vcl) {
+		valueChangedListener = vcl;
+		spinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				if (stateChangeEventsDisabled > 0) {
+					stateChangeEventsDisabled--;
+				} else {
+					valueChangedListener.valueChanged();
+				}
+			}
+		});				
+
+	}
+	
+	public void setValueWithoutEvents(short value) {
+		if ((value >= 0 ) && (value < 128)) {
+			stateChangeEventsDisabled = 1;
+			spinner.setValue(value);
+		}
+		updateNoteName();
+	}
+
+	private void setValue(short value) {
 		if ((value >= 0 ) && (value < 128)) {
 			spinner.setValue(value);
 		}
