@@ -68,10 +68,19 @@ class ComboBoxCustom extends JComboBox {
 	 * 
 	 */
 	private static final long serialVersionUID = -2832411917427792044L;
+	public int selectEventsDisabled = 0;
 
 	public ComboBoxCustom () {
-		this.setMaximumRowCount(30);
+		//this.setMaximumRowCount(128);
 		this.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+	}
+	
+	public void setSelectedIndexWithoutEvent(int index) {
+		if (index >= this.getItemCount()) {
+			index = this.getItemCount() - 1;
+		}
+		this.selectEventsDisabled = 1;
+		this.setSelectedIndex(index);
 	}
 }
 
@@ -94,8 +103,6 @@ public class ControlsPadCommon extends JPanel {
 	 */
 	private static final long serialVersionUID = -8180680885905840242L;
 
-	private Boolean changeEventsAllowed = false;
-	
 	private ComboBoxCustom comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
@@ -200,7 +207,9 @@ public class ControlsPadCommon extends JPanel {
 		comboBox_name.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					if (changeEventsAllowed) {
+					if (comboBox_name.selectEventsDisabled > 0) {
+						comboBox_name.selectEventsDisabled--;
+					} else {
 						firePropertyChange("nameChanged", false, true);
 					}
 				}
@@ -450,9 +459,11 @@ public class ControlsPadCommon extends JPanel {
 		comboBox_type.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					//if (changeEventsAllowed) {
-						firePropertyChange("typeChanged", false, true);
-					//}
+					if (comboBox_type.selectEventsDisabled > 0) {
+						comboBox_type.selectEventsDisabled--;
+					} else {
+						firePropertyChange("typeChanged", false, true);						
+					}
 				}
 			}
 		});
@@ -460,25 +471,27 @@ public class ControlsPadCommon extends JPanel {
 		
 		padButton_type = new PadButton("type", head_rim_pad);
 		add(padButton_type, "5, 20");
-		
 		for (Object control: this.getComponents()) {
 			//System.out.printf("Component -> %s\n",control.getClass().toString());
 			if (control.getClass().equals(PadButton.class)) {
 				((PadButton)control).addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						pressedPadButtonName = ((PadButton)arg0.getSource()).getName();
-						if (changeEventsAllowed) {
-							firePropertyChange("copyButton", false, true);
-						}
+						firePropertyChange("copyButton", false, true);
 					}
 				});
 			}
 			//if (control.getClass().equals (JComboBox.class)) {
-			if (control instanceof JComboBox) {
-				((JComboBox) control).addItemListener(new ItemListener() {
+			if (control instanceof ComboBoxCustom) {
+				((ComboBoxCustom) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
+						ComboBoxCustom comboBoxCustom = ((ComboBoxCustom) arg0.getSource());
 						if (arg0.getStateChange() == ItemEvent.SELECTED) {
-							valueChanged();
+							if (comboBoxCustom.selectEventsDisabled > 0) {
+								comboBoxCustom.selectEventsDisabled--;
+							} else {
+								valueChanged();
+							}
 						}
 					}
 				});
@@ -487,7 +500,7 @@ public class ControlsPadCommon extends JPanel {
 			if (control.getClass().equals(JCheckBox.class)) {
 				((JCheckBox) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
-						valueChanged();
+						//valueChanged();
 					}
 				});
 				
@@ -495,7 +508,7 @@ public class ControlsPadCommon extends JPanel {
 			if (control.getClass().equals (NoteSpinControl.class)) {
 				((NoteSpinControl) control).getSpinner().addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
-						valueChanged();
+						//valueChanged();
 					}
 				});				
 			}
@@ -503,7 +516,7 @@ public class ControlsPadCommon extends JPanel {
 				((JSpinner) control).setFont(new Font("Tahoma", Font.PLAIN, 11));
 				((JSpinner) control).addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
-						valueChanged();
+						//valueChanged();
 					}
 				});				
 			}
@@ -512,35 +525,32 @@ public class ControlsPadCommon extends JPanel {
 	}
 	
 	private void valueChanged() {
-		if (changeEventsAllowed) {
-			updateConfig();
-			firePropertyChange("valueChanged", false, true);
-		}
+		updateConfig();
+		firePropertyChange("valueChanged", false, true);
 	}
 
-	public void updateControls() {
-		changeEventsAllowed = false;
+	private void updateControls() {
 
-		comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);
+		comboBox_name.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].name);
 		noteSpinControl_note.setValue(configFull.configPads[configIndex].note);
 		noteSpinControl_altNote.setValue(configFull.configPads[configIndex].altNote);
 		noteSpinControl_altNote.getCheckBox().setSelected(configFull.configPads[configIndex].altNote_linked);
 		noteSpinControl_pressrollNote.setValue(configFull.configPads[configIndex].pressrollNote);
 		noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.configPads[configIndex].pressrollNote_linked);
 		spinner_channel.setValue(configFull.configPads[configIndex].channel + 1);
-		comboBox_function.setSelectedIndex(configFull.configPads[configIndex].function);
-		comboBox_curve.setSelectedIndex(configFull.configPads[configIndex].curve);
-		comboBox_compression.setSelectedIndex(configFull.configPads[configIndex].compression);
-		comboBox_shift.setSelectedIndex(configFull.configPads[configIndex].shift);
-		comboBox_xtalkLevel.setSelectedIndex(configFull.configPads[configIndex].xtalkLevel);
-		comboBox_xtalkGroup.setSelectedIndex(configFull.configPads[configIndex].xtalkGroup);
+		comboBox_function.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].function);
+		comboBox_curve.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].curve);
+		comboBox_compression.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].compression);
+		comboBox_shift.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].shift);
+		comboBox_xtalkLevel.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].xtalkLevel);
+		comboBox_xtalkGroup.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].xtalkGroup);
 		spinner_threshold.setValue(configFull.configPads[configIndex].threshold);
-		comboBox_gain.setSelectedIndex(configFull.configPads[configIndex].gain);
+		comboBox_gain.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].gain);
 		checkBox_autoLevel.setSelected(configFull.configPads[configIndex].autoLevel);
 		spinner_highLevel.setValue(configFull.configPads[configIndex].levelMax);
 		spinner_retrigger.setValue(configFull.configPads[configIndex].retrigger);
-		comboBox_dynLevel.setSelectedIndex(configFull.configPads[configIndex].dynLevel);
-		comboBox_dynTime.setSelectedIndex(configFull.configPads[configIndex].dynTime);
+		comboBox_dynLevel.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].dynLevel);
+		comboBox_dynTime.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].dynTime);
 		spinner_minScan.setValue(configFull.configPads[configIndex].minScan);
 		comboBox_type.removeAllItems();
 		if (head_rim_pad == head_pad) {
@@ -548,19 +558,18 @@ public class ControlsPadCommon extends JPanel {
 			comboBox_type.addItem("Dual or 3way Yamaha");
 			comboBox_type.addItem("3way Roland");
 			if (configFull.configPads[configIndex].dual) {
-				comboBox_type.setSelectedIndex(1);
+				comboBox_type.setSelectedIndexWithoutEvent(1);
 			}
 			if (configFull.configPads[configIndex].threeWay) {
-				comboBox_type.setSelectedIndex(2);
+				comboBox_type.setSelectedIndexWithoutEvent(2);
 			}			
 		} else {
 			comboBox_type.addItem("Piezo");
 			comboBox_type.addItem("Switch");
 			if (configFull.configPads[configIndex].type) {
-				comboBox_type.setSelectedIndex(1);
+				comboBox_type.setSelectedIndexWithoutEvent(1);
 			}
 		}
-		changeEventsAllowed = true;
 	}
 	
 	public void updateConfig() {
@@ -615,12 +624,7 @@ public class ControlsPadCommon extends JPanel {
 		configIndex = pad_id;
 		head_rim_pad = pad_type;
 		updateControls();
-		changeEventsAllowed = false;
 		updatePadsNames();
-		//comboBox_name.insertItemAt(Constants.PADS_NAMES_LIST[configIndex], 0);
-		//comboBox_name.removeItemAt(1);
-		//comboBox_name.setSelectedIndex(index);
-		changeEventsAllowed = true;
 	}
 	
 	public void updatePadsNames() {
@@ -633,6 +637,7 @@ public class ControlsPadCommon extends JPanel {
 		for (int i = 0; i < configFull.customNamesCount; i++) {
 			comboBox_name.addItem(configFull.configCustomNames[i].name);
 		}
+		comboBox_name.selectEventsDisabled = 1;
 		comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);			
 	}
 	

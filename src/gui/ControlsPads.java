@@ -807,9 +807,9 @@ public class ControlsPads extends JPanel {
 			}
 		}
 
-		if ((padPointer > 0) && (head_rim = head_pad)) {
-			panel_rim.updateControls();
-		}
+//		if ((padPointer > 0) && (head_rim = head_pad)) {
+//			panel_rim.updateControls();
+//		}
 	}
 	
 	private void copy3rdVar(String varName, int third_id, Config3rd config) {
