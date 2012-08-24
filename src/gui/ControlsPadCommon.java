@@ -119,7 +119,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	private ComboBoxCustom comboBox_xtalkGroup;
 	private JSpinnerCustom spinner_threshold;
 	private ComboBoxCustom comboBox_gain;
-	private JCheckBox checkBox_autoLevel;
+	private JCheckBoxCustom checkBox_autoLevel;
 	private JSpinnerCustom spinner_highLevel;
 	private JSpinnerCustom spinner_retrigger;
 	private ComboBoxCustom comboBox_dynLevel;
@@ -394,7 +394,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblHighlevelAuto = new LabelCustom("HighLevel Auto");
 		add(lblHighlevelAuto, "1, 14, right, center");
 		
-		checkBox_autoLevel = new JCheckBox("");		
+		checkBox_autoLevel = new JCheckBoxCustom(this);		
 		add(checkBox_autoLevel, "3, 14, left, center");
 		
 		padButton_autoLevel = new PadButton("autoLevel", head_rim_pad);
@@ -499,12 +499,6 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 						}
 					}
 				});			
-			} else if (control.getClass().equals(JCheckBox.class)) {
-				((JCheckBox) control).addItemListener(new ItemListener() {
-					public void itemStateChanged(ItemEvent arg0) {
-						//valueChanged();
-					}
-				});	
 			} else if (control.getClass().equals (NoteSpinControl.class)) {
 				NoteSpinControl noteSpinControl = ((NoteSpinControl) control);
 				noteSpinControl.setEventListener(this);
@@ -539,7 +533,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		comboBox_xtalkGroup.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].xtalkGroup);
 		spinner_threshold.setValueWithoutEvent(configFull.configPads[configIndex].threshold);
 		comboBox_gain.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].gain);
-		checkBox_autoLevel.setSelected(configFull.configPads[configIndex].autoLevel);
+		checkBox_autoLevel.setValueWithoutEvent(configFull.configPads[configIndex].autoLevel);
 		spinner_highLevel.setValueWithoutEvent(configFull.configPads[configIndex].levelMax);
 		spinner_retrigger.setValueWithoutEvent(configFull.configPads[configIndex].retrigger);
 		comboBox_dynLevel.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].dynLevel);
