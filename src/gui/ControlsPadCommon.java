@@ -214,7 +214,9 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 					if (comboBox_name.selectEventsDisabled > 0) {
 						comboBox_name.selectEventsDisabled--;
 					} else {
-						firePropertyChange("nameChanged", false, true);
+						if (controlsInited) {
+							firePropertyChange("nameChanged", false, true);							
+						}
 					}
 				}
 			}
@@ -468,18 +470,6 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 			comboBox_type.addItem("Piezo");
 			comboBox_type.addItem("Switch");
 		}
-//		comboBox_type.addItemListener(new ItemListener() {
-//			public void itemStateChanged(ItemEvent arg0) {
-//				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-//					if (comboBox_type.selectEventsDisabled > 0) {
-//						comboBox_type.selectEventsDisabled--;
-//					} else {
-//						valueChanged();
-//						firePropertyChange("typeChanged", false, true);						
-//					}
-//				}
-//			}
-//		});
 		add(comboBox_type, "3, 20, fill, center");
 		
 		padButton_type = new PadButton("type", head_rim_pad);
@@ -526,8 +516,10 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	}
 	
 	public void valueChanged() {
-		updateConfig();
-		firePropertyChange("valueChanged", false, true);
+		if (controlsInited) {
+			updateConfig();
+			firePropertyChange("valueChanged", false, true);
+		}
 	}
 
 	private void updateControls() {

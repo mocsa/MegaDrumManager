@@ -36,6 +36,7 @@ public class NoteSpinControl extends JPanel {
 	private JCheckBox checkBox;
 	private ValueChangedListener valueChangedListener;
 	
+	public boolean firstSet = true;
 	public int stateChangeEventsDisabled = 0;
 	
 	/**
@@ -119,7 +120,13 @@ public class NoteSpinControl extends JPanel {
 	
 	public void setValueWithoutEvents(int value) {
 		if ((value >= 0 ) && (value < 128)) {
-			stateChangeEventsDisabled = 1;
+			if (firstSet) {
+				firstSet = false;
+			} else {
+				if (value != getValue()) {
+					stateChangeEventsDisabled = 1;					
+				}
+			}
 			spinner.setValue(value);
 		}
 		updateNoteName();
