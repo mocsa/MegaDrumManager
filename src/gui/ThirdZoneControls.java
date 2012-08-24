@@ -55,7 +55,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	private NoteSpinControl noteSpinControl_dampenedNote;
 	private JSpinnerCustom spinner_threshold;
 	private JSpinnerCustom spinner_midPointWidth;
-	private JSlider slider_midPoint;
+	private JSliderCustom slider_midPoint;
 
 	//private Config3rd config3rd;
 	private ConfigFull configFull;
@@ -123,7 +123,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		lblMidpoint.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblMidpoint, "7, 1, right, default");
 		
-		slider_midPoint = new JSlider();
+		slider_midPoint = new JSliderCustom();
 		//controls.add(slider_midPoint);
 		slider_midPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
@@ -235,12 +235,8 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 
 		for (Object control: this.getComponents()) {
 			//System.out.printf("Component -> %s\n",control.getClass().toString());
-			if (control.getClass().equals(JSlider.class)) {
-				((JSlider) control).addChangeListener(new ChangeListener() {
-					public void stateChanged(ChangeEvent arg0) {
-						//valueChanged();
-					}
-				});		
+			if (control.getClass().equals(JSliderCustom.class)) {
+				((JSliderCustom) control).setValueChangedListener(this);
 			} else if (control.getClass().equals (NoteSpinControl.class)) {
 				NoteSpinControl noteSpinControl = ((NoteSpinControl) control);
 				noteSpinControl.setEventListener(this);
@@ -276,9 +272,9 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 				noteSpinControl_dampenedNote.setValueWithoutEvents(configFull.config3rds[configIndex].dampenedNote);
 				noteSpinControl_altNote.getCheckBox().setSelected(configFull.config3rds[configIndex].altNote_linked);
 				noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.config3rds[configIndex].pressrollNote_linked);
-				spinner_threshold.setValue(configFull.config3rds[configIndex].threshold);
-				spinner_midPointWidth.setValue(configFull.config3rds[configIndex].threshold&0x0f);
-				slider_midPoint.setValue((configFull.config3rds[configIndex].threshold&0xf0)>>4);
+				spinner_threshold.setValueWithoutEvent(configFull.config3rds[configIndex].threshold);
+				spinner_midPointWidth.setValueWithoutEvent(configFull.config3rds[configIndex].threshold&0x0f);
+				slider_midPoint.setValueWithoutEvent((configFull.config3rds[configIndex].threshold&0xf0)>>4);
 				inUpdate = false;
 			//}
 		}
