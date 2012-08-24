@@ -79,8 +79,10 @@ class ComboBoxCustom extends JComboBox {
 		if (index >= this.getItemCount()) {
 			index = this.getItemCount() - 1;
 		}
-		this.selectEventsDisabled = 1;
-		this.setSelectedIndex(index);
+		if (index != getSelectedIndex()) {
+			this.selectEventsDisabled = 1;
+			this.setSelectedIndex(index);
+		}
 	}
 }
 
@@ -300,7 +302,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		comboBox_function.addItem("Normal");
 		comboBox_function.addItem("ProgramChange");
 		comboBox_function.addItem("CutOff");
-		comboBox_function.setSelectedIndex(0);
+		comboBox_function.setSelectedIndexWithoutEvent(0);
 		
 		padButton_function = new PadButton("function", head_rim_pad);
 		add(padButton_function, "5, 6");
@@ -466,18 +468,18 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 			comboBox_type.addItem("Piezo");
 			comboBox_type.addItem("Switch");
 		}
-		comboBox_type.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					if (comboBox_type.selectEventsDisabled > 0) {
-						comboBox_type.selectEventsDisabled--;
-					} else {
-						valueChanged();
-						firePropertyChange("typeChanged", false, true);						
-					}
-				}
-			}
-		});
+//		comboBox_type.addItemListener(new ItemListener() {
+//			public void itemStateChanged(ItemEvent arg0) {
+//				if (arg0.getStateChange() == ItemEvent.SELECTED) {
+//					if (comboBox_type.selectEventsDisabled > 0) {
+//						comboBox_type.selectEventsDisabled--;
+//					} else {
+//						valueChanged();
+//						firePropertyChange("typeChanged", false, true);						
+//					}
+//				}
+//			}
+//		});
 		add(comboBox_type, "3, 20, fill, center");
 		
 		padButton_type = new PadButton("type", head_rim_pad);
@@ -500,6 +502,9 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 								comboBoxCustom.selectEventsDisabled--;
 							} else {
 								valueChanged();
+							}
+							if (comboBoxCustom.equals(comboBox_type)) {
+								firePropertyChange("typeChanged", false, true);
 							}
 						}
 					}
@@ -623,6 +628,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	}
 	
 	public void updatePadsNames() {
+		comboBox_name.selectEventsDisabled = 1;
 		comboBox_name.removeAllItems();
 		//comboBox_name.addItem("");
 		comboBox_name.addItem(Constants.PADS_NAMES_LIST[configIndex]);
@@ -632,8 +638,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		for (int i = 0; i < configFull.customNamesCount; i++) {
 			comboBox_name.addItem(configFull.configCustomNames[i].name);
 		}
-		comboBox_name.selectEventsDisabled = 1;
-		comboBox_name.setSelectedIndex(configFull.configPads[configIndex].name);			
+		comboBox_name.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].name);			
 	}
 	
 	public boolean getHeadRim() {

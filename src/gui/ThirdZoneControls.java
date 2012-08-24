@@ -53,8 +53,8 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	private NoteSpinControl noteSpinControl_altNote;
 	private NoteSpinControl noteSpinControl_pressrollNote;
 	private NoteSpinControl noteSpinControl_dampenedNote;
-	private JSpinner spinner_threshold;
-	private JSpinner spinner_midPointWidth;
+	private JSpinnerCustom spinner_threshold;
+	private JSpinnerCustom spinner_midPointWidth;
 	private JSlider slider_midPoint;
 
 	//private Config3rd config3rd;
@@ -62,7 +62,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	private int	configIndex = 0;
 	private boolean inUpdate = false;
 
-	private ArrayList<Object> controls; 
+	//private ArrayList<Object> controls; 
 	private ZoneButton zoneButton_note;
 	private ZoneButton zoneButton_altNote;
 	private ZoneButton zoneButton_pressrollNote;
@@ -79,7 +79,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	public ThirdZoneControls(ConfigFull config) {
 		configFull = config;
 		configIndex = 0;
-		controls = new ArrayList<Object>();
+		//controls = new ArrayList<Object>();
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:default"),
 				ColumnSpec.decode("3px"),
@@ -113,7 +113,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 				}
 			}
 		});
-		controls.add(noteSpinControl_note.getSpinner());
+		//controls.add(noteSpinControl_note.getSpinner());
 		add(noteSpinControl_note, "3, 1, fill, fill");
 		
 		zoneButton_note = new ZoneButton("note");
@@ -124,7 +124,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		add(lblMidpoint, "7, 1, right, default");
 		
 		slider_midPoint = new JSlider();
-		controls.add(slider_midPoint);
+		//controls.add(slider_midPoint);
 		slider_midPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configFull.config3rds[configIndex].threshold = (configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4);
@@ -157,7 +157,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		});
 		noteSpinControl_altNote.getCheckBox().setVisible(true);
 		noteSpinControl_altNote.getCheckBox().setToolTipText("Linked to Note");
-		controls.add(noteSpinControl_altNote.getSpinner());
+		//controls.add(noteSpinControl_altNote.getSpinner());
 		add(noteSpinControl_altNote, "3, 2, fill, fill");
 		
 		zoneButton_altNote = new ZoneButton("altNote");
@@ -167,14 +167,15 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		lblMidpointWidth.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblMidpointWidth, "7, 2, right, default");
 		
-		spinner_midPointWidth = new JSpinner();
-		controls.add(spinner_midPointWidth);
+		spinner_midPointWidth = new JSpinnerCustom(this);
+		//controls.add(spinner_midPointWidth);
 		spinner_midPointWidth.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				configFull.config3rds[configIndex].threshold = (configFull.config3rds[configIndex].threshold&0xf0)|((Integer)spinner_midPointWidth.getValue()&0x0f);
 				updateControls();
 			}
-		});
+		});				
+
 		spinner_midPointWidth.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(15), new Integer(1)));
 		add(spinner_midPointWidth, "9, 2, left, fill");
 		
@@ -196,7 +197,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		});
 		noteSpinControl_pressrollNote.getCheckBox().setVisible(true);
 		noteSpinControl_pressrollNote.getCheckBox().setToolTipText("Linked to Note");
-		controls.add(noteSpinControl_pressrollNote.getSpinner());
+		//controls.add(noteSpinControl_pressrollNote.getSpinner());
 		add(noteSpinControl_pressrollNote, "3, 3, fill, fill");
 		
 		zoneButton_pressrollNote = new ZoneButton("pressrollNote");
@@ -206,14 +207,14 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		lblThreshold.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblThreshold, "7, 3, right, default");
 		
-		spinner_threshold = new JSpinner();
-		controls.add(spinner_threshold);
+		spinner_threshold = new JSpinnerCustom(this);
+		//controls.add(spinner_threshold);
 		spinner_threshold.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.config3rds[configIndex].threshold = (Integer)(spinner_threshold.getValue());
+				configFull.config3rds[configIndex].threshold = (Integer)spinner_threshold.getValue();
 				updateControls();
-		}
-		});
+			}
+		});				
 		spinner_threshold.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(255), new Integer(1)));
 		add(spinner_threshold, "9, 3, left, fill");
 		
@@ -226,36 +227,26 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		
 		noteSpinControl_dampenedNote = new NoteSpinControl(configFull);
 		//noteSpinControl_dampenedNote.getCheckBox().setVisible(true);
-		controls.add(noteSpinControl_dampenedNote.getSpinner());
+		//controls.add(noteSpinControl_dampenedNote.getSpinner());
 		add(noteSpinControl_dampenedNote, "3, 4, fill, fill");
 		
 		zoneButton_dampenedNote = new ZoneButton("dampenedNote");
 		add(zoneButton_dampenedNote, "5, 4");
 
-		for (Object control : controls) {
+		for (Object control: this.getComponents()) {
+			//System.out.printf("Component -> %s\n",control.getClass().toString());
 			if (control.getClass().equals(JSlider.class)) {
 				((JSlider) control).addChangeListener(new ChangeListener() {
 					public void stateChanged(ChangeEvent arg0) {
-						valueChanged();
+						//valueChanged();
 					}
-				});
-				
+				});		
 			} else if (control.getClass().equals (NoteSpinControl.class)) {
 				NoteSpinControl noteSpinControl = ((NoteSpinControl) control);
 				noteSpinControl.setEventListener(this);
 			} else if (control.getClass().equals(JSpinner.class)) {
 				((JSpinner) control).setFont(new Font("Tahoma", Font.PLAIN, 11));
-				((JSpinner) control).addChangeListener(new ChangeListener() {
-					public void stateChanged(ChangeEvent arg0) {
-						//valueChanged();
-					}
-				});				
-			}
-		}
-
-		for (Object control: this.getComponents()) {
-			//System.out.printf("Component -> %s\n",control.getClass().toString());
-			if (control.getClass().equals(ZoneButton.class)) {
+			} else if (control.getClass().equals(ZoneButton.class)) {
 				((ZoneButton)control).addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						//System.out.printf("Button -> %s\n",((ZoneButton)arg0.getSource()).getName());
@@ -272,11 +263,12 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	public void valueChanged() {
 		updateConfig();
 		firePropertyChange("valueChanged", false, true);
+		//updateControls();
 	}
 
 	public void updateControls() {
 		if (controlsInited) {
-			if (!inUpdate) {
+			//if (!inUpdate) {
 				inUpdate = true;
 				noteSpinControl_note.setValueWithoutEvents(configFull.config3rds[configIndex].note);
 				noteSpinControl_altNote.setValueWithoutEvents(configFull.config3rds[configIndex].altNote);
@@ -288,7 +280,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 				spinner_midPointWidth.setValue(configFull.config3rds[configIndex].threshold&0x0f);
 				slider_midPoint.setValue((configFull.config3rds[configIndex].threshold&0xf0)>>4);
 				inUpdate = false;
-			}
+			//}
 		}
 	}
 	
@@ -300,7 +292,6 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 			configFull.config3rds[configIndex].dampenedNote = (Integer)noteSpinControl_dampenedNote.getValue();
 			configFull.config3rds[configIndex].altNote_linked = noteSpinControl_altNote.getCheckBox().isSelected();
 			configFull.config3rds[configIndex].pressrollNote_linked = noteSpinControl_pressrollNote.getCheckBox().isSelected();
-			configFull.config3rds[configIndex].threshold = (Integer)spinner_threshold.getValue();
 		}
 	}
 	
