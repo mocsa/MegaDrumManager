@@ -855,7 +855,7 @@ public class ControlsPads extends JPanel {
 		if (panel_head != null) {
 			switch_to_pad(0);
 		}
-		if (comboBox_padSelection.getItemCount() != (count)/2) {
+//		if (comboBox_padSelection.getItemCount() != (count)/2) {
 			mnCopypadto.removeAll();
 			mnCopyhead.removeAll();
 			mnCopyrim.removeAll();
@@ -869,7 +869,7 @@ public class ControlsPads extends JPanel {
 	    		updatePadsSelection(i);
 	    		i++;
 	        }
-		}
+//		}
 	}
 
 	public JButton getBtnGetall() {

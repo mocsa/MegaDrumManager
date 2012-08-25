@@ -60,7 +60,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	//private Config3rd config3rd;
 	private ConfigFull configFull;
 	private int	configIndex = 0;
-	private boolean inUpdate = false;
+	//private boolean inUpdate = false;
 
 	//private ArrayList<Object> controls; 
 	private ZoneButton zoneButton_note;
@@ -265,7 +265,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	public void updateControls() {
 		if (controlsInited) {
 			//if (!inUpdate) {
-				inUpdate = true;
+				//inUpdate = true;
 				noteSpinControl_note.setValueWithoutEvents(configFull.config3rds[configIndex].note);
 				noteSpinControl_altNote.setValueWithoutEvents(configFull.config3rds[configIndex].altNote);
 				noteSpinControl_pressrollNote.setValueWithoutEvents(configFull.config3rds[configIndex].pressrollNote);
@@ -275,7 +275,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 				spinner_threshold.setValueWithoutEvent(configFull.config3rds[configIndex].threshold);
 				spinner_midPointWidth.setValueWithoutEvent(configFull.config3rds[configIndex].threshold&0x0f);
 				slider_midPoint.setValueWithoutEvent((configFull.config3rds[configIndex].threshold&0xf0)>>4);
-				inUpdate = false;
+				//inUpdate = false;
 			//}
 		}
 	}
