@@ -153,7 +153,6 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		comboBox_type.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configFull.configPedal.type = (comboBox_type.getSelectedIndex() != 0);
 					if (comboBox_type.selectEventsDisabled > 0) {
 						comboBox_type.selectEventsDisabled--;
 					} else {
@@ -178,7 +177,6 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		comboBox_curve.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configFull.configPedal.curve = comboBox_curve.getSelectedIndex();
 					if (comboBox_curve.selectEventsDisabled > 0) {
 						comboBox_curve.selectEventsDisabled--;
 					} else {
@@ -204,7 +202,6 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		comboBox_input.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					configFull.configPedal.hhInput = (comboBox_input.getSelectedIndex()*2 + 2);
 					if (comboBox_input.selectEventsDisabled > 0) {
 						comboBox_input.selectEventsDisabled--;
 					} else {
@@ -518,8 +515,8 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_chickDelay.setValueWithoutEvents(configFull.configPedal.chickDelay);
 		spin127Control_cc.setValueWithoutEvents(configFull.configPedal.cc);
 		spin127Control_ccRdcLvl.setValueWithoutEvents(configFull.configPedal.ccRdcLvl);
-		spin1023Control_lowLevel.getSpinner().setValue(configFull.configPedal.lowLevel);
-		spin1023Control_highLevel.getSpinner().setValue(configFull.configPedal.highLevel);
+		spin1023Control_lowLevel.setValueWithoutEvents(configFull.configPedal.lowLevel);
+		spin1023Control_highLevel.setValueWithoutEvents(configFull.configPedal.highLevel);
 		spin127Control_openLevel.setValueWithoutEvents(configFull.configPedal.openLevel);
 		spin127Control_semiOpen.setValueWithoutEvents(configFull.configPedal.semiOpenLevel);
 		spin127Control_halfOpen.setValueWithoutEvents(configFull.configPedal.halfOpenLevel);
@@ -544,6 +541,9 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	
 	public void updateConfig() {
 		if (controlsInited) {
+			configFull.configPedal.type = (comboBox_type.getSelectedIndex() != 0);
+			configFull.configPedal.curve = comboBox_curve.getSelectedIndex();
+			configFull.configPedal.hhInput = (comboBox_input.getSelectedIndex()*2 + 2);
 			configFull.configPedal.altIn = checkBox_altInput.isSelected();
 			configFull.configPedal.reverseLevels = checkBox_reverseLevels.isSelected();
 			configFull.configPedal.softChicks = checkBox_softChicks.isSelected();
@@ -585,11 +585,13 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	}
 	
 	public void updateInputCountsControls(int count) {
+		comboBox_input.selectEventsDisabled = 1;
 		comboBox_input.removeAllItems();
         for(int i=2; i<(count - 1); i++){
         	comboBox_input.addItem(((Integer)i).toString());
         	i++;
         }
+		comboBox_input.setSelectedIndexWithoutEvent((configFull.configPedal.hhInput-2)/2);
 	}
 
 	public JButton getBtnLoad() {

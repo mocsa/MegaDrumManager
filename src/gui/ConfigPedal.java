@@ -18,7 +18,7 @@ public class ConfigPedal {
 	public int closedLevel;
 	public int shortThres;
 	public int longThres;
-	public int hhInput;
+	public int hhInput = 2;
 	public boolean softChicks;
 	public int semiOpenLevel;
 	public int halfOpenLevel;
@@ -91,7 +91,7 @@ public class ConfigPedal {
 		closedLevel = Utils.validateInt(prop.getInt(prefix+"closedLevel", closedLevel),0,127,closedLevel);
 		shortThres = Utils.validateInt(prop.getInt(prefix+"shortThres", shortThres),0,127,shortThres);
 		longThres = Utils.validateInt(prop.getInt(prefix+"longThres", longThres),0,127,longThres);
-		hhInput = Utils.validateInt(prop.getInt(prefix+"hhInput", hhInput),0,127,hhInput);
+		hhInput = Utils.validateInt(prop.getInt(prefix+"hhInput", hhInput),2,127,hhInput);
 		softChicks = prop.getBoolean(prefix+"softChicks", softChicks);
 		semiOpenLevel = Utils.validateInt(prop.getInt(prefix+"semiOpenLevel", semiOpenLevel),0,127,semiOpenLevel);
 		halfOpenLevel = Utils.validateInt(prop.getInt(prefix+"halfOpenLevel", halfOpenLevel),0,127,halfOpenLevel);
