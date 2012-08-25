@@ -62,30 +62,6 @@ class PadButton extends JButton {
 	}
 }
 
-class ComboBoxCustom extends JComboBox {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2832411917427792044L;
-	public int selectEventsDisabled = 0;
-
-	public ComboBoxCustom () {
-		//this.setMaximumRowCount(128);
-		this.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-	}
-	
-	public void setSelectedIndexWithoutEvent(int index) {
-		if (index >= this.getItemCount()) {
-			index = this.getItemCount() - 1;
-		}
-		if (index != getSelectedIndex()) {
-			this.selectEventsDisabled = 1;
-			this.setSelectedIndex(index);
-		}
-	}
-}
-
 class LabelCustom extends JLabel {
 
 	/**
@@ -107,25 +83,25 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	
 	private Boolean controlsInited = false;
 
-	private ComboBoxCustom comboBox_name;
+	private JComboBoxCustom comboBox_name;
 	private NoteSpinControl noteSpinControl_note;
 	private NoteSpinControl noteSpinControl_altNote;
 	private NoteSpinControl noteSpinControl_pressrollNote;
 	private JSpinnerCustom spinner_channel;
-	private ComboBoxCustom comboBox_curve;
-	private ComboBoxCustom comboBox_compression;
-	private ComboBoxCustom comboBox_shift;
-	private ComboBoxCustom comboBox_xtalkLevel;
-	private ComboBoxCustom comboBox_xtalkGroup;
+	private JComboBoxCustom comboBox_curve;
+	private JComboBoxCustom comboBox_compression;
+	private JComboBoxCustom comboBox_shift;
+	private JComboBoxCustom comboBox_xtalkLevel;
+	private JComboBoxCustom comboBox_xtalkGroup;
 	private JSpinnerCustom spinner_threshold;
-	private ComboBoxCustom comboBox_gain;
+	private JComboBoxCustom comboBox_gain;
 	private JCheckBoxCustom checkBox_autoLevel;
 	private JSpinnerCustom spinner_highLevel;
 	private JSpinnerCustom spinner_retrigger;
-	private ComboBoxCustom comboBox_dynLevel;
-	private ComboBoxCustom comboBox_dynTime;
+	private JComboBoxCustom comboBox_dynLevel;
+	private JComboBoxCustom comboBox_dynTime;
 	private JSpinnerCustom spinner_minScan;
-	private ComboBoxCustom comboBox_type;
+	private JComboBoxCustom comboBox_type;
 	private boolean head_rim_pad;
 	private static final boolean head_pad = true;
 	//private static final boolean rim_pad = false;
@@ -155,7 +131,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	//private String [] customNamesList;
 	//private int customNamesCount;
 	public String pressedPadButtonName;
-	private ComboBoxCustom comboBox_function;
+	private JComboBoxCustom comboBox_function;
 	
 	
 	/**
@@ -207,7 +183,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 //        for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
 //        	customNamesList[i] = "Custom" + i.toString();
 //        }
-		comboBox_name = new ComboBoxCustom();
+		comboBox_name = new JComboBoxCustom();
 		comboBox_name.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -299,7 +275,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		lblFunction.setText("Function");
 		add(lblFunction, "1, 6, right, default");
 		
-		comboBox_function = new ComboBoxCustom();
+		comboBox_function = new JComboBoxCustom();
 		add(comboBox_function, "3, 6, fill, default");
 		comboBox_function.addItem("Normal");
 		comboBox_function.addItem("ProgramChange");
@@ -312,7 +288,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblCurve_1 = new LabelCustom("Curve");
 		add(lblCurve_1, "1, 7, right, center");
 		
-		comboBox_curve = new ComboBoxCustom();
+		comboBox_curve = new JComboBoxCustom();
 		for (String string : Constants.CURVES_LIST) {
 			comboBox_curve.addItem(string);
 			}
@@ -324,7 +300,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblCompression = new LabelCustom("Compression");
 		add(lblCompression, "1, 8, right, center");
 		
-		comboBox_compression = new ComboBoxCustom();
+		comboBox_compression = new JComboBoxCustom();
         for(int i=0; i<8; i++){
     		comboBox_compression.addItem(((Integer)i).toString());
         }		
@@ -336,7 +312,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblShift = new LabelCustom("Level Shift");
 		add(lblShift, "1, 9, right, center");
 		
-		comboBox_shift = new ComboBoxCustom();
+		comboBox_shift = new JComboBoxCustom();
         for(int i=0; i<8; i++){
     		comboBox_shift.addItem(((Integer)(i*8)).toString());
         }		
@@ -348,7 +324,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblXtalkLevel = new LabelCustom("XTalk Level");
 		add(lblXtalkLevel, "1, 10, right, center");
 		
-		comboBox_xtalkLevel = new ComboBoxCustom();
+		comboBox_xtalkLevel = new JComboBoxCustom();
         for(int i=0; i<8; i++){
     		comboBox_xtalkLevel.addItem(((Integer)i).toString());
         }		
@@ -360,7 +336,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblXtalkGroup = new LabelCustom("XTalk Group");
 		add(lblXtalkGroup, "1, 11, right, center");
 		
-		comboBox_xtalkGroup = new ComboBoxCustom();
+		comboBox_xtalkGroup = new JComboBoxCustom();
         for(int i=0; i<8; i++){
     		comboBox_xtalkGroup.addItem(((Integer)i).toString());
         }		
@@ -382,7 +358,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblGain = new LabelCustom("Gain");
 		add(lblGain, "1, 13, right, center");
 		
-		comboBox_gain = new ComboBoxCustom();
+		comboBox_gain = new JComboBoxCustom();
         for(int i=0; i<9; i++){
     		comboBox_gain.addItem(((Integer)i).toString());
         }		
@@ -426,7 +402,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		lblDyn.setToolTipText("Dynamic Threshold Level");
 		add(lblDyn, "1, 17, right, center");
 		
-		comboBox_dynLevel = new ComboBoxCustom();
+		comboBox_dynLevel = new JComboBoxCustom();
         for(int i=0; i<16; i++){
     		comboBox_dynLevel.addItem(((Integer)i).toString());
         }		
@@ -439,7 +415,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		lblDyntime.setToolTipText("Dynamic Threshold decay time");
 		add(lblDyntime, "1, 18, right, center");
 		
-		comboBox_dynTime = new ComboBoxCustom();
+		comboBox_dynTime = new JComboBoxCustom();
         for(int i=0; i<16; i++){
     		comboBox_dynTime.addItem(((Integer)(i*4)).toString());
         }		
@@ -461,7 +437,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		LabelCustom lblType = new LabelCustom("Type");
 		add(lblType, "1, 20, right, center");
 		
-		comboBox_type = new ComboBoxCustom();
+		comboBox_type = new JComboBoxCustom();
 		if (head_rim_pad == head_pad) {
 			comboBox_type.addItem("Single Piezo");
 			comboBox_type.addItem("Dual or 3way Yamaha");
@@ -483,10 +459,10 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 						firePropertyChange("copyButton", false, true);
 					}
 				});
-			} else if (control instanceof ComboBoxCustom) {
-				((ComboBoxCustom) control).addItemListener(new ItemListener() {
+			} else if (control instanceof JComboBoxCustom) {
+				((JComboBoxCustom) control).addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent arg0) {
-						ComboBoxCustom comboBoxCustom = ((ComboBoxCustom) arg0.getSource());
+						JComboBoxCustom comboBoxCustom = ((JComboBoxCustom) arg0.getSource());
 						if (arg0.getStateChange() == ItemEvent.SELECTED) {
 							if (comboBoxCustom.selectEventsDisabled > 0) {
 								comboBoxCustom.selectEventsDisabled--;

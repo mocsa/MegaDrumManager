@@ -23,6 +23,10 @@ public class Spin1023Control extends JPanel {
 	 */
 	private static final long serialVersionUID = 6939120061067438757L;
 	private JSpinner spinner;
+	private ValueChangedListener valueChangedListener;
+	
+	public boolean firstSet = true;
+	public int stateChangeEventsDisabled = 0;
 
 	/**
 	 * Create the panel.
@@ -52,6 +56,37 @@ public class Spin1023Control extends JPanel {
 		return (Integer)spinner.getValue();
 	}
 	
+	public void addChangeListener(ChangeListener listener) {
+		spinner.addChangeListener(listener);
+	}
+	
+	public void setEventListener(ValueChangedListener vcl) {
+		valueChangedListener = vcl;
+		spinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent arg0) {
+				if (stateChangeEventsDisabled > 0) {
+					stateChangeEventsDisabled--;
+				} else {
+					valueChangedListener.valueChanged();
+				}
+			}
+		});				
+
+	}
+	
+	public void setValueWithoutEvents(int value) {
+		if ((value >= 0 ) && (value < 128)) {
+			if (firstSet) {
+				firstSet = false;
+			} else {
+				if (value != getValue()) {
+					stateChangeEventsDisabled = 1;					
+				}
+			}
+			spinner.setValue(value);
+		}
+	}
+
 	public void setValue(int value) {
 		if ((value >= 0 ) && (value < 1024)) {
 			spinner.setValue(value);
