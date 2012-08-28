@@ -34,6 +34,7 @@ import javax.swing.JMenuBar;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.awt.Dimension;
 
@@ -266,20 +267,7 @@ public class ControlsPads extends JPanel {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					padSelection = comboBox_padSelection.getSelectedIndex();
-					//if (padSelection != prevPadSelection) {
-					if (!switchingPad) {
-						switchingPad = true;
-						//prevPadSelection = padSelection;						
-						if (padSelection > 0 ) {
-							padSelection = ((padSelection - 1)*2) + 1;
-							switch_to_pad(padSelection);
-						} else {
-							switch_to_pad(0);
-						}
-						switchingPad = false;
-						firePropertyChange("resize", false, true);
-					}
-					//}
+					switchAndShowPad(padSelection);
 		        }
 			}
 		});
@@ -671,6 +659,20 @@ public class ControlsPads extends JPanel {
 		comboBox_padSelection.removeItemAt(index+1);
 	}
 
+	public void switchAndShowPad(int padSelection) {
+		if (!switchingPad) {
+			switchingPad = true;
+			//prevPadSelection = padSelection;						
+			if (padSelection > 0 ) {
+				padSelection = ((padSelection - 1)*2) + 1;
+				switch_to_pad(padSelection);
+			} else {
+				switch_to_pad(0);
+			}
+			switchingPad = false;
+			firePropertyChange("resize", false, true);
+		}
+	}
 	private void switch_to_pad(int pad_id) {
 		int comboBox_pointer = 0;
 		

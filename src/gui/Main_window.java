@@ -1627,6 +1627,20 @@ public class Main_window {
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
 				panelMidiLog.showHiHatLevel(127 - buffer[2], Constants.MD_HIHAT_COLOR);
 			}
+			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x13)) {
+				int id = buffer[2];
+				if (id > 0x3f) {
+					id = (id - 0x40)*2 + 1; 
+				} else {
+					id--;
+				}
+				if (id > 0) {
+					id = (id - 1)/2 + 1;
+				} else {
+					id = 0;
+				}
+				controlsPads.switchAndShowPad(id);
+			}
 			break;
 		}
 	

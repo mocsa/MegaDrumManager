@@ -184,19 +184,6 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 //        	customNamesList[i] = "Custom" + i.toString();
 //        }
 		comboBox_name = new JComboBoxCustom();
-		comboBox_name.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					if (comboBox_name.selectEventsDisabled > 0) {
-						comboBox_name.selectEventsDisabled--;
-					} else {
-						if (controlsInited) {
-							firePropertyChange("nameChanged", false, true);							
-						}
-					}
-				}
-			}
-		});
 		updatePadsNames();
 		add(comboBox_name, "3, 1, fill, center");
 		
@@ -467,7 +454,12 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 							if (comboBoxCustom.selectEventsDisabled > 0) {
 								comboBoxCustom.selectEventsDisabled--;
 							} else {
-								valueChanged();
+								if (controlsInited) {
+									valueChanged();
+									if (comboBoxCustom.equals(comboBox_name)) {
+										firePropertyChange("nameChanged", false, true);							
+									}
+								}
 							}
 							if (comboBoxCustom.equals(comboBox_type)) {
 								firePropertyChange("typeChanged", false, true);
@@ -593,14 +585,18 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		comboBox_name.selectEventsDisabled = 1;
 		comboBox_name.removeAllItems();
 		//comboBox_name.addItem("");
+		comboBox_name.selectEventsDisabled = 1;
 		comboBox_name.addItem(Constants.PADS_NAMES_LIST[configIndex]);
 		for (String string : Constants.CUSTOM_PADS_NAMES_LIST) {
+			comboBox_name.selectEventsDisabled = 1;
 			comboBox_name.addItem(string);
 			}
 		for (int i = 0; i < configFull.customNamesCount; i++) {
+			comboBox_name.selectEventsDisabled = 1;
 			comboBox_name.addItem(configFull.configCustomNames[i].name);
 		}
-		comboBox_name.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].name);			
+		comboBox_name.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].name);
+		comboBox_name.selectEventsDisabled = 0;
 	}
 	
 	public boolean getHeadRim() {
