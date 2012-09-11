@@ -1639,7 +1639,9 @@ public class Main_window {
 				} else {
 					id = 0;
 				}
-				controlsPads.switchAndShowPad(id);
+				if (configFull.configMisc.send_triggered_in) {
+					controlsPads.switchAndShowPad(id);
+				}
 			}
 			break;
 		}
