@@ -37,6 +37,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 
 	//private Boolean changeEventsAllowed = false;
 	private Boolean controlsInited = false;
+	private int prevInputsCount;
 
 	private JButton btnGet;
 	private JButton btnSend;
@@ -513,8 +514,8 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		checkBox_softChicks.setValueWithoutEvent(configFull.configPedal.softChicks);
 		checkBox_autoLevels.setValueWithoutEvent(configFull.configPedal.autoLevels);
 		spin127Control_chickDelay.setValueWithoutEvents(configFull.configPedal.chickDelay);
-		spin127Control_cc.setValueWithoutEvents(configFull.configPedal.cc);
 		spin127Control_ccRdcLvl.setValueWithoutEvents(configFull.configPedal.ccRdcLvl);
+		spin127Control_cc.setValueWithoutEvents(configFull.configPedal.cc);
 		spin1023Control_lowLevel.setValueWithoutEvents(configFull.configPedal.lowLevel);
 		spin1023Control_highLevel.setValueWithoutEvents(configFull.configPedal.highLevel);
 		spin127Control_openLevel.setValueWithoutEvents(configFull.configPedal.openLevel);
@@ -585,13 +586,16 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	}
 	
 	public void updateInputCountsControls(int count) {
-		comboBox_input.selectEventsDisabled = 1;
-		comboBox_input.removeAllItems();
-        for(int i=2; i<(count - 1); i++){
-        	comboBox_input.addItem(((Integer)i).toString());
-        	i++;
-        }
-		comboBox_input.setSelectedIndexWithoutEvent((configFull.configPedal.hhInput-2)/2);
+		if (count != prevInputsCount) {
+			prevInputsCount = count;
+			comboBox_input.selectEventsDisabled = 1;
+			comboBox_input.removeAllItems();
+	        for(int i=2; i<(count - 1); i++){
+	        	comboBox_input.addItem(((Integer)i).toString());
+	        	i++;
+	        }
+			comboBox_input.setSelectedIndexWithoutEvent((configFull.configPedal.hhInput-2)/2);
+		}
 	}
 
 	public JButton getBtnLoad() {

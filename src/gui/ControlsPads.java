@@ -58,6 +58,7 @@ public class ControlsPads extends JPanel {
 	private ControlsPadCommon panel_head;
 	private ControlsPadCommon panel_rim;
 	private ThirdZoneControls panel_3rd_zone;
+	private int prevInputsCount;
 	
 	//public ConfigPad [] configPads;
 	//public Config3rd [] config3rds;
@@ -854,24 +855,27 @@ public class ControlsPads extends JPanel {
 	}
 
 	public void updateInputCountsControls(int count) {
-		if (panel_head != null) {
-			switch_to_pad(0);
+		if (count != prevInputsCount) {
+			prevInputsCount = count;
+			if (panel_head != null) {
+				switch_to_pad(0);
+			}
+//			if (comboBox_padSelection.getItemCount() != (count)/2) {
+				mnCopypadto.removeAll();
+				mnCopyhead.removeAll();
+				mnCopyrim.removeAll();
+				mnCopyrd.removeAll();
+				comboBox_padSelection.setMaximumRowCount((count)/2);
+				comboBox_padSelection.removeAllItems();
+				comboBox_padSelection.addItem("");
+				updatePadsSelection(0);
+		        for(int i=1; i<(count - 1); i++){
+		    		comboBox_padSelection.addItem("");
+		    		updatePadsSelection(i);
+		    		i++;
+		        }
+//			}
 		}
-//		if (comboBox_padSelection.getItemCount() != (count)/2) {
-			mnCopypadto.removeAll();
-			mnCopyhead.removeAll();
-			mnCopyrim.removeAll();
-			mnCopyrd.removeAll();
-			comboBox_padSelection.setMaximumRowCount((count)/2);
-			comboBox_padSelection.removeAllItems();
-			comboBox_padSelection.addItem("");
-			updatePadsSelection(0);
-	        for(int i=1; i<(count - 1); i++){
-	    		comboBox_padSelection.addItem("");
-	    		updatePadsSelection(i);
-	    		i++;
-	        }
-//		}
 	}
 
 	public JButton getBtnGetall() {

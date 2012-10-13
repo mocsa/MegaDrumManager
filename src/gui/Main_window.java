@@ -112,7 +112,7 @@ public class Main_window {
 	//private JMenuItem menuItem;
 	private JMenu mnView;
 	private JProgressBar progressBar;
-	private JComboBox comboBox_inputsCount;
+	private JComboBoxCustom comboBox_inputsCount;
 	private JSpinner spinnerLCDcontrast;
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
@@ -871,7 +871,7 @@ public class Main_window {
 		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblInputs, "10, 1");
 		
-		comboBox_inputsCount = new JComboBox();
+		comboBox_inputsCount = new JComboBoxCustom();
 		comboBox_inputsCount.setToolTipText("<html>Select number of inputs used in MegaDrum.<br>\r\n<br>\r\nIt shoud match MaxInputs setting, which is only accessible<br>\r\nfrom MegaDrum menu.\r\n</html>");
 		comboBox_inputsCount.setMaximumRowCount(20);
 		panel.add(comboBox_inputsCount, "12, 1");
@@ -939,10 +939,14 @@ public class Main_window {
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
-		        	configFull.configGlobalMisc.inputs_count = ((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
-		        	updateInputsCountControls();
-					if (configOptions.interactive) {
-						sendGlobalMisc();
+					if (comboBox_inputsCount.selectEventsDisabled > 0) {
+						comboBox_inputsCount.selectEventsDisabled--;
+					} else {
+			        	configFull.configGlobalMisc.inputs_count = ((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
+			        	updateInputsCountControls();
+						if (configOptions.interactive) {
+							sendGlobalMisc();
+						}
 					}
 		        }
 			}
@@ -1119,6 +1123,7 @@ public class Main_window {
 			});
 		}
 		controlsPads.updateCustomNamesList();
+		updateAllControls();
 	}
 	
 	private void delayMs(int delay) {
@@ -1389,20 +1394,28 @@ public class Main_window {
 		}
 	}
 
+	private void updateAllControls() {
+		controlsMisc.updateControls();
+		controlsPedal.updateControls();
+		int p = controlsPads.getPadPointer();
+		controlsPads.setPadPointer(1);
+		controlsPads.updateControls();
+		controlsPads.setPadPointer(p);
+		controlsPads.updateControls();
+		controlsPadsExtra.updateControls();		
+		updateInputsCountControls();
+	}
 	private void loadAllFromConfigFull() {
 		byte [] sysex = new byte[256];
 
 		Utils.copyConfigGlobalMiscToSysex(fullConfigs[configOptions.lastConfig].configGlobalMisc, sysex, configOptions.chainId);
 		Utils.copySysexToConfigGlobalMisc(sysex, configFull.configGlobalMisc);
-		updateInputsCountControls();
 
 		Utils.copyConfigMiscToSysex(fullConfigs[configOptions.lastConfig].configMisc, sysex, configOptions.chainId);
 		Utils.copySysexToConfigMisc(sysex, configFull.configMisc);
-		controlsMisc.updateControls();
 
 		Utils.copyConfigPedalToSysex(fullConfigs[configOptions.lastConfig].configPedal, sysex, configOptions.chainId);
 		Utils.copySysexToConfigPedal(sysex, configFull.configPedal);		
-		controlsPedal.updateControls();
 
 		for (int i=0; i < (Constants.MAX_INPUTS - 1); i++) {
 			Utils.copyConfigPadToSysex(fullConfigs[configOptions.lastConfig].configPads[i], sysex, configOptions.chainId, i);
@@ -1416,7 +1429,6 @@ public class Main_window {
 			configFull.config3rds[i].altNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].altNote_linked;
 			configFull.config3rds[i].pressrollNote_linked = fullConfigs[configOptions.lastConfig].config3rds[i].pressrollNote_linked;
 		}				
-		controlsPads.updateControls();
 		
 		for (int i=0; i < (Constants.CURVES_COUNT); i++) {
 			Utils.copyConfigCurveToSysex(fullConfigs[configOptions.lastConfig].configCurves[i], sysex, configOptions.chainId, i);
@@ -1426,7 +1438,7 @@ public class Main_window {
 			Utils.copyConfigCustomNameToSysex(fullConfigs[configOptions.lastConfig].configCustomNames[i], sysex, configOptions.chainId, i);
 			Utils.copySysexToConfigCustomName(sysex, configFull.configCustomNames[i]);					
 		}
-		controlsPadsExtra.updateControls();
+		updateAllControls();
 	}
 	
 	private void load_all() {
@@ -1482,7 +1494,8 @@ public class Main_window {
 	}
 	
 	private void updateInputsCountControls() {
-		comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+//		comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+		comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		spinnerLCDcontrast.setValue(100 - configFull.configGlobalMisc.lcd_contrast);
 		controlsPedal.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
 		controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
