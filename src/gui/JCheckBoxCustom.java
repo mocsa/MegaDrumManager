@@ -15,6 +15,10 @@ public class JCheckBoxCustom extends JCheckBox {
 	private ValueChangedListener valueChangedListener;
 	private int changeEventsDisabled = 0;
 
+	public JCheckBoxCustom() {
+		super();
+	}
+
 	public JCheckBoxCustom(String string) {
 		super(string);
 	}

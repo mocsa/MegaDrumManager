@@ -127,8 +127,10 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		//controls.add(slider_midPoint);
 		slider_midPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.config3rds[configIndex].threshold = (configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4);
-				updateControls();
+				if (configFull != null) {
+					configFull.config3rds[configIndex].threshold = (configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4);
+					updateControls();					
+				}
 			}
 		});
 		slider_midPoint.setPaintLabels(true);

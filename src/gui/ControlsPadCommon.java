@@ -5,6 +5,8 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
+import javax.swing.Icon;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -178,13 +180,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		lblName.setToolTipText("Input Name");
 		add(lblName, "1, 1, right, center");
 		
-//		customNamesCount = Constants.CUSTOM_NAMES_MAX;
-//		customNamesList = new String[Constants.CUSTOM_NAMES_MAX];
-//        for(Integer i=0; i<Constants.CUSTOM_NAMES_MAX; i++){
-//        	customNamesList[i] = "Custom" + i.toString();
-//        }
 		comboBox_name = new JComboBoxCustom();
-		updatePadsNames();
 		add(comboBox_name, "3, 1, fill, center");
 		
 		padButton__name = new PadButton("name",head_rim_pad);
@@ -474,6 +470,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 				((JSpinnerCustom) control).setFont(new Font("Tahoma", Font.PLAIN, 11));
 			}
 		}
+		updatePadsNames();
 		controlsInited = true;
 	}
 	
@@ -591,11 +588,13 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 			comboBox_name.selectEventsDisabled = 1;
 			comboBox_name.addItem(string);
 			}
-		for (int i = 0; i < configFull.customNamesCount; i++) {
-			comboBox_name.selectEventsDisabled = 1;
-			comboBox_name.addItem(configFull.configCustomNames[i].name);
+		if (configFull != null) {
+			for (int i = 0; i < configFull.customNamesCount; i++) {
+				comboBox_name.selectEventsDisabled = 1;
+				comboBox_name.addItem(configFull.configCustomNames[i].name);
+			}
+			comboBox_name.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].name);			
 		}
-		comboBox_name.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].name);
 		comboBox_name.selectEventsDisabled = 0;
 	}
 	

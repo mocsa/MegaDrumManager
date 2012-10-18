@@ -449,8 +449,6 @@ public class Main_window {
 		
 		
 		panel_main = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel_main.getLayout();
-		flowLayout.setAlignOnBaseline(true);
 		panel_main.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),
 				ColumnSpec.decode("default:grow"),
@@ -460,6 +458,8 @@ public class Main_window {
 			new RowSpec[] {
 				FormFactory.LINE_GAP_ROWSPEC,
 				RowSpec.decode("pref:grow"),}));
+//		FlowLayout flowLayout = (FlowLayout) panel_main.getLayout();
+//		flowLayout.setAlignOnBaseline(true);
 		
 		controlsMisc = new ControlsMisc(configFull);
 		controlsMisc.getBtnSave().addActionListener(new ActionListener() {
@@ -1124,6 +1124,7 @@ public class Main_window {
 		}
 		controlsPads.updateCustomNamesList();
 		updateAllControls();
+
 	}
 	
 	private void delayMs(int delay) {
@@ -1495,10 +1496,12 @@ public class Main_window {
 	
 	private void updateInputsCountControls() {
 //		comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-		comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-		spinnerLCDcontrast.setValue(100 - configFull.configGlobalMisc.lcd_contrast);
-		controlsPedal.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
-		controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
+		if (configFull != null) {
+			comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+			spinnerLCDcontrast.setValue(100 - configFull.configGlobalMisc.lcd_contrast);
+			controlsPedal.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
+			controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);			
+		}
 	}
 	
 	private void resizeMainWindow() {
