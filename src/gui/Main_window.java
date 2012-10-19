@@ -10,6 +10,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIDefaults;
@@ -87,10 +88,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.Toolkit;
 import com.jgoodies.forms.layout.Sizes;
+import javax.swing.ScrollPaneConstants;
 
 public class Main_window {
 
 	private JFrame frmMegadrummanager;
+	private JScrollPane main_scroller;
+	private JPanel global_panel;
 	private JPanel panel_main;
 	private JPanel panel_top;
 	private Options dialog_options;
@@ -180,7 +184,6 @@ public class Main_window {
 		configFull = new ConfigFull();
 		frmMegadrummanager = new JFrame();
 		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/icons/megadrum-manager128.png")));
-		frmMegadrummanager.setResizable(false);
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
@@ -669,19 +672,35 @@ public class Main_window {
 			}
 		});
 
-		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
+		global_panel = new JPanel();
+		main_scroller = new JScrollPane(global_panel);
+		frmMegadrummanager.getContentPane().add(main_scroller);
+		
+		global_panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("pref:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				RowSpec.decode("pref:grow"),
+				FormFactory.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
 				FormFactory.PREF_ROWSPEC,}));
 		
+//		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
+//				ColumnSpec.decode("pref:grow"),
+//				FormFactory.RELATED_GAP_COLSPEC,
+//				FormFactory.DEFAULT_COLSPEC,},
+//			new RowSpec[] {
+//				FormFactory.PREF_ROWSPEC,
+//				RowSpec.decode("1dlu"),
+//				FormFactory.PREF_ROWSPEC,
+//				RowSpec.decode("1dlu"),
+//				FormFactory.PREF_ROWSPEC,}));
+		
 		panel_top = new JPanel();
-		frmMegadrummanager.getContentPane().add(panel_top, "1, 1, fill, fill");
+//		frmMegadrummanager.getContentPane().add(panel_top, "1, 1, fill, fill");
+		global_panel.add(panel_top, "1, 1, fill, fill");
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -816,7 +835,8 @@ public class Main_window {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		frmMegadrummanager.getContentPane().add(panel, "1, 3, fill, fill");
+//		frmMegadrummanager.getContentPane().add(panel, "1, 3, fill, fill");
+		global_panel.add(panel, "1, 3, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -964,7 +984,8 @@ public class Main_window {
 				toggleMidiOpenButton();
 			}
 		});
-		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
+//		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
+		global_panel.add(panel_main, "1, 5, 3, 1, left, fill");
 		
 		controlsPadsExtra = new ControlsPadsExtra(configFull);
 		controlsPadsExtra.getBtnCurveSave().addActionListener(new ActionListener() {
