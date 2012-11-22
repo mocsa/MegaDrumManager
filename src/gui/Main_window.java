@@ -1847,7 +1847,11 @@ public class Main_window {
 					commsStateLabel.setBackground(Color.GREEN);
 					commsStateLabel.setText("SysEx Ok");					
 				}
-			}				
+			}	
+			// Simulate failure of one input
+//			if ((buffer[3] == Constants.MD_SYSEX_PAD) && (buffer[4] == 11)) {
+//				return;
+//			}
 			sysexWaitTimer.cancel();
 			compareSysexToConfigIsOn = false;
 		}
