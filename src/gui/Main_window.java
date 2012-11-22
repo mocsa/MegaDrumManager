@@ -126,7 +126,7 @@ public class Main_window {
 	private JComboBox comboBoxCfg;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
-	private boolean compareSysexToConfig = false;
+	private boolean compareSysexToConfigIsOn = false;
 	private boolean compareSysexToConfigLast = false;
 	private boolean withReportInTask;
 	private int compareResultCombined;
@@ -245,7 +245,7 @@ public class Main_window {
 					midi_handler.getMidi();
 					if (midi_handler.sysexReceived) {
 						midi_handler.sysexReceived = false;
-						if (compareSysexToConfig) {
+						if (compareSysexToConfigIsOn) {
 							compareSysexToConfig(midi_handler.bufferIn);
 						} else {
 							decodeSysex(midi_handler.bufferIn);						
@@ -1178,12 +1178,12 @@ public class Main_window {
 			commsStateLabel.setBackground(Color.RED);
 			commsStateLabel.setText("SysEx Timeout");
 			sysexWaitTimer.cancel();
-			compareSysexToConfig = false;
+			compareSysexToConfigIsOn = false;
 	    }
 	}
 	
 	private void startSysexWaitTimer(int ms) {
-		compareSysexToConfig = true;
+		compareSysexToConfigIsOn = true;
 		if (sysexWaitTimer != null) {
 			sysexWaitTimer.cancel();
 		}
@@ -1242,7 +1242,9 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 		sendWithReport(withReport);
 		midi_handler.requestConfigGlobalMisc();
-		delayMs(configOptions.sysexDelay);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
 	}
 
 	private void getMisc() {
@@ -1258,7 +1260,9 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 		sendWithReport(withReport);
 		midi_handler.requestConfigMisc();
-		delayMs(configOptions.sysexDelay);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
 	}
 	
 	private void getPad(int pad_id) {
@@ -1284,7 +1288,9 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);		
 		sendWithReport(withReport);
 		midi_handler.requestConfigPad(pad_id + 1);
-		delayMs(configOptions.sysexDelay);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
 	}
 	
 	private void sendThirdZone(int pad_id, boolean withReport) {
@@ -1296,7 +1302,9 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 		sendWithReport(withReport);
 		midi_handler.requestConfig3rd(pad_id);
-		delayMs(configOptions.sysexDelay);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
 	}
 
 	private void sendPad(int pad_id, boolean withReport) {
@@ -1426,7 +1434,9 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 		sendWithReport(withReport);
 		midi_handler.requestConfigCustomName(name_id);
-		delayMs(configOptions.sysexDelay);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
 	}
 
 	private void getAllCustomNames() {
@@ -1481,7 +1491,9 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 		sendWithReport(withReport);
 		midi_handler.requestConfigCurve(curve_id);
-		delayMs(configOptions.sysexDelay);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
 	}
 	
 	private void getAllCurves() {
@@ -1524,7 +1536,7 @@ public class Main_window {
 	}
 
 	private void getAll() {
-		compareSysexToConfig = false;
+		compareSysexToConfigIsOn = false;
 		getGlobalMisc();
 		getMisc();
 		getPedal();
@@ -1534,7 +1546,7 @@ public class Main_window {
 	}
 	
 	private void sendAll() {
-		compareSysexToConfig = true;
+		compareSysexToConfigIsOn = true;
 		compareResultCombined = 0;
 		compareSysexToConfigLast = false;
 		commsStateLabel.setBackground(Color.YELLOW);
@@ -1548,21 +1560,29 @@ public class Main_window {
                 SwingUtilities.invokeLater( new Runnable() {
                     public void run() {
                 		sendMisc(false);
+                    	while (compareSysexToConfigIsOn) {
+                    		delayMs(10);
+                    	}
                 		sendGlobalMisc(false);
+                    	while (compareSysexToConfigIsOn) {
+                    		delayMs(10);
+                    	}
+                		//while (compareSysexToConfigIsOn);
                 		sendAllPadsInThisThread(false);
                 		sendAllCurvesInThisThread(false);
                 		sendAllCustomNamesInThisThread(false);
                 		compareSysexToConfigLast = true;
                 		sendPedal(false);
+                    	while (compareSysexToConfigIsOn) {
+                    		delayMs(10);
+                    	}
                    }
                 });
             }
 
 		});
         t.setPriority( Thread.NORM_PRIORITY );
-        t.run();
-
-		
+        t.run();	
 	}
 
 	private void copyConfigToLastConfig() {
@@ -1800,7 +1820,7 @@ public class Main_window {
 				}
 			}				
 			sysexWaitTimer.cancel();
-			compareSysexToConfig = false;
+			compareSysexToConfigIsOn = false;
 		}
 	}
 	
