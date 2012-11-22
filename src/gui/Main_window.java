@@ -1229,7 +1229,7 @@ public class Main_window {
 			commsStateLabel.setBackground(Color.YELLOW);
 			commsStateLabel.setText("SysEx Wait");			
 		}
-		startSysexWaitTimer(configOptions.sysexDelay*10);		
+		startSysexWaitTimer(configOptions.sysexDelay*3);		
 	}
 	
 	private void sendPedal(boolean withReport) {

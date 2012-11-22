@@ -259,6 +259,12 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	}
 
 	public void valueChanged() {
+		if (noteSpinControl_altNote.getCheckBox().isSelected()) {
+			noteSpinControl_altNote.setValueWithoutEvents(noteSpinControl_note.getValue());
+		}
+		if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
+			noteSpinControl_pressrollNote.setValueWithoutEvents(noteSpinControl_note.getValue());
+		}
 		updateConfig();
 		firePropertyChange("valueChanged", false, true);
 		//updateControls();

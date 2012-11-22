@@ -2,8 +2,6 @@ package gui;
 
 import javax.swing.JOptionPane;
 
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
-
 public class Utils {
 
 	public static void show_error(String msg) {
