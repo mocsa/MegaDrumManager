@@ -118,6 +118,7 @@ public class Main_window {
 	private JProgressBar progressBar;
 	private JComboBoxCustom comboBox_inputsCount;
 	private JSpinner spinnerLCDcontrast;
+	private int spinnerLCDEventDisabled = 0;
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
 	private JLabel lblVersion;
@@ -128,6 +129,7 @@ public class Main_window {
 	private boolean sendSysexEnabled = true;
 	private boolean compareSysexToConfigIsOn = false;
 	private boolean compareSysexToConfigLast = false;
+	private boolean compareResultTimeoutsCombined = false;
 	private boolean withReportInTask;
 	private int compareResultCombined;
 	private Timer sysexWaitTimer;
@@ -936,9 +938,13 @@ public class Main_window {
 		spinnerLCDcontrast = new JSpinner();
 		spinnerLCDcontrast.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
-				configFull.configGlobalMisc.lcd_contrast = (Integer)spinnerLCDcontrast.getValue();
-				if (configOptions.interactive) {
-					sendGlobalMisc(true);
+				if (spinnerLCDEventDisabled > 0 ) {
+					spinnerLCDEventDisabled--;
+				} else {
+					configFull.configGlobalMisc.lcd_contrast = (Integer)spinnerLCDcontrast.getValue();
+					if (configOptions.interactive) {
+						sendGlobalMisc(true);
+					}
 				}
 			}
 		});
@@ -1176,9 +1182,15 @@ public class Main_window {
 	    public void run() {
 	    	// Timer expired and Sysex has not been received
 			commsStateLabel.setBackground(Color.RED);
-			commsStateLabel.setText("SysEx Timeout");
+			if (compareResultTimeoutsCombined) {
+				commsStateLabel.setText("SysEx Timeouts");
+			} else {
+				commsStateLabel.setText("SysEx Timeout");
+			}
 			sysexWaitTimer.cancel();
 			compareSysexToConfigIsOn = false;
+			compareResultCombined = 1;
+			compareResultTimeoutsCombined = true;
 	    }
 	}
 	
@@ -1204,7 +1216,7 @@ public class Main_window {
 	}
 	
 	private void getPedal() {
-		//midi_handler.clear_midi_input();
+		compareSysexToConfigIsOn = false;
 		midi_handler.requestConfigPedal();
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1212,6 +1224,7 @@ public class Main_window {
 	private void sendWithReport(boolean withReport) {
 		if (withReport) {
 			compareResultCombined = 0;
+			compareResultTimeoutsCombined = false;
 			compareSysexToConfigLast = true;
 			commsStateLabel.setBackground(Color.YELLOW);
 			commsStateLabel.setText("SysEx Wait");			
@@ -1230,7 +1243,7 @@ public class Main_window {
 	}
 	
 	private void getGlobalMisc() {
-		//midi_handler.clear_midi_input();
+		compareSysexToConfigIsOn = false;
 		midi_handler.requestConfigGlobalMisc();					
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1248,7 +1261,7 @@ public class Main_window {
 	}
 
 	private void getMisc() {
-		//midi_handler.clear_midi_input();
+		compareSysexToConfigIsOn = false;
 		midi_handler.requestConfigMisc();					
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1266,7 +1279,7 @@ public class Main_window {
 	}
 	
 	private void getPad(int pad_id) {
-		//midi_handler.clear_midi_input();
+		compareSysexToConfigIsOn = false;
 		if ( pad_id > 0 ) {
 			midi_handler.requestConfigPad(pad_id + 1);
 			delayMs(configOptions.sysexDelay);
@@ -1311,6 +1324,7 @@ public class Main_window {
 
 		if (withReport) {
 			compareResultCombined = 0;
+			compareResultTimeoutsCombined = false;
 			compareSysexToConfigLast = false;
 			commsStateLabel.setBackground(Color.YELLOW);
 			commsStateLabel.setText("SysEx Wait");
@@ -1327,6 +1341,7 @@ public class Main_window {
 	}
 	
 	private void getAllPads() {
+		compareSysexToConfigIsOn = false;
 		progressBar.setVisible(true);
 		Thread t = new Thread(new Runnable() {
             public void run() {
@@ -1367,6 +1382,7 @@ public class Main_window {
 		sendWithReport(withReport);
 		if (withReport) {
 			compareResultCombined = 0;
+			compareResultTimeoutsCombined = false;
 			compareSysexToConfigLast = false;
 			commsStateLabel.setBackground(Color.YELLOW);
 			commsStateLabel.setText("SysEx Wait");
@@ -1399,6 +1415,7 @@ public class Main_window {
 		sendWithReport(withReport);
 		if (withReport) {
 			compareResultCombined = 0;
+			compareResultTimeoutsCombined = false;
 			compareSysexToConfigLast = false;
 			commsStateLabel.setBackground(Color.YELLOW);
 			commsStateLabel.setText("SysEx Wait");
@@ -1422,7 +1439,7 @@ public class Main_window {
 	}
 
 	private void getCustomName(int name_id) {
-		//midi_handler.clear_midi_input();
+		compareSysexToConfigIsOn = false;
 		midi_handler.requestConfigCustomName(name_id);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1440,6 +1457,7 @@ public class Main_window {
 	}
 
 	private void getAllCustomNames() {
+		compareSysexToConfigIsOn = false;
 		for (int i = 0; i < configFull.customNamesCount; i++) {
 			getCustomName(i);
 		}
@@ -1456,6 +1474,7 @@ public class Main_window {
 	private void sendAllCustomNames(boolean withReport) {
 		if (withReport) {
 			compareResultCombined = 0;
+			compareResultTimeoutsCombined = false;
 			compareSysexToConfigLast = false;
 			commsStateLabel.setBackground(Color.YELLOW);
 			commsStateLabel.setText("SysEx Wait");
@@ -1479,7 +1498,7 @@ public class Main_window {
 
 	}
 	private void getCurve(int curve_id) {
-		//midi_handler.clear_midi_input();
+		compareSysexToConfigIsOn = false;
 		midi_handler.requestConfigCurve(curve_id);
 		delayMs(configOptions.sysexDelay);
 	}
@@ -1497,6 +1516,7 @@ public class Main_window {
 	}
 	
 	private void getAllCurves() {
+		compareSysexToConfigIsOn = false;
 		for (int i = 0; i<Constants.CURVES_COUNT; i++) {
 			getCurve(i);
 		}
@@ -1513,6 +1533,7 @@ public class Main_window {
 	private void sendAllCurves(boolean withReport) {
 		if (withReport) {
 			compareResultCombined = 0;
+			compareResultTimeoutsCombined = false;
 			compareSysexToConfigLast = false;
 			commsStateLabel.setBackground(Color.YELLOW);
 			commsStateLabel.setText("SysEx Wait");
@@ -1548,6 +1569,7 @@ public class Main_window {
 	private void sendAll() {
 		compareSysexToConfigIsOn = true;
 		compareResultCombined = 0;
+		compareResultTimeoutsCombined = false;
 		compareSysexToConfigLast = false;
 		commsStateLabel.setBackground(Color.YELLOW);
 		commsStateLabel.setText("SysEx Wait");
@@ -1567,7 +1589,6 @@ public class Main_window {
                     	while (compareSysexToConfigIsOn) {
                     		delayMs(10);
                     	}
-                		//while (compareSysexToConfigIsOn);
                 		sendAllPadsInThisThread(false);
                 		sendAllCurvesInThisThread(false);
                 		sendAllCustomNamesInThisThread(false);
@@ -1724,7 +1745,10 @@ public class Main_window {
 //		comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		if (configFull != null) {
 			comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-			spinnerLCDcontrast.setValue(100 - configFull.configGlobalMisc.lcd_contrast);
+			if ((Integer)spinnerLCDcontrast.getValue() != configFull.configGlobalMisc.lcd_contrast) {
+				spinnerLCDEventDisabled = 1;
+				spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);
+			}
 			controlsPedal.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
 			controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);			
 		}
@@ -1812,8 +1836,13 @@ public class Main_window {
 			if (compareSysexToConfigLast) {
 			//if (buffer[3] == Constants.MD_SYSEX_MISC) {
 				if (compareResultCombined != 0) {
-					commsStateLabel.setBackground(Color.RED);
-					commsStateLabel.setText("SysEx Error");
+					if (compareResultTimeoutsCombined) {
+						commsStateLabel.setBackground(Color.RED);
+						commsStateLabel.setText("SysEx Timeouts");
+					} else {
+						commsStateLabel.setBackground(Color.RED);
+						commsStateLabel.setText("SysEx Error");
+					}
 				} else {
 					commsStateLabel.setBackground(Color.GREEN);
 					commsStateLabel.setText("SysEx Ok");					
@@ -1869,7 +1898,10 @@ public class Main_window {
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
 						comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
-						spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);
+						if ((Integer)spinnerLCDcontrast.getValue() != configFull.configGlobalMisc.lcd_contrast) {
+							spinnerLCDEventDisabled = 1;
+							spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);
+						}
 						break;
 					default:
 						break;
