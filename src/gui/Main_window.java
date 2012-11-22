@@ -121,10 +121,16 @@ public class Main_window {
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
 	private JLabel lblVersion;
+	private JLabel commsStateLabel;
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox comboBoxCfg;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
+	private boolean compareSysexToConfig = false;
+	private boolean compareSysexToConfigLast = false;
+	private boolean withReportInTask;
+	private int compareResultCombined;
+	private Timer sysexWaitTimer;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
 	
@@ -239,7 +245,11 @@ public class Main_window {
 					midi_handler.getMidi();
 					if (midi_handler.sysexReceived) {
 						midi_handler.sysexReceived = false;
-						decodeSysex(midi_handler.bufferIn);						
+						if (compareSysexToConfig) {
+							compareSysexToConfig(midi_handler.bufferIn);
+						} else {
+							decodeSysex(midi_handler.bufferIn);						
+						}
 					} else if (midi_handler.bufferIn != null) {
 						decodeShortMidi(midi_handler.bufferIn);
 					}
@@ -312,7 +322,7 @@ public class Main_window {
 		JMenuItem mntmSendToMd_1 = new JMenuItem("Send to MD");
 		mntmSendToMd_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendMisc();
+				sendMisc(true);
 			}
 		});
 		mnMiscSettings.add(mntmSendToMd_1);
@@ -332,7 +342,7 @@ public class Main_window {
 		JMenuItem mntmSendToMd_2 = new JMenuItem("Send to MD");
 		mntmSendToMd_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sendPedal();
+				sendPedal(true);
 			}
 		});
 		mnHihatPedalSettings.add(mntmSendToMd_2);
@@ -351,7 +361,7 @@ public class Main_window {
 		JMenuItem mntmSendToMd_3 = new JMenuItem("Send to MD");
 		mntmSendToMd_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sendAllPads();
+				sendAllPads(true);
 			}
 		});
 		mnAllPadsSettings.add(mntmSendToMd_3);
@@ -370,7 +380,7 @@ public class Main_window {
 		JMenuItem mntmSendToMd_4 = new JMenuItem("Send to MD");
 		mntmSendToMd_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sendPad(controlsPads.getPadPointer());
+				sendPad(controlsPads.getPadPointer(), true);
 			}
 		});
 		mnSelectedPadSettings.add(mntmSendToMd_4);
@@ -389,7 +399,7 @@ public class Main_window {
 		JMenuItem mntmSendToMd_5 = new JMenuItem("Send to MD");
 		mntmSendToMd_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendAllCurves();
+				sendAllCurves(true);
 			}
 		});
 		mnCustomCurves.add(mntmSendToMd_5);
@@ -485,7 +495,7 @@ public class Main_window {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueChanged")) {
-						sendMisc();
+						sendMisc(true);
 					}
 				}
 				if (arg0.getPropertyName().equals("octaveValueChanged")) {
@@ -503,7 +513,7 @@ public class Main_window {
 		});
 		controlsMisc.getBtnSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendMisc();
+				sendMisc(true);
 			}
 		});
 		
@@ -528,7 +538,7 @@ public class Main_window {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueChanged")) {
-						sendPedal();
+						sendPedal(true);
 					}
 				}
 			}
@@ -542,7 +552,7 @@ public class Main_window {
 		});
 		controlsPedal.getBtnSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendPedal();
+				sendPedal(true);
 			}
 		});
 		
@@ -632,13 +642,13 @@ public class Main_window {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive && sendSysexEnabled) {
 					if (arg0.getPropertyName().equals("headValueChanged")) {
-						sendPadOneZone(controlsPads.getPadPointer());
+						sendPadOneZone(controlsPads.getPadPointer(), true);
 					}
 					if (arg0.getPropertyName().equals("rimValueChanged")) {
-						sendPadOneZone(controlsPads.getPadPointer() + 1);
+						sendPadOneZone(controlsPads.getPadPointer() + 1, true);
 					}
 					if (arg0.getPropertyName().equals("thirdZoneValueChanged")) {
-						sendThirdZone(controlsPads.getPadPointer());
+						sendThirdZone(controlsPads.getPadPointer(), true);
 					}
 				}
 			}
@@ -651,7 +661,7 @@ public class Main_window {
 //		});
 		controlsPads.getBtnSendall().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				sendAllPads();
+				sendAllPads(true);
 			}
 		});
 		controlsPads.getBtnGetall().addActionListener(new ActionListener() {
@@ -668,7 +678,7 @@ public class Main_window {
 		});
 		controlsPads.getBtnSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendPad(controlsPads.getPadPointer());
+				sendPad(controlsPads.getPadPointer(), true);
 			}
 		});
 
@@ -717,7 +727,9 @@ public class Main_window {
 				ColumnSpec.decode("2dlu"),
 				FormFactory.PREF_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.PREF_COLSPEC,},
+				FormFactory.PREF_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
@@ -833,6 +845,12 @@ public class Main_window {
 		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panel_top.add(btnNextcfg, "16, 1");
 		
+		commsStateLabel = new JLabel("SysEx Ok");
+		panel_top.add(commsStateLabel, "18, 1");
+		commsStateLabel.setOpaque(true);
+		commsStateLabel.setBackground(Color.GREEN);
+		commsStateLabel.setVisible(false);
+		
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 //		frmMegadrummanager.getContentPane().add(panel, "1, 3, fill, fill");
@@ -861,7 +879,9 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu"),},
+				ColumnSpec.decode("50dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
@@ -918,7 +938,7 @@ public class Main_window {
 			public void stateChanged(ChangeEvent arg0) {
 				configFull.configGlobalMisc.lcd_contrast = (Integer)spinnerLCDcontrast.getValue();
 				if (configOptions.interactive) {
-					sendGlobalMisc();
+					sendGlobalMisc(true);
 				}
 			}
 		});
@@ -940,7 +960,7 @@ public class Main_window {
 		JButton btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendGlobalMisc();
+				sendGlobalMisc(true);
 			}
 		});
 		btnSend.setToolTipText("Send global misc settings (number of inputs, LCD contrast)");
@@ -965,7 +985,7 @@ public class Main_window {
 			        	configFull.configGlobalMisc.inputs_count = ((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
 			        	updateInputsCountControls();
 						if (configOptions.interactive) {
-							sendGlobalMisc();
+							sendGlobalMisc(true);
 						}
 					}
 		        }
@@ -976,10 +996,14 @@ public class Main_window {
 				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
 					midi_handler.closeAllPorts();
 					lblVersion.setText("????????");
+					commsStateLabel.setVisible(false);
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					showMidiWarningIfNeeded();
 					midi_handler.initPorts(configOptions);
+					commsStateLabel.setVisible(true);
+					commsStateLabel.setText("MIDI Init Error");
+					commsStateLabel.setBackground(Color.RED);
 				}
 				toggleMidiOpenButton();
 			}
@@ -1043,10 +1067,10 @@ public class Main_window {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueCurveChanged")) {
-						sendCurve(controlsPadsExtra.getCurvePointer());
+						sendCurve(controlsPadsExtra.getCurvePointer(),true);
 					}
 					if (arg0.getPropertyName().equals("valueCustomNameChanged")) {
-						sendCustomName(controlsPadsExtra.getCustomNamePointer());
+						sendCustomName(controlsPadsExtra.getCustomNamePointer(), true);
 					}
 				}
 				if (arg0.getPropertyName().equals("CustomNamesChanged")) {
@@ -1062,7 +1086,7 @@ public class Main_window {
 		});
 		controlsPadsExtra.getButton_curveSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendCurve(controlsPadsExtra.getCurvePointer());
+				sendCurve(controlsPadsExtra.getCurvePointer(), true);
 			}
 		});
 		controlsPadsExtra.getButton_curveGetAll().addActionListener(new ActionListener() {
@@ -1072,7 +1096,7 @@ public class Main_window {
 		});
 		controlsPadsExtra.getButton_curveSendAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendAllCurves();
+				sendAllCurves(true);
 			}
 		});
 		controlsPadsExtra.getButton_customNameGet().addActionListener(new ActionListener() {
@@ -1082,7 +1106,7 @@ public class Main_window {
 		});
 		controlsPadsExtra.getButton_customNameSend().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendCustomName(controlsPadsExtra.getCustomNamePointer());
+				sendCustomName(controlsPadsExtra.getCustomNamePointer(), true);
 			}
 		});
 		controlsPadsExtra.getButton_customNamesGetAll().addActionListener(new ActionListener() {
@@ -1092,7 +1116,7 @@ public class Main_window {
 		});
 		controlsPadsExtra.getButton_customNamesSendAll().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				sendAllCustomNames();
+				sendAllCustomNames(true);
 			}
 		});
 		panel_main.add(controlsPadsExtra, "4, 2, fill, top");
@@ -1148,6 +1172,25 @@ public class Main_window {
 
 	}
 	
+	class sysexTimerTask extends TimerTask {
+	    public void run() {
+	    	// Timer expired and Sysex has not been received
+			commsStateLabel.setBackground(Color.RED);
+			commsStateLabel.setText("SysEx Timeout");
+			sysexWaitTimer.cancel();
+			compareSysexToConfig = false;
+	    }
+	}
+	
+	private void startSysexWaitTimer(int ms) {
+		compareSysexToConfig = true;
+		if (sysexWaitTimer != null) {
+			sysexWaitTimer.cancel();
+		}
+		sysexWaitTimer = new Timer();
+		sysexWaitTimer.schedule(new sysexTimerTask(), ms);
+	}
+	
 	private void delayMs(int delay) {
 		try {
 			Thread.sleep(delay);
@@ -1166,11 +1209,23 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 	}
 	
-	private void sendPedal() {
+	private void sendWithReport(boolean withReport) {
+		if (withReport) {
+			compareResultCombined = 0;
+			compareSysexToConfigLast = true;
+			commsStateLabel.setBackground(Color.YELLOW);
+			commsStateLabel.setText("SysEx Wait");			
+		}
+		startSysexWaitTimer(configOptions.sysexDelay*10);		
+	}
+	
+	private void sendPedal(boolean withReport) {
 		byte [] sysexPedal = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
 		Utils.copyConfigPedalToSysex(configFull.configPedal, sysexPedal, configOptions.chainId);
 		midi_handler.sendSysex(sysexPedal);
 		delayMs(configOptions.sysexDelay);
+		sendWithReport(withReport);
+		midi_handler.requestConfigPedal();
 	}
 	
 	private void getGlobalMisc() {
@@ -1179,11 +1234,13 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 	}
 
-	private void sendGlobalMisc() {
+	private void sendGlobalMisc(boolean withReport) {
 		byte [] sysexGlobalMisc = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
 		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysexGlobalMisc, configOptions.chainId);
 		midi_handler.sendSysex(sysexGlobalMisc);
 		delayMs(configOptions.sysexDelay);
+		sendWithReport(withReport);
+		midi_handler.requestConfigGlobalMisc();
 	}
 
 	private void getMisc() {
@@ -1192,11 +1249,13 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 	}
 	
-	private void sendMisc() {
+	private void sendMisc(boolean withReport) {
 		byte [] sysexMisc = new byte[Constants.MD_SYSEX_MISC_SIZE];
 		Utils.copyConfigMiscToSysex(configFull.configMisc, sysexMisc, configOptions.chainId);
 		midi_handler.sendSysex(sysexMisc);
 		delayMs(configOptions.sysexDelay);
+		sendWithReport(withReport);
+		midi_handler.requestConfigMisc();
 	}
 	
 	private void getPad(int pad_id) {
@@ -1214,31 +1273,44 @@ public class Main_window {
 		}
 	}
 	
-	private void sendPadOneZone(int pad_id) {
+	private void sendPadOneZone(int pad_id, boolean withReport) {
 		byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE];
 		
 		Utils.copyConfigPadToSysex(configFull.configPads[pad_id], sysexPad, configOptions.chainId, pad_id);
 		midi_handler.sendSysex(sysexPad);
 		delayMs(configOptions.sysexDelay);		
+		sendWithReport(withReport);
+		midi_handler.requestConfigPad(pad_id + 1);
 	}
 	
-	private void sendThirdZone(int pad_id) {
+	private void sendThirdZone(int pad_id, boolean withReport) {
 		byte [] sysex3rd = new byte[Constants.MD_SYSEX_3RD_SIZE];
 		
 		pad_id = (pad_id - 1)/2;
 		Utils.copyConfig3rdToSysex(configFull.config3rds[pad_id], sysex3rd, configOptions.chainId, pad_id);
 		midi_handler.sendSysex(sysex3rd);
 		delayMs(configOptions.sysexDelay);
+		sendWithReport(withReport);
+		midi_handler.requestConfig3rd(pad_id);
 	}
 
-	private void sendPad(int pad_id) {
+	private void sendPad(int pad_id, boolean withReport) {
 
-		sendPadOneZone(pad_id);
-		if (pad_id > 0 ) {
-			sendPadOneZone(pad_id + 1);
-			sendThirdZone(pad_id);
+		if (withReport) {
+			compareResultCombined = 0;
+			compareSysexToConfigLast = false;
+			commsStateLabel.setBackground(Color.YELLOW);
+			commsStateLabel.setText("SysEx Wait");
 		}
-		
+		if (pad_id == 0) {
+			compareSysexToConfigLast = withReport;			
+		}
+		sendPadOneZone(pad_id, false);
+		if (pad_id > 0 ) {
+			sendPadOneZone(pad_id + 1, false);
+			compareSysexToConfigLast = withReport;
+			sendThirdZone(pad_id, false);
+		}
 	}
 	
 	private void getAllPads() {
@@ -1277,8 +1349,16 @@ public class Main_window {
         t.run();
 	}
 		
-	private void sendAllPads() {
+	private void sendAllPads(boolean withReport) {
 		progressBar.setVisible(true);
+		sendWithReport(withReport);
+		if (withReport) {
+			compareResultCombined = 0;
+			compareSysexToConfigLast = false;
+			commsStateLabel.setBackground(Color.YELLOW);
+			commsStateLabel.setText("SysEx Wait");
+		}
+		withReportInTask = withReport;
 		Thread t = new Thread(new Runnable() {
             public void run() {
                 // since we're not on the EDT,
@@ -1290,17 +1370,19 @@ public class Main_window {
                         resizeWindow = false;
                 		progressBar.setMinimum(0);
                 		progressBar.setMaximum(configFull.configGlobalMisc.inputs_count - 3);
-                		for (i = 0; i<(configFull.configGlobalMisc.inputs_count - 2); i++) {
+                		for (i = 0; i < (configFull.configGlobalMisc.inputs_count - 4); i++) {
                 			progressBar.setValue(i);
                 			Rectangle progressRect = progressBar.getBounds();
                 			progressRect.x = 0;
                 			progressRect.y = 0;
                 			progressBar.paintImmediately( progressRect );
-                			sendPad(i);
+                			sendPad(i, false);
                 			if (i>0) {
                 				i++;
                 			}
                 		}
+                		compareSysexToConfigLast = withReportInTask;
+            			sendPad(configFull.configGlobalMisc.inputs_count - 4, false);
                 		progressBar.setVisible(false);
                         resizeWindow = true;
                         resizeMainWindow();
@@ -1319,11 +1401,13 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 	}
 
-	private void sendCustomName(int name_id) {
+	private void sendCustomName(int name_id, boolean withReport) {
 		byte [] sysexCustomName = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
 		Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[name_id], sysexCustomName, configOptions.chainId, name_id);
 		midi_handler.sendSysex(sysexCustomName);
 		delayMs(configOptions.sysexDelay);
+		sendWithReport(withReport);
+		midi_handler.requestConfigCustomName(name_id);
 	}
 
 	private void getAllCustomNames() {
@@ -1332,10 +1416,34 @@ public class Main_window {
 		}
 	}
 		
-	private void sendAllCustomNames() {
-		for (int i = 0; i < configFull.customNamesCount; i++) {
-			sendCustomName(i);
+	private void sendAllCustomNames(boolean withReport) {
+		if (withReport) {
+			compareResultCombined = 0;
+			compareSysexToConfigLast = false;
+			commsStateLabel.setBackground(Color.YELLOW);
+			commsStateLabel.setText("SysEx Wait");
 		}
+		withReportInTask = withReport;
+		Thread t = new Thread(new Runnable() {
+            public void run() {
+                // since we're not on the EDT,
+                // let's put the setVisible-code
+                // into the Event Dispatching Queue
+                SwingUtilities.invokeLater( new Runnable() {
+                    public void run() {
+                		for (int i = 0; i < (configFull.customNamesCount - 1); i++) {
+                			sendCustomName(i, false);
+                		}
+                		compareSysexToConfigLast = withReportInTask;
+                		sendCustomName(configFull.customNamesCount - 1, false);
+                   }
+                });
+            }
+
+		});
+        t.setPriority( Thread.NORM_PRIORITY );
+        t.run();
+
 	}
 	private void getCurve(int curve_id) {
 		//midi_handler.clear_midi_input();
@@ -1343,11 +1451,13 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 	}
 	
-	private void sendCurve(int curve_id) {
+	private void sendCurve(int curve_id, boolean withReport) {
 		byte [] sysexCurve = new byte[Constants.MD_SYSEX_CURVE_SIZE];
 		Utils.copyConfigCurveToSysex(configFull.configCurves[curve_id], sysexCurve, configOptions.chainId, curve_id);
 		midi_handler.sendSysex(sysexCurve);
 		delayMs(configOptions.sysexDelay);
+		sendWithReport(withReport);
+		midi_handler.requestConfigCurve(curve_id);
 	}
 	
 	private void getAllCurves() {
@@ -1356,10 +1466,33 @@ public class Main_window {
 		}
 	}
 		
-	private void sendAllCurves() {
-		for (int i = 0; i<Constants.CURVES_COUNT; i++) {
-			sendCurve(i);
+	private void sendAllCurves(boolean withReport) {
+		if (withReport) {
+			compareResultCombined = 0;
+			compareSysexToConfigLast = false;
+			commsStateLabel.setBackground(Color.YELLOW);
+			commsStateLabel.setText("SysEx Wait");
 		}
+		withReportInTask = withReport;
+		Thread t = new Thread(new Runnable() {
+            public void run() {
+                // since we're not on the EDT,
+                // let's put the setVisible-code
+                // into the Event Dispatching Queue
+                SwingUtilities.invokeLater( new Runnable() {
+                    public void run() {
+                		for (int i = 0; i < (Constants.CURVES_COUNT - 1); i++) {
+                			sendCurve(i, false);
+                		}
+                		compareSysexToConfigLast = withReportInTask;
+                		sendCurve(Constants.CURVES_COUNT - 1, false);
+                   }
+                });
+            }
+
+		});
+        t.setPriority( Thread.NORM_PRIORITY );
+        t.run();
 	}
 
 	private void getAll() {
@@ -1372,12 +1505,17 @@ public class Main_window {
 	}
 	
 	private void sendAll() {
-		sendGlobalMisc();
-		sendMisc();
-		sendPedal();
-		sendAllPads();
-		sendAllCurves();
-		sendAllCustomNames();
+		compareResultCombined = 0;
+		compareSysexToConfigLast = false;
+		commsStateLabel.setBackground(Color.YELLOW);
+		commsStateLabel.setText("SysEx Wait");
+		sendGlobalMisc(false);
+		sendPedal(false);
+		sendAllPads(false);
+		sendAllCurves(false);
+		sendAllCustomNames(false);
+		compareSysexToConfigLast = true;
+		sendMisc(false);
 	}
 
 	private void copyConfigToLastConfig() {
@@ -1571,6 +1709,53 @@ public class Main_window {
 		}
 	}
 	
+	private void compareSysexToConfig(byte [] buffer) {
+		int compareResult = 1; // 0 means Ok, otherwise Error
+		if (buffer[1] == Constants.MD_SYSEX) {
+			if (buffer[2] == (byte) configOptions.chainId) {
+				switch (buffer[3]) {
+					case Constants.MD_SYSEX_MISC:
+						compareResult = Utils.compareSysexToConfigMisc(midi_handler.bufferIn, configFull.configMisc);
+						break;
+					case Constants.MD_SYSEX_PEDAL:
+						compareResult = Utils.compareSysexToConfigPedal(midi_handler.bufferIn, configFull.configPedal);
+						break;
+					case Constants.MD_SYSEX_PAD:
+						compareResult = Utils.compareSysexToConfigPad(midi_handler.bufferIn, configFull.configPads[buffer[4] - 1]);
+						break;
+					case Constants.MD_SYSEX_3RD:
+						compareResult = Utils.compareSysexToConfig3rd(midi_handler.bufferIn, configFull.config3rds[buffer[4]]);
+						break;
+					case Constants.MD_SYSEX_CURVE:
+						compareResult = Utils.compareSysexToConfigCurve(midi_handler.bufferIn, configFull.configCurves[buffer[4]]);
+						break;
+					case Constants.MD_SYSEX_CUSTOM_NAME:
+						compareResult = Utils.compareSysexToConfigCustomName(midi_handler.bufferIn, configFull.configCustomNames[buffer[4]]);
+						break;
+					case Constants.MD_SYSEX_GLOBAL_MISC:
+						compareResult = Utils.compareSysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
+						break;
+					default:
+						break;
+				}
+			}
+			if (compareResult != 0) {
+				compareResultCombined = compareResult;
+			}
+			if (compareSysexToConfigLast) {
+				if (compareResultCombined != 0) {
+					commsStateLabel.setBackground(Color.RED);
+					commsStateLabel.setText("SysEx Error");
+				} else {
+					commsStateLabel.setBackground(Color.GREEN);
+					commsStateLabel.setText("SysEx Ok");					
+				}
+			}				
+			sysexWaitTimer.cancel();
+			compareSysexToConfig = false;
+		}
+	}
+	
 	private void decodeSysex(byte [] buffer) {
 		if (buffer[1] == Constants.MD_SYSEX) {
 			if (buffer[2] == (byte) configOptions.chainId) {
@@ -1601,6 +1786,8 @@ public class Main_window {
 								ver += b<<(8*i);
 							}
 							lblVersion.setText(((Integer)ver).toString());
+							commsStateLabel.setText("SysEx Ok");
+							commsStateLabel.setBackground(Color.GREEN);
 						}
 						break;
 					case Constants.MD_SYSEX_CURVE:
