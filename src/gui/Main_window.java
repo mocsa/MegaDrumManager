@@ -1509,13 +1509,30 @@ public class Main_window {
 		compareSysexToConfigLast = false;
 		commsStateLabel.setBackground(Color.YELLOW);
 		commsStateLabel.setText("SysEx Wait");
-		sendGlobalMisc(false);
-		sendPedal(false);
-		sendAllPads(false);
-		sendAllCurves(false);
-		sendAllCustomNames(false);
-		compareSysexToConfigLast = true;
-		sendMisc(false);
+
+		Thread t = new Thread(new Runnable() {
+            public void run() {
+                // since we're not on the EDT,
+                // let's put the setVisible-code
+                // into the Event Dispatching Queue
+                SwingUtilities.invokeLater( new Runnable() {
+                    public void run() {
+                		sendGlobalMisc(false);
+                		sendPedal(false);
+                		sendAllPads(false);
+                		sendAllCurves(false);
+                		sendAllCustomNames(false);
+                		compareSysexToConfigLast = true;
+                		sendMisc(false);
+                   }
+                });
+            }
+
+		});
+        t.setPriority( Thread.NORM_PRIORITY );
+        t.run();
+
+		
 	}
 
 	private void copyConfigToLastConfig() {
