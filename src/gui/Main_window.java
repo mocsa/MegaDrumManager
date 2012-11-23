@@ -125,6 +125,7 @@ public class Main_window {
 	private JLabel commsStateLabel;
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox comboBoxCfg;
+	private JCheckBox checkBoxAutoResize;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
 	private boolean compareSysexToConfigIsOn = false;
@@ -879,6 +880,8 @@ public class Main_window {
 				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
@@ -973,12 +976,17 @@ public class Main_window {
 		btnSend.setMargin(new Insets(1, 1, 1, 1));
 		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(btnSend, "20, 1");
+		
+		checkBoxAutoResize = new JCheckBox("AutoResize");
+		checkBoxAutoResize.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		checkBoxAutoResize.setSelected(true);
+		panel.add(checkBoxAutoResize, "22, 1");
 		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
-		panel.add(tglbtnLiveUpdates, "22, 1");
+		panel.add(tglbtnLiveUpdates, "24, 1");
 		
 		progressBar = new JProgressBar();
 		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel.add(progressBar, "24, 1");
+		panel.add(progressBar, "26, 1");
 		progressBar.setVisible(false);
 		
 		progressBar.setStringPainted(true);
@@ -1757,37 +1765,39 @@ public class Main_window {
 	}
 	
 	private void resizeMainWindow() {
-		// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Pads Extra, 4 - MIDI Log
-		for (int i = 0; i< Constants.PANELS_COUNT; i++) {
+		if (checkBoxAutoResize.isSelected()) {
+			// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Pads Extra, 4 - MIDI Log
+			for (int i = 0; i< Constants.PANELS_COUNT; i++) {
+				if (LookAndFeelChanged) {
+					SwingUtilities.updateComponentTreeUI(framesDetached[i]);
+				}
+				controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
+				if (i == 3) {
+					// Pause, start live MIDI log
+					panelMidiLog.pauseLiveScroll(!panelMidiLog.isVisible());
+				}
+				if (configOptions.showPanels[i] == Constants.PANEL_DETACH) {
+					if (!framesDetached[i].isDetached) {
+						framesDetached[i].isDetached = true;
+						framesDetached[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
+						framesDetached[i].setVisible(true);
+					}
+				} else {
+					if (framesDetached[i].isDetached) {
+						framesDetached[i].isDetached = false;
+						framesDetached[i].setVisible(false);
+						panel_main.add(controlsPanels[i], ((Integer)(i+1)).toString() +", 2, default, top");
+					}
+				}
+				framesDetached[i].pack();
+			}
 			if (LookAndFeelChanged) {
-				SwingUtilities.updateComponentTreeUI(framesDetached[i]);
+				SwingUtilities.updateComponentTreeUI(frmMegadrummanager);
 			}
-			controlsPanels[i].setVisible(configOptions.showPanels[i] != Constants.PANEL_HIDE);
-			if (i == 3) {
-				// Pause, start live MIDI log
-				panelMidiLog.pauseLiveScroll(!panelMidiLog.isVisible());
-			}
-			if (configOptions.showPanels[i] == Constants.PANEL_DETACH) {
-				if (!framesDetached[i].isDetached) {
-					framesDetached[i].isDetached = true;
-					framesDetached[i].getContentPane().add(controlsPanels[i], "1, 1, fill, top");
-					framesDetached[i].setVisible(true);
-				}
-			} else {
-				if (framesDetached[i].isDetached) {
-					framesDetached[i].isDetached = false;
-					framesDetached[i].setVisible(false);
-					panel_main.add(controlsPanels[i], ((Integer)(i+1)).toString() +", 2, default, top");
-				}
-			}
-			framesDetached[i].pack();
-		}
-		if (LookAndFeelChanged) {
-			SwingUtilities.updateComponentTreeUI(frmMegadrummanager);
-		}
-		LookAndFeelChanged = false;
-		if (resizeWindow) {
-			frmMegadrummanager.pack();
+			LookAndFeelChanged = false;
+			if (resizeWindow) {
+				frmMegadrummanager.pack();
+			}			
 		}
 	}
 	
