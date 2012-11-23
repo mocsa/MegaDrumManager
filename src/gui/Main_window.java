@@ -1229,7 +1229,7 @@ public class Main_window {
 			commsStateLabel.setBackground(Color.YELLOW);
 			commsStateLabel.setText("SysEx Wait");			
 		}
-		startSysexWaitTimer(configOptions.sysexDelay*3);		
+		startSysexWaitTimer(configOptions.sysexDelay*15);		
 	}
 	
 	private void sendPedal(boolean withReport) {
@@ -1239,7 +1239,9 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 		sendWithReport(withReport);
 		midi_handler.requestConfigPedal();
-		delayMs(configOptions.sysexDelay);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
 	}
 	
 	private void getGlobalMisc() {
@@ -1901,7 +1903,7 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
-						comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+						comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 						if ((Integer)spinnerLCDcontrast.getValue() != configFull.configGlobalMisc.lcd_contrast) {
 							spinnerLCDEventDisabled = 1;
 							spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);

@@ -127,7 +127,14 @@ public class Midi_handler {
 		if (midiout != null) {
 			if (midiout.isOpen()) {
 				SysexMessage	sysexMessage = new SysexMessage();
-
+				midiout.close();
+		    	try {
+					midiout.open();
+					receiver = midiout.getReceiver();
+				} catch (MidiUnavailableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				try {
 					sysexMessage.setMessage(buf, buf.length);
 					receiver.send(sysexMessage, -1);
