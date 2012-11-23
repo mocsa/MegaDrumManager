@@ -1903,7 +1903,11 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
+						int c = comboBox_inputsCount.getSelectedIndex();
 						comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
+						if (comboBox_inputsCount.getSelectedIndex() != c) {
+							updateInputsCountControls();
+						}
 						if ((Integer)spinnerLCDcontrast.getValue() != configFull.configGlobalMisc.lcd_contrast) {
 							spinnerLCDEventDisabled = 1;
 							spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);
