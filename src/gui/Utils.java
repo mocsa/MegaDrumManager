@@ -286,7 +286,7 @@ public class Utils {
 			if (config.note != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (config.threshold != sysex2byte(sysex_byte)) result = 1;
+			if (config.threshold != (int) (sysex2byte(sysex_byte)&0xff)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			if (config.pressrollNote != sysex2byte(sysex_byte)) result = 1;
@@ -309,7 +309,7 @@ public class Utils {
 			config.note = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			config.threshold = sysex2byte(sysex_byte);
+			config.threshold = (int)(sysex2byte(sysex_byte)&0xff);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.pressrollNote = sysex2byte(sysex_byte);
