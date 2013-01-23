@@ -32,7 +32,8 @@ public class ConfigOptions implements java.io.Serializable {
 	// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Curves, 4 - MIDI Log
 	public Point [] framesPositions = { new Point(10,10), new Point(210,10), new Point(410,10), new Point(610,10), new Point(810,10)};
 	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
-	
+	public int mcuType = 0;
+
 	public ConfigOptions() {
 		configsNames = new String[Constants.CONFIGS_COUNT];
 		for (Integer i = 1;i<=Constants.CONFIGS_COUNT;i++) {

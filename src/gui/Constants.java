@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20121202";
+	public static final String MD_VERSION = "20130124";
 	public static final Double MD_CONFIG_VERSION = 0.5;
 	public static final int MIN_INPUTS = 18;
 	public static final int MAX_INPUTS = 56;
@@ -14,6 +14,7 @@ public interface Constants {
 	public static final int PANEL_DETACH = 2;
 	public static final int PANELS_COUNT = 5;
 	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Pads Extra", "MIDI Log"};
+	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6", "STM32F103RBT6", "STM32F103RCT6"};
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
 	public static final int Error_CRC = 0x22;
@@ -44,6 +45,8 @@ public interface Constants {
 	public static final byte MD_SYSEX_CUSTOM_NAME_SIZE = 22;
 	public static final byte MD_SYSEX_GLOBAL_MISC = (byte)0x09;
 	public static final byte MD_SYSEX_GLOBAL_MISC_SIZE = 9;
+	public static final byte MD_SYSEX_MCU_TYPE = (byte)0x0c;
+	public static final byte MD_SYSEX_MCU_TYPE_SIZE = 7;
 	public static final byte MD_SYSEX_SAVE_SLOT1 = (byte)0x7f;
 	public static final String[] CURVES_LIST = { "Linear", "Log1", "Log2", "Log3", "Log4",
 		"Exp1", "Exp2", "S1", "S2", "Strong1", "Strong2", "Max",

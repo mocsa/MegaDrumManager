@@ -134,6 +134,7 @@ public class Main_window {
 	private boolean withReportInTask;
 	private int compareResultCombined;
 	private Timer sysexWaitTimer;
+	private JLabel lblMCU;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
 	
@@ -870,6 +871,10 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("50dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("30dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -900,7 +905,7 @@ public class Main_window {
 		tglbtnMidi.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnMidi.setMargin(new Insets(1, 1, 1, 1));
 		
-		JLabel lblFirmwareVer = new JLabel("Firmware ver:");
+		JLabel lblFirmwareVer = new JLabel("FW ver:");
 		lblFirmwareVer.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblFirmwareVer, "6, 1");
 		
@@ -912,14 +917,26 @@ public class Main_window {
 		lblVersion.setForeground(new Color(0, 0, 0));
 		panel.add(lblVersion, "8, 1");
 		
+		JLabel lblMcu = new JLabel("MCU:");
+		lblMcu.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panel.add(lblMcu, "10, 1");
+		
+		lblMCU = new JLabel("Unknown");
+		lblMCU.setToolTipText("<html>Shows the MCU type<br>\r\nof the connected MegaDrum.\r\n</html>");
+		lblMCU.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMCU.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblMCU.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		lblMCU.setForeground(new Color(0, 0, 0));
+		panel.add(lblMCU, "12, 1");
+		
 		JLabel lblInputs = new JLabel("Inputs:");
 		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel.add(lblInputs, "10, 1");
+		panel.add(lblInputs, "14, 1");
 		
 		comboBox_inputsCount = new JComboBoxCustom();
 		comboBox_inputsCount.setToolTipText("<html>Select number of inputs used in MegaDrum.<br>\r\n<br>\r\nIt shoud match MaxInputs setting, which is only accessible<br>\r\nfrom MegaDrum menu.\r\n</html>");
 		comboBox_inputsCount.setMaximumRowCount(20);
-		panel.add(comboBox_inputsCount, "12, 1");
+		panel.add(comboBox_inputsCount, "16, 1");
 		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		comboBox_inputsCount.removeAllItems();
 		for (int i=0;i<((Constants.MAX_INPUTS-Constants.MIN_INPUTS)/2 + 1);i++) {
@@ -936,7 +953,7 @@ public class Main_window {
 		
 		JLabel lblLCDcontrast = new JLabel("LCD contrast:");
 		lblLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel.add(lblLCDcontrast, "14, 1");
+		panel.add(lblLCDcontrast, "18, 1");
 		
 		spinnerLCDcontrast = new JSpinner();
 		spinnerLCDcontrast.addChangeListener(new ChangeListener() {
@@ -953,7 +970,7 @@ public class Main_window {
 		});
 		spinnerLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		spinnerLCDcontrast.setModel(new SpinnerNumberModel(new Integer(50), new Integer(1), new Integer(100), new Integer(1)));
-		panel.add(spinnerLCDcontrast, "16, 1");
+		panel.add(spinnerLCDcontrast, "20, 1");
 		
 		JButton btnGet = new JButton("Get");
 		btnGet.addActionListener(new ActionListener() {
@@ -964,7 +981,7 @@ public class Main_window {
 		btnGet.setToolTipText("Get global misc settings (number of inputs, LCD contrast)");
 		btnGet.setMargin(new Insets(1, 1, 1, 1));
 		btnGet.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel.add(btnGet, "18, 1");
+		panel.add(btnGet, "22, 1");
 		
 		JButton btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
@@ -975,18 +992,18 @@ public class Main_window {
 		btnSend.setToolTipText("Send global misc settings (number of inputs, LCD contrast)");
 		btnSend.setMargin(new Insets(1, 1, 1, 1));
 		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel.add(btnSend, "20, 1");
+		panel.add(btnSend, "24, 1");
 		
 		checkBoxAutoResize = new JCheckBox("AutoResize");
 		checkBoxAutoResize.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		checkBoxAutoResize.setSelected(true);
-		panel.add(checkBoxAutoResize, "22, 1");
+		panel.add(checkBoxAutoResize, "26, 1");
 		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
-		panel.add(tglbtnLiveUpdates, "24, 1");
+		panel.add(tglbtnLiveUpdates, "28, 1");
 		
 		progressBar = new JProgressBar();
 		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel.add(progressBar, "26, 1");
+		panel.add(progressBar, "30, 1");
 		progressBar.setVisible(false);
 		
 		progressBar.setStringPainted(true);
@@ -1010,6 +1027,8 @@ public class Main_window {
 				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
 					midi_handler.closeAllPorts();
 					lblVersion.setText("????????");
+					lblMCU.setText("Unknown");
+					configOptions.mcuType = 0;
 					commsStateLabel.setVisible(false);
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -1806,6 +1825,7 @@ public class Main_window {
 			tglbtnMidi.setText("Close MIDI");
 			tglbtnMidi.setSelected(true);
 			midi_handler.requestVersion();
+			midi_handler.requestMCU();
 		} else {
 			tglbtnMidi.setText("Open MIDI");
 			tglbtnMidi.setSelected(false);
@@ -1921,6 +1941,15 @@ public class Main_window {
 						if ((Integer)spinnerLCDcontrast.getValue() != configFull.configGlobalMisc.lcd_contrast) {
 							spinnerLCDEventDisabled = 1;
 							spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);
+						}
+						break;
+					case Constants.MD_SYSEX_MCU_TYPE:
+						if (buffer.length >= Constants.MD_SYSEX_MCU_TYPE_SIZE) {
+							configOptions.mcuType = (int)(buffer[4]<<4);
+							configOptions.mcuType |= (int)buffer[5];
+							lblMCU.setText(Constants.MCU_TYPES[configOptions.mcuType]);
+							commsStateLabel.setText("SysEx Ok");
+							commsStateLabel.setBackground(Color.GREEN);
 						}
 						break;
 					default:
