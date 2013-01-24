@@ -54,13 +54,33 @@ class BinFileFilter extends javax.swing.filechooser.FileFilter {
     }
 }
 
+class BinFileFilterSTM32a extends javax.swing.filechooser.FileFilter {
+    public boolean accept(File f) {
+        return f.isDirectory() || (f.getName().toLowerCase().endsWith(".bin") && (f.getName().toLowerCase().contains("megadrumstm32a_")));
+    }
+    
+    public String getDescription() {
+        return "STM32a firmware files (*.bin)";
+    }
+}
+
+class BinFileFilterSTM32b extends javax.swing.filechooser.FileFilter {
+    public boolean accept(File f) {
+        return f.isDirectory() || (f.getName().toLowerCase().endsWith(".bin") && (f.getName().toLowerCase().contains("megadrumstm32b_")));
+    }
+    
+    public String getDescription() {
+        return "STM32b firmware files (*.bin)";
+    }
+}
+
 public class FileManager {
 	private JFileChooser fileChooser;
 	private JFrame parent;
 	private File file = null;
 	private ConfigFileFilter configFileFilter;
 	private SysexFileFilter sysexFileFilter;
-	private BinFileFilter binFileFilter;
+	//private BinFileFilter binFileFilter;
 	//private Properties prop;
 	private PropertiesConfiguration fullConfig;
 	//private CombinedConfiguration cc;
@@ -70,7 +90,7 @@ public class FileManager {
 		parent = parentFrame;
 		configFileFilter = new ConfigFileFilter();
 		sysexFileFilter = new SysexFileFilter();
-		binFileFilter = new BinFileFilter();
+		//binFileFilter = new BinFileFilter();
 		//prop = new Properties();
 		//fullConfig = new PropertiesConfiguration();
 	}
@@ -156,7 +176,13 @@ public class FileManager {
 		if (!options.lastFullPathFirmware.equals("")) {
 			fileChooser.setCurrentDirectory(new File(options.lastFullPathFirmware));
 		}
-		fileChooser.setFileFilter(binFileFilter);
+		fileChooser.setFileFilter(new BinFileFilter());
+		if (options.mcuType == 4) {
+			fileChooser.setFileFilter(new BinFileFilterSTM32a());
+		}
+		if (options.mcuType == 5) {
+			fileChooser.setFileFilter(new BinFileFilterSTM32b());
+		}
 		returnVal = fileChooser.showOpenDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			file = fileChooser.getSelectedFile();

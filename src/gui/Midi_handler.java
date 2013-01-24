@@ -571,7 +571,7 @@ public class Midi_handler {
 			// Restart ARM based MegaDrum in bootloader mode
 			requestArmBootloader();
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(6000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
