@@ -45,6 +45,7 @@ public interface Constants {
 	public static final byte MD_SYSEX_CUSTOM_NAME_SIZE = 22;
 	public static final byte MD_SYSEX_GLOBAL_MISC = (byte)0x09;
 	public static final byte MD_SYSEX_GLOBAL_MISC_SIZE = 9;
+	public static final byte MD_SYSEX_BOOTLOADER = (byte)0x0b;
 	public static final byte MD_SYSEX_MCU_TYPE = (byte)0x0c;
 	public static final byte MD_SYSEX_MCU_TYPE_SIZE = 7;
 	public static final byte MD_SYSEX_SAVE_SLOT1 = (byte)0x7f;
@@ -115,4 +116,25 @@ public interface Constants {
 	public static final String MIDI_PORTS_WARNING =
 			"<html><font size=4>Before using MegaDrum Manager</font></html>\n" +
 			"<html><font size=4>you first must set MIDI In/Out ports in Main->Options!!!</font></html>";
+	public static final String UPGRADE_INSTRUCTION_ATMEGA =
+			"Upgrade instruction for:\n" +
+			"    Atmega based MegaDrum\n" +
+			"    ARM based MegaDrum in 'recovery' mode\n" +
+			"\n" +
+			"1. Select the MegaDrum firmware file.\n" +
+			"2. Disconnect (power off) MegaDrum.\n" +
+			"3. While holding MegaDrum's button LEFT connect (power on) MegaDrum.\n" +
+			"4. By pressing MegaDrum's button UP select a correct MegaDrum crystal frequency.\n" +
+			"5. Press MegaDrum's button DOWN. MegaDrum LCD will show 'StartUpdateOnPC'.\n" +
+			"6. Click button Start.\n" +
+			"7. Wait for the upgrade to finish.\n" +
+			"8. Click button Close.";
+	public static final String UPGRADE_INSTRUCTION_ARM =
+			"Upgrade instruction for:\n" +
+			"    ARM based MegaDrum\n" +
+			"\n" +
+			"1. Select the MegaDrum firmware file.\n" +
+			"2. Click button Start.\n" +
+			"3. Wait for the upgrade to finish.\n" +
+			"4. Click button Close.";
 }

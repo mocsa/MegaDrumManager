@@ -51,6 +51,7 @@ public class Upgrade extends JDialog {
 	//private Thread midiThread;
 	ExecutorService backgroundExec = Executors.newCachedThreadPool();
 	Future<?>  midiTask = null;
+	private JTextPane txtInstruction;
 	
 	
 	/**
@@ -76,7 +77,7 @@ public class Upgrade extends JDialog {
 		setResizable(false);
 		setName("upgradeDialog");
 		setTitle("MegaDrum Firmware Upgrade");
-		setBounds(100, 100, 495, 280);
+		setBounds(100, 100, 495, 332);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
@@ -91,10 +92,9 @@ public class Upgrade extends JDialog {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JTextPane txtpnSelectThe = new JTextPane();
-		txtpnSelectThe.setEditable(false);
-		txtpnSelectThe.setText("1. Select the MegaDrum firmware file.\r\n2. Disconnect (power off) MegaDrum.\r\n3. While holding MegaDrum's button LEFT connect (power on) MegaDrum. \r\n4. By pressing MegaDrum's button UP select a correct MegaDrum crystal frequency.\r\n5. Press MegaDrum's button DOWN. MegaDrum LCD will show 'StartUpdateOnPC'.\r\n6. Click button Start.\r\n7. Wait for the upgrade to finish.\r\n8. Click button Close.");
-		getContentPane().add(txtpnSelectThe, "2, 2, fill, fill");
+		txtInstruction = new JTextPane();
+		txtInstruction.setEditable(false);
+		getContentPane().add(txtInstruction, "2, 2, fill, fill");
 		
 		JPanel panel_1 = new JPanel();
 		getContentPane().add(panel_1, "2, 4, fill, fill");
@@ -268,6 +268,11 @@ public class Upgrade extends JDialog {
 	
 	public void setConfigOptions(ConfigOptions config) {
 		configOptions = config;
+		if (configOptions.mcuType < 3) {
+			txtInstruction.setText(Constants.UPGRADE_INSTRUCTION_ATMEGA);
+		} else {
+			txtInstruction.setText(Constants.UPGRADE_INSTRUCTION_ARM);			
+		}
 	}
 
 	public JProgressBar getProgressBar() {

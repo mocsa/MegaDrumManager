@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Timer;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.ShortMessage;
@@ -253,13 +254,40 @@ public class Midi_handler {
 	}
 
 	public void requestSaveSlot1() {
-		byte [] sx = new byte[6];
+		byte [] sx = new byte[5];
 		
 		sx[0] = Constants.SYSEX_START;
 		sx[1] = Constants.MD_SYSEX;
 		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_SAVE_SLOT1;
 		sx[4] = Constants.SYSEX_END;
+		sendSysex(sx);
+	}
+
+	public void requestArmBootloader() {
+		byte [] sx = new byte[21];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)chainId;
+		sx[3] = Constants.MD_SYSEX_BOOTLOADER;
+		sx[4] = 0x09;
+		sx[5] = 0x03;
+		sx[6] = 0x0a;
+		sx[7] = 0x07;
+		sx[8] = 0x0c;
+		sx[9] = 0x01;
+		sx[10] = 0x05;
+		sx[11] = 0x0d;
+		sx[12] = 0x03;
+		sx[13] = 0x0f;
+		sx[14] = 0x0e;
+		sx[15] = 0x06;
+		sx[16] = 0x04;
+		sx[17] = 0x0b;
+		sx[18] = 0x00;
+		sx[19] = 0x05;
+		sx[20] = Constants.SYSEX_END;
 		sendSysex(sx);
 	}
 
@@ -537,6 +565,17 @@ public class Midi_handler {
 		{
 			buffer[bufferSize] = readHex(dis);
 			bufferSize++;
+		}
+		
+		if (options.mcuType > 2) {
+			// Restart ARM based MegaDrum in bootloader mode
+			requestArmBootloader();
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		parent.getProgressBar().setMinimum(0);
 		parent.getProgressBar().setMaximum(bufferSize);
