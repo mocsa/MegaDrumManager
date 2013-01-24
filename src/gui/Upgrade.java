@@ -77,7 +77,7 @@ public class Upgrade extends JDialog {
 		setResizable(false);
 		setName("upgradeDialog");
 		setTitle("MegaDrum Firmware Upgrade");
-		setBounds(100, 100, 495, 332);
+		setBounds(100, 100, 495, 365);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
