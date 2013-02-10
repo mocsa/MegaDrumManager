@@ -38,6 +38,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import com.jgoodies.forms.layout.Sizes;
+import javax.swing.DefaultComboBoxModel;
 
 class PadButton extends JButton {
 	/**
@@ -134,6 +135,15 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	//private int customNamesCount;
 	public String pressedPadButtonName;
 	private JComboBoxCustom comboBox_function;
+	private LabelCustom lblPosLevel;
+	private LabelCustom lblPosLow;
+	private LabelCustom lblPosHigh;
+	private JComboBoxCustom comboBox_posLevel;
+	private JSpinnerCustom spinner_posLow;
+	private JSpinnerCustom spinner_posHigh;
+	private PadButton padButton_posLevel;
+	private PadButton padButton_posLow;
+	private PadButton padButton_posHigh;
 	
 	
 	/**
@@ -174,6 +184,9 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
+				RowSpec.decode("0px"),
+				RowSpec.decode("0px"),
+				RowSpec.decode("0px"),
 				RowSpec.decode("20px"),}));
 		
 		LabelCustom lblName = new LabelCustom("Name");
@@ -417,10 +430,44 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_minScan = new PadButton("minScan", head_rim_pad);
 		add(padButton_minScan, "5, 19");
 		
+		lblPosLevel = new LabelCustom("Type");
+		lblPosLevel.setText("Pos Level");
+		add(lblPosLevel, "1, 20, right, center");
+		
+		comboBox_posLevel = new JComboBoxCustom();
+		comboBox_posLevel.setModel(new DefaultComboBoxModel(new String[] {"Disabled", "1", "2"}));
+		add(comboBox_posLevel, "3, 20, fill, center");
+		
+		padButton_posLevel = new PadButton("minScan", false);
+		add(padButton_posLevel, "5, 20");
+		
+		lblPosLow = new LabelCustom("Type");
+		lblPosLow.setText("Pos Low");
+		add(lblPosLow, "1, 21, right, center");
+		
+		spinner_posLow = new JSpinnerCustom((ValueChangedListener) null);
+		spinner_posLow.setModel(new SpinnerNumberModel(new Integer(5), new Integer(5), new Integer(100), new Integer(1)));
+		add(spinner_posLow, "3, 21, left, center");
+		
+		padButton_posLow = new PadButton("minScan", false);
+		add(padButton_posLow, "5, 21");
+		
+		lblPosHigh = new LabelCustom("Type");
+		lblPosHigh.setText("Pos High");
+		add(lblPosHigh, "1, 22, right, center");
+		
+		spinner_posHigh = new JSpinnerCustom((ValueChangedListener) null);
+		spinner_posHigh.setModel(new SpinnerNumberModel(new Integer(15), new Integer(5), new Integer(100), new Integer(1)));
+		add(spinner_posHigh, "3, 22, left, center");
+		
+		padButton_posHigh = new PadButton("minScan", false);
+		add(padButton_posHigh, "5, 22");
+		
 		LabelCustom lblType = new LabelCustom("Type");
-		add(lblType, "1, 20, right, center");
+		add(lblType, "1, 23, right, center");
 		
 		comboBox_type = new JComboBoxCustom();
+		add(comboBox_type, "3, 23, fill, center");
 		if (head_rim_pad == head_pad) {
 			comboBox_type.addItem("Single Piezo");
 			comboBox_type.addItem("Dual or 3way Yamaha");
@@ -429,10 +476,10 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 			comboBox_type.addItem("Piezo");
 			comboBox_type.addItem("Switch");
 		}
-		add(comboBox_type, "3, 20, fill, center");
 		
 		padButton_type = new PadButton("type", head_rim_pad);
-		add(padButton_type, "5, 20");
+		add(padButton_type, "5, 23");
+		
 		for (Object control: this.getComponents()) {
 			//System.out.printf("Component -> %s\n",control.getClass().toString());
 			if (control.getClass().equals(PadButton.class)) {

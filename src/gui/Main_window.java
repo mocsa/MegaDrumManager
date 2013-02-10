@@ -1825,7 +1825,9 @@ public class Main_window {
 			tglbtnMidi.setText("Close MIDI");
 			tglbtnMidi.setSelected(true);
 			midi_handler.requestVersion();
+			delayMs(configOptions.sysexDelay);
 			midi_handler.requestMCU();
+			delayMs(configOptions.sysexDelay);
 		} else {
 			tglbtnMidi.setText("Open MIDI");
 			tglbtnMidi.setSelected(false);
