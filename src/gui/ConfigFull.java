@@ -15,6 +15,7 @@ public class ConfigFull implements java.io.Serializable {
 	public ConfigMisc configMisc;
 	public ConfigPedal configPedal;
 	public ConfigPad [] configPads;
+	public ConfigPositional [] configPos;
 	public Config3rd [] config3rds;
 	public ConfigCurve [] configCurves;
 	public ConfigCustomName [] configCustomNames;
@@ -23,6 +24,7 @@ public class ConfigFull implements java.io.Serializable {
 	private static final String configMiscPrefix = "misc.";
 	private static final String configPedalPrefix = "pedal.";
 	private static final String configPadPrefix = "input";
+	private static final String configPosPrefix = "pos";
 	private static final String config3rdPrefix = "pad3d_zone";
 	private static final String configCurvePrefix = "curve";
 	private static final String configCustomNamePrefix = "customName";
@@ -33,9 +35,11 @@ public class ConfigFull implements java.io.Serializable {
 		configMisc = new ConfigMisc();
 		configPedal = new ConfigPedal();
 		configPads = new ConfigPad[Constants.PADS_COUNT];
+		configPos = new ConfigPositional[Constants.PADS_COUNT];
 		config3rds = new Config3rd[(Constants.PADS_COUNT-1)/2];
 		for (Integer i = 0; i < Constants.PADS_COUNT;i++) {
 			configPads[i] = new ConfigPad();
+			configPos[i] = new ConfigPositional(); 
 			if ((i>0) && ((i&0x01)==0)) {
 				config3rds[(i-1)/2] = new Config3rd();
 			}
@@ -58,6 +62,7 @@ public class ConfigFull implements java.io.Serializable {
 		configPedal.copyToPropertiesConfiguration(prop, layout,configPedalPrefix);
 		for (Integer i = 0; i < Constants.PADS_COUNT;i++) {
 			configPads[i].copyToPropertiesConfiguration(prop, layout,configPadPrefix, i);
+			configPos[i].copyToPropertiesConfiguration(prop, layout,configPosPrefix, i);
 			if ((i>0) && ((i&0x01)==0)) {
 				config3rds[(i-1)/2].copyToPropertiesConfiguration(prop, layout,config3rdPrefix, (i-1)/2);				
 			}
@@ -78,6 +83,7 @@ public class ConfigFull implements java.io.Serializable {
 		configPedal.copyFromPropertiesConfiguration(prop, configPedalPrefix);
 		for (Integer i = 0; i < Constants.PADS_COUNT;i++) {
 			configPads[i].copyFromPropertiesConfiguration(prop, configPadPrefix, i);
+			configPos[i].copyFromPropertiesConfiguration(prop, configPosPrefix, i);
 			if ((i>0) && ((i&0x01)==0)) {
 				config3rds[(i-1)/2].copyFromPropertiesConfiguration(prop, config3rdPrefix, (i-1)/2);				
 			}

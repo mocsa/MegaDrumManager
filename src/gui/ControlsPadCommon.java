@@ -184,9 +184,9 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),
-				RowSpec.decode("0px"),
-				RowSpec.decode("0px"),
-				RowSpec.decode("0px"),
+				RowSpec.decode("20px"),
+				RowSpec.decode("20px"),
+				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),}));
 		
 		LabelCustom lblName = new LabelCustom("Name");
@@ -445,7 +445,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		lblPosLow.setText("Pos Low");
 		add(lblPosLow, "1, 21, right, center");
 		
-		spinner_posLow = new JSpinnerCustom((ValueChangedListener) null);
+		spinner_posLow = new JSpinnerCustom(this);
 		spinner_posLow.setModel(new SpinnerNumberModel(new Integer(5), new Integer(5), new Integer(100), new Integer(1)));
 		add(spinner_posLow, "3, 21, left, center");
 		
@@ -456,7 +456,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		lblPosHigh.setText("Pos High");
 		add(lblPosHigh, "1, 22, right, center");
 		
-		spinner_posHigh = new JSpinnerCustom((ValueChangedListener) null);
+		spinner_posHigh = new JSpinnerCustom(this);
 		spinner_posHigh.setModel(new SpinnerNumberModel(new Integer(15), new Integer(5), new Integer(100), new Integer(1)));
 		add(spinner_posHigh, "3, 22, left, center");
 		
@@ -557,6 +557,9 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		comboBox_dynLevel.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].dynLevel);
 		comboBox_dynTime.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].dynTime);
 		spinner_minScan.setValueWithoutEvent(configFull.configPads[configIndex].minScan);
+		comboBox_posLevel.setSelectedIndexWithoutEvent(configFull.configPos[configIndex].level);
+		spinner_posLow.setValueWithoutEvent(configFull.configPos[configIndex].low);
+		spinner_posHigh.setValueWithoutEvent(configFull.configPos[configIndex].high);
 		if (head_rim_pad == head_pad) {
 			if (configFull.configPads[configIndex].dual) {
 				comboBox_type.setSelectedIndexWithoutEvent(1);
@@ -597,6 +600,9 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 			configFull.configPads[configIndex].dynLevel = comboBox_dynLevel.getSelectedIndex();
 			configFull.configPads[configIndex].dynTime = comboBox_dynTime.getSelectedIndex();
 			configFull.configPads[configIndex].minScan = (Integer)spinner_minScan.getValue();
+			configFull.configPos[configIndex].level = comboBox_posLevel.getSelectedIndex();
+			configFull.configPos[configIndex].low = (Integer)spinner_posLow.getValue();
+			configFull.configPos[configIndex].high = (Integer)spinner_posHigh.getValue();
 			if (head_rim_pad == head_pad) {
 				configFull.configPads[configIndex].type = false;
 				switch (comboBox_type.getSelectedIndex()) {

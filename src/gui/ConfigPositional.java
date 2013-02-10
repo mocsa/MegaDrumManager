@@ -1,0 +1,33 @@
+package gui;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.PropertiesConfigurationLayout;
+
+public class ConfigPositional {
+	public int level = 0;
+	public int low = 5;
+	public int high = 15;
+	
+	public ConfigPositional (){
+	}
+	
+	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix, Integer id) {
+		id++;
+		prefix = prefix+"["+id.toString()+"].";
+		layout.setComment(prefix+"level", "\n#Input "+id.toString()+" positional settings");
+		prop.setProperty(prefix+"level", level);
+		prop.setProperty(prefix+"low", low);
+		prop.setProperty(prefix+"high", high);
+	}
+
+	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix, Integer id) {
+		id++;
+		prefix = prefix+"["+id.toString()+"].";
+		level = Utils.validateInt(prop.getInt(prefix+"level", level),0,2,level);
+		low = Utils.validateInt(prop.getInt(prefix+"low", low),0,100,low);
+		high = Utils.validateInt(prop.getInt(prefix+"high", high),0,100,high);
+	}	
+}
