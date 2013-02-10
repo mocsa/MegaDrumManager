@@ -1357,22 +1357,37 @@ public class Main_window {
 			delayMs(configOptions.sysexDelay);
 			midi_handler.requestConfigPad(pad_id + 2);
 			delayMs(configOptions.sysexDelay);
+			midi_handler.requestConfigPos(pad_id);
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestConfigPos(pad_id + 1);
+			delayMs(configOptions.sysexDelay);
 			midi_handler.requestConfig3rd((pad_id - 1)/2);
 			delayMs(configOptions.sysexDelay);
 		} else {
 			midi_handler.requestConfigPad(1);
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestConfigPos(0);
 			delayMs(configOptions.sysexDelay);
 		}
 	}
 	
 	private void sendPadOneZone(int pad_id, boolean withReport) {
 		byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE];
+		byte [] sysexPos = new byte[Constants.MD_SYSEX_POS_SIZE];
 		
 		Utils.copyConfigPadToSysex(configFull.configPads[pad_id], sysexPad, configOptions.chainId, pad_id);
 		midi_handler.sendSysex(sysexPad);
 		delayMs(configOptions.sysexDelay);		
 		sendWithReport(withReport);
 		midi_handler.requestConfigPad(pad_id + 1);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
+		Utils.copyConfigPosToSysex(configFull.configPos[pad_id], sysexPos, configOptions.chainId, pad_id);
+		midi_handler.sendSysex(sysexPos);
+		delayMs(configOptions.sysexDelay);		
+		sendWithReport(withReport);
+		midi_handler.requestConfigPos(pad_id);
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
@@ -1891,6 +1906,9 @@ public class Main_window {
 					case Constants.MD_SYSEX_PAD:
 						compareResult = Utils.compareSysexToConfigPad(midi_handler.bufferIn, configFull.configPads[buffer[4] - 1]);
 						break;
+					case Constants.MD_SYSEX_POS:
+						compareResult = Utils.compareSysexToConfigPos(midi_handler.bufferIn, configFull.configPos[buffer[4]]);
+						break;
 					case Constants.MD_SYSEX_3RD:
 						compareResult = Utils.compareSysexToConfig3rd(midi_handler.bufferIn, configFull.config3rds[buffer[4]]);
 						break;
@@ -1948,6 +1966,10 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_PAD:
 						Utils.copySysexToConfigPad(midi_handler.bufferIn, configFull.configPads[buffer[4] - 1]);
+						controlsPads.updateControls();
+						break;
+					case Constants.MD_SYSEX_POS:
+						Utils.copySysexToConfigPos(midi_handler.bufferIn, configFull.configPos[buffer[4]]);
 						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_3RD:
