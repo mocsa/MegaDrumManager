@@ -435,7 +435,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		add(lblPosLevel, "1, 20, right, center");
 		
 		comboBox_posLevel = new JComboBoxCustom();
-		comboBox_posLevel.setModel(new DefaultComboBoxModel(new String[] {"Disabled", "1", "2"}));
+		comboBox_posLevel.setModel(new DefaultComboBoxModel(new String[] {"Disabled", "1", "2", "3"}));
 		add(comboBox_posLevel, "3, 20, fill, center");
 		
 		padButton_posLevel = new PadButton("minScan", false);
@@ -446,7 +446,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		add(lblPosLow, "1, 21, right, center");
 		
 		spinner_posLow = new JSpinnerCustom(this);
-		spinner_posLow.setModel(new SpinnerNumberModel(new Integer(5), new Integer(5), new Integer(100), new Integer(1)));
+		spinner_posLow.setModel(new SpinnerNumberModel(new Integer(5), new Integer(0), new Integer(100), new Integer(1)));
 		add(spinner_posLow, "3, 21, left, center");
 		
 		padButton_posLow = new PadButton("minScan", false);
@@ -457,7 +457,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		add(lblPosHigh, "1, 22, right, center");
 		
 		spinner_posHigh = new JSpinnerCustom(this);
-		spinner_posHigh.setModel(new SpinnerNumberModel(new Integer(15), new Integer(5), new Integer(100), new Integer(1)));
+		spinner_posHigh.setModel(new SpinnerNumberModel(new Integer(15), new Integer(0), new Integer(100), new Integer(1)));
 		add(spinner_posHigh, "3, 22, left, center");
 		
 		padButton_posHigh = new PadButton("minScan", false);

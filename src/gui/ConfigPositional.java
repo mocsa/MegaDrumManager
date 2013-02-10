@@ -26,7 +26,7 @@ public class ConfigPositional {
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix, Integer id) {
 		id++;
 		prefix = prefix+"["+id.toString()+"].";
-		level = Utils.validateInt(prop.getInt(prefix+"level", level),0,2,level);
+		level = Utils.validateInt(prop.getInt(prefix+"level", level),0,3,level);
 		low = Utils.validateInt(prop.getInt(prefix+"low", low),0,100,low);
 		high = Utils.validateInt(prop.getInt(prefix+"high", high),0,100,high);
 	}	
