@@ -53,65 +53,6 @@ public class Utils {
 //		dst[pad_id].pressrollNote_linked = src.pressrollNote_linked[pad_id];
 //	}
 //	
-	public static void copyConfigPadToSysex(ConfigPad config, byte [] sysex, int chainId, int padId) {
-		byte [] sysex_byte = new byte[2];
-		byte [] sysex_short = new byte[4];
-		byte flags;
-		int i = 0;
-
-		sysex[i++] = Constants.SYSEX_START;
-		sysex[i++] = Constants.MD_SYSEX;
-		sysex[i++] = (byte)chainId; 
-		sysex[i++] = Constants.MD_SYSEX_PAD;
-		sysex[i++] = (byte)(padId + 1);
-		
-		sysex_byte = byte2sysex((byte)config.note);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)((config.channel<<4)|(config.curve)));
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.threshold);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.retrigger);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_short = short2sysex((short)config.levelMax);
-		sysex[i++] = sysex_short[0];
-		sysex[i++] = sysex_short[1];
-		sysex[i++] = sysex_short[2];
-		sysex[i++] = sysex_short[3];
-		sysex_byte = byte2sysex((byte)config.minScan);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		flags = (byte) (((config.type)?1:0)|(((config.autoLevel)?1:0)<<1)|(((config.dual)?1:0)<<2)|(((config.threeWay)?1:0)<<3)
-				|(config.gain<<4));
-		sysex_byte = byte2sysex(flags);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)((config.xtalkGroup<<3)|(config.xtalkLevel)));
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)((config.dynLevel<<4)|(config.dynTime)));
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)(((config.function)<<6)|(config.shift<<3)|(config.compression)));
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];		
-		sysex_byte = byte2sysex((byte)config.name);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.pressrollNote);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.altNote);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex[i++] = Constants.SYSEX_END;
-
-	}
-
 	public static int compareSysexToConfigPad(byte [] sysex, ConfigPad config) {
 		//Returns 0 if SysEx and config match, otherwise it returns non-zero result
 		byte [] sysex_byte = new byte[2];
@@ -181,6 +122,65 @@ public class Utils {
 		return result;
 	}
 	
+	public static void copyConfigPadToSysex(ConfigPad config, byte [] sysex, int chainId, int padId) {
+		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		byte flags;
+		int i = 0;
+
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte)chainId; 
+		sysex[i++] = Constants.MD_SYSEX_PAD;
+		sysex[i++] = (byte)(padId + 1);
+		
+		sysex_byte = byte2sysex((byte)config.note);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)((config.channel<<4)|(config.curve)));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.threshold);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.retrigger);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_short = short2sysex((short)config.levelMax);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
+		sysex_byte = byte2sysex((byte)config.minScan);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		flags = (byte) (((config.type)?1:0)|(((config.autoLevel)?1:0)<<1)|(((config.dual)?1:0)<<2)|(((config.threeWay)?1:0)<<3)
+				|(config.gain<<4));
+		sysex_byte = byte2sysex(flags);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)((config.xtalkGroup<<3)|(config.xtalkLevel)));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)((config.dynLevel<<4)|(config.dynTime)));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)(((config.function)<<6)|(config.shift<<3)|(config.compression)));
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];		
+		sysex_byte = byte2sysex((byte)config.name);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.pressrollNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.altNote);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex[i++] = Constants.SYSEX_END;
+
+	}
+
 	public static void copySysexToConfigPad(byte [] sysex, ConfigPad config) {
 		byte [] sysex_byte = new byte[2];
 		byte [] sysex_short = new byte[4];
@@ -243,6 +243,67 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.altNote = sysex2byte(sysex_byte);
+		}
+	}
+
+	public static int compareSysexToConfigPos(byte [] sysex, ConfigPositional config) {
+		//Returns 0 if SysEx and config match, otherwise it returns non-zero result
+		byte [] sysex_byte = new byte[2];
+		int i = 5;
+		int result = 1;
+
+		if (sysex.length >= Constants.MD_SYSEX_POS_SIZE) {
+			result = 0;
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			if (config.level != sysex2byte(sysex_byte)) result = 1;
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			if (config.low != sysex2byte(sysex_byte)) result = 1;
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			if (config.high != sysex2byte(sysex_byte)) result = 1;
+		}
+		return result;
+	}
+
+	public static void copyConfigPosToSysex(ConfigPositional config, byte [] sysex, int chainId, int padId) {
+		byte [] sysex_byte = new byte[2];
+		int i = 0;
+
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte)chainId; 
+		sysex[i++] = Constants.MD_SYSEX_POS;
+		sysex[i++] = (byte)(padId);
+		
+		sysex_byte = byte2sysex((byte)config.level);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.low);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.high);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
+		sysex[i++] = Constants.SYSEX_END;
+
+	}
+
+	public static void copySysexToConfigPos(byte [] sysex, ConfigPositional config) {
+		byte [] sysex_byte = new byte[2];
+		int i = 5;
+
+		if (sysex.length >= Constants.MD_SYSEX_POS_SIZE) {
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			config.level = sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			config.low = sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
+			config.high = sysex2byte(sysex_byte);
 		}
 	}
 
