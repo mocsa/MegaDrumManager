@@ -112,7 +112,7 @@ public interface Constants {
 	public static final String HELP_ABOUT = "<html><font size=2>MegaDrum Manager</font></html>\n" +
 			"<html><font size=2>Version: " + MD_VERSION + "</font></html>\n" +
 			"<html><font size=2>www.megadrum.info</font></html>\n"+
-			"<html><font size=2>© 2007-2011 Dmitri Skachkov</font></html>";
+			"<html><font size=2>© 2007-2013 Dmitri Skachkov</font></html>";
 	public static final String MIDI_PORTS_WARNING =
 			"<html><font size=4>Before using MegaDrum Manager</font></html>\n" +
 			"<html><font size=4>you first must set MIDI In/Out ports in Main->Options!!!</font></html>";
