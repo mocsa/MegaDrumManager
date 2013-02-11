@@ -35,6 +35,7 @@ public class Midi_handler {
 	private Receiver thruReceiver;
 	private DumpReceiver dump_receiver;
 	private Transmitter	transmitter;
+	private ConfigOptions configOptions;
 	
 	public int chainId;
 	public boolean getMidiBlocked;
@@ -60,7 +61,8 @@ public class Midi_handler {
 		}
 	}
 
-	  public Midi_handler () {
+	  public Midi_handler (ConfigOptions config) {
+		configOptions = config;
 		midiin = null;
 		midiout = null;
 		midithru = null;
@@ -218,13 +220,23 @@ public class Midi_handler {
 	}
 
 	public void requestConfigPos(int pad_id) {
+		if (configOptions.mcuType == 0) return;	// Unknown MCU so it's not clear how to handle positional sysex
+		int id = pad_id;
+		if (configOptions.mcuType < 3){
+			//Atmega MCU, 8 (Atmega1284) or 4 (Atmega644) head/bow inputs with positional sensing starting from Snare
+			if (id < 3) return;
+			id = id - 3;
+			if ((id&1) > 0) return;
+			id = id/2;
+			if (id > 7) return;
+			if ((configOptions.mcuType < 2) && (id > 3)) return;
+		}
 		byte [] sx = new byte[6];
-		
 		sx[0] = Constants.SYSEX_START;
 		sx[1] = Constants.MD_SYSEX;
 		sx[2] = (byte)chainId;
 		sx[3] = Constants.MD_SYSEX_POS;
-		sx[4] = (byte)pad_id;
+		sx[4] = (byte)id;
 		sx[5] = Constants.SYSEX_END;
 		sendSysex(sx);
 	}
@@ -410,21 +422,21 @@ public class Midi_handler {
 		return list;		
 	}
 	
-	public void initPorts(ConfigOptions options) {
+	public void initPorts() {
 		aInfos = MidiSystem.getMidiDeviceInfo(); 
 		int nPorts;
 		nPorts = aInfos.length;
 
 		closeAllPorts();
 		
-		chainId = options.chainId;
- 		if (!options.MidiInName.equals("")) {
+		chainId = configOptions.chainId;
+ 		if (!configOptions.MidiInName.equals("")) {
 			try
 			{
 				for (int i = 0; i < nPorts; i++) {
 					midiin = MidiSystem.getMidiDevice(aInfos[i]);
 					if (midiin.getMaxTransmitters() != 0) {
-						if (aInfos[i].getName().equals(options.MidiInName)) {
+						if (aInfos[i].getName().equals(configOptions.MidiInName)) {
 					    	midiin = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midiin.open();
 							transmitter = midiin.getTransmitter();
@@ -440,13 +452,13 @@ public class Midi_handler {
 			}
  		}
 
- 		if (!options.MidiOutName.equals("")) {
+ 		if (!configOptions.MidiOutName.equals("")) {
 			try
 			{
 				for (int i = 0; i < nPorts; i++) {
 					midiout = MidiSystem.getMidiDevice(aInfos[i]);
 					if (midiout.getMaxReceivers() != 0) {
-						if (aInfos[i].getName().equals(options.MidiOutName)) {
+						if (aInfos[i].getName().equals(configOptions.MidiOutName)) {
 					    	midiout = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midiout.open();
 					    	receiver = midiout.getReceiver();
@@ -461,13 +473,13 @@ public class Midi_handler {
 			}
  		}
 
- 		if ((!options.MidiThruName.equals("")) && (options.useThruPort)) {
+ 		if ((!configOptions.MidiThruName.equals("")) && (configOptions.useThruPort)) {
 			try
 			{
 				for (int i = 0; i < nPorts; i++) {
 					midithru = MidiSystem.getMidiDevice(aInfos[i]);
 					if (midithru.getMaxReceivers() != 0) {
-						if (aInfos[i].getName().equals(options.MidiThruName)) {
+						if (aInfos[i].getName().equals(configOptions.MidiThruName)) {
 					    	midithru = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midithru.open();
 					    	thruReceiver = midithru.getReceiver();
@@ -540,7 +552,7 @@ public class Midi_handler {
 		}
 	}	
 	
-	public void doFirmwareUpgrade (Upgrade parent, ConfigOptions options, File file) throws IOException {		
+	public void doFirmwareUpgrade (Upgrade parent, File file) throws IOException {		
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
 		DataInputStream dis = null;
@@ -571,7 +583,7 @@ public class Midi_handler {
 		bis = new BufferedInputStream(fis);
 		dis = new DataInputStream(bis);
 
-		initPorts(options);
+		initPorts();
 
 		while (dis.available() > 1)
 		{
@@ -579,7 +591,7 @@ public class Midi_handler {
 			bufferSize++;
 		}
 		
-		if (options.mcuType > 2) {
+		if (configOptions.mcuType > 2) {
 			// Restart ARM based MegaDrum in bootloader mode
 			requestArmBootloader();
 			try {

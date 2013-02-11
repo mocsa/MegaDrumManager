@@ -193,7 +193,7 @@ public class Upgrade extends JDialog {
                        //}
    						try {
    							midi_handler.upgradeCancelled = false;
-							midi_handler.doFirmwareUpgrade(mySelf, configOptions, file);
+							midi_handler.doFirmwareUpgrade(mySelf, file);
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

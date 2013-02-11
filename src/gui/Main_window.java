@@ -175,7 +175,7 @@ public class Main_window {
 		dialog_options.setVisible(true);
 		if (dialog_options.config_applied) {
 			dialog_options.saveOptionsTo(configOptions);
-			midi_handler.initPorts(configOptions);
+			midi_handler.initPorts();
 		}
 		toggleMidiOpenButton();
 	}
@@ -216,7 +216,7 @@ public class Main_window {
 			fullConfigs[i-1] = new ConfigFull();
 		}
 		fileManager = new FileManager(frmMegadrummanager);
-		midi_handler = new Midi_handler();
+		midi_handler = new Midi_handler(configOptions);
 		dialog_options = new Options(midi_handler);
 		SwingUtilities.updateComponentTreeUI(dialog_options);
 		dialog_options.pack();
@@ -1076,7 +1076,7 @@ public class Main_window {
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					showMidiWarningIfNeeded();
-					midi_handler.initPorts(configOptions);
+					midi_handler.initPorts();
 					commsStateLabel.setVisible(true);
 					commsStateLabel.setText("MIDI Init Error");
 					commsStateLabel.setBackground(Color.RED);
@@ -1383,7 +1383,20 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
+
+    	if (configOptions.mcuType == 0) return;	// Unknown MCU so it's not clear how to handle positional sysex
+		int id = pad_id;
+		if (configOptions.mcuType < 3){
+			//Atmega MCU, 8 (Atmega1284) or 4 (Atmega644) head/bow inputs with positional sensing starting from Snare
+			if (id < 3) return;
+			id = id - 3;
+			if ((id&1) > 0) return;
+			id = id/2;
+			if (id > 7) return;
+			if ((configOptions.mcuType < 2) && (id > 3)) return;
+		}
 		Utils.copyConfigPosToSysex(configFull.configPos[pad_id], sysexPos, configOptions.chainId, pad_id);
+		sysexPos[4] = (byte)id; 
 		midi_handler.sendSysex(sysexPos);
 		delayMs(configOptions.sysexDelay);		
 		sendWithReport(withReport);
@@ -1796,7 +1809,7 @@ public class Main_window {
 		dialog_options.loadOptionsFrom(configOptions);
 		showMidiWarningIfNeeded();
 		if (configOptions.autoOpenPorts) {
-			midi_handler.initPorts(configOptions);
+			midi_handler.initPorts();
 			tglbtnMidi.setSelected(midi_handler.isMidiOpen());
 		}
 		midi_handler.chainId = configOptions.chainId;
@@ -1907,7 +1920,13 @@ public class Main_window {
 						compareResult = Utils.compareSysexToConfigPad(midi_handler.bufferIn, configFull.configPads[buffer[4] - 1]);
 						break;
 					case Constants.MD_SYSEX_POS:
-						compareResult = Utils.compareSysexToConfigPos(midi_handler.bufferIn, configFull.configPos[buffer[4]]);
+						if (configOptions.mcuType == 0) break;	// Unknown MCU so it's not clear how to handle positional sysex
+						int id = buffer[4];
+						if (configOptions.mcuType < 3) {
+							//Atmega MCU, 8 (Atmega1284) or 4 (Atmega644) head/bow inputs with positional sensing starting from Snare
+							id = (id*2) + 3;
+						}
+						compareResult = Utils.compareSysexToConfigPos(midi_handler.bufferIn, configFull.configPos[id]);
 						break;
 					case Constants.MD_SYSEX_3RD:
 						compareResult = Utils.compareSysexToConfig3rd(midi_handler.bufferIn, configFull.config3rds[buffer[4]]);
@@ -1969,7 +1988,13 @@ public class Main_window {
 						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_POS:
-						Utils.copySysexToConfigPos(midi_handler.bufferIn, configFull.configPos[buffer[4]]);
+						if (configOptions.mcuType == 0) break;	// Unknown MCU so it's not clear how to handle positional sysex
+						int id = buffer[4];
+						if (configOptions.mcuType < 3) {
+							//Atmega MCU, 8 (Atmega1284) or 4 (Atmega644) head/bow inputs with positional sensing starting from Snare
+							id = (id*2) + 3;
+						}
+						Utils.copySysexToConfigPos(midi_handler.bufferIn, configFull.configPos[id]);
 						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_3RD:
