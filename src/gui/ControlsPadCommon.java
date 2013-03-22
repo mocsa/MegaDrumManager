@@ -438,7 +438,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		comboBox_posLevel.setModel(new DefaultComboBoxModel(new String[] {"Disabled", "1", "2", "3"}));
 		add(comboBox_posLevel, "3, 20, fill, center");
 		
-		padButton_posLevel = new PadButton("minScan", false);
+		padButton_posLevel = new PadButton("posLevel", false);
 		add(padButton_posLevel, "5, 20");
 		
 		lblPosLow = new LabelCustom("Type");
@@ -449,7 +449,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		spinner_posLow.setModel(new SpinnerNumberModel(new Integer(5), new Integer(0), new Integer(100), new Integer(1)));
 		add(spinner_posLow, "3, 21, left, center");
 		
-		padButton_posLow = new PadButton("minScan", false);
+		padButton_posLow = new PadButton("posLow", false);
 		add(padButton_posLow, "5, 21");
 		
 		lblPosHigh = new LabelCustom("Type");
@@ -460,7 +460,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		spinner_posHigh.setModel(new SpinnerNumberModel(new Integer(15), new Integer(0), new Integer(100), new Integer(1)));
 		add(spinner_posHigh, "3, 22, left, center");
 		
-		padButton_posHigh = new PadButton("minScan", false);
+		padButton_posHigh = new PadButton("posHigh", false);
 		add(padButton_posHigh, "5, 22");
 		
 		LabelCustom lblType = new LabelCustom("Type");

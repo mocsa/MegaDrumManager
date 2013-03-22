@@ -1723,6 +1723,8 @@ public class Main_window {
 			Utils.copySysexToConfigPad(sysex, fullConfigs[configOptions.lastConfig].configPads[i]);					
 			fullConfigs[configOptions.lastConfig].configPads[i].altNote_linked = configFull.configPads[i].altNote_linked;
 			fullConfigs[configOptions.lastConfig].configPads[i].pressrollNote_linked = configFull.configPads[i].pressrollNote_linked;
+			Utils.copyConfigPosToSysex(configFull.configPos[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigPos(sysex, fullConfigs[configOptions.lastConfig].configPos[i]);					
 		}
 		
 		for (int i=0; i < ((Constants.MAX_INPUTS/2) - 1); i++) {
@@ -1770,6 +1772,8 @@ public class Main_window {
 			Utils.copySysexToConfigPad(sysex, configFull.configPads[i]);
 			configFull.configPads[i].altNote_linked = fullConfigs[configOptions.lastConfig].configPads[i].altNote_linked;
 			configFull.configPads[i].pressrollNote_linked = fullConfigs[configOptions.lastConfig].configPads[i].pressrollNote_linked;
+			Utils.copyConfigPosToSysex(fullConfigs[configOptions.lastConfig].configPos[i], sysex, configOptions.chainId, i);
+			Utils.copySysexToConfigPos(sysex, configFull.configPos[i]);
 		}
 		for (int i=0; i < ((Constants.MAX_INPUTS/2) - 1); i++) {
 			Utils.copyConfig3rdToSysex(fullConfigs[configOptions.lastConfig].config3rds[i], sysex, configOptions.chainId, i);
