@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20130322";
+	public static final String MD_VERSION = "20130612";
 	public static final Double MD_CONFIG_VERSION = 0.5;
 	public static final int MIN_INPUTS = 18;
 	public static final int MAX_INPUTS = 56;
@@ -21,7 +21,7 @@ public interface Constants {
 	public static final int Error_Read = 0x23;
 	public static final String MD_MANAGER_CONFIG = System.getProperty("user.home") + System.getProperty("file.separator") + "megadrummanager.cfg";
 	public static final int PADS_COUNT = 55;
-	public static final int CURVES_COUNT = 4;
+	public static final int CURVES_COUNT = 16;
 	public static final int CUSTOM_NAMES_MAX = 32;
 	public static final int SYSEX_DELAY = 50;
 	public static final byte SYSEX_START = (byte)0xf0;
@@ -49,9 +49,9 @@ public interface Constants {
 	public static final byte MD_SYSEX_MCU_TYPE = (byte)0x0c;
 	public static final byte MD_SYSEX_MCU_TYPE_SIZE = 7;
 	public static final byte MD_SYSEX_SAVE_SLOT1 = (byte)0x7f;
-	public static final String[] CURVES_LIST = { "Linear", "Log1", "Log2", "Log3", "Log4",
-		"Exp1", "Exp2", "S1", "S2", "Strong1", "Strong2", "Max",
-		"Custom1", "Custom2", "Custom3", "Custom4" };
+	public static final String[] CURVES_LIST = { "LinearCustom1", "Log1Custom2", "Log2Custom3", "Log3Custom4", "Log4Custom5",
+		"Exp1Custom6", "Exp2Custom7", "S1Custom8", "S2Custom9", "Strong1Custom10", "Strong2Custom11", "MaxCustom12",
+		"Custom13", "Custom14", "Custom15", "Custom16" };
 	public static final String[] PADS_NAMES_LIST = { "Kick", "HiHatB",
 			"HiHatE", "SnareH", "SnareR", "RideB", "RideE", "CrashB", "CrashE",
 			"Tom1H", "Tom1R", "Tom2H", "Tom2R", "Tom3H", "Tom3R", "Tom4H",

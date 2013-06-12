@@ -195,7 +195,8 @@ public class ControlsPadsExtra extends JPanel {
 		        }
 			}
 		});
-		comboBox_curveNumber.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
+		//comboBox_curveNumber.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
+		comboBox_curveNumber.setModel(new DefaultComboBoxModel(Constants.CURVES_LIST));
 		comboBox_curveNumber.setSelectedIndex(0);
 		comboBox_curveNumber.setMaximumRowCount(28);
 		comboBox_curveNumber.setFont(new Font("Segoe UI", Font.PLAIN, 9));
@@ -440,9 +441,9 @@ public class ControlsPadsExtra extends JPanel {
 				updateYvalues();
 			}
 		});
-		for (int i = 0; i < 4; i++) {
-			comboBox_curveNumber.addItem(i+1);
-		}
+		//for (int i = 0; i < 4; i++) {
+		//	comboBox_curveNumber.addItem(i+1);
+		//}
 		
 		spinnerChangeListener = new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
