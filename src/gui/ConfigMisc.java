@@ -58,6 +58,6 @@ public class ConfigMisc {
 		inputs_priority = prop.getBoolean(prefix+"inputs_priority", inputs_priority);
 		midi_thru = prop.getBoolean(prefix+"midi_thru", midi_thru);
 		custom_names_en = prop.getBoolean(prefix+"custom_names_en", custom_names_en);
-		custom_names_en = prop.getBoolean(prefix+"send_triggered_in", send_triggered_in);
+		send_triggered_in = prop.getBoolean(prefix+"send_triggered_in", send_triggered_in);
 	}
 }
