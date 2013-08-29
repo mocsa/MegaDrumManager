@@ -59,6 +59,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	private Spin127Control spin127Control_closed;
 	private Spin127Control spin127Control_shortThres;
 	private Spin127Control spin127Control_longThres;
+	private Spin127Control spin127Control_chickThres;
 	private NoteSpinControl noteSpinControl_bowSemiOpen;
 	private NoteSpinControl noteSpinControl_edgeSemiOpen;
 	private NoteSpinControl noteSpinControl_bellSemiOpen;
@@ -295,6 +296,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblLow = new JLabel("Low");
@@ -360,6 +362,14 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_longThres = new Spin127Control();
 		spin127Control_longThres.setEventListener(this);
 		panel_levels.add(spin127Control_longThres, "3, 8, fill, fill");
+		
+		JLabel lblChickthresh = new JLabel("ChickThresh");
+		lblChickthresh.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel_levels.add(lblChickthresh, "1, 9");
+		
+		spin127Control_chickThres = new Spin127Control();
+		spin127Control_chickThres.setEventListener(this);
+		panel_levels.add(spin127Control_chickThres, "3, 9, fill, fill");
 		
 		JPanel panel_notes = new JPanel();
 		tabbedPane.addTab("Notes", null, panel_notes, null);
@@ -524,6 +534,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_closed.setValueWithoutEvents(configFull.configPedal.closedLevel);
 		spin127Control_shortThres.setValueWithoutEvents(configFull.configPedal.shortThres);
 		spin127Control_longThres.setValueWithoutEvents(configFull.configPedal.longThres);
+		spin127Control_chickThres.setValueWithoutEvents(configFull.configPedal.chickThres);
 		noteSpinControl_bowSemiOpen.setValueWithoutEvents(configFull.configPedal.bowSemiOpenNote);
 		noteSpinControl_edgeSemiOpen.setValueWithoutEvents(configFull.configPedal.edgeSemiOpenNote);
 		noteSpinControl_bellSemiOpen.setValueWithoutEvents(configFull.configPedal.bellSemiOpenNote);
@@ -558,6 +569,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 			configFull.configPedal.closedLevel = (Integer)spin127Control_closed.getSpinner().getValue();
 			configFull.configPedal.shortThres = (Integer)spin127Control_shortThres.getSpinner().getValue();
 			configFull.configPedal.longThres = (Integer)spin127Control_longThres.getSpinner().getValue();
+			configFull.configPedal.chickThres = (Integer)spin127Control_chickThres.getSpinner().getValue();
 			configFull.configPedal.lowLevel = (Integer)spin1023Control_lowLevel.getSpinner().getValue();
 			configFull.configPedal.highLevel = (Integer)spin1023Control_highLevel.getSpinner().getValue();
 		

@@ -18,6 +18,7 @@ public class ConfigPedal {
 	public int closedLevel;
 	public int shortThres;
 	public int longThres;
+	public int chickThres;
 	public int hhInput = 2;
 	public boolean softChicks;
 	public int semiOpenLevel;
@@ -55,6 +56,7 @@ public class ConfigPedal {
 		prop.setProperty(prefix+"closedLevel", closedLevel);
 		prop.setProperty(prefix+"shortThres", shortThres);
 		prop.setProperty(prefix+"longThres", longThres);
+		prop.setProperty(prefix+"chickThres", chickThres);
 		prop.setProperty(prefix+"hhInput", hhInput);
 		prop.setProperty(prefix+"softChicks", softChicks);
 		prop.setProperty(prefix+"semiOpenLevel", semiOpenLevel);
@@ -109,6 +111,7 @@ public class ConfigPedal {
 		bellClosedNote = Utils.validateInt(prop.getInt(prefix+"bellClosedNote", bellClosedNote),0,127,bellClosedNote);
 		chickNote = Utils.validateInt(prop.getInt(prefix+"chickNote", chickNote),0,127,chickNote);
 		splashNote = Utils.validateInt(prop.getInt(prefix+"splashNote", splashNote),0,127,splashNote);
+		chickThres = Utils.validateInt(prop.getInt(prefix+"chickThres", chickThres),0,127,chickThres);
 	}
 	
 }
