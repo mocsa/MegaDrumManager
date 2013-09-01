@@ -620,6 +620,9 @@ public class Utils {
 			if (config.halfOpenLevel != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
+			if (config.chickThres != sysex2byte(sysex_byte)) result = 1;
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
 			if (config.bowSemiOpenNote != sysex2byte(sysex_byte)) result = 1;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -660,9 +663,6 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			if (config.splashNote != sysex2byte(sysex_byte)) result = 1;
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			if (config.chickThres != sysex2byte(sysex_byte)) result = 1;
 		}
 		return result;
 	}
@@ -726,6 +726,9 @@ public class Utils {
 			config.halfOpenLevel = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
+			config.chickThres = sysex2byte(sysex_byte);
+			sysex_byte[0] = sysex[i++];
+			sysex_byte[1] = sysex[i++];
 			config.bowSemiOpenNote = sysex2byte(sysex_byte);
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
@@ -766,9 +769,6 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.splashNote = sysex2byte(sysex_byte);
-			sysex_byte[0] = sysex[i++];
-			sysex_byte[1] = sysex[i++];
-			config.chickThres = sysex2byte(sysex_byte);
 		}
 	}
 	
@@ -830,6 +830,9 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)config.halfOpenLevel);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
+		sysex_byte = byte2sysex((byte)config.chickThres);
+		sysex[i++] = sysex_byte[0];
+		sysex[i++] = sysex_byte[1];
 		sysex_byte = byte2sysex((byte)config.bowSemiOpenNote);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
@@ -870,9 +873,6 @@ public class Utils {
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex_byte = byte2sysex((byte)config.splashNote);
-		sysex[i++] = sysex_byte[0];
-		sysex[i++] = sysex_byte[1];
-		sysex_byte = byte2sysex((byte)config.longThres);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex[i++] = Constants.SYSEX_END;

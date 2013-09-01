@@ -347,29 +347,30 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_closed.setEventListener(this);
 		panel_levels.add(spin127Control_closed, "3, 6, fill, fill");
 		
-		JLabel lblShortThresh = new JLabel("ShortChickThresh");
-		lblShortThresh.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_levels.add(lblShortThresh, "1, 7");
-		
-		spin127Control_shortThres = new Spin127Control();
-		spin127Control_shortThres.setEventListener(this);
-		panel_levels.add(spin127Control_shortThres, "3, 7, fill, fill");
-		
-		JLabel lblLongchickthresh = new JLabel("LongChickThresh");
-		lblLongchickthresh.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_levels.add(lblLongchickthresh, "1, 8");
-		
-		spin127Control_longThres = new Spin127Control();
-		spin127Control_longThres.setEventListener(this);
-		panel_levels.add(spin127Control_longThres, "3, 8, fill, fill");
-		
 		JLabel lblChickthresh = new JLabel("ChickThresh");
 		lblChickthresh.setFont(new Font("Dialog", Font.PLAIN, 10));
-		panel_levels.add(lblChickthresh, "1, 9");
+		panel_levels.add(lblChickthresh, "1, 7");
 		
 		spin127Control_chickThres = new Spin127Control();
 		spin127Control_chickThres.setEventListener(this);
-		panel_levels.add(spin127Control_chickThres, "3, 9, fill, fill");
+		panel_levels.add(spin127Control_chickThres, "3, 7, fill, fill");
+
+		JLabel lblShortThresh = new JLabel("ShortChickThresh");
+		lblShortThresh.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_levels.add(lblShortThresh, "1, 8");
+		
+		spin127Control_shortThres = new Spin127Control();
+		spin127Control_shortThres.setEventListener(this);
+		panel_levels.add(spin127Control_shortThres, "3, 8, fill, fill");
+		
+		JLabel lblLongchickthresh = new JLabel("LongChickThresh");
+		lblLongchickthresh.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_levels.add(lblLongchickthresh, "1, 9");
+		
+		spin127Control_longThres = new Spin127Control();
+		spin127Control_longThres.setEventListener(this);
+		panel_levels.add(spin127Control_longThres, "3, 9, fill, fill");
+		
 		
 		JPanel panel_notes = new JPanel();
 		tabbedPane.addTab("Notes", null, panel_notes, null);

@@ -15,10 +15,10 @@ public class ConfigPedal {
 	public int lowLevel;
 	public int highLevel;
 	public int openLevel;
+	public int chickThres;
 	public int closedLevel;
 	public int shortThres;
 	public int longThres;
-	public int chickThres;
 	public int hhInput = 2;
 	public boolean softChicks;
 	public int semiOpenLevel;
