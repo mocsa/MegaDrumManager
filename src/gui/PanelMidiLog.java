@@ -380,10 +380,10 @@ public class PanelMidiLog extends JPanel {
 						 * 
 						 */
 						private static final long serialVersionUID = -4891186049381935054L;
-						Class[] columnTypes = new Class[] {
+						Class<?>[] columnTypes = new Class[] {
 								String.class, String.class, String.class, String.class, String.class, String.class, String.class
 						};
-						public Class getColumnClass(int columnIndex) {
+						public Class<?> getColumnClass(int columnIndex) {
 							return columnTypes[columnIndex];
 						}
 					};

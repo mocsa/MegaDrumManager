@@ -89,9 +89,9 @@ public class ControlsPads extends JPanel {
 	private JButton btnSendall;
 	private JButton btnLoad;
 	private JButton btnSave;
-	private JPanel panelCopyPad;
+	//private JPanel panelCopyPad;
 	//private JMenu menu;
-	private JMenuBar menuBar;
+	//private JMenuBar menuBar;
 	private JMenu mnCopypadto;
 	private JMenu mnCopyhead;
 	private JMenu mnCopyrim;
