@@ -53,7 +53,7 @@ public class ControlsPadsExtra extends JPanel {
 	private ConfigFull configFull;
 	private int customNamePointer;
 	//private int prevCustomNamePointer;
-	private JComboBox comboBox_curveNumber;
+	private JComboBox<String> comboBox_curveNumber;
 	private JButton button_first;
 	private JButton button_prev;
 	private JButton button_next;
@@ -70,9 +70,9 @@ public class ControlsPadsExtra extends JPanel {
 	private JPanel panelNamesGetSend;
 	private JPanel panelNamesEdit;
 	private JTextField textFieldEditName;
-	private JComboBox comboBoxSelectName;
+	private JComboBox<String> comboBoxSelectName;
 	private JLabel lblCustomNames;
-	private JComboBox comboBoxCustomNamesCount;
+	private JComboBox<String> comboBoxCustomNamesCount;
 	private JButton button_customNameGet;
 	private JButton button_customNameSend;
 	private JButton button_customNamesGetAll;
@@ -185,7 +185,7 @@ public class ControlsPadsExtra extends JPanel {
 		lblCurve.setFont(new Font("Segoe UI", Font.BOLD, 11));
 		panelCurvesSelection.add(lblCurve, "2, 1");
 		
-		comboBox_curveNumber = new JComboBox();
+		comboBox_curveNumber = new JComboBox<String>();
 		comboBox_curveNumber.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -196,7 +196,7 @@ public class ControlsPadsExtra extends JPanel {
 			}
 		});
 		//comboBox_curveNumber.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
-		comboBox_curveNumber.setModel(new DefaultComboBoxModel(Constants.CURVES_LIST));
+		comboBox_curveNumber.setModel(new DefaultComboBoxModel<String>(Constants.CURVES_LIST));
 		comboBox_curveNumber.setSelectedIndex(0);
 		comboBox_curveNumber.setMaximumRowCount(28);
 		comboBox_curveNumber.setFont(new Font("Segoe UI", Font.PLAIN, 9));
@@ -307,9 +307,9 @@ public class ControlsPadsExtra extends JPanel {
 		lblCustomNames.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panelNamesGetSend.add(lblCustomNames, "1, 1, right, default");
 		
-		comboBoxCustomNamesCount = new JComboBox();
+		comboBoxCustomNamesCount = new JComboBox<String>();
 		comboBoxCustomNamesCount.setFont(new Font("Segoe UI", Font.PLAIN, 9));
-		comboBoxCustomNamesCount.setModel(new DefaultComboBoxModel(new String[] {"2", "16", "32"}));
+		comboBoxCustomNamesCount.setModel(new DefaultComboBoxModel<String>(new String[] {"2", "16", "32"}));
 		comboBoxCustomNamesCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -402,7 +402,7 @@ public class ControlsPadsExtra extends JPanel {
 		lblSelectNameTo = new JLabel("Select name to edit:");
 		panelNamesEdit.add(lblSelectNameTo, "1, 3, right, default");
 		
-		comboBoxSelectName = new JComboBox();
+		comboBoxSelectName = new JComboBox<String>();
 		comboBoxSelectName.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {

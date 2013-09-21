@@ -50,16 +50,16 @@ public class Options extends JDialog {
 	
 	private Midi_handler midi_handler;
 	private JCheckBox chckbx_samePort;
-	private JComboBox comboBox_MIDI_In;
-	private JComboBox comboBox_MIDI_Out;
-	private JComboBox comboBox_chainId;
+	private JComboBox<String> comboBox_MIDI_In;
+	private JComboBox<String> comboBox_MIDI_Out;
+	private JComboBox<Integer> comboBox_chainId;
 	private JCheckBox checkBox_Thru;
-	public JComboBox comboBox_MIDI_Thru;
+	public JComboBox<String> comboBox_MIDI_Thru;
 	private JCheckBox checkBox_saveOnClose;
 	private ConfigOptions configOptions;
 	private JCheckBox checkBox_autoOpen;
 	private JSpinner spinner_sysexDelay;
-	private JComboBox comboBox_lookAndFeel;
+	private JComboBox<String> comboBox_lookAndFeel;
 	private LookAndFeelInfo[] lookAndFeelArray;
 	public LookAndFeelInfo lookAndFeel;
 	public int midi_port_out;
@@ -130,7 +130,7 @@ public class Options extends JDialog {
 				RowSpec.decode("fill:default"),
 				RowSpec.decode("fill:default"),}));
 		
-		comboBox_MIDI_Out = new JComboBox();
+		comboBox_MIDI_Out = new JComboBox<String>();
 		comboBox_MIDI_Out.setMaximumRowCount(16);
 		comboBox_MIDI_Out.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		comboBox_MIDI_Out.addItemListener(new ItemListener() {
@@ -154,7 +154,7 @@ public class Options extends JDialog {
 		chckbx_samePort.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 		panel_midi.add(comboBox_MIDI_Out, "3, 3, fill, fill");
 		
-		comboBox_MIDI_In = new JComboBox();
+		comboBox_MIDI_In = new JComboBox<String>();
 		comboBox_MIDI_In.setMaximumRowCount(16);
 		comboBox_MIDI_In.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		comboBox_MIDI_In.addItemListener(new ItemListener() {
@@ -176,7 +176,7 @@ public class Options extends JDialog {
 		lblMegadrumChainid.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_midi.add(lblMegadrumChainid, "1, 4");
 		
-		comboBox_chainId = new JComboBox();
+		comboBox_chainId = new JComboBox<Integer>();
 		for (int i = 0;i<4;i++) {
 			comboBox_chainId.addItem(i);
 		}
@@ -200,7 +200,7 @@ public class Options extends JDialog {
 		lblMidiThru.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_midi.add(lblMidiThru, "1, 6, right, default");
 		
-		comboBox_MIDI_Thru = new JComboBox();
+		comboBox_MIDI_Thru = new JComboBox<String>();
 		comboBox_MIDI_Thru.setMaximumRowCount(16);
 		comboBox_MIDI_Thru.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panel_midi.add(comboBox_MIDI_Thru, "3, 6, fill, fill");
@@ -222,7 +222,7 @@ public class Options extends JDialog {
 		lblLooknfeel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblLooknfeel, "1, 2");
 		
-		comboBox_lookAndFeel = new JComboBox();
+		comboBox_lookAndFeel = new JComboBox<String>();
 		comboBox_lookAndFeel.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		comboBox_lookAndFeel.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {

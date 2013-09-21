@@ -31,6 +31,7 @@ public class ConfigPad {
 	public int pressrollNote = 0;
 	public boolean altNote_linked = false;
 	public boolean pressrollNote_linked = false;
+	public boolean inputDisabled = false;
 
 	
 	public ConfigPad (){

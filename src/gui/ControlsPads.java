@@ -54,14 +54,16 @@ public class ControlsPads extends JPanel {
 	private static final long serialVersionUID = -7163944275522270789L;
 	private JButton btnGet;
 	private JButton btnSend;
-	private JComboBox comboBox_padSelection;
+	private JComboBox<String> comboBox_padSelection;
 	private ControlsPadCommon panel_head;
 	private ControlsPadCommon panel_rim;
 	private ThirdZoneControls panel_3rd_zone;
 	private int prevInputsCount;
+	private boolean otherInputsDisabled = false;
+	private boolean prevOtherInputsDisabled = false;
+	private String disableString = "Disable Others";	
+	private String enableString = "Enable Others";	
 	
-	//public ConfigPad [] configPads;
-	//public Config3rd [] config3rds;
 	private ConfigFull configFull;
 
 	private int padPointer;
@@ -72,6 +74,7 @@ public class ControlsPads extends JPanel {
 	private JButton btnPrev;
 	private JButton btnNext;
 	private JButton btnLast;
+	private JButton btnTglDisableOthers;
 	private int padSelection;
 	//private int prevPadSelection;
 	private PropertyChangeListener padButtonPropertyChangeListener;
@@ -92,12 +95,9 @@ public class ControlsPads extends JPanel {
 	private JMenu mnCopypadto;
 	private JMenu mnCopyhead;
 	private JMenu mnCopyrim;
-	private JMenu mnCopyrd;
 	private JPopupMenu popupMenu;
-	private JMenu mnCopyHeadrimrd;
-	private JMenu mnCopyHead;
-	private JMenu mnCopyRim;
 	private JMenu mnCopy3rd;
+	private JButton btnCopy;
 	//private ArrayList<JMenu> settingsMenu;
 	//private JMenu menu_1;
 	
@@ -133,25 +133,26 @@ public class ControlsPads extends JPanel {
 //			e.printStackTrace();
 //		}
 
+		mnCopypadto = new JMenu("CopyPad");
+		mnCopypadto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		
+		mnCopyhead = new JMenu("CopyHead");
+		mnCopyhead.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		
+		mnCopyrim = new JMenu("CopyRim");
+		mnCopyrim.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		
+		mnCopy3rd = new JMenu("Copy3rd");
+		mnCopy3rd.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+
 		popupMenu = new JPopupMenu();
 		addPopup(this, popupMenu);
 		
-		mnCopyHeadrimrd = new JMenu("Copy Head/Rim/3rd");
-		mnCopyHeadrimrd.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		popupMenu.add(mnCopyHeadrimrd);	
-		
-		mnCopyHead = new JMenu("Copy Head");
-		mnCopyHead.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		popupMenu.add(mnCopyHead);
-		
-		mnCopyRim = new JMenu("Copy Rim");
-		mnCopyRim.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		popupMenu.add(mnCopyRim);
-		
-		mnCopy3rd = new JMenu("Copy 3rd");
-		mnCopy3rd.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		popupMenu.add(mnCopypadto);	
+		popupMenu.add(mnCopyhead);
+		popupMenu.add(mnCopyrim);
 		popupMenu.add(mnCopy3rd);
-        
+      
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
@@ -160,6 +161,7 @@ public class ControlsPads extends JPanel {
 				FormFactory.PREF_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
+		
 		
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
@@ -176,6 +178,8 @@ public class ControlsPads extends JPanel {
 				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,}));
@@ -209,35 +213,30 @@ public class ControlsPads extends JPanel {
 		btnSave.setMargin(new Insets(1, 2, 1, 2));
 		btnSave.setFont(new Font("Segoe UI", Font.PLAIN, 9));
 		panel_buttons.add(btnSave, "11, 1, default, fill");
+
+		btnCopy = new JButton("Copy");
+		btnCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//comboBox_padSelection.setSelectedIndex(comboBox_padSelection.getItemCount() - 1);
+				popupMenu.show(btnCopy, btnCopy.getWidth(),0);
+			}
+		});
+		btnCopy.setMargin(new Insets(1, 2, 1, 2));
+		btnCopy.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel_buttons.add(btnCopy, "13, 1");
+
+		btnTglDisableOthers = new JButton(disableString);
+		btnTglDisableOthers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//comboBox_padSelection.setSelectedIndex(comboBox_padSelection.getItemCount() - 1);
+				toggleEnableDisable();
+			}
+		});
+		btnTglDisableOthers.setMargin(new Insets(1, 2, 1, 2));
+		btnTglDisableOthers.setFont(new Font("Segoe UI", Font.PLAIN, 9));
+		panel_buttons.add(btnTglDisableOthers, "15, 1");
 		
-		panelCopyPad = new JPanel();
-		panelCopyPad.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panelCopyPad.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel_buttons.add(panelCopyPad, "13, 1, fill, fill");
-		panelCopyPad.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,},
-			new RowSpec[] {
-				RowSpec.decode("fill:default"),}));
-		
-		menuBar = new JMenuBar();
-		panelCopyPad.add(menuBar, "1, 1, left, fill");
-		
-		mnCopypadto = new JMenu("CopyPad");
-		mnCopypadto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		menuBar.add(mnCopypadto);
-		
-		mnCopyhead = new JMenu("CopyHead");
-		mnCopyhead.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		menuBar.add(mnCopyhead);
-		
-		mnCopyrim = new JMenu("CopyRim");
-		mnCopyrim.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		menuBar.add(mnCopyrim);
-		
-		mnCopyrd = new JMenu("Copy3rd");
-		mnCopyrd.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		menuBar.add(mnCopyrd);
-		
+
 		JPanel panel_input_selection = new JPanel();
 		add(panel_input_selection, "1, 3, fill, fill");
 		panel_input_selection.setLayout(new FormLayout(new ColumnSpec[] {
@@ -253,7 +252,7 @@ public class ControlsPads extends JPanel {
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("40dlu"),},
+				ColumnSpec.decode("1dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("fill:default"),}));
 		
@@ -261,7 +260,7 @@ public class ControlsPads extends JPanel {
 		label.setFont(new Font("Segoe UI", Font.BOLD, 11));
 		panel_input_selection.add(label, "2, 1, right, default");
 		
-		comboBox_padSelection = new JComboBox();
+		comboBox_padSelection = new JComboBox<String>();
 		updateInputCountsControls(Constants.PADS_COUNT);
         comboBox_padSelection.setSelectedIndex(0); 
 		comboBox_padSelection.addItemListener(new ItemListener() {
@@ -310,7 +309,8 @@ public class ControlsPads extends JPanel {
 		});
 		btnLast.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_input_selection.add(btnLast, "12, 1");
-		
+
+
 		JPanel panel_head_rim = new JPanel();
 		add(panel_head_rim, "1, 4, fill, fill");
 
@@ -416,7 +416,42 @@ public class ControlsPads extends JPanel {
 		add(panel_3rd_zone, "1, 5, fill, fill");
 		panel_3rd_zone.setBorder(new TitledBorder(null, "3rd Zone", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		comboBox_padSelection.setSelectedIndex(0);		
+
+		comboBox_padSelection.setSelectedIndex(0);
+	}
+	
+	private void toggleEnableDisable() {
+		prevOtherInputsDisabled = otherInputsDisabled;
+		if (otherInputsDisabled) {
+			otherInputsDisabled = false;
+			btnTglDisableOthers.setText(disableString);
+		} else {
+			otherInputsDisabled = true;
+			btnTglDisableOthers.setText(enableString);
+		}
+		disableAll(otherInputsDisabled);
+	}
+	
+	private void disableAll (boolean state) {
+		boolean inputState;
+		for (int i = 0; i<Constants.PADS_COUNT;i++) {
+			inputState = state;
+			if (i == padPointer) {
+				inputState = true;
+			} else {
+				if (i > 0) {
+					if ((i&1) == 0) {
+						if ((padPointer + 1) == i) {
+							inputState = true;
+						}
+					}
+				}
+			}
+			configFull.configPads[i].inputDisabled = inputState;
+		}
+		if (prevOtherInputsDisabled != otherInputsDisabled) {
+			firePropertyChange("inputsEnabledDisabled", false, true);
+		}
 	}
 	
 	public JButton getBtnGet() {
@@ -614,19 +649,19 @@ public class ControlsPads extends JPanel {
 			((JMenuItem)mnCopyrim.getMenuComponent(index)).setName(((Integer)(index)).toString());
 			((JMenuItem)mnCopyrim.getMenuComponent(index)).addActionListener(copyRimAction);
 			
-			if (mnCopyrd.getMenuComponentCount() == 0) {
-				mnCopyrd.insert("To All 3rd zones", 0);
-				((JMenuItem)mnCopyrd.getMenuComponent(0)).setFont(menuFont);
-				((JMenuItem)mnCopyrd.getMenuComponent(0)).setName("0");
-				((JMenuItem)mnCopyrd.getMenuComponent(0)).addActionListener(copy3rdAction);
+			if (mnCopy3rd.getMenuComponentCount() == 0) {
+				mnCopy3rd.insert("To All 3rd zones", 0);
+				((JMenuItem)mnCopy3rd.getMenuComponent(0)).setFont(menuFont);
+				((JMenuItem)mnCopy3rd.getMenuComponent(0)).setName("0");
+				((JMenuItem)mnCopy3rd.getMenuComponent(0)).addActionListener(copy3rdAction);
 			}
-			if ((index) < mnCopyrd.getMenuComponentCount()) {
-				mnCopyrd.remove(index);
+			if ((index) < mnCopy3rd.getMenuComponentCount()) {
+				mnCopy3rd.remove(index);
 			}
-			mnCopyrd.insert(padString, index);
-			((JMenuItem)mnCopyrd.getMenuComponent(index)).setFont(menuFont);
-			((JMenuItem)mnCopyrd.getMenuComponent(index)).setName(((Integer)(index)).toString());
-			((JMenuItem)mnCopyrd.getMenuComponent(index)).addActionListener(copy3rdAction);
+			mnCopy3rd.insert(padString, index);
+			((JMenuItem)mnCopy3rd.getMenuComponent(index)).setFont(menuFont);
+			((JMenuItem)mnCopy3rd.getMenuComponent(index)).setName(((Integer)(index)).toString());
+			((JMenuItem)mnCopy3rd.getMenuComponent(index)).addActionListener(copy3rdAction);
 		}
 		if (mnCopyhead.getMenuComponentCount() == 0) {
 			mnCopyhead.insert("To All Heads", 0);
@@ -714,6 +749,10 @@ public class ControlsPads extends JPanel {
 		//if (comboBox_pointer != prevPadSelection ) {
 			//comboBox_padSelection.setSelectedIndex(comboBox_pointer);
 		//}
+		if (otherInputsDisabled) {
+			toggleEnableDisable();
+			prevOtherInputsDisabled = false;
+		}
 	}
 	
 //	public void loadFromConfigFull (ConfigFull config) {
@@ -864,7 +903,7 @@ public class ControlsPads extends JPanel {
 				mnCopypadto.removeAll();
 				mnCopyhead.removeAll();
 				mnCopyrim.removeAll();
-				mnCopyrd.removeAll();
+				mnCopy3rd.removeAll();
 				comboBox_padSelection.setMaximumRowCount((count)/2);
 				comboBox_padSelection.removeAllItems();
 				comboBox_padSelection.addItem("");

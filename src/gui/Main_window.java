@@ -124,7 +124,7 @@ public class Main_window {
 	private JLabel lblVersion;
 	private JLabel commsStateLabel;
 	private JToggleButton tglbtnLiveUpdates;
-	private JComboBox comboBoxCfg;
+	private JComboBox<String> comboBoxCfg;
 	private JCheckBox checkBoxAutoResize;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
@@ -697,6 +697,9 @@ public class Main_window {
 					if (arg0.getPropertyName().equals("thirdZoneValueChanged")) {
 						sendThirdZone(controlsPads.getPadPointer(), true);
 					}
+					if (arg0.getPropertyName().equals("inputsEnabledDisabled")) {
+						sendAllPads(true);
+					}
 				}
 			}
 		});
@@ -835,19 +838,19 @@ public class Main_window {
 		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
 		panel_top.add(btnSaveToSlot, "10, 1");
 		
-		comboBoxCfg = new JComboBox();
+		comboBoxCfg = new JComboBox<String>();
 		comboBoxCfg.setToolTipText("<html>Select the current full config to use.<br>\r\nMegaDrumManager can hold up to 8<br>\r\nfull MegaDrum configs in memory<br>\r\nand you can quickly switch between them here<br>.\r\n</html>");
 		comboBoxCfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String text = comboBoxCfg.getSelectedItem().toString();
 				if (comboBoxCfg.getSelectedIndex()<0) {
 					configOptions.configsNames[configOptions.lastConfig] = text;
-					comboBoxCfg.setModel(new DefaultComboBoxModel(configOptions.configsNames));
+					comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configsNames));
 					comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 				}
 			}			
 		});
-		comboBoxCfg.setModel(new DefaultComboBoxModel(configOptions.configsNames));
+		comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configsNames));
 		comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		comboBoxCfg.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
@@ -1805,7 +1808,7 @@ public class Main_window {
 	private void loadConfig() {
 		//copyAllToConfigFull();
 		configOptions  = fileManager.loadLastOptions(configOptions);
-		comboBoxCfg.setModel(new DefaultComboBoxModel(configOptions.configsNames));
+		comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configsNames));
 		comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		dialog_options.fillInPorts(midi_handler.getMidiInList());
 		dialog_options.fillOutPorts(midi_handler.getMidiOutList());

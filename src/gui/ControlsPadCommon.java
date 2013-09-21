@@ -435,7 +435,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		add(lblPosLevel, "1, 20, right, center");
 		
 		comboBox_posLevel = new JComboBoxCustom();
-		comboBox_posLevel.setModel(new DefaultComboBoxModel(new String[] {"Disabled", "1", "2", "3"}));
+		comboBox_posLevel.setModel(new DefaultComboBoxModel<Object>(new String[] {"Disabled", "1", "2", "3"}));
 		add(comboBox_posLevel, "3, 20, fill, center");
 		
 		padButton_posLevel = new PadButton("posLevel", false);
@@ -661,7 +661,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		return head_rim_pad;
 	}
 	
-	public JComboBox getComboBox_type() {
+	public JComboBoxCustom getComboBox_type() {
 		return comboBox_type;
 	}
 

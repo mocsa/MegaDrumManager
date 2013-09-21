@@ -134,7 +134,11 @@ public class Utils {
 		sysex[i++] = Constants.MD_SYSEX_PAD;
 		sysex[i++] = (byte)(padId + 1);
 		
-		sysex_byte = byte2sysex((byte)config.note);
+		if (config.inputDisabled) {
+			sysex_byte = byte2sysex((byte)0);
+		} else {
+			sysex_byte = byte2sysex((byte)config.note);
+		}
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
 		sysex_byte = byte2sysex((byte)((config.channel<<4)|(config.curve)));

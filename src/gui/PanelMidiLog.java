@@ -167,7 +167,7 @@ public class PanelMidiLog extends JPanel {
 	private JToggleButton tglbtnPause;
 	private JScrollBar scrollBar;
 	private JPanel panel;
-	private JComboBox comboBoxBarsCount;
+	private JComboBox<String> comboBoxBarsCount;
 	private JLabel lblBarsNumber;
 	
 	public int barsCount;
@@ -292,7 +292,7 @@ public class PanelMidiLog extends JPanel {
 								FormFactory.RELATED_GAP_ROWSPEC,
 								FormFactory.DEFAULT_ROWSPEC,}));
 						
-						comboBoxBarsCount = new JComboBox();
+						comboBoxBarsCount = new JComboBox<String>();
 						comboBoxBarsCount.addItemListener(new ItemListener() {
 							public void itemStateChanged(ItemEvent arg0) {
 						        if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -304,7 +304,7 @@ public class PanelMidiLog extends JPanel {
 							}
 						});
 						comboBoxBarsCount.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-						comboBoxBarsCount.setModel(new DefaultComboBoxModel(new String[] {"16", "20", "24", "28", "32"}));
+						comboBoxBarsCount.setModel(new DefaultComboBoxModel<String>(new String[] {"16", "20", "24", "28", "32"}));
 						panel.add(comboBoxBarsCount, "1, 1, fill, default");
 						
 						lblBarsNumber = new JLabel("Bars number");

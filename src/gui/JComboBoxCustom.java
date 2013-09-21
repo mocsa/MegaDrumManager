@@ -4,7 +4,7 @@ import java.awt.Font;
 
 import javax.swing.JComboBox;
 
-public class JComboBoxCustom extends JComboBox {
+public class JComboBoxCustom extends JComboBox<Object> {
 
 	/**
 	 * 

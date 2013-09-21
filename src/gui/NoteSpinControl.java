@@ -132,12 +132,12 @@ public class NoteSpinControl extends JPanel {
 		updateNoteName();
 	}
 
-	private void setValue(int value) {
-		if ((value >= 0 ) && (value < 128)) {
-			spinner.setValue(value);
-		}
-		updateNoteName();
-	}
+//	private void setValue(int value) {
+//		if ((value >= 0 ) && (value < 128)) {
+//			spinner.setValue(value);
+//		}
+//		updateNoteName();
+//	}
 	public JSpinner getSpinner() {
 		return spinner;
 	}
