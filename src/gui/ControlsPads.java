@@ -437,12 +437,12 @@ public class ControlsPads extends JPanel {
 		for (int i = 0; i<Constants.PADS_COUNT;i++) {
 			inputState = state;
 			if (i == padPointer) {
-				inputState = true;
+				inputState = false;
 			} else {
 				if (i > 0) {
 					if ((i&1) == 0) {
 						if ((padPointer + 1) == i) {
-							inputState = true;
+							inputState = false;
 						}
 					}
 				}

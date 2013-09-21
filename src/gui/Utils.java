@@ -65,7 +65,9 @@ public class Utils {
 			result = 0;
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			if (config.note != sysex2byte(sysex_byte)) result = 1;
+			if (!config.inputDisabled) {
+				if (config.note != sysex2byte(sysex_byte)) result = 1;
+			}
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
@@ -194,7 +196,9 @@ public class Utils {
 		if (sysex.length >= Constants.MD_SYSEX_PAD_SIZE) {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
-			config.note = sysex2byte(sysex_byte);
+			if (!config.inputDisabled) {
+				config.note = sysex2byte(sysex_byte);
+			}
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			flags = sysex2byte(sysex_byte);
