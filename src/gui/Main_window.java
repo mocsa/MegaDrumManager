@@ -687,6 +687,9 @@ public class Main_window {
 
 		controlsPads.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
+				if (arg0.getPropertyName().equals("inputsEnabledDisabled")) {
+					sendAllPads(true);
+				}
 				if ((configOptions != null) && configOptions.interactive && sendSysexEnabled) {
 					if (arg0.getPropertyName().equals("headValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer(), true);
@@ -696,9 +699,6 @@ public class Main_window {
 					}
 					if (arg0.getPropertyName().equals("thirdZoneValueChanged")) {
 						sendThirdZone(controlsPads.getPadPointer(), true);
-					}
-					if (arg0.getPropertyName().equals("inputsEnabledDisabled")) {
-						sendAllPads(true);
 					}
 				}
 			}
