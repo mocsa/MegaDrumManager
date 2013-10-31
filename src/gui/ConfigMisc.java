@@ -22,7 +22,6 @@ public class ConfigMisc {
 	public boolean alt_false_tr_supp = false;
 	public boolean inputs_priority = false;
 	public boolean midi_thru = false;
-	public boolean custom_names_en = false;
 	public boolean send_triggered_in = false;
 
 	public ConfigMisc (){
@@ -41,7 +40,6 @@ public class ConfigMisc {
 		prop.setProperty(prefix+"alt_false_tr_supp", alt_false_tr_supp);
 		prop.setProperty(prefix+"inputs_priority", inputs_priority);
 		prop.setProperty(prefix+"midi_thru", midi_thru);
-		prop.setProperty(prefix+"custom_names_en", custom_names_en);
 		prop.setProperty(prefix+"send_triggered_in", send_triggered_in);
 	}
 
@@ -57,7 +55,6 @@ public class ConfigMisc {
 		alt_false_tr_supp = prop.getBoolean(prefix+"alt_false_tr_supp", alt_false_tr_supp);
 		inputs_priority = prop.getBoolean(prefix+"inputs_priority", inputs_priority);
 		midi_thru = prop.getBoolean(prefix+"midi_thru", midi_thru);
-		custom_names_en = prop.getBoolean(prefix+"custom_names_en", custom_names_en);
 		send_triggered_in = prop.getBoolean(prefix+"send_triggered_in", send_triggered_in);
 	}
 }

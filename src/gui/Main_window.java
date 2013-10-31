@@ -307,7 +307,7 @@ public class Main_window {
 		JMenuItem mntmSaveToMd = new JMenuItem("Save to MD slot 1");
 		mntmSaveToMd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.requestSaveSlot1();
+				midi_handler.requestSaveToSlot(0);
 			}
 		});
 		mnLoad.add(mntmSaveToMd);
@@ -832,7 +832,7 @@ public class Main_window {
 		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnSaveToSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.requestSaveSlot1();
+				midi_handler.requestSaveToSlot(0);
 			}
 		});
 		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
@@ -921,24 +921,15 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("30dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("18dlu"),
-				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("1dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
 		JLabel lblMidi = new JLabel("MIDI :");
@@ -977,17 +968,22 @@ public class Main_window {
 		
 		JLabel lblInputs = new JLabel("Inputs:");
 		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel.add(lblInputs, "14, 1");
+		panel.add(lblInputs, "2, 3");
 		
 		comboBox_inputsCount = new JComboBoxCustom();
 		comboBox_inputsCount.setToolTipText("<html>Select number of inputs used in MegaDrum.<br>\r\n<br>\r\nIt shoud match MaxInputs setting, which is only accessible<br>\r\nfrom MegaDrum menu.\r\n</html>");
 		comboBox_inputsCount.setMaximumRowCount(20);
-		panel.add(comboBox_inputsCount, "16, 1");
+		panel.add(comboBox_inputsCount, "4, 3");
 		comboBox_inputsCount.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		comboBox_inputsCount.removeAllItems();
 		for (int i=0;i<((Constants.MAX_INPUTS-Constants.MIN_INPUTS)/2 + 1);i++) {
 			comboBox_inputsCount.addItem((i*2) + Constants.MIN_INPUTS);
 		}		
+		
+		checkBoxAutoResize = new JCheckBox("AutoResize");
+		checkBoxAutoResize.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		checkBoxAutoResize.setSelected(true);
+		panel.add(checkBoxAutoResize, "14, 1");
 		tglbtnLiveUpdates = new JToggleButton("Live updates");
 		tglbtnLiveUpdates.setToolTipText("<html>Enable live settingsupdates.<br>\r\n<br>\r\nWhen enabled, all changes to settings in MegaDrumManager<br>\r\nare sent to MegaDrum upon a change.\r\n</html>");
 		tglbtnLiveUpdates.setFont(new Font("Tahoma", Font.PLAIN, 9));
@@ -996,10 +992,19 @@ public class Main_window {
 				configOptions.interactive = tglbtnLiveUpdates.isSelected(); 
 			}
 		});
+		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
+		panel.add(tglbtnLiveUpdates, "16, 1");
 		
+		progressBar = new JProgressBar();
+		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		panel.add(progressBar, "19, 1");
+		progressBar.setVisible(false);
+		
+		progressBar.setStringPainted(true);
+				
 		JLabel lblLCDcontrast = new JLabel("LCD contrast:");
 		lblLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel.add(lblLCDcontrast, "18, 1");
+		panel.add(lblLCDcontrast, "6, 3");
 		
 		spinnerLCDcontrast = new JSpinner();
 		spinnerLCDcontrast.addChangeListener(new ChangeListener() {
@@ -1016,7 +1021,17 @@ public class Main_window {
 		});
 		spinnerLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		spinnerLCDcontrast.setModel(new SpinnerNumberModel(new Integer(50), new Integer(1), new Integer(100), new Integer(1)));
-		panel.add(spinnerLCDcontrast, "20, 1");
+		panel.add(spinnerLCDcontrast, "8, 3");
+		
+		JCheckBox chckbxConfignamesen = new JCheckBox("ConfigNamesEn");
+		chckbxConfignamesen.setSelected(true);
+		chckbxConfignamesen.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel.add(chckbxConfignamesen, "12, 3");
+		
+		JCheckBox chckbxCustomPadsNames = new JCheckBox("Custom Pads Names");
+		chckbxCustomPadsNames.setSelected(true);
+		chckbxCustomPadsNames.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel.add(chckbxCustomPadsNames, "14, 3");
 		
 		JButton btnGet = new JButton("Get");
 		btnGet.addActionListener(new ActionListener() {
@@ -1027,7 +1042,7 @@ public class Main_window {
 		btnGet.setToolTipText("Get global misc settings (number of inputs, LCD contrast)");
 		btnGet.setMargin(new Insets(1, 1, 1, 1));
 		btnGet.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel.add(btnGet, "22, 1");
+		panel.add(btnGet, "16, 3");
 		
 		JButton btnSend = new JButton("Send");
 		btnSend.addActionListener(new ActionListener() {
@@ -1038,21 +1053,7 @@ public class Main_window {
 		btnSend.setToolTipText("Send global misc settings (number of inputs, LCD contrast)");
 		btnSend.setMargin(new Insets(1, 1, 1, 1));
 		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel.add(btnSend, "24, 1");
-		
-		checkBoxAutoResize = new JCheckBox("AutoResize");
-		checkBoxAutoResize.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		checkBoxAutoResize.setSelected(true);
-		panel.add(checkBoxAutoResize, "26, 1");
-		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
-		panel.add(tglbtnLiveUpdates, "28, 1");
-		
-		progressBar = new JProgressBar();
-		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel.add(progressBar, "30, 1");
-		progressBar.setVisible(false);
-		
-		progressBar.setStringPainted(true);
+		panel.add(btnSend, "18, 3");
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {

@@ -50,8 +50,6 @@ public class ControlsMisc extends JPanel {
 	private JCheckBox checkBox_bigVuSplit;
 	private JCheckBox checkBox_MidiThru;
 	private JLabel lblMidiThruEnabled;
-	private JLabel labelCustomNamesEn;
-	private JCheckBox checkBox_customNamesEn;
 	private JSpinner spinner_octaveShift;
 	private JLabel lblOctaveShift;
 	private JLabel labelSendTriggeredIn;
@@ -113,7 +111,6 @@ public class ControlsMisc extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("32dlu"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -297,23 +294,9 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_MidiThru, "3, 11");
 		
-		labelCustomNamesEn = new JLabel("CustomNamesEn");
-		labelCustomNamesEn.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel.add(labelCustomNamesEn, "1, 12");
-		
-		checkBox_customNamesEn = new JCheckBox("");
-		checkBox_customNamesEn.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				configFull.configMisc.custom_names_en = checkBox_customNamesEn.isSelected();
-				valueChanged();
-			}
-		});
-		checkBox_customNamesEn.setToolTipText("<html>Check this box to enable saving Custom Pads Names<br>\r\nin MegaDrum non-volatile memory.<br><br>\r\nWhen enabled, MegaDrum can store fewer Configs/Drum maps<br>\r\nin non-volatile memory.</html>");
-		panel.add(checkBox_customNamesEn, "3, 12");
-		
 		labelSendTriggeredIn = new JLabel("Send TriggeredIn");
 		labelSendTriggeredIn.setFont(new Font("Dialog", Font.PLAIN, 10));
-		panel.add(labelSendTriggeredIn, "1, 13");
+		panel.add(labelSendTriggeredIn, "1, 12");
 		
 		checkBox_sendTriggeredIn = new JCheckBox("");
 		checkBox_sendTriggeredIn.addItemListener(new ItemListener() {
@@ -323,7 +306,7 @@ public class ControlsMisc extends JPanel {
 			}
 		});		
 		checkBox_sendTriggeredIn.setToolTipText("<html>Check this box to enable MegaDrum to send TriggeredIn info.<br>\r\nWhen enabled, triggered inputs will also send MIDI CC 0x13<br>\r\nwith the inputs number<br>\r\nto make MDM to swith to a triggered input.</html>");
-		panel.add(checkBox_sendTriggeredIn, "3, 13");
+		panel.add(checkBox_sendTriggeredIn, "3, 12");
 		changeEventsAllowed = true;
 
 	}
@@ -356,7 +339,6 @@ public class ControlsMisc extends JPanel {
 		checkBox_inputsPriority.setSelected(configFull.configMisc.inputs_priority);
 		checkBox_allGainsLow.setSelected(configFull.configMisc.all_gains_low);		
 		checkBox_MidiThru.setSelected(configFull.configMisc.midi_thru);
-		checkBox_customNamesEn.setSelected(configFull.configMisc.custom_names_en);		
 		checkBox_sendTriggeredIn.setSelected(configFull.configMisc.send_triggered_in);		
 		changeEventsAllowed = true;
 	}

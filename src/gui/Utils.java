@@ -394,8 +394,13 @@ public class Utils {
 
 	public static void copyConfigGlobalMiscToSysex(ConfigGlobalMisc config, byte [] sysex, int chainId) {
 		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		short flags;
 		int i = 0;
 
+		flags = (short) (
+				(((config.custom_names_en)?1:0)<<1)|(((config.config_names_en)?1:0)<<2)
+				);
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = (byte)chainId;
@@ -407,12 +412,19 @@ public class Utils {
 		sysex_byte = byte2sysex((byte)config.inputs_count);
 		sysex[i++] = sysex_byte[0];
 		sysex[i++] = sysex_byte[1];
+		sysex_short = short2sysex(flags);
+		sysex[i++] = sysex_short[0];
+		sysex[i++] = sysex_short[1];
+		sysex[i++] = sysex_short[2];
+		sysex[i++] = sysex_short[3];
 		sysex[i++] = Constants.SYSEX_END;		
 	}
 	
 	public static int compareSysexToConfigGlobalMisc(byte [] sysex, ConfigGlobalMisc config) {
 		//Returns 0 if SysEx and config match, otherwise it returns non-zero result
 		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		short flags;
 		int i = 4;
 		int result = 1;
 		if (sysex.length >= Constants.MD_SYSEX_GLOBAL_MISC_SIZE) {
@@ -423,12 +435,24 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			if (config.inputs_count != sysex2byte(sysex_byte)) result = 1;
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			flags = sysex2short(sysex_short);
+
+			if (config.custom_names_en != ((flags&(1<<1)) != 0)) result = 1;
+			if (config.config_names_en != ((flags&(1<<2)) != 0)) result = 1;
+
 		}
 		return result;
 	}
 	
 	public static void copySysexToConfigGlobalMisc(byte [] sysex, ConfigGlobalMisc config) {
 		byte [] sysex_byte = new byte[2];
+		byte [] sysex_short = new byte[4];
+		short flags;
+		
 		int i = 4;
 		if (sysex.length >= Constants.MD_SYSEX_GLOBAL_MISC_SIZE) {
 			sysex_byte[0] = sysex[i++];
@@ -437,6 +461,13 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.inputs_count = sysex2byte(sysex_byte);
+			sysex_short[0] = sysex[i++];
+			sysex_short[1] = sysex[i++];
+			sysex_short[2] = sysex[i++];
+			sysex_short[3] = sysex[i++];
+			flags = sysex2short(sysex_short);
+			config.custom_names_en = ((flags&(1<<1)) != 0);
+			config.config_names_en = ((flags&(1<<2)) != 0);
 		}
 		
 	}
@@ -479,7 +510,6 @@ public class Utils {
 			config.alt_false_tr_supp = ((flags&(1<<5)) != 0);
 			config.inputs_priority = ((flags&(1<<6)) != 0);
 			config.midi_thru = ((flags&(1<<8)) != 0);
-			config.custom_names_en = ((flags&(1<<9)) != 0);
 			config.send_triggered_in = ((flags&(1<<11)) != 0);
 		}
 	}
@@ -525,7 +555,6 @@ public class Utils {
 			if (config.alt_false_tr_supp != ((flags&(1<<5)) != 0)) result = 1;
 			if (config.inputs_priority != ((flags&(1<<6)) != 0)) result = 1;
 			if (config.midi_thru != ((flags&(1<<8)) != 0)) result = 1;
-			if (config.custom_names_en != ((flags&(1<<9)) != 0)) result = 1;
 			if (config.send_triggered_in != ((flags&(1<<11)) != 0)) result = 1;
 		}
 		return result;
@@ -540,8 +569,7 @@ public class Utils {
 		flags = (short) (((config.all_gains_low)?1:0)|(((config.big_vu_meter)?1:0)<<2)
 				|(((config.quick_access)?1:0)<<3)|(((config.big_vu_split)?1:0)<<4)
 				|(((config.alt_false_tr_supp)?1:0)<<5)|(((config.inputs_priority)?1:0)<<6)
-				|(((config.midi_thru)?1:0)<<8)|(((config.custom_names_en)?1:0)<<9)
-				|(((config.send_triggered_in)?1:0)<<11));
+				|(((config.midi_thru)?1:0)<<8)|(((config.send_triggered_in)?1:0)<<11));
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
 		sysex[i++] = (byte) chainId;
