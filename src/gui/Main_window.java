@@ -920,10 +920,11 @@ public class Main_window {
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("30dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("30dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
@@ -984,20 +985,10 @@ public class Main_window {
 		checkBoxAutoResize.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		checkBoxAutoResize.setSelected(true);
 		panel.add(checkBoxAutoResize, "14, 1");
-		tglbtnLiveUpdates = new JToggleButton("Live updates");
-		tglbtnLiveUpdates.setToolTipText("<html>Enable live settingsupdates.<br>\r\n<br>\r\nWhen enabled, all changes to settings in MegaDrumManager<br>\r\nare sent to MegaDrum upon a change.\r\n</html>");
-		tglbtnLiveUpdates.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		tglbtnLiveUpdates.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				configOptions.interactive = tglbtnLiveUpdates.isSelected(); 
-			}
-		});
-		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
-		panel.add(tglbtnLiveUpdates, "16, 1");
 		
 		progressBar = new JProgressBar();
 		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel.add(progressBar, "19, 1");
+		panel.add(progressBar, "20, 1");
 		progressBar.setVisible(false);
 		
 		progressBar.setStringPainted(true);
@@ -1021,7 +1012,7 @@ public class Main_window {
 		});
 		spinnerLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		spinnerLCDcontrast.setModel(new SpinnerNumberModel(new Integer(50), new Integer(1), new Integer(100), new Integer(1)));
-		panel.add(spinnerLCDcontrast, "8, 3");
+		panel.add(spinnerLCDcontrast, "8, 3, left, default");
 		
 		JCheckBox chckbxConfignamesen = new JCheckBox("ConfigNamesEn");
 		chckbxConfignamesen.setSelected(true);
@@ -1054,6 +1045,16 @@ public class Main_window {
 		btnSend.setMargin(new Insets(1, 1, 1, 1));
 		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(btnSend, "18, 3");
+		tglbtnLiveUpdates = new JToggleButton("Live updates");
+		tglbtnLiveUpdates.setToolTipText("<html>Enable live settingsupdates.<br>\r\n<br>\r\nWhen enabled, all changes to settings in MegaDrumManager<br>\r\nare sent to MegaDrum upon a change.\r\n</html>");
+		tglbtnLiveUpdates.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		tglbtnLiveUpdates.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				configOptions.interactive = tglbtnLiveUpdates.isSelected(); 
+			}
+		});
+		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
+		panel.add(tglbtnLiveUpdates, "20, 3");
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
