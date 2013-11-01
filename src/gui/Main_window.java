@@ -130,6 +130,7 @@ public class Main_window {
 	private JCheckBox checkBoxAutoResize;
 	private JCheckBox chckbxConfignamesen;
 	private JCheckBox chckbxCustomPadsNames;
+	private JLabel lblCfgSlotsNr;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
 	private boolean compareSysexToConfigIsOn = false;
@@ -925,9 +926,9 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("30dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("30dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -970,6 +971,18 @@ public class Main_window {
 		lblMCU.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		lblMCU.setForeground(new Color(0, 0, 0));
 		panel.add(lblMCU, "12, 1");
+		
+		JLabel lblConfigSlots = new JLabel("Config Slots:");
+		lblConfigSlots.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panel.add(lblConfigSlots, "16, 1");
+		
+		lblCfgSlotsNr = new JLabel("???????");
+		lblCfgSlotsNr.setToolTipText("<html>Shows the current firmware version<br>\r\nof the connected MegaDrum.\r\n</html>");
+		lblCfgSlotsNr.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCfgSlotsNr.setForeground(Color.BLACK);
+		lblCfgSlotsNr.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblCfgSlotsNr.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel.add(lblCfgSlotsNr, "18, 1");
 		
 		JLabel lblInputs = new JLabel("Inputs:");
 		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -1353,6 +1366,12 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 	}
 
+	private void getReadOnlyData() {
+		compareSysexToConfigIsOn = false;
+		midi_handler.requestConfigCount();					
+		delayMs(configOptions.sysexDelay);
+	}
+
 	private void sendGlobalMisc(boolean withReport) {
 		byte [] sysexGlobalMisc = new byte[Constants.MD_SYSEX_GLOBAL_MISC_SIZE];
 		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysexGlobalMisc, configOptions.chainId);
@@ -1697,6 +1716,7 @@ public class Main_window {
 		getAllPads();
 		getAllCurves();
 		getAllCustomNames();
+		getReadOnlyData();
 	}
 	
 	private void sendAll() {
@@ -2085,6 +2105,16 @@ public class Main_window {
 							configOptions.mcuType = (int)(buffer[4]<<4);
 							configOptions.mcuType |= (int)buffer[5];
 							lblMCU.setText(Constants.MCU_TYPES[configOptions.mcuType]);
+							commsStateLabel.setText("SysEx Ok");
+							commsStateLabel.setBackground(Color.GREEN);
+						}
+						break;
+					case Constants.MD_SYSEX_CONFIG_COUNT:
+						if (buffer.length >= Constants.MD_SYSEX_CONFIG_COUNT_SIZE) {
+							int b;
+							b = (int)(buffer[4]<<4);
+							b |= (int)buffer[5];
+							lblCfgSlotsNr.setText(((Integer)b).toString());
 							commsStateLabel.setText("SysEx Ok");
 							commsStateLabel.setBackground(Color.GREEN);
 						}
