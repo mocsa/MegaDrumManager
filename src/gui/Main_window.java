@@ -119,6 +119,8 @@ public class Main_window {
 	private JComboBoxCustom comboBox_inputsCount;
 	private JSpinner spinnerLCDcontrast;
 	private int spinnerLCDEventDisabled = 0;
+	private int chckbxCustomPadsNamesEventDisabled = 0;
+	private int chckbxConfignamesenEventDisabled = 0;
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
 	private JLabel lblVersion;
@@ -126,6 +128,8 @@ public class Main_window {
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox<String> comboBoxCfg;
 	private JCheckBox checkBoxAutoResize;
+	private JCheckBox chckbxConfignamesen;
+	private JCheckBox chckbxCustomPadsNames;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
 	private boolean compareSysexToConfigIsOn = false;
@@ -943,7 +947,7 @@ public class Main_window {
 		tglbtnMidi.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnMidi.setMargin(new Insets(1, 1, 1, 1));
 		
-		JLabel lblFirmwareVer = new JLabel("FW ver:");
+		JLabel lblFirmwareVer = new JLabel("FW version:");
 		lblFirmwareVer.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblFirmwareVer, "6, 1");
 		
@@ -1014,12 +1018,36 @@ public class Main_window {
 		spinnerLCDcontrast.setModel(new SpinnerNumberModel(new Integer(50), new Integer(1), new Integer(100), new Integer(1)));
 		panel.add(spinnerLCDcontrast, "8, 3, left, default");
 		
-		JCheckBox chckbxConfignamesen = new JCheckBox("ConfigNamesEn");
+		chckbxConfignamesen = new JCheckBox("ConfigNamesEn");
+		chckbxConfignamesen.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (chckbxConfignamesenEventDisabled > 0) {
+					chckbxConfignamesenEventDisabled--;
+				} else {
+					configFull.configGlobalMisc.config_names_en = chckbxConfignamesen.isSelected();					
+					if (configOptions.interactive) {
+						sendGlobalMisc(true);
+					}
+				}
+			}
+		});
 		chckbxConfignamesen.setSelected(true);
 		chckbxConfignamesen.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(chckbxConfignamesen, "12, 3");
 		
-		JCheckBox chckbxCustomPadsNames = new JCheckBox("Custom Pads Names");
+		chckbxCustomPadsNames = new JCheckBox("Custom Pads Names");
+		chckbxCustomPadsNames.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (chckbxCustomPadsNamesEventDisabled > 0) {
+					chckbxCustomPadsNamesEventDisabled--;
+				} else {
+					configFull.configGlobalMisc.custom_names_en = chckbxCustomPadsNames.isSelected();
+					if (configOptions.interactive) {
+						sendGlobalMisc(true);
+					}
+				}
+			}
+		});
 		chckbxCustomPadsNames.setSelected(true);
 		chckbxCustomPadsNames.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(chckbxCustomPadsNames, "14, 3");
@@ -2042,6 +2070,14 @@ public class Main_window {
 						if ((Integer)spinnerLCDcontrast.getValue() != configFull.configGlobalMisc.lcd_contrast) {
 							spinnerLCDEventDisabled = 1;
 							spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);
+						}
+						if (chckbxCustomPadsNames.isSelected() != configFull.configGlobalMisc.custom_names_en) {
+							chckbxCustomPadsNamesEventDisabled = 1;
+							chckbxCustomPadsNames.setSelected(configFull.configGlobalMisc.custom_names_en);							
+						}
+						if (chckbxConfignamesen.isSelected() != configFull.configGlobalMisc.config_names_en) {
+							chckbxConfignamesenEventDisabled = 1;
+							chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);							
 						}
 						break;
 					case Constants.MD_SYSEX_MCU_TYPE:
