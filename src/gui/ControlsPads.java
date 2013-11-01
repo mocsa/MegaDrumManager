@@ -133,7 +133,7 @@ public class ControlsPads extends JPanel {
 //			e.printStackTrace();
 //		}
 
-		mnCopypadto = new JMenu("CopyPad");
+        mnCopypadto = new JMenu("CopyPad");
 		mnCopypadto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		
 		mnCopyhead = new JMenu("CopyHead");

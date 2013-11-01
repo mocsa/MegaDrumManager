@@ -45,6 +45,8 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.text.JTextComponent;
 
@@ -89,6 +91,7 @@ import java.awt.event.KeyEvent;
 import java.awt.Toolkit;
 import com.jgoodies.forms.layout.Sizes;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.JPopupMenu;
 
 public class Main_window {
 
@@ -131,6 +134,9 @@ public class Main_window {
 	private JCheckBox chckbxConfignamesen;
 	private JCheckBox chckbxCustomPadsNames;
 	private JLabel lblCfgSlotsNr;
+	private JButton btnSaveToSlot;
+	private JPopupMenu popupMenuSaveToSlot;
+	ActionListener saveToSlotAction;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
 	private boolean compareSysexToConfigIsOn = false;
@@ -766,6 +772,23 @@ public class Main_window {
 		panel_top = new JPanel();
 //		frmMegadrummanager.getContentPane().add(panel_top, "1, 1, fill, fill");
 		global_panel.add(panel_top, "1, 1, fill, fill");
+		
+//        mnSaveSimple = new JMenu("");
+//		mnCopypadto.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+//		
+//		mnSaveWithName = new JMenu("CopyHead");
+//		mnCopyhead.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+
+		popupMenuSaveToSlot = new JPopupMenu();
+		addPopup(panel_top, popupMenuSaveToSlot);
+		saveToSlotAction =  new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//midi_handler.requestSaveToSlot(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
+				System.out.printf("Save to slot -> %d\n",Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
+			}
+		};
+
+		
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
@@ -832,12 +855,12 @@ public class Main_window {
 		});
 		panel_top.add(btnSaveAll, "8, 1");
 		
-		JButton btnSaveToSlot = new JButton("Save To Slot1");
-		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin Slot1 of non-volatile memory.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom Slot1 on power up.\r\n</html>");
+		btnSaveToSlot = new JButton("Save To Slot");
+		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin one of non-volatile memory slots.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom Slot1 on power up.\r\n</html>");
 		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnSaveToSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.requestSaveToSlot(0);
+				popupMenuSaveToSlot.show(btnSaveToSlot, btnSaveToSlot.getWidth(),0);
 			}
 		});
 		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
@@ -926,17 +949,15 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.PREF_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				ColumnSpec.decode("left:default"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
+				RowSpec.decode("default:grow"),
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				RowSpec.decode("default:grow"),}));
 		
 		JLabel lblMidi = new JLabel("MIDI :");
 		lblMidi.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -972,17 +993,28 @@ public class Main_window {
 		lblMCU.setForeground(new Color(0, 0, 0));
 		panel.add(lblMCU, "12, 1");
 		
-		JLabel lblConfigSlots = new JLabel("Config Slots:");
-		lblConfigSlots.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel.add(lblConfigSlots, "16, 1");
+		JPanel panel_2 = new JPanel();
+		panel.add(panel_2, "16, 1, fill, fill");
+		panel_2.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("15dlu"),},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		lblCfgSlotsNr = new JLabel("???????");
+		JLabel lblConfigSlots = new JLabel("Config Slots:");
+		panel_2.add(lblConfigSlots, "2, 2");
+		lblConfigSlots.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		
+		lblCfgSlotsNr = new JLabel("??");
+		panel_2.add(lblCfgSlotsNr, "4, 2");
 		lblCfgSlotsNr.setToolTipText("<html>Shows the current firmware version<br>\r\nof the connected MegaDrum.\r\n</html>");
 		lblCfgSlotsNr.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCfgSlotsNr.setForeground(Color.BLACK);
 		lblCfgSlotsNr.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblCfgSlotsNr.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel.add(lblCfgSlotsNr, "18, 1");
 		
 		JLabel lblInputs = new JLabel("Inputs:");
 		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -1005,7 +1037,7 @@ public class Main_window {
 		
 		progressBar = new JProgressBar();
 		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel.add(progressBar, "20, 1");
+		panel.add(progressBar, "18, 1");
 		progressBar.setVisible(false);
 		
 		progressBar.setStringPainted(true);
@@ -1064,28 +1096,6 @@ public class Main_window {
 		chckbxCustomPadsNames.setSelected(true);
 		chckbxCustomPadsNames.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(chckbxCustomPadsNames, "14, 3");
-		
-		JButton btnGet = new JButton("Get");
-		btnGet.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				getGlobalMisc();
-			}
-		});
-		btnGet.setToolTipText("Get global misc settings (number of inputs, LCD contrast)");
-		btnGet.setMargin(new Insets(1, 1, 1, 1));
-		btnGet.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel.add(btnGet, "16, 3");
-		
-		JButton btnSend = new JButton("Send");
-		btnSend.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				sendGlobalMisc(true);
-			}
-		});
-		btnSend.setToolTipText("Send global misc settings (number of inputs, LCD contrast)");
-		btnSend.setMargin(new Insets(1, 1, 1, 1));
-		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel.add(btnSend, "18, 3");
 		tglbtnLiveUpdates = new JToggleButton("Live updates");
 		tglbtnLiveUpdates.setToolTipText("<html>Enable live settingsupdates.<br>\r\n<br>\r\nWhen enabled, all changes to settings in MegaDrumManager<br>\r\nare sent to MegaDrum upon a change.\r\n</html>");
 		tglbtnLiveUpdates.setFont(new Font("Tahoma", Font.PLAIN, 9));
@@ -1094,8 +1104,39 @@ public class Main_window {
 				configOptions.interactive = tglbtnLiveUpdates.isSelected(); 
 			}
 		});
+		
+		JPanel panel_1 = new JPanel();
+		panel.add(panel_1, "16, 3, fill, fill");
+		panel_1.setLayout(new FormLayout(new ColumnSpec[] {
+				ColumnSpec.decode("24dlu"),
+				ColumnSpec.decode("pref:grow"),
+				ColumnSpec.decode("24dlu"),},
+			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		JButton btnGet = new JButton("Get");
+		panel_1.add(btnGet, "1, 1");
+		btnGet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				getGlobalMisc();
+			}
+		});
+		btnGet.setToolTipText("Get global misc settings (number of inputs, LCD contrast)");
+		btnGet.setMargin(new Insets(1, 0, 1, 0));
+		btnGet.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		
+		JButton btnSend = new JButton("Send");
+		panel_1.add(btnSend, "3, 1");
+		btnSend.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				sendGlobalMisc(true);
+			}
+		});
+		btnSend.setToolTipText("Send global misc settings (number of inputs, LCD contrast)");
+		btnSend.setMargin(new Insets(1, 0, 1, 0));
+		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
-		panel.add(tglbtnLiveUpdates, "20, 3");
+		panel.add(tglbtnLiveUpdates, "18, 3");
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -1364,6 +1405,7 @@ public class Main_window {
 		compareSysexToConfigIsOn = false;
 		midi_handler.requestConfigGlobalMisc();					
 		delayMs(configOptions.sysexDelay);
+		getReadOnlyData();
 	}
 
 	private void getReadOnlyData() {
@@ -1382,6 +1424,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
+    	getReadOnlyData();
 	}
 
 	private void getMisc() {
@@ -1716,7 +1759,6 @@ public class Main_window {
 		getAllPads();
 		getAllCurves();
 		getAllCustomNames();
-		getReadOnlyData();
 	}
 	
 	private void sendAll() {
@@ -2117,6 +2159,13 @@ public class Main_window {
 							lblCfgSlotsNr.setText(((Integer)b).toString());
 							commsStateLabel.setText("SysEx Ok");
 							commsStateLabel.setBackground(Color.GREEN);
+							popupMenuSaveToSlot.removeAll();
+							for (int i = 0; i < b; i++) {
+								JMenuItem mnItemSaveItem = new JMenuItem(((Integer)(i+1)).toString());
+								mnItemSaveItem.setName(((Integer)(i+1)).toString());
+								popupMenuSaveToSlot.add(mnItemSaveItem);
+								mnItemSaveItem.addActionListener(saveToSlotAction);
+							}
 						}
 						break;
 					default:
@@ -2199,6 +2248,23 @@ public class Main_window {
 	
 	private void updateCustomNamesControls() {
 		controlsPads.updateCustomNamesList();
+	}
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
 	}
 }
 
