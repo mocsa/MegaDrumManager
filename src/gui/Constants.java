@@ -23,6 +23,7 @@ public interface Constants {
 	public static final int PADS_COUNT = 55;
 	public static final int CURVES_COUNT = 16;
 	public static final int CUSTOM_NAMES_MAX = 32;
+	public static final int CONFIG_NAMES_MAX = 127;
 	public static final int SYSEX_DELAY = 50;
 	public static final byte SYSEX_START = (byte)0xf0;
 	public static final byte SYSEX_END = (byte)0xf7;

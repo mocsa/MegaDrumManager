@@ -964,6 +964,61 @@ public class Utils {
 		
 	}
 
+	public static void copyConfigConfigNameToSysex(ConfigConfigName config, byte [] sysex, int chainId, int nameId) {
+		byte [] sysex_byte = new byte[2];
+		String name;
+		byte [] nameBytes;
+		int i = 0;
+		sysex[i++] = Constants.SYSEX_START;
+		sysex[i++] = Constants.MD_SYSEX;
+		sysex[i++] = (byte) chainId;
+		sysex[i++] = Constants.MD_SYSEX_CONFIG_NAME;
+		sysex[i++] = (byte)nameId;
+		
+		name = config.name + "            ";
+		name = name.substring(0, 12);
+		nameBytes = name.getBytes();
+		for (int p = 0; p < 12;p++) {
+			sysex_byte = byte2sysex(nameBytes[p]);
+			sysex[i++] = sysex_byte[0];
+			sysex[i++] = sysex_byte[1];
+		}
+		sysex[i++] = Constants.SYSEX_END;
+
+	}
+
+	public static int compareSysexToConfigConfigName(byte [] sysex, ConfigConfigName config) {
+		//Returns 0 if SysEx and config match, otherwise it returns non-zero result
+		byte [] sysex_byte = new byte[2];
+		char [] bytes_string = { 1, 2, 3, 4, 5, 6, 7, 8 , 9 , 10, 11, 12 };
+		int i = 5;
+		int result = 1;
+		if (sysex.length >= Constants.MD_SYSEX_CONFIG_NAME_SIZE) {
+			result = 0;
+			for (int p = 0; p < 12;p++) {
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				bytes_string[p] = (char)sysex2byte(sysex_byte);
+			}
+			if (!String.copyValueOf(bytes_string).trim().equals(config.name)) result = 1;
+		}
+		return result;
+	}
+
+	public static void copySysexToConfigConfigName(byte [] sysex, ConfigConfigName config) {
+		byte [] sysex_byte = new byte[2];
+		char [] bytes_string = { 1, 2, 3, 4, 5, 6, 7, 8 , 9, 10, 11, 12};
+		int i = 5;
+		if (sysex.length >= Constants.MD_SYSEX_CUSTOM_NAME_SIZE) {
+			for (int p = 0; p < 8;p++) {
+				sysex_byte[0] = sysex[i++];
+				sysex_byte[1] = sysex[i++];
+				bytes_string[p] = (char)sysex2byte(sysex_byte);
+			}
+			config.name = String.copyValueOf(bytes_string).trim();
+		}
+	}
+
 	public static void copyConfigCustomNameToSysex(ConfigCustomName config, byte [] sysex, int chainId, int nameId) {
 		byte [] sysex_byte = new byte[2];
 		String name;

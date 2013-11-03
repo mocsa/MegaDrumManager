@@ -19,7 +19,9 @@ public class ConfigFull implements java.io.Serializable {
 	public Config3rd [] config3rds;
 	public ConfigCurve [] configCurves;
 	public ConfigCustomName [] configCustomNames;
+	public ConfigConfigName [] configConfigNames;
 	public int customNamesCount;
+	public int configNamesCount;
 	private static final String configGlobalMiscPrefix = "global_misc.";
 	private static final String configMiscPrefix = "misc.";
 	private static final String configPedalPrefix = "pedal.";
@@ -53,7 +55,13 @@ public class ConfigFull implements java.io.Serializable {
 			configCustomNames[i] = new ConfigCustomName();
         	configCustomNames[i].name = "Custom" + i.toString(); 
 		}
-		customNamesCount = Constants.CUSTOM_NAMES_MAX;
+		configConfigNames = new ConfigConfigName[Constants.CONFIG_NAMES_MAX];
+		for (Integer i = 0; i < Constants.CONFIG_NAMES_MAX;i++) {
+			configConfigNames[i] = new ConfigConfigName();
+			//configConfigNames[i].name = "Custom" + i.toString(); 
+			configConfigNames[i].name = "            "; 
+		}
+		configNamesCount = Constants.CONFIG_NAMES_MAX;
 	}
 	
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout) {

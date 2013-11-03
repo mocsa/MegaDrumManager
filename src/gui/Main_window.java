@@ -92,6 +92,7 @@ import java.awt.Toolkit;
 import com.jgoodies.forms.layout.Sizes;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 
 public class Main_window {
 
@@ -136,6 +137,7 @@ public class Main_window {
 	private JLabel lblCfgSlotsNr;
 	private JButton btnSaveToSlot;
 	private JPopupMenu popupMenuSaveToSlot;
+	private JMenuItem menuItemsSaveToSlot[];
 	ActionListener saveToSlotAction;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
@@ -146,6 +148,7 @@ public class Main_window {
 	private int compareResultCombined;
 	private Timer sysexWaitTimer;
 	private JLabel lblMCU;
+	private JTextField textField;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
 	
@@ -203,6 +206,12 @@ public class Main_window {
 	 */
 	private void initialize() {
 		configFull = new ConfigFull();
+		menuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
+		for (int i =0; i < Constants.CONFIG_NAMES_MAX; i++) {
+			menuItemsSaveToSlot[i] = new JMenuItem();
+			menuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
+			menuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
+		}
 		frmMegadrummanager = new JFrame();
 		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/icons/megadrum-manager128.png")));
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
@@ -783,8 +792,8 @@ public class Main_window {
 		addPopup(panel_top, popupMenuSaveToSlot);
 		saveToSlotAction =  new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//midi_handler.requestSaveToSlot(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
-				System.out.printf("Save to slot -> %d\n",Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
+				midi_handler.requestSaveToSlot(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
+				//System.out.printf("Save to slot -> %d\n",Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
 			}
 		};
 
@@ -801,7 +810,7 @@ public class Main_window {
 				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("40dlu"),
+				ColumnSpec.decode("50dlu"),
 				ColumnSpec.decode("2dlu"),
 				FormFactory.PREF_COLSPEC,
 				ColumnSpec.decode("2dlu"),
@@ -809,7 +818,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormFactory.MIN_ROWSPEC,}));
 		
 		JButton btnGetAll = new JButton("Get All");
 		btnGetAll.setToolTipText("Get all settings from MegaDrum");
@@ -1105,8 +1114,28 @@ public class Main_window {
 			}
 		});
 		
+		JPanel panel_3 = new JPanel();
+		panel.add(panel_3, "16, 3, fill, fill");
+		panel_3.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("50dlu"),},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,}));
+		
+		JLabel lblConfigName = new JLabel("Config Name:");
+		lblConfigName.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panel_3.add(lblConfigName, "2, 2, right, default");
+		
+		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panel_3.add(textField, "4, 2, fill, default");
+		textField.setColumns(10);
+		
 		JPanel panel_1 = new JPanel();
-		panel.add(panel_1, "16, 3, fill, fill");
+		panel.add(panel_1, "18, 3, fill, fill");
 		panel_1.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("24dlu"),
 				ColumnSpec.decode("pref:grow"),
@@ -1136,7 +1165,7 @@ public class Main_window {
 		btnSend.setMargin(new Insets(1, 0, 1, 0));
 		btnSend.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnLiveUpdates.setMargin(new Insets(1, 1, 1, 1));
-		panel.add(tglbtnLiveUpdates, "18, 3");
+		panel.add(tglbtnLiveUpdates, "20, 3");
 		comboBox_inputsCount.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 		        if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -2036,6 +2065,9 @@ public class Main_window {
 					case Constants.MD_SYSEX_CUSTOM_NAME:
 						compareResult = Utils.compareSysexToConfigCustomName(midi_handler.bufferIn, configFull.configCustomNames[buffer[4]]);
 						break;
+					case Constants.MD_SYSEX_CONFIG_NAME:
+						compareResult = Utils.compareSysexToConfigConfigName(midi_handler.bufferIn, configFull.configConfigNames[buffer[4]]);
+						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						compareResult = Utils.compareSysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
 						break;
@@ -2122,6 +2154,12 @@ public class Main_window {
 						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, configFull.configCustomNames[buffer[4]]);
 						controlsPadsExtra.updateControls();
 						break;
+					case Constants.MD_SYSEX_CONFIG_NAME:
+						Utils.copySysexToConfigConfigName(midi_handler.bufferIn, configFull.configConfigNames[buffer[4]]);
+						if (buffer[4] < configFull.configNamesCount) {
+							menuItemsSaveToSlot[buffer[4]].setText("1 " + configFull.configConfigNames[buffer[4]].name);
+						}
+						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
 						int c = comboBox_inputsCount.getSelectedIndex();
@@ -2161,10 +2199,7 @@ public class Main_window {
 							commsStateLabel.setBackground(Color.GREEN);
 							popupMenuSaveToSlot.removeAll();
 							for (int i = 0; i < b; i++) {
-								JMenuItem mnItemSaveItem = new JMenuItem(((Integer)(i+1)).toString());
-								mnItemSaveItem.setName(((Integer)(i+1)).toString());
-								popupMenuSaveToSlot.add(mnItemSaveItem);
-								mnItemSaveItem.addActionListener(saveToSlotAction);
+								popupMenuSaveToSlot.add(menuItemsSaveToSlot[i]);
 							}
 						}
 						break;
