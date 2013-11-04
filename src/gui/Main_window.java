@@ -138,7 +138,9 @@ public class Main_window {
 	private JLabel lblCfgCurrent;
 	private JButton btnSaveToSlot;
 	private JPopupMenu popupMenuSaveToSlot;
+	private JMenuItem popupMenuItemsSaveToSlot[];
 	private JMenuItem menuItemsSaveToSlot[];
+	private JMenu mntmSaveToMd;
 	ActionListener saveToSlotAction;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
@@ -207,12 +209,6 @@ public class Main_window {
 	 */
 	private void initialize() {
 		configFull = new ConfigFull();
-		menuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
-		for (int i =0; i < Constants.CONFIG_NAMES_MAX; i++) {
-			menuItemsSaveToSlot[i] = new JMenuItem();
-			menuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
-			menuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
-		}
 		frmMegadrummanager = new JFrame();
 		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/icons/megadrum-manager128.png")));
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
@@ -324,13 +320,8 @@ public class Main_window {
 			}
 		});
 		mnLoad.add(mntmSaveToFile);
-		
-		JMenuItem mntmSaveToMd = new JMenuItem("Save to MD slot 1");
-		mntmSaveToMd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.requestSaveToSlot(0);
-			}
-		});
+
+		mntmSaveToMd = new JMenu("Save to MD slot:");
 		mnLoad.add(mntmSaveToMd);
 		
 		JMenu mnMiscSettings = new JMenu("Misc settings");
@@ -801,7 +792,18 @@ public class Main_window {
 			    //}
 			}
 		};
-
+		popupMenuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
+		menuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
+		for (int i =0; i < Constants.CONFIG_NAMES_MAX; i++) {
+			menuItemsSaveToSlot[i] = new JMenuItem();
+			menuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString() + " Name?");
+			menuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
+			menuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
+			popupMenuItemsSaveToSlot[i] = new JMenuItem();
+			popupMenuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString() + " Name?");
+			popupMenuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
+			popupMenuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
+		}
 		
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -870,7 +872,7 @@ public class Main_window {
 		panel_top.add(btnSaveAll, "8, 1");
 		
 		btnSaveToSlot = new JButton("Save To Slot");
-		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin one of non-volatile memory slots.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom Slot1 on power up.\r\n</html>");
+		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin one of non-volatile memory slots.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom that slot on power up.\r\n</html>");
 		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		btnSaveToSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -2203,7 +2205,7 @@ public class Main_window {
 					case Constants.MD_SYSEX_CONFIG_NAME:
 						Utils.copySysexToConfigConfigName(midi_handler.bufferIn, configFull.configConfigNames[buffer[4]]);
 						if (buffer[4] < configFull.configNamesCount) {
-							menuItemsSaveToSlot[buffer[4]].setText("1 " + configFull.configConfigNames[buffer[4]].name);
+							menuItemsSaveToSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
 						}
 						if (configFull.configCurrent == buffer[4]) {
 							configNameTextField.setText(configFull.configConfigNames[buffer[4]].name);
@@ -2246,19 +2248,22 @@ public class Main_window {
 							commsStateLabel.setText("SysEx Ok");
 							commsStateLabel.setBackground(Color.GREEN);
 							popupMenuSaveToSlot.removeAll();
+							mntmSaveToMd.removeAll();
 							for (int i = 0; i < b; i++) {
-								popupMenuSaveToSlot.add(menuItemsSaveToSlot[i]);
+								popupMenuSaveToSlot.add(popupMenuItemsSaveToSlot[i]);
+								mntmSaveToMd.add(menuItemsSaveToSlot[i]);
 							}
 						}
+						break;
 					case Constants.MD_SYSEX_CONFIG_CURRENT:
 						if (buffer.length >= Constants.MD_SYSEX_CONFIG_CURRENT_SIZE) {
 							int b;
 							b = (int)buffer[4];
-							lblCfgCurrent.setText(((Integer)b).toString());
+							lblCfgCurrent.setText(((Integer)(b + 1)).toString());
 							configFull.configCurrent = b;
 							commsStateLabel.setText("SysEx Ok");
 							commsStateLabel.setBackground(Color.GREEN);
-							popupMenuSaveToSlot.removeAll();
+							//popupMenuSaveToSlot.removeAll();
 						}
 						break;
 					default:
