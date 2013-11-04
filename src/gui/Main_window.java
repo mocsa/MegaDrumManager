@@ -796,9 +796,9 @@ public class Main_window {
 				int id = Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1;
 				midi_handler.requestSaveToSlot(id);
 				//System.out.printf("Save to slot -> %d\n",Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
-			    if (configFull.configGlobalMisc.config_names_en) {
-			    	sendConfigName(id, true);
-			    }
+			    //if (configFull.configGlobalMisc.config_names_en) {
+			    //	sendConfigName(id, true);
+			    //}
 			}
 		};
 
@@ -1151,6 +1151,12 @@ public class Main_window {
 		panel_3.add(lblConfigName, "2, 2, right, default");
 		
 		configNameTextField = new JTextField();
+		configNameTextField.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				configFull.configNameChanged = true;
+				configFull.configConfigNames[configFull.configCurrent].name = configNameTextField.getText();
+			}
+		});
 		configNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel_3.add(configNameTextField, "4, 2, fill, default");
 		configNameTextField.setColumns(10);
@@ -1476,6 +1482,10 @@ public class Main_window {
 		midi_handler.requestConfigGlobalMisc();
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
+    	}
+    	if (configFull.configNameChanged) {
+    		configFull.configNameChanged = false;
+    		sendConfigName(configFull.configCurrent, withReport);
     	}
     	getReadOnlyData();
 	}
