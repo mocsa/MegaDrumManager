@@ -786,10 +786,24 @@ public class Main_window {
 			public void actionPerformed(ActionEvent arg0) {
 				int id = Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1;
 				midi_handler.requestSaveToSlot(id);
-				//System.out.printf("Save to slot -> %d\n",Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
-			    //if (configFull.configGlobalMisc.config_names_en) {
-			    //	sendConfigName(id, true);
-			    //}
+				setConfigCurrent(id);
+//				Timer configGlobalTimer = new Timer();
+//				configGlobalTimer.schedule(new TimerTask() {
+//					
+//					@Override
+//					public void run() {
+//						getGlobalMisc();
+//						Timer configNameTimer = new Timer();
+//						configNameTimer.schedule(new TimerTask() {
+//							
+//							@Override
+//							public void run() {
+//								// TODO Auto-generated method stub
+//								midi_handler.requestConfigConfigName(configFull.configCurrent);
+//							}
+//						}, 1000);
+//					}
+//				}, 1000);
 			}
 		};
 		popupMenuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
@@ -1106,9 +1120,12 @@ public class Main_window {
 						sendGlobalMisc(true);
 					}
 				}
+				if (configNameTextField != null) {
+					configNameTextField.setEnabled(configFull.configGlobalMisc.config_names_en);						
+				}
 			}
 		});
-		chckbxConfignamesen.setSelected(true);
+		chckbxConfignamesen.setSelected(false);
 		chckbxConfignamesen.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(chckbxConfignamesen, "12, 3");
 		
@@ -1125,7 +1142,7 @@ public class Main_window {
 				}
 			}
 		});
-		chckbxCustomPadsNames.setSelected(true);
+		chckbxCustomPadsNames.setSelected(false);
 		chckbxCustomPadsNames.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(chckbxCustomPadsNames, "14, 3");
 		tglbtnLiveUpdates = new JToggleButton("Live updates");
@@ -1153,15 +1170,36 @@ public class Main_window {
 		panel_3.add(lblConfigName, "2, 2, right, default");
 		
 		configNameTextField = new JTextField();
-		configNameTextField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				configFull.configNameChanged = true;
-				configFull.configConfigNames[configFull.configCurrent].name = configNameTextField.getText();
-			}
-		});
+//		configNameTextField.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				configFull.configNameChanged = true;
+//				configFull.configConfigNames[configFull.configCurrent].name = configNameTextField.getText();
+//			}
+//		});
+		configNameTextField.getDocument().addDocumentListener(new DocumentListener() {
+			  public void changedUpdate(DocumentEvent e) {
+				  updateConfigName();
+			  }
+			  public void removeUpdate(DocumentEvent e) {
+				  updateConfigName();
+			  }
+			  public void insertUpdate(DocumentEvent e) {
+				  updateConfigName();
+			  }
+
+			  public void updateConfigName() {
+				  int id = configFull.configCurrent;
+				  configFull.configNameChanged = true;
+				  configFull.configConfigNames[id].name = configNameTextField.getText();
+				  menuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
+				  popupMenuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
+			  }
+			});
 		configNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel_3.add(configNameTextField, "4, 2, fill, default");
-		configNameTextField.setColumns(10);
+		configNameTextField.setColumns(12);
+		configNameTextField.setEnabled(false);
+		
 		
 		JPanel panel_1 = new JPanel();
 		panel.add(panel_1, "18, 3, fill, fill");
@@ -1464,6 +1502,10 @@ public class Main_window {
 		midi_handler.requestConfigGlobalMisc();					
 		delayMs(configOptions.sysexDelay);
 		getReadOnlyData();
+		if (configFull.configGlobalMisc.config_names_en) {
+			compareSysexToConfigIsOn = false;
+			midi_handler.requestConfigConfigName(configFull.configCurrent);								
+		}
 	}
 
 	private void getReadOnlyData() {
@@ -1704,6 +1746,12 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 	}
 
+	private void getConfigName(int name_id) {
+		compareSysexToConfigIsOn = false;
+		midi_handler.requestConfigConfigName(name_id);
+		delayMs(configOptions.sysexDelay*2);
+	}
+
 	private void sendCustomName(int name_id, boolean withReport) {
 		byte [] sysexCustomName = new byte[Constants.MD_SYSEX_CUSTOM_NAME_SIZE];
 		Utils.copyConfigCustomNameToSysex(configFull.configCustomNames[name_id], sysexCustomName, configOptions.chainId, name_id);
@@ -1735,6 +1783,15 @@ public class Main_window {
 		}
 	}
 		
+	private void getAllConfigNames() {
+		if (configFull.configGlobalMisc.config_names_en) {
+			compareSysexToConfigIsOn = false;
+			for (int i = 0; i < configFull.configNamesCount; i++) {
+				getConfigName(i);
+			}			
+		}
+	}
+
 	private void sendAllCustomNamesInThisThread(boolean withReport) {
 		for (int i = 0; i < (configFull.customNamesCount - 1); i++) {
 			sendCustomName(i, false);
@@ -1836,6 +1893,7 @@ public class Main_window {
 		getAllPads();
 		getAllCurves();
 		getAllCustomNames();
+		getAllConfigNames();
 	}
 	
 	private void sendAll() {
@@ -2078,6 +2136,8 @@ public class Main_window {
 		} else {
 			tglbtnMidi.setText("Open MIDI");
 			tglbtnMidi.setSelected(false);
+			popupMenuSaveToSlot.removeAll();
+			mntmSaveToMd.removeAll();
 		}
 	}
 	
@@ -2206,9 +2266,10 @@ public class Main_window {
 						Utils.copySysexToConfigConfigName(midi_handler.bufferIn, configFull.configConfigNames[buffer[4]]);
 						if (buffer[4] < configFull.configNamesCount) {
 							menuItemsSaveToSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
+							popupMenuItemsSaveToSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
 						}
 						if (configFull.configCurrent == buffer[4]) {
-							configNameTextField.setText(configFull.configConfigNames[buffer[4]].name);
+							configNameTextField.setText(configFull.configConfigNames[buffer[4]].name.trim());
 						}
 						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
@@ -2228,7 +2289,8 @@ public class Main_window {
 						}
 						if (chckbxConfignamesen.isSelected() != configFull.configGlobalMisc.config_names_en) {
 							chckbxConfignamesenEventDisabled = 1;
-							chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);							
+							chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);
+							configNameTextField.setEnabled(configFull.configGlobalMisc.config_names_en);
 						}
 						break;
 					case Constants.MD_SYSEX_MCU_TYPE:
@@ -2259,8 +2321,7 @@ public class Main_window {
 						if (buffer.length >= Constants.MD_SYSEX_CONFIG_CURRENT_SIZE) {
 							int b;
 							b = (int)buffer[4];
-							lblCfgCurrent.setText(((Integer)(b + 1)).toString());
-							configFull.configCurrent = b;
+							setConfigCurrent(b);
 							commsStateLabel.setText("SysEx Ok");
 							commsStateLabel.setBackground(Color.GREEN);
 							//popupMenuSaveToSlot.removeAll();
@@ -2271,6 +2332,15 @@ public class Main_window {
 				}
 			}
 		}		
+	}
+	
+	private void setConfigCurrent(int id) {
+		lblCfgCurrent.setText(((Integer)(id + 1)).toString());
+		configFull.configCurrent = id;		
+		configFull.configNameChanged = false;
+		configNameTextField.setText(configFull.configConfigNames[id].name.trim());
+		menuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
+		popupMenuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
 	}
 	
 	public void decodeShortMidi (byte [] buffer) {
