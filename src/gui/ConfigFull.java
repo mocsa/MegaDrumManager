@@ -22,6 +22,7 @@ public class ConfigFull implements java.io.Serializable {
 	public ConfigConfigName [] configConfigNames;
 	public int customNamesCount;
 	public int configNamesCount;
+	public int configCurrent;
 	private static final String configGlobalMiscPrefix = "global_misc.";
 	private static final String configMiscPrefix = "misc.";
 	private static final String configPedalPrefix = "pedal.";

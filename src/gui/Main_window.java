@@ -135,6 +135,7 @@ public class Main_window {
 	private JCheckBox chckbxConfignamesen;
 	private JCheckBox chckbxCustomPadsNames;
 	private JLabel lblCfgSlotsNr;
+	private JLabel lblCfgCurrent;
 	private JButton btnSaveToSlot;
 	private JPopupMenu popupMenuSaveToSlot;
 	private JMenuItem menuItemsSaveToSlot[];
@@ -148,7 +149,7 @@ public class Main_window {
 	private int compareResultCombined;
 	private Timer sysexWaitTimer;
 	private JLabel lblMCU;
-	private JTextField textField;
+	private JTextField configNameTextField;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
 	
@@ -792,8 +793,12 @@ public class Main_window {
 		addPopup(panel_top, popupMenuSaveToSlot);
 		saveToSlotAction =  new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.requestSaveToSlot(Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
+				int id = Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1;
+				midi_handler.requestSaveToSlot(id);
 				//System.out.printf("Save to slot -> %d\n",Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1);
+			    if (configFull.configGlobalMisc.config_names_en) {
+			    	sendConfigName(id, true);
+			    }
 			}
 		};
 
@@ -1008,22 +1013,38 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("15dlu"),
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("15dlu"),},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblConfigSlots = new JLabel("Config Slots:");
+		JLabel lblConfigSlots = new JLabel("CfgSlots:");
 		panel_2.add(lblConfigSlots, "2, 2");
 		lblConfigSlots.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
 		lblCfgSlotsNr = new JLabel("??");
 		panel_2.add(lblCfgSlotsNr, "4, 2");
-		lblCfgSlotsNr.setToolTipText("<html>Shows the current firmware version<br>\r\nof the connected MegaDrum.\r\n</html>");
+		lblCfgSlotsNr.setToolTipText("<html>Shows the total number of Config Slots<br>\r\non the connected MegaDrum.\r\n</html>");
 		lblCfgSlotsNr.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCfgSlotsNr.setForeground(Color.BLACK);
 		lblCfgSlotsNr.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblCfgSlotsNr.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		
+		JLabel lblCurrent = new JLabel("Current:");
+		lblCurrent.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panel_2.add(lblCurrent, "6, 2");
+		
+		lblCfgCurrent = new JLabel("??");
+		lblCfgCurrent.setToolTipText("<html>Shows the current Config Slot<br>\r\non the connected MegaDrum.\r\n</html>");
+		lblCfgCurrent.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCfgCurrent.setForeground(Color.BLACK);
+		lblCfgCurrent.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblCfgCurrent.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel_2.add(lblCfgCurrent, "8, 2");
 		
 		JLabel lblInputs = new JLabel("Inputs:");
 		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -1129,10 +1150,10 @@ public class Main_window {
 		lblConfigName.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel_3.add(lblConfigName, "2, 2, right, default");
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel_3.add(textField, "4, 2, fill, default");
-		textField.setColumns(10);
+		configNameTextField = new JTextField();
+		configNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		panel_3.add(configNameTextField, "4, 2, fill, default");
+		configNameTextField.setColumns(10);
 		
 		JPanel panel_1 = new JPanel();
 		panel.add(panel_1, "18, 3, fill, fill");
@@ -1441,6 +1462,9 @@ public class Main_window {
 		compareSysexToConfigIsOn = false;
 		midi_handler.requestConfigCount();					
 		delayMs(configOptions.sysexDelay);
+		compareSysexToConfigIsOn = false;
+		midi_handler.requestConfigCurrent();					
+		delayMs(configOptions.sysexDelay);
 	}
 
 	private void sendGlobalMisc(boolean withReport) {
@@ -1675,6 +1699,18 @@ public class Main_window {
 		delayMs(configOptions.sysexDelay);
 		sendWithReport(withReport);
 		midi_handler.requestConfigCustomName(name_id);
+    	while (compareSysexToConfigIsOn) {
+    		delayMs(10);
+    	}
+	}
+
+	private void sendConfigName(int name_id, boolean withReport) {
+		byte [] sysexConfigName = new byte[Constants.MD_SYSEX_CONFIG_NAME_SIZE];
+		Utils.copyConfigConfigNameToSysex(configFull.configConfigNames[name_id], sysexConfigName, configOptions.chainId, name_id);
+		midi_handler.sendSysex(sysexConfigName);
+		delayMs(configOptions.sysexDelay);
+		sendWithReport(withReport);
+		midi_handler.requestConfigConfigName(name_id);
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
@@ -2159,6 +2195,9 @@ public class Main_window {
 						if (buffer[4] < configFull.configNamesCount) {
 							menuItemsSaveToSlot[buffer[4]].setText("1 " + configFull.configConfigNames[buffer[4]].name);
 						}
+						if (configFull.configCurrent == buffer[4]) {
+							configNameTextField.setText(configFull.configConfigNames[buffer[4]].name);
+						}
 						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
@@ -2192,8 +2231,7 @@ public class Main_window {
 					case Constants.MD_SYSEX_CONFIG_COUNT:
 						if (buffer.length >= Constants.MD_SYSEX_CONFIG_COUNT_SIZE) {
 							int b;
-							b = (int)(buffer[4]<<4);
-							b |= (int)buffer[5];
+							b = (int)buffer[4];
 							lblCfgSlotsNr.setText(((Integer)b).toString());
 							commsStateLabel.setText("SysEx Ok");
 							commsStateLabel.setBackground(Color.GREEN);
@@ -2201,6 +2239,16 @@ public class Main_window {
 							for (int i = 0; i < b; i++) {
 								popupMenuSaveToSlot.add(menuItemsSaveToSlot[i]);
 							}
+						}
+					case Constants.MD_SYSEX_CONFIG_CURRENT:
+						if (buffer.length >= Constants.MD_SYSEX_CONFIG_CURRENT_SIZE) {
+							int b;
+							b = (int)buffer[4];
+							lblCfgCurrent.setText(((Integer)b).toString());
+							configFull.configCurrent = b;
+							commsStateLabel.setText("SysEx Ok");
+							commsStateLabel.setBackground(Color.GREEN);
+							popupMenuSaveToSlot.removeAll();
 						}
 						break;
 					default:

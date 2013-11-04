@@ -207,6 +207,17 @@ public class Midi_handler {
 		sendSysex(sx);
 	}
 
+	public void requestConfigCurrent() {
+		byte [] sx = new byte[5];
+		
+		sx[0] = Constants.SYSEX_START;
+		sx[1] = Constants.MD_SYSEX;
+		sx[2] = (byte)chainId;
+		sx[3] = Constants.MD_SYSEX_CONFIG_CURRENT;
+		sx[4] = Constants.SYSEX_END;
+		sendSysex(sx);
+	}
+
 	public void requestConfigPedal() {
 		byte [] sx = new byte[5];
 		
