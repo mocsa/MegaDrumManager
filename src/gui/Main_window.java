@@ -808,16 +808,7 @@ public class Main_window {
 		};
 		popupMenuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
 		menuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
-		for (int i =0; i < Constants.CONFIG_NAMES_MAX; i++) {
-			menuItemsSaveToSlot[i] = new JMenuItem();
-			menuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString() + " Name?");
-			menuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
-			menuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
-			popupMenuItemsSaveToSlot[i] = new JMenuItem();
-			popupMenuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString() + " Name?");
-			popupMenuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
-			popupMenuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
-		}
+		clearConfigSlotsNames();
 		
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
@@ -1256,6 +1247,9 @@ public class Main_window {
 					lblMCU.setText("Unknown");
 					configOptions.mcuType = 0;
 					commsStateLabel.setVisible(false);
+					lblCfgSlotsNr.setText("??");
+					lblCfgCurrent.setText("??");
+					clearConfigSlotsNames();
 				}
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
 					showMidiWarningIfNeeded();
@@ -2341,6 +2335,21 @@ public class Main_window {
 		configNameTextField.setText(configFull.configConfigNames[id].name.trim());
 		menuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
 		popupMenuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
+	}
+	
+	private void clearConfigSlotsNames() {
+		for (int i =0; i < Constants.CONFIG_NAMES_MAX; i++) {
+			menuItemsSaveToSlot[i] = new JMenuItem();
+//			menuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString() + " Name?");
+			menuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString());
+			menuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
+			menuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
+			popupMenuItemsSaveToSlot[i] = new JMenuItem();
+//			popupMenuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString() + " Name?");
+			popupMenuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString());
+			popupMenuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
+			popupMenuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
+		}	
 	}
 	
 	public void decodeShortMidi (byte [] buffer) {
