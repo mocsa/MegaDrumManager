@@ -1010,7 +1010,7 @@ public class Utils {
 		char [] bytes_string = { 1, 2, 3, 4, 5, 6, 7, 8 , 9, 10, 11, 12};
 		int i = 5;
 		if (sysex.length >= Constants.MD_SYSEX_CUSTOM_NAME_SIZE) {
-			for (int p = 0; p < 8;p++) {
+			for (int p = 0; p < 12;p++) {
 				sysex_byte[0] = sysex[i++];
 				sysex_byte[1] = sysex[i++];
 				bytes_string[p] = (char)sysex2byte(sysex_byte);
