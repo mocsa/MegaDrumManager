@@ -137,11 +137,17 @@ public class Main_window {
 	private JLabel lblCfgSlotsNr;
 	private JLabel lblCfgCurrent;
 	private JButton btnSaveToSlot;
+	private JButton btnLoadFromSlot;
 	private JPopupMenu popupMenuSaveToSlot;
+	private JPopupMenu popupMenuLoadFromSlot;
 	private JMenuItem popupMenuItemsSaveToSlot[];
 	private JMenuItem menuItemsSaveToSlot[];
+	private JMenuItem popupMenuItemsLoadFromSlot[];
+	private JMenuItem menuItemsLoadFromSlot[];
 	private JMenu mntmSaveToMd;
+	private JMenu mntmLoadFromMd;
 	ActionListener saveToSlotAction;
+	ActionListener loadFromSlotAction;
 	private boolean LookAndFeelChanged = false;
 	private boolean sendSysexEnabled = true;
 	private boolean compareSysexToConfigIsOn = false;
@@ -320,6 +326,9 @@ public class Main_window {
 			}
 		});
 		mnLoad.add(mntmSaveToFile);
+
+		mntmLoadFromMd = new JMenu("Load from MD slot:");
+		mnLoad.add(mntmLoadFromMd);
 
 		mntmSaveToMd = new JMenu("Save to MD slot:");
 		mnLoad.add(mntmSaveToMd);
@@ -780,6 +789,16 @@ public class Main_window {
 //		mnSaveWithName = new JMenu("CopyHead");
 //		mnCopyhead.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 
+		popupMenuLoadFromSlot = new JPopupMenu();
+		addPopup(panel_top, popupMenuLoadFromSlot);
+		loadFromSlotAction =  new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int id = Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1;
+				midi_handler.requestLoadFromSlot(id);
+				setConfigCurrent(id);
+			}
+		};
+		
 		popupMenuSaveToSlot = new JPopupMenu();
 		addPopup(panel_top, popupMenuSaveToSlot);
 		saveToSlotAction =  new ActionListener() {
@@ -808,6 +827,8 @@ public class Main_window {
 		};
 		popupMenuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
 		menuItemsSaveToSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
+		popupMenuItemsLoadFromSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
+		menuItemsLoadFromSlot = new JMenuItem[Constants.CONFIG_NAMES_MAX];
 		clearConfigSlotsNames();
 		
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
@@ -819,6 +840,8 @@ public class Main_window {
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
+				ColumnSpec.decode("40dlu"),
+				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
@@ -827,6 +850,8 @@ public class Main_window {
 				FormFactory.PREF_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				FormFactory.PREF_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,},
 			new RowSpec[] {
@@ -853,39 +878,6 @@ public class Main_window {
 			}
 		});
 		panel_top.add(btnSendAll, "4, 1");
-		
-		JButton btnLoadAll = new JButton("Load All");
-		btnLoadAll.setToolTipText("Load settings from a file");
-		btnLoadAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnLoadAll.setMargin(new Insets(0, 1, 0, 1));
-		btnLoadAll.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				load_all();
-			}
-		});
-		panel_top.add(btnLoadAll, "6, 1");
-		
-		JButton btnSaveAll = new JButton("Save All");
-		btnSaveAll.setToolTipText("Save all settings to a file");
-		btnSaveAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnSaveAll.setMargin(new Insets(0, 1, 0, 1));
-		btnSaveAll.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				save_all();
-			}
-		});
-		panel_top.add(btnSaveAll, "8, 1");
-		
-		btnSaveToSlot = new JButton("Save To Slot");
-		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin one of non-volatile memory slots.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom that slot on power up.\r\n</html>");
-		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnSaveToSlot.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				popupMenuSaveToSlot.show(btnSaveToSlot, btnSaveToSlot.getWidth(),0);
-			}
-		});
-		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
-		panel_top.add(btnSaveToSlot, "10, 1");
 		
 		comboBoxCfg = new JComboBox<String>();
 		comboBoxCfg.setToolTipText("<html>Select the current full config to use.<br>\r\nMegaDrumManager can hold up to 8<br>\r\nfull MegaDrum configs in memory<br>\r\nand you can quickly switch between them here<br>.\r\n</html>");
@@ -914,9 +906,54 @@ public class Main_window {
 				}
 			}
 		});
+		
+		JButton btnSaveAll = new JButton("Save All");
+		btnSaveAll.setToolTipText("Save all settings to a file");
+		btnSaveAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnSaveAll.setMargin(new Insets(0, 1, 0, 1));
+		btnSaveAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				save_all();
+			}
+		});
+		
+		JButton btnLoadAll = new JButton("Load All");
+		btnLoadAll.setToolTipText("Load settings from a file");
+		btnLoadAll.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnLoadAll.setMargin(new Insets(0, 1, 0, 1));
+		btnLoadAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				load_all();
+			}
+		});
+		
+		btnSaveToSlot = new JButton("Save To Slot");
+		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin one of non-volatile memory slots.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom that slot on power up.\r\n</html>");
+		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
+		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnSaveToSlot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				popupMenuSaveToSlot.show(btnSaveToSlot, btnSaveToSlot.getWidth(),0);
+			}
+		});
+		
+		btnLoadFromSlot = new JButton("Load from Slot");
+		btnLoadFromSlot.setToolTipText("<html>Tell MegaDrum to load settings<br>\r\nfrom one of non-volatile memory slots.<br>\r\n<br>\r\n</html>");
+		btnLoadFromSlot.setMargin(new Insets(0, 1, 0, 1));
+		btnLoadFromSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnLoadFromSlot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				popupMenuLoadFromSlot.show(btnLoadFromSlot, btnLoadFromSlot.getWidth(),0);
+			}
+		});
+
+		panel_top.add(btnLoadFromSlot, "6, 1");
+		panel_top.add(btnSaveToSlot, "8, 1");
+		panel_top.add(btnLoadAll, "10, 1");
+		panel_top.add(btnSaveAll, "12, 1");
 		comboBoxCfg.setEditable(true);
 		comboBoxCfg.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel_top.add(comboBoxCfg, "12, 1, fill, default");
+		panel_top.add(comboBoxCfg, "14, 1, fill, default");
 		
 		JButton btnPrevcfg = new JButton("prevCfg");
 		btnPrevcfg.setToolTipText("<html>Switch to previous full MegaDrum config</html>");
@@ -929,7 +966,7 @@ public class Main_window {
 		});
 		btnPrevcfg.setMargin(new Insets(0, 1, 0, 1));
 		btnPrevcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel_top.add(btnPrevcfg, "14, 1");
+		panel_top.add(btnPrevcfg, "16, 1");
 		
 		JButton btnNextcfg = new JButton("nextCfg");
 		btnNextcfg.setToolTipText("<html>Switch to next full MegaDrum config</html>");
@@ -942,10 +979,10 @@ public class Main_window {
 		});
 		btnNextcfg.setMargin(new Insets(0, 1, 0, 1));
 		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel_top.add(btnNextcfg, "16, 1");
+		panel_top.add(btnNextcfg, "18, 1");
 		
 		commsStateLabel = new JLabel("SysEx Ok");
-		panel_top.add(commsStateLabel, "18, 1");
+		panel_top.add(commsStateLabel, "20, 1");
 		commsStateLabel.setOpaque(true);
 		commsStateLabel.setBackground(Color.GREEN);
 		commsStateLabel.setVisible(false);
@@ -1184,6 +1221,8 @@ public class Main_window {
 				  configFull.configConfigNames[id].name = configNameTextField.getText();
 				  menuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
 				  popupMenuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
+				  menuItemsLoadFromSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
+				  popupMenuItemsLoadFromSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);				  
 			  }
 			});
 		configNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -2132,6 +2171,8 @@ public class Main_window {
 			tglbtnMidi.setSelected(false);
 			popupMenuSaveToSlot.removeAll();
 			mntmSaveToMd.removeAll();
+			popupMenuLoadFromSlot.removeAll();
+			mntmLoadFromMd.removeAll();
 		}
 	}
 	
@@ -2261,6 +2302,8 @@ public class Main_window {
 						if (buffer[4] < configFull.configNamesCount) {
 							menuItemsSaveToSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
 							popupMenuItemsSaveToSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
+							menuItemsLoadFromSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
+							popupMenuItemsLoadFromSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
 						}
 						if (configFull.configCurrent == buffer[4]) {
 							configNameTextField.setText(configFull.configConfigNames[buffer[4]].name.trim());
@@ -2305,9 +2348,13 @@ public class Main_window {
 							commsStateLabel.setBackground(Color.GREEN);
 							popupMenuSaveToSlot.removeAll();
 							mntmSaveToMd.removeAll();
+							popupMenuLoadFromSlot.removeAll();
+							mntmLoadFromMd.removeAll();
 							for (int i = 0; i < b; i++) {
 								popupMenuSaveToSlot.add(popupMenuItemsSaveToSlot[i]);
 								mntmSaveToMd.add(menuItemsSaveToSlot[i]);
+								popupMenuLoadFromSlot.add(popupMenuItemsLoadFromSlot[1]);
+								mntmLoadFromMd.add(menuItemsLoadFromSlot[1]);
 							}
 						}
 						break;
@@ -2335,20 +2382,28 @@ public class Main_window {
 		configNameTextField.setText(configFull.configConfigNames[id].name.trim());
 		menuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
 		popupMenuItemsSaveToSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
+		menuItemsLoadFromSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
+		popupMenuItemsLoadFromSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);
 	}
 	
 	private void clearConfigSlotsNames() {
 		for (int i =0; i < Constants.CONFIG_NAMES_MAX; i++) {
 			menuItemsSaveToSlot[i] = new JMenuItem();
-//			menuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString() + " Name?");
 			menuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString());
 			menuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
 			menuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
 			popupMenuItemsSaveToSlot[i] = new JMenuItem();
-//			popupMenuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString() + " Name?");
 			popupMenuItemsSaveToSlot[i].setText(((Integer)(i+1)).toString());
 			popupMenuItemsSaveToSlot[i].setName(((Integer)(i+1)).toString());
 			popupMenuItemsSaveToSlot[i].addActionListener(saveToSlotAction);
+			menuItemsLoadFromSlot[i] = new JMenuItem();
+			menuItemsLoadFromSlot[i].setText(((Integer)(i+1)).toString());
+			menuItemsLoadFromSlot[i].setName(((Integer)(i+1)).toString());
+			menuItemsLoadFromSlot[i].addActionListener(saveToSlotAction);
+			popupMenuItemsLoadFromSlot[i] = new JMenuItem();
+			popupMenuItemsLoadFromSlot[i].setText(((Integer)(i+1)).toString());
+			popupMenuItemsLoadFromSlot[i].setName(((Integer)(i+1)).toString());
+			popupMenuItemsLoadFromSlot[i].addActionListener(saveToSlotAction);
 		}	
 	}
 	

@@ -57,6 +57,8 @@ public interface Constants {
 	public static final byte MD_SYSEX_CONFIG_SAVE_SIZE = 6;
 	public static final byte MD_SYSEX_CONFIG_CURRENT = (byte)0x10;
 	public static final byte MD_SYSEX_CONFIG_CURRENT_SIZE = 6;
+	public static final byte MD_SYSEX_CONFIG_LOAD = (byte)0x11;
+	public static final byte MD_SYSEX_CONFIG_LOAD_SIZE = 6;
 	public static final String[] CURVES_LIST = { "LinearCustom1", "Log1Custom2", "Log2Custom3", "Log3Custom4", "Log4Custom5",
 		"Exp1Custom6", "Exp2Custom7", "S1Custom8", "S2Custom9", "Strong1Custom10", "Strong2Custom11", "MaxCustom12",
 		"Custom13", "Custom14", "Custom15", "Custom16" };
