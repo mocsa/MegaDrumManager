@@ -146,6 +146,7 @@ public class Main_window {
 	private JMenuItem menuItemsLoadFromSlot[];
 	private JMenu mntmSaveToMd;
 	private JMenu mntmLoadFromMd;
+	private JCheckBox checkBoxSyncronized;
 	ActionListener saveToSlotAction;
 	ActionListener loadFromSlotAction;
 	private boolean LookAndFeelChanged = false;
@@ -154,6 +155,8 @@ public class Main_window {
 	private boolean compareSysexToConfigLast = false;
 	private boolean compareResultTimeoutsCombined = false;
 	private boolean withReportInTask;
+	private boolean delayedSaveToSlot = false;
+	private int delayedSaveToSlotNumber;
 	private int compareResultCombined;
 	private Timer sysexWaitTimer;
 	private JLabel lblMCU;
@@ -795,6 +798,10 @@ public class Main_window {
 			public void actionPerformed(ActionEvent arg0) {
 				int id = Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1;
 				midi_handler.requestLoadFromSlot(id);
+				if (checkBoxSyncronized.isSelected()) {
+					delayMs(configOptions.sysexDelay);
+					getAll();
+				}
 				setConfigCurrent(id);
 			}
 		};
@@ -804,8 +811,14 @@ public class Main_window {
 		saveToSlotAction =  new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int id = Integer.parseInt(((JMenuItem)arg0.getSource()).getName()) - 1;
-				midi_handler.requestSaveToSlot(id);
-				setConfigCurrent(id);
+				if (checkBoxSyncronized.isSelected()) {
+					delayedSaveToSlot = true;
+					delayedSaveToSlotNumber = id;
+					sendAll();
+				} else {
+					midi_handler.requestSaveToSlot(id);
+					setConfigCurrent(id);
+				}
 //				Timer configGlobalTimer = new Timer();
 //				configGlobalTimer.schedule(new TimerTask() {
 //					
@@ -839,6 +852,8 @@ public class Main_window {
 				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("40dlu"),
 				FormFactory.DEFAULT_COLSPEC,
@@ -927,16 +942,6 @@ public class Main_window {
 			}
 		});
 		
-		btnSaveToSlot = new JButton("Save To Slot");
-		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin one of non-volatile memory slots.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom that slot on power up.\r\n</html>");
-		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
-		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		btnSaveToSlot.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				popupMenuSaveToSlot.show(btnSaveToSlot, btnSaveToSlot.getWidth(),0);
-			}
-		});
-		
 		btnLoadFromSlot = new JButton("Load from Slot");
 		btnLoadFromSlot.setToolTipText("<html>Tell MegaDrum to load settings<br>\r\nfrom one of non-volatile memory slots.<br>\r\n<br>\r\n</html>");
 		btnLoadFromSlot.setMargin(new Insets(0, 1, 0, 1));
@@ -948,12 +953,28 @@ public class Main_window {
 		});
 
 		panel_top.add(btnLoadFromSlot, "6, 1");
+		
+		btnSaveToSlot = new JButton("Save To Slot");
+		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin one of non-volatile memory slots.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom that slot on power up.\r\n</html>");
+		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
+		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnSaveToSlot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				popupMenuSaveToSlot.show(btnSaveToSlot, btnSaveToSlot.getWidth(),0);
+			}
+		});
 		panel_top.add(btnSaveToSlot, "8, 1");
-		panel_top.add(btnLoadAll, "10, 1");
-		panel_top.add(btnSaveAll, "12, 1");
+		
+		checkBoxSyncronized = new JCheckBox("Synchronized");
+		checkBoxSyncronized.setToolTipText("<html>Do GetAll/SendAll after/before Load from/Save to Slot </html>");
+		checkBoxSyncronized.setSelected(true);
+		checkBoxSyncronized.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel_top.add(checkBoxSyncronized, "10, 1");
+		panel_top.add(btnLoadAll, "12, 1");
+		panel_top.add(btnSaveAll, "14, 1");
 		comboBoxCfg.setEditable(true);
 		comboBoxCfg.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		panel_top.add(comboBoxCfg, "14, 1, fill, default");
+		panel_top.add(comboBoxCfg, "16, 1, fill, default");
 		
 		JButton btnPrevcfg = new JButton("prevCfg");
 		btnPrevcfg.setToolTipText("<html>Switch to previous full MegaDrum config</html>");
@@ -966,7 +987,7 @@ public class Main_window {
 		});
 		btnPrevcfg.setMargin(new Insets(0, 1, 0, 1));
 		btnPrevcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel_top.add(btnPrevcfg, "16, 1");
+		panel_top.add(btnPrevcfg, "18, 1");
 		
 		JButton btnNextcfg = new JButton("nextCfg");
 		btnNextcfg.setToolTipText("<html>Switch to next full MegaDrum config</html>");
@@ -979,10 +1000,10 @@ public class Main_window {
 		});
 		btnNextcfg.setMargin(new Insets(0, 1, 0, 1));
 		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel_top.add(btnNextcfg, "18, 1");
+		panel_top.add(btnNextcfg, "20, 1");
 		
 		commsStateLabel = new JLabel("SysEx Ok");
-		panel_top.add(commsStateLabel, "20, 1");
+		panel_top.add(commsStateLabel, "22, 1");
 		commsStateLabel.setOpaque(true);
 		commsStateLabel.setBackground(Color.GREEN);
 		commsStateLabel.setVisible(false);
@@ -1960,6 +1981,13 @@ public class Main_window {
                     	while (compareSysexToConfigIsOn) {
                     		delayMs(10);
                     	}
+                    	if (delayedSaveToSlot) {
+                    		midi_handler.requestSaveToSlot(delayedSaveToSlotNumber);
+                    		setConfigCurrent(delayedSaveToSlotNumber);
+                    		//
+                    		delayedSaveToSlot = false;
+                    	}
+
                    }
                 });
             }
