@@ -295,13 +295,13 @@ public class Main_window {
 		JMenu mnLoad = new JMenu("All settings");
 		mnMain.add(mnLoad);
 		
-		JMenuItem mntmLoadFromMd = new JMenuItem("Load from MD");
-		mntmLoadFromMd.addActionListener(new ActionListener() {
+		JMenuItem menuItemLoadFromMd = new JMenuItem("Get from MD");
+		menuItemLoadFromMd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				getAll();
 			}
 		});
-		mnLoad.add(mntmLoadFromMd);
+		mnLoad.add(menuItemLoadFromMd);
 		
 		JMenuItem mntmSendToMd = new JMenuItem("Send to MD");
 		mntmSendToMd.addActionListener(new ActionListener() {
@@ -2169,10 +2169,10 @@ public class Main_window {
 		} else {
 			tglbtnMidi.setText("Open MIDI");
 			tglbtnMidi.setSelected(false);
-			popupMenuSaveToSlot.removeAll();
-			mntmSaveToMd.removeAll();
 			popupMenuLoadFromSlot.removeAll();
 			mntmLoadFromMd.removeAll();
+			popupMenuSaveToSlot.removeAll();
+			mntmSaveToMd.removeAll();
 		}
 	}
 	
@@ -2353,8 +2353,8 @@ public class Main_window {
 							for (int i = 0; i < b; i++) {
 								popupMenuSaveToSlot.add(popupMenuItemsSaveToSlot[i]);
 								mntmSaveToMd.add(menuItemsSaveToSlot[i]);
-								popupMenuLoadFromSlot.add(popupMenuItemsLoadFromSlot[1]);
-								mntmLoadFromMd.add(menuItemsLoadFromSlot[1]);
+								popupMenuLoadFromSlot.add(popupMenuItemsLoadFromSlot[i]);
+								mntmLoadFromMd.add(menuItemsLoadFromSlot[i]);
 							}
 						}
 						break;
@@ -2399,11 +2399,11 @@ public class Main_window {
 			menuItemsLoadFromSlot[i] = new JMenuItem();
 			menuItemsLoadFromSlot[i].setText(((Integer)(i+1)).toString());
 			menuItemsLoadFromSlot[i].setName(((Integer)(i+1)).toString());
-			menuItemsLoadFromSlot[i].addActionListener(saveToSlotAction);
+			menuItemsLoadFromSlot[i].addActionListener(loadFromSlotAction);
 			popupMenuItemsLoadFromSlot[i] = new JMenuItem();
 			popupMenuItemsLoadFromSlot[i].setText(((Integer)(i+1)).toString());
 			popupMenuItemsLoadFromSlot[i].setName(((Integer)(i+1)).toString());
-			popupMenuItemsLoadFromSlot[i].addActionListener(saveToSlotAction);
+			popupMenuItemsLoadFromSlot[i].addActionListener(loadFromSlotAction);
 		}	
 	}
 	
