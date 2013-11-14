@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Point;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
@@ -74,6 +75,13 @@ public class ConfigOptions implements java.io.Serializable {
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop) {
+		prop.setListDelimiter((char)0);
+		try {
+			prop.refresh();
+		} catch (ConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		useSamePort = prop.getBoolean("useSamePort", useSamePort);
 		useThruPort = prop.getBoolean("useThruPort", useThruPort);
 		autoOpenPorts = prop.getBoolean("autoOpenPorts", autoOpenPorts);
@@ -90,6 +98,7 @@ public class ConfigOptions implements java.io.Serializable {
 		MidiInName = prop.getString("MidiInName", MidiInName);
 		MidiOutName = prop.getString("MidiOutName", MidiOutName);
 		MidiThruName = prop.getString("MidiThruName", MidiThruName);
+		System.out.printf("MIDI IN in config is %s\n", MidiInName);
 		chainId = Utils.validateInt(prop.getInt("chainId", chainId),0,3,chainId);
 		//inputsCount = Utils.validateInt(prop.getInt("inputsCount", inputsCount),18,56,inputsCount);
 		sysexDelay = Utils.validateInt(prop.getInt("sysexDelay", sysexDelay),10,100,sysexDelay);
