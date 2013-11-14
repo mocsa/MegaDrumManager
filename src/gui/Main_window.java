@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.EventQueue;
 
+import javax.swing.BorderFactory;
 import javax.swing.ComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -1053,12 +1054,13 @@ public class Main_window {
 		panel.add(lblFirmwareVer, "6, 1");
 		
 		lblVersion = new JLabel("???????");
+		panel.add(lblVersion, "8, 1");
 		lblVersion.setToolTipText("<html>Shows the current firmware version<br>\r\nof the connected MegaDrum.\r\n</html>");
 		lblVersion.setHorizontalAlignment(SwingConstants.CENTER);
 		lblVersion.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblVersion.setOpaque(true);
 		lblVersion.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		lblVersion.setForeground(new Color(0, 0, 0));
-		panel.add(lblVersion, "8, 1");
 		
 		JLabel lblMcu = new JLabel("MCU:");
 		lblMcu.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -1304,6 +1306,7 @@ public class Main_window {
 				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
 					midi_handler.closeAllPorts();
 					lblVersion.setText("????????");
+					lblVersion.setBackground(UIManager.getColor ("lblVersion.background"));
 					lblMCU.setText("Unknown");
 					configOptions.mcuType = 0;
 					commsStateLabel.setVisible(false);
@@ -2315,6 +2318,22 @@ public class Main_window {
 							lblVersion.setText(((Integer)ver).toString());
 							commsStateLabel.setText("SysEx Ok");
 							commsStateLabel.setBackground(Color.GREEN);
+							if (ver < Constants.MD_MINIMUM_VERSION) {
+								lblVersion.setBackground(Color.RED);
+								Timer warning_timer = new Timer();
+								warning_timer.schedule(new TimerTask() {
+									
+									@Override
+									public void run() {
+										JOptionPane.showMessageDialog(null,
+											    "<html><font size=5>"+Constants.WARNING_VERSION+"</font></html>",
+											    "Warning",
+											    JOptionPane.WARNING_MESSAGE);
+									}
+								}, 200);
+							} else {
+								lblVersion.setBackground(Color.GREEN);
+							}
 						}
 						break;
 					case Constants.MD_SYSEX_CURVE:

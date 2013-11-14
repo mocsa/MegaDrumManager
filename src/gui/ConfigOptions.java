@@ -98,7 +98,6 @@ public class ConfigOptions implements java.io.Serializable {
 		MidiInName = prop.getString("MidiInName", MidiInName);
 		MidiOutName = prop.getString("MidiOutName", MidiOutName);
 		MidiThruName = prop.getString("MidiThruName", MidiThruName);
-		System.out.printf("MIDI IN in config is %s\n", MidiInName);
 		chainId = Utils.validateInt(prop.getInt("chainId", chainId),0,3,chainId);
 		//inputsCount = Utils.validateInt(prop.getInt("inputsCount", inputsCount),18,56,inputsCount);
 		sysexDelay = Utils.validateInt(prop.getInt("sysexDelay", sysexDelay),10,100,sysexDelay);
