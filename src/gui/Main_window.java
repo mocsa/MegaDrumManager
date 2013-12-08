@@ -1293,7 +1293,7 @@ public class Main_window {
 						comboBox_inputsCount.selectEventsDisabled--;
 					} else {
 			        	configFull.configGlobalMisc.inputs_count = ((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
-			        	updateInputsCountControls();
+			        	updateGlobalMiscControls();
 						if (configOptions.interactive) {
 							sendGlobalMisc(true);
 						}
@@ -2047,7 +2047,7 @@ public class Main_window {
 		controlsPads.setPadPointer(p);
 		controlsPads.updateControls();
 		controlsPadsExtra.updateControls();		
-		updateInputsCountControls();
+		updateGlobalMiscControls();
 	}
 	private void loadAllFromConfigFull() {
 		byte [] sysex = new byte[256];
@@ -2117,7 +2117,7 @@ public class Main_window {
 			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
 			loadAllFromConfigFull();
 		}
-		updateInputsCountControls();
+		updateGlobalMiscControls();
 		frmMegadrummanager.setLocation(configOptions.mainWindowPosition);
 		for (int i = 0;i<Constants.PANELS_COUNT;i++) {
 			framesDetached[i].setLocation(configOptions.framesPositions[i]);
@@ -2139,7 +2139,7 @@ public class Main_window {
 		System.exit(0);
 	}
 	
-	private void updateInputsCountControls() {
+	private void updateGlobalMiscControls() {
 //		comboBox_inputsCount.setSelectedIndex((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		if (configFull != null) {
 			comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
@@ -2148,7 +2148,9 @@ public class Main_window {
 				spinnerLCDcontrast.setValue(configFull.configGlobalMisc.lcd_contrast);
 			}
 			controlsPedal.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
-			controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);			
+			controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
+			chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);
+			chckbxCustomPadsNames.setSelected(configFull.configGlobalMisc.custom_names_en);
 		}
 	}
 	
@@ -2361,7 +2363,7 @@ public class Main_window {
 						int c = comboBox_inputsCount.getSelectedIndex();
 						comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 						if (comboBox_inputsCount.getSelectedIndex() != c) {
-							updateInputsCountControls();
+							updateGlobalMiscControls();
 						}
 						if ((Integer)spinnerLCDcontrast.getValue() != configFull.configGlobalMisc.lcd_contrast) {
 							spinnerLCDEventDisabled = 1;
