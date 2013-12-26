@@ -18,7 +18,6 @@ import	javax.sound.midi.Sequencer;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.SysexMessage;
 import javax.swing.event.EventListenerList;
 
