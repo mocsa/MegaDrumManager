@@ -481,10 +481,18 @@ public class Main_window {
 				//JOptionPane jp = JOptionPane();
 				//jp.setFont(new Font("Tahoma", Font.PLAIN, 10));
 				//jp.showMessageDialog(null,
-				JOptionPane.showMessageDialog(null,
-					    "<html><font size=5>"+Constants.HELP_ABOUT+"</font></html>",
-					    "About",
-					    JOptionPane.INFORMATION_MESSAGE);
+				if (System.getProperty("os.name").startsWith("Mac")) {
+					JOptionPane.showMessageDialog(null,
+						    Constants.HELP_ABOUT+Constants.HELP_ABOUT_MMJ,
+						    "About",
+						    JOptionPane.INFORMATION_MESSAGE);
+					
+				} else {
+					JOptionPane.showMessageDialog(null,
+						    "<html><font size=5>"+Constants.HELP_ABOUT+"</font></html>",
+						    "About",
+						    JOptionPane.INFORMATION_MESSAGE);					
+				}
 			}
 		});
 		mnHelp.add(mntmAbout);

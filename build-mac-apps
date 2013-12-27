@@ -1,0 +1,13 @@
+#!/bin/bash
+mkdir MacDist
+mkdir MacDistJRE
+versionsdate=`date "+%Y%m%d"`
+
+JAVA_HOME=`/usr/libexec/java_home` ~/Projects/apache-ant-1.9.2/bin/ant bundle-small
+JAVA_HOME=`/usr/libexec/java_home` ~/Projects/apache-ant-1.9.2/bin/ant bundle
+productbuild --version ${versionsdate} --component MacDist/MegaDrumManager.app /Applications megadrum-manager-installer-${versionsdate}.pkg
+productbuild --version ${versionsdate} --component MacDistJRE/MegaDrumManager.app /Applications megadrum-manager-jre-installer-${versionsdate}.pkg
+
+rm -rf MacDist
+rm -rf MacDistJRE
+
