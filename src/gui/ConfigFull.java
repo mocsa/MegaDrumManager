@@ -1,6 +1,5 @@
 package gui;
 
-import org.apache.commons.configuration.CombinedConfiguration;
 import org.apache.commons.configuration.ConversionException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
