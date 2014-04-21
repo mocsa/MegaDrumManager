@@ -504,6 +504,7 @@ public class Utils {
 			
 			
 			config.all_gains_low = ((flags&1) != 0);
+			config.alt_note_choking = ((flags&(1<<1)) != 0);
 			config.big_vu_meter = ((flags&(1<<2)) != 0);
 			config.quick_access = ((flags&(1<<3)) != 0);
 			config.big_vu_split = ((flags&(1<<4)) != 0);
@@ -549,6 +550,7 @@ public class Utils {
 			
 			
 			if (config.all_gains_low != ((flags&1) != 0)) result = 1;
+			if (config.alt_note_choking != ((flags&(1<<1)) != 0)) result = 1;
 			if (config.big_vu_meter != ((flags&(1<<2)) != 0)) result = 1;
 			if (config.quick_access != ((flags&(1<<3)) != 0)) result = 1;
 			if (config.big_vu_split != ((flags&(1<<4)) != 0)) result = 1;
@@ -566,7 +568,8 @@ public class Utils {
 		short flags;
 		int i = 0;
 		
-		flags = (short) (((config.all_gains_low)?1:0)|(((config.big_vu_meter)?1:0)<<2)
+		flags = (short) (((config.all_gains_low)?1:0)|
+				(((config.alt_note_choking)?1:0)<<1)|(((config.big_vu_meter)?1:0)<<2)
 				|(((config.quick_access)?1:0)<<3)|(((config.big_vu_split)?1:0)<<4)
 				|(((config.alt_false_tr_supp)?1:0)<<5)|(((config.inputs_priority)?1:0)<<6)
 				|(((config.midi_thru)?1:0)<<8)|(((config.send_triggered_in)?1:0)<<11));

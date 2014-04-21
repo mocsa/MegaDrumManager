@@ -37,6 +37,7 @@ public class ControlsMisc extends JPanel {
 	private JSpinner spinner_noteoff;
 	private JSpinner spinner_pressroll;
 	private JSpinner spinner_latency;
+	private JCheckBox checkBox_altNoteChoking;
 	private JCheckBox checkBox_bigVuMeter;
 	private JCheckBox checkBox_quickAccess;
 	private JCheckBox checkBox_altFalseTrSupp;
@@ -54,6 +55,8 @@ public class ControlsMisc extends JPanel {
 	private JLabel lblOctaveShift;
 	private JLabel labelSendTriggeredIn;
 	private JCheckBox checkBox_sendTriggeredIn;
+	private JLabel lblAltnoteChoking;
+	private JCheckBox checkBox;
 
 	/**
 	 * Create the panel.
@@ -111,6 +114,7 @@ public class ControlsMisc extends JPanel {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("32dlu"),},
 			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -307,6 +311,20 @@ public class ControlsMisc extends JPanel {
 		});		
 		checkBox_sendTriggeredIn.setToolTipText("<html>Check this box to enable MegaDrum to send TriggeredIn info.<br>\r\nWhen enabled, triggered inputs will also send MIDI CC 0x13<br>\r\nwith the inputs number<br>\r\nto make MDM to swith to a triggered input.</html>");
 		panel.add(checkBox_sendTriggeredIn, "3, 12");
+		
+		lblAltnoteChoking = new JLabel("AltNote Choking");
+		lblAltnoteChoking.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel.add(lblAltnoteChoking, "1, 13");
+		
+		checkBox_altNoteChoking = new JCheckBox("");
+		checkBox_altNoteChoking.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				configFull.configMisc.alt_note_choking = checkBox_altNoteChoking.isSelected();
+				valueChanged();
+			}
+		});		
+		checkBox_altNoteChoking.setToolTipText("<html>Check this box to use AltNote for cymbals choking instead of Aftertouch.</html>");
+		panel.add(checkBox_altNoteChoking, "3, 13");
 		changeEventsAllowed = true;
 
 	}
@@ -340,6 +358,7 @@ public class ControlsMisc extends JPanel {
 		checkBox_allGainsLow.setSelected(configFull.configMisc.all_gains_low);		
 		checkBox_MidiThru.setSelected(configFull.configMisc.midi_thru);
 		checkBox_sendTriggeredIn.setSelected(configFull.configMisc.send_triggered_in);		
+		checkBox_altNoteChoking.setSelected(configFull.configMisc.alt_note_choking);		
 		changeEventsAllowed = true;
 	}
 

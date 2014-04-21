@@ -23,6 +23,7 @@ public class ConfigMisc {
 	public boolean inputs_priority = false;
 	public boolean midi_thru = false;
 	public boolean send_triggered_in = false;
+	public boolean alt_note_choking = false;
 
 	public ConfigMisc (){
 	}
@@ -41,6 +42,7 @@ public class ConfigMisc {
 		prop.setProperty(prefix+"inputs_priority", inputs_priority);
 		prop.setProperty(prefix+"midi_thru", midi_thru);
 		prop.setProperty(prefix+"send_triggered_in", send_triggered_in);
+		prop.setProperty(prefix+"alt_note_choking", alt_note_choking);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
@@ -56,5 +58,6 @@ public class ConfigMisc {
 		inputs_priority = prop.getBoolean(prefix+"inputs_priority", inputs_priority);
 		midi_thru = prop.getBoolean(prefix+"midi_thru", midi_thru);
 		send_triggered_in = prop.getBoolean(prefix+"send_triggered_in", send_triggered_in);
+		alt_note_choking = prop.getBoolean(prefix+"alt_note_choking", alt_note_choking);
 	}
 }
