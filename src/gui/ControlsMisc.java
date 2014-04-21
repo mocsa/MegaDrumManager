@@ -56,7 +56,6 @@ public class ControlsMisc extends JPanel {
 	private JLabel labelSendTriggeredIn;
 	private JCheckBox checkBox_sendTriggeredIn;
 	private JLabel lblAltnoteChoking;
-	private JCheckBox checkBox;
 
 	/**
 	 * Create the panel.
