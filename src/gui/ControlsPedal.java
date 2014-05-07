@@ -48,11 +48,14 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	private JCheckBoxCustom checkBox_reverseLevels;
 	private JCheckBoxCustom checkBox_softChicks;
 	private JCheckBoxCustom checkBox_autoLevels;
+	private JCheckBoxCustom checkBox_new_algorithm;
 	private Spin127Control spin127Control_chickDelay;
 	private Spin127Control spin127Control_cc;
 	private Spin127Control spin127Control_ccRdcLvl;
 	private Spin1023Control spin1023Control_lowLevel;
 	private Spin1023Control spin1023Control_highLevel;
+	private Spin1023Control spin1023Control_minVelocity;
+	private Spin1023Control spin1023Control_maxVelocity;
 	private Spin127Control spin127Control_openLevel;
 	private Spin127Control spin127Control_semiOpen;
 	private Spin127Control spin127Control_halfOpen;
@@ -143,6 +146,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 				RowSpec.decode("12dlu"),
 				RowSpec.decode("12dlu"),
 				RowSpec.decode("12dlu"),
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
@@ -254,33 +258,42 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		checkBox_autoLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(checkBox_autoLevels, "3, 7");
 		
+		JLabel lblNewAlgorithm = new JLabel("New Algorithm");
+		lblNewAlgorithm.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel_misc.add(lblNewAlgorithm, "1, 8");
+		
+		checkBox_new_algorithm = new JCheckBoxCustom("");
+		checkBox_new_algorithm.setValueChangedListener(this);
+		checkBox_new_algorithm.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel_misc.add(checkBox_new_algorithm, "3, 8");
+		
 		JLabel lblChickDelay = new JLabel("Chick Delay");
 		lblChickDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_misc.add(lblChickDelay, "1, 8");
+		panel_misc.add(lblChickDelay, "1, 9");
 		
 		spin127Control_chickDelay = new Spin127Control();
 		spin127Control_chickDelay.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_chickDelay.setEventListener(this);
-		panel_misc.add(spin127Control_chickDelay, "3, 8, fill, fill");
+		panel_misc.add(spin127Control_chickDelay, "3, 9, fill, fill");
 		
 		JLabel lblCcNumber = new JLabel("CC Number");
 		lblCcNumber.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_misc.add(lblCcNumber, "1, 9");
+		panel_misc.add(lblCcNumber, "1, 10");
 		
 		spin127Control_cc = new Spin127Control();
 		spin127Control_cc.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_cc.setEventListener(this);
-		panel_misc.add(spin127Control_cc, "3, 9, fill, fill");
+		panel_misc.add(spin127Control_cc, "3, 10, fill, fill");
 		
 		JLabel lblCcRdcLvl = new JLabel("CC Reduction Lvl");
 		lblCcRdcLvl.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_misc.add(lblCcRdcLvl, "1, 10");
+		panel_misc.add(lblCcRdcLvl, "1, 11");
 		
 		spin127Control_ccRdcLvl = new Spin127Control();
 		spin127Control_ccRdcLvl.getSpinner().setFont(new Font("Tahoma", Font.PLAIN, 12));
 		spin127Control_ccRdcLvl.setEventListener(this);
 		spin127Control_ccRdcLvl.getSpinner().setModel(new SpinnerNumberModel(0, 0, 3, 1));
-		panel_misc.add(spin127Control_ccRdcLvl, "3, 10, fill, fill");
+		panel_misc.add(spin127Control_ccRdcLvl, "3, 11, fill, fill");
 		
 		JPanel panel_levels = new JPanel();
 		tabbedPane.addTab("Levels", null, panel_levels, null);
@@ -289,6 +302,8 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
@@ -370,6 +385,22 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_longThres = new Spin127Control();
 		spin127Control_longThres.setEventListener(this);
 		panel_levels.add(spin127Control_longThres, "3, 9, fill, fill");
+		
+		JLabel lblMinVelocity = new JLabel("Min Velocity");
+		lblMinVelocity.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel_levels.add(lblMinVelocity, "1, 10");
+		
+		spin1023Control_minVelocity = new Spin1023Control();
+		spin1023Control_minVelocity.setEventListener(this);
+		panel_levels.add(spin1023Control_minVelocity, "3, 10, fill, fill");
+		
+		JLabel lblMaxVelocity = new JLabel("Max Velocity");
+		lblMaxVelocity.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel_levels.add(lblMaxVelocity, "1, 11");
+		
+		spin1023Control_maxVelocity = new Spin1023Control();
+		spin1023Control_maxVelocity.setEventListener(this);
+		panel_levels.add(spin1023Control_maxVelocity, "3, 11, fill, fill");
 		
 		
 		JPanel panel_notes = new JPanel();
@@ -524,6 +555,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		checkBox_reverseLevels.setValueWithoutEvent(configFull.configPedal.reverseLevels);
 		checkBox_softChicks.setValueWithoutEvent(configFull.configPedal.softChicks);
 		checkBox_autoLevels.setValueWithoutEvent(configFull.configPedal.autoLevels);
+		checkBox_new_algorithm.setValueWithoutEvent(configFull.configPedal.new_algorithm);
 		spin127Control_chickDelay.setValueWithoutEvents(configFull.configPedal.chickDelay);
 		spin127Control_ccRdcLvl.setValueWithoutEvents(configFull.configPedal.ccRdcLvl);
 		spin127Control_cc.setValueWithoutEvents(configFull.configPedal.cc);
@@ -536,6 +568,8 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_shortThres.setValueWithoutEvents(configFull.configPedal.shortThres);
 		spin127Control_longThres.setValueWithoutEvents(configFull.configPedal.longThres);
 		spin127Control_chickThres.setValueWithoutEvents(configFull.configPedal.chickThres);
+		spin1023Control_minVelocity.setValueWithoutEvents(configFull.configPedal.minVelocity);
+		spin1023Control_maxVelocity.setValueWithoutEvents(configFull.configPedal.maxVelocity);
 		noteSpinControl_bowSemiOpen.setValueWithoutEvents(configFull.configPedal.bowSemiOpenNote);
 		noteSpinControl_edgeSemiOpen.setValueWithoutEvents(configFull.configPedal.edgeSemiOpenNote);
 		noteSpinControl_bellSemiOpen.setValueWithoutEvents(configFull.configPedal.bellSemiOpenNote);
@@ -561,6 +595,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 			configFull.configPedal.reverseLevels = checkBox_reverseLevels.isSelected();
 			configFull.configPedal.softChicks = checkBox_softChicks.isSelected();
 			configFull.configPedal.autoLevels = checkBox_autoLevels.isSelected();
+			configFull.configPedal.new_algorithm = checkBox_new_algorithm.isSelected();
 			configFull.configPedal.chickDelay = (Integer)spin127Control_chickDelay.getSpinner().getValue();
 			configFull.configPedal.cc = (Integer)spin127Control_cc.getSpinner().getValue();
 			configFull.configPedal.ccRdcLvl = (Integer)spin127Control_ccRdcLvl.getSpinner().getValue();
@@ -573,6 +608,8 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 			configFull.configPedal.chickThres = (Integer)spin127Control_chickThres.getSpinner().getValue();
 			configFull.configPedal.lowLevel = (Integer)spin1023Control_lowLevel.getSpinner().getValue();
 			configFull.configPedal.highLevel = (Integer)spin1023Control_highLevel.getSpinner().getValue();
+			configFull.configPedal.minVelocity = (Integer)spin1023Control_minVelocity.getSpinner().getValue();
+			configFull.configPedal.maxVelocity = (Integer)spin1023Control_maxVelocity.getSpinner().getValue();
 		
 			configFull.configPedal.bowSemiOpenNote = (Integer)noteSpinControl_bowSemiOpen.getValue();		
 			configFull.configPedal.edgeSemiOpenNote = (Integer)noteSpinControl_edgeSemiOpen.getValue();

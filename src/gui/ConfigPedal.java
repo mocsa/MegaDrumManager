@@ -5,6 +5,7 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 public class ConfigPedal {
 	public boolean type;
+	public boolean new_algorithm;
 	public boolean autoLevels;
 	public boolean altIn;
 	public boolean reverseLevels;
@@ -23,6 +24,8 @@ public class ConfigPedal {
 	public boolean softChicks;
 	public int semiOpenLevel;
 	public int halfOpenLevel;
+	public int minVelocity;
+	public int maxVelocity;
 	public int bowSemiOpenNote;
 	public int edgeSemiOpenNote;
 	public int bellSemiOpenNote;
@@ -38,11 +41,13 @@ public class ConfigPedal {
 	public int chickNote;
 	public int splashNote;
 	
+	
 	public ConfigPedal (){
 	}
 	public void copyToPropertiesConfiguration(PropertiesConfiguration prop, PropertiesConfigurationLayout layout, String prefix) {
 		layout.setComment(prefix+"type", "\n#Pedal settings");
 		prop.setProperty(prefix+"type", type);
+		prop.setProperty(prefix+"new_algorithm", new_algorithm);
 		prop.setProperty(prefix+"autoLevels", autoLevels);
 		prop.setProperty(prefix+"altIn", altIn);
 		prop.setProperty(prefix+"reverseLevels", reverseLevels);
@@ -61,6 +66,8 @@ public class ConfigPedal {
 		prop.setProperty(prefix+"softChicks", softChicks);
 		prop.setProperty(prefix+"semiOpenLevel", semiOpenLevel);
 		prop.setProperty(prefix+"halfOpenLevel", halfOpenLevel);
+		prop.setProperty(prefix+"minVelocity", minVelocity);
+		prop.setProperty(prefix+"maxVelocity", maxVelocity);		
 		prop.setProperty(prefix+"bowSemiOpenNote", bowSemiOpenNote);
 		prop.setProperty(prefix+"edgeSemiOpenNote", edgeSemiOpenNote);
 		prop.setProperty(prefix+"bellSemiOpenNote", bellSemiOpenNote);
@@ -97,6 +104,8 @@ public class ConfigPedal {
 		softChicks = prop.getBoolean(prefix+"softChicks", softChicks);
 		semiOpenLevel = Utils.validateInt(prop.getInt(prefix+"semiOpenLevel", semiOpenLevel),0,127,semiOpenLevel);
 		halfOpenLevel = Utils.validateInt(prop.getInt(prefix+"halfOpenLevel", halfOpenLevel),0,127,halfOpenLevel);
+		minVelocity = Utils.validateInt(prop.getInt(prefix+"minVelocity", minVelocity),0,1023,minVelocity);
+		maxVelocity = Utils.validateInt(prop.getInt(prefix+"maxVelocity", maxVelocity),0,1023,maxVelocity);
 		bowSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"bowSemiOpenNote", bowSemiOpenNote),0,127,bowSemiOpenNote);
 		edgeSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"edgeSemiOpenNote", edgeSemiOpenNote),0,127,edgeSemiOpenNote);
 		bellSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"bellSemiOpenNote", bellSemiOpenNote),0,127,bellSemiOpenNote);
