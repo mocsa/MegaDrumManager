@@ -24,6 +24,7 @@ public class JComboBoxCustom extends JComboBox<Object> {
 		if (index != getSelectedIndex()) {
 			this.selectEventsDisabled = 1;
 			this.setSelectedIndex(index);
+			this.updateUI();
 		}
 	}
 

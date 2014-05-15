@@ -1,5 +1,7 @@
 package gui;
 
+import java.security.PublicKey;
+
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
@@ -24,8 +26,10 @@ public class ConfigPedal {
 	public boolean softChicks;
 	public int semiOpenLevel;
 	public int halfOpenLevel;
-	public int minVelocity;
-	public int maxVelocity;
+	public int chickCurve;
+	public int chickParam1;
+	public int chickParam2;
+	public int chickParam3;
 	public int bowSemiOpenNote;
 	public int edgeSemiOpenNote;
 	public int bellSemiOpenNote;
@@ -66,8 +70,10 @@ public class ConfigPedal {
 		prop.setProperty(prefix+"softChicks", softChicks);
 		prop.setProperty(prefix+"semiOpenLevel", semiOpenLevel);
 		prop.setProperty(prefix+"halfOpenLevel", halfOpenLevel);
-		prop.setProperty(prefix+"minVelocity", minVelocity);
-		prop.setProperty(prefix+"maxVelocity", maxVelocity);		
+		prop.setProperty(prefix+"chickCurve", chickCurve);
+		prop.setProperty(prefix+"chickPeriodShort", chickParam1);
+		prop.setProperty(prefix+"chickPeriodLong", chickParam2);	
+		prop.setProperty(prefix+"chickPeriodDead", chickParam3);	
 		prop.setProperty(prefix+"bowSemiOpenNote", bowSemiOpenNote);
 		prop.setProperty(prefix+"edgeSemiOpenNote", edgeSemiOpenNote);
 		prop.setProperty(prefix+"bellSemiOpenNote", bellSemiOpenNote);
@@ -104,8 +110,10 @@ public class ConfigPedal {
 		softChicks = prop.getBoolean(prefix+"softChicks", softChicks);
 		semiOpenLevel = Utils.validateInt(prop.getInt(prefix+"semiOpenLevel", semiOpenLevel),0,127,semiOpenLevel);
 		halfOpenLevel = Utils.validateInt(prop.getInt(prefix+"halfOpenLevel", halfOpenLevel),0,127,halfOpenLevel);
-		minVelocity = Utils.validateInt(prop.getInt(prefix+"minVelocity", minVelocity),0,1023,minVelocity);
-		maxVelocity = Utils.validateInt(prop.getInt(prefix+"maxVelocity", maxVelocity),0,1023,maxVelocity);
+		chickCurve = Utils.validateInt(prop.getInt(prefix+"chickCurve", chickCurve),0,15,chickCurve);
+		chickParam1 = Utils.validateInt(prop.getInt(prefix+"chickPeriodShort", chickParam1),0,1023,chickParam1);
+		chickParam2 = Utils.validateInt(prop.getInt(prefix+"chickPeriodLong", chickParam2),0,1023,chickParam2);
+		chickParam3 = Utils.validateInt(prop.getInt(prefix+"chickPeriodDead", chickParam3),0,1023,chickParam3);
 		bowSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"bowSemiOpenNote", bowSemiOpenNote),0,127,bowSemiOpenNote);
 		edgeSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"edgeSemiOpenNote", edgeSemiOpenNote),0,127,edgeSemiOpenNote);
 		bellSemiOpenNote = Utils.validateInt(prop.getInt(prefix+"bellSemiOpenNote", bellSemiOpenNote),0,127,bellSemiOpenNote);
