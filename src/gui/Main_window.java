@@ -2391,7 +2391,9 @@ public class Main_window {
 						if (buffer.length >= Constants.MD_SYSEX_MCU_TYPE_SIZE) {
 							configOptions.mcuType = (int)(buffer[4]<<4);
 							configOptions.mcuType |= (int)buffer[5];
-							lblMCU.setText(Constants.MCU_TYPES[configOptions.mcuType]);
+							if (configOptions.mcuType < Constants.MCU_TYPES.length ) {
+								lblMCU.setText(Constants.MCU_TYPES[configOptions.mcuType]);								
+							}
 							commsStateLabel.setText("SysEx Ok");
 							commsStateLabel.setBackground(Color.GREEN);
 						}

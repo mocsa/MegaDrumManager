@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20140516";
+	public static final String MD_VERSION = "20140829";
 	public static final int MD_MINIMUM_VERSION = 20140516;
 	public static final String WARNING_VERSION = "<html><font size=2>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=2>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
@@ -17,7 +17,7 @@ public interface Constants {
 	public static final int PANEL_DETACH = 2;
 	public static final int PANELS_COUNT = 5;
 	public static final String[] PANELS_NAMES = { "Misc", "Pedal", "Pads", "Pads Extra", "MIDI Log"};
-	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6", "STM32F103RBT6", "STM32F103RCT6"};
+	public static final String[] MCU_TYPES = { "Unknown", "Atmega644", "Atmega1284", "STM32F103VBT6", "STM32F103RBT6", "STM32F103RCT6", "STM32F205RBT6", "STM32F205RCT6"};
 	public static final int Error_NoResponse = 0x00;
 	public static final int Error_OK = 0x11;
 	public static final int Error_CRC = 0x22;

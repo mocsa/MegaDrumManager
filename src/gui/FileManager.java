@@ -74,6 +74,26 @@ class BinFileFilterSTM32b extends javax.swing.filechooser.FileFilter {
     }
 }
 
+class BinFileFilterSTM32c extends javax.swing.filechooser.FileFilter {
+    public boolean accept(File f) {
+        return f.isDirectory() || (f.getName().toLowerCase().endsWith(".bin") && (f.getName().toLowerCase().contains("megadrumstm32c_")));
+    }
+    
+    public String getDescription() {
+        return "STM32c firmware files (*.bin)";
+    }
+}
+
+class BinFileFilterSTM32d extends javax.swing.filechooser.FileFilter {
+    public boolean accept(File f) {
+        return f.isDirectory() || (f.getName().toLowerCase().endsWith(".bin") && (f.getName().toLowerCase().contains("megadrumstm32d_")));
+    }
+    
+    public String getDescription() {
+        return "STM32d firmware files (*.bin)";
+    }
+}
+
 public class FileManager {
 	private JFileChooser fileChooser;
 	private JFrame parent;
@@ -182,6 +202,12 @@ public class FileManager {
 		}
 		if (options.mcuType == 5) {
 			fileChooser.setFileFilter(new BinFileFilterSTM32b());
+		}
+		if (options.mcuType == 6) {
+			fileChooser.setFileFilter(new BinFileFilterSTM32c());
+		}
+		if (options.mcuType == 7) {
+			fileChooser.setFileFilter(new BinFileFilterSTM32d());
 		}
 		returnVal = fileChooser.showOpenDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
