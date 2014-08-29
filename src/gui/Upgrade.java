@@ -262,7 +262,9 @@ public class Upgrade extends JDialog {
 		Rectangle progressRect = progressBar.getBounds();
 		progressRect.x = 0;
 		progressRect.y = 0;
-		progressBar.paintImmediately( progressRect );		
+		//progressBar.paintImmediately( progressRect );
+		//progressBar.repaint(progressRect);
+		progressBar.repaint(10);
 	}
 
 	

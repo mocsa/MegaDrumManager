@@ -612,6 +612,7 @@ public class Midi_handler {
 		int frameSize;				// Number of bytes in the current frame
 		int bufferSize = 0;			// Total number of bytes in the buffer
 		int bytesSent = 0;			// Number of bytes sent so far
+		int prevBytesSent = 0;
 		int nBytes;
 		int inDelay;
 		int upgradeError = 0;
@@ -641,7 +642,7 @@ public class Midi_handler {
 			// Restart ARM based MegaDrum in bootloader mode
 			requestArmBootloader();
 			try {
-				Thread.sleep(6000);
+				Thread.sleep(4000);
 				initPorts();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -660,7 +661,10 @@ public class Midi_handler {
 		{
 			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
 			//clear_midi_input();
-			parent.setProgressBar(bytesSent);
+			if (((bytesSent-prevBytesSent)*100/(bufferSize/10)) > 1) {
+				parent.setProgressBar(bytesSent);
+				prevBytesSent = bytesSent;				
+			}
 			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
 			Block_size = frameSize;
@@ -671,7 +675,7 @@ public class Midi_handler {
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
-			inDelay = 10000;
+			inDelay = 1750;
 			receivedBuffer = null;	
  			while ((nBytes == 0) && (inDelay > 0)) {
 
