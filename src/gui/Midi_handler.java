@@ -642,6 +642,7 @@ public class Midi_handler {
 			requestArmBootloader();
 			try {
 				Thread.sleep(6000);
+				initPorts();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -662,13 +663,15 @@ public class Midi_handler {
 			parent.setProgressBar(bytesSent);
 			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
-			//Block_size = frameSize;
+			Block_size = frameSize;
 			//Block_size = frameSize/8 + 2;
-			Block_size = 2;
+			//Block_size = frameSize/2 + 2;
+			//Block_size = 2;
+			if (frameSize < 80) Block_size = 2;
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
-			inDelay = 40;
+			inDelay = 10000;
 			receivedBuffer = null;	
  			while ((nBytes == 0) && (inDelay > 0)) {
 
@@ -679,7 +682,7 @@ public class Midi_handler {
  				}
 			    inDelay--;
 			    try {
-					Thread.sleep(10);
+					Thread.sleep(1);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					// e.printStackTrace();
