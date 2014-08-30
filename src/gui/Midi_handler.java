@@ -642,7 +642,7 @@ public class Midi_handler {
 			// Restart ARM based MegaDrum in bootloader mode
 			requestArmBootloader();
 			try {
-				Thread.sleep(4500);
+				Thread.sleep(6000);
 				initPorts();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
@@ -675,7 +675,7 @@ public class Midi_handler {
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
-			inDelay = 2000;
+			inDelay = 2500;
 			receivedBuffer = null;	
  			while ((nBytes == 0) && (inDelay > 0)) {
 
