@@ -178,6 +178,7 @@ public class Upgrade extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				midi_handler.closeAllPorts();
 				midi_handler.initPorts();
+				midi_handler.requestVersionAndMcu();
 				btnStart.setEnabled(false);
 				btnCancel.setEnabled(false);
 				setVisible(false);

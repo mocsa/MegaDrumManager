@@ -361,6 +361,30 @@ public class Midi_handler {
 		sendSysex(sx);
 	}
 
+	private void delayMs(int ms) {
+	    try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			// e.printStackTrace();
+			Utils.show_error("Unrecoverable timer error. Exiting.\n" +
+					"(" + e.getMessage() + ")");
+			System.exit(1);
+		}
+		
+	}
+	
+	public void requestVersionAndMcu() {
+		// A workaround for Windows USB MIDI bug? or STM32F205 USB MIDI bug?
+		// Where first 8 (2x4) MIDI SysEx replies from MegaDrum are lost
+		for (int i = 0; i < 5; i++) {
+			requestVersion();
+			delayMs(configOptions.sysexDelay);
+			requestMCU();
+			delayMs(configOptions.sysexDelay);			
+		}
+	}
+	
 	public void clear_midi_input() {
 		byte [] result;
 		result = null;
@@ -599,7 +623,7 @@ public class Midi_handler {
 			write(rr,buf,ind + p, size - p);
 		}
 	}	
-	
+
 	public void doFirmwareUpgrade (Upgrade parent, File file) throws IOException {		
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
@@ -639,12 +663,7 @@ public class Midi_handler {
 			// Restart ARM based MegaDrum in bootloader mode
 			requestArmBootloader();
 			//System.out.printf("Sent reboot request\n");
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			delayMs(4000);
 		}
 		closeAllPorts();
 		//System.out.printf("Loading Firmware file\n");
@@ -691,15 +710,7 @@ public class Midi_handler {
  					nBytes = receivedBuffer.length;
  				}
 			    inDelay--;
-			    try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					// e.printStackTrace();
-					Utils.show_error("Unrecoverable timer error. Exiting.\n" +
-							"(" + e.getMessage() + ")");
-					System.exit(1);
-				}
+			    delayMs(1);
 			}
 			//System.out.printf("Received %d bytes\n", nBytes);
 						
@@ -726,15 +737,7 @@ public class Midi_handler {
 					if (++retries < 4) {
 						index -= frameSize;
 						//System.out.println("Retrying on error\n");
-						try {
-							Thread.sleep(10);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							// e.printStackTrace();
-							Utils.show_error("Unrecoverable error. Exiting.\n" +
-									"(" + e.getMessage() + ")");
-							System.exit(1);
-						}
+						delayMs(10);
 					} else {
 						//System.out.println("\nCRC error. File damaged.\n");
 						switch (receivedByte) {
