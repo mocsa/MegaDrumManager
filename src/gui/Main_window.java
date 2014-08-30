@@ -2207,6 +2207,24 @@ public class Main_window {
 			delayMs(configOptions.sysexDelay);
 			midi_handler.requestMCU();
 			delayMs(configOptions.sysexDelay);
+			midi_handler.requestVersion();
+			// A workaround for Windows USB MIDI bug? or STM32F205 USB MIDI bug?
+			// Where first 8 (2x4) MIDI SysEx replies from MegaDrum are lost
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestMCU();
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestVersion();
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestMCU();
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestVersion();
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestMCU();
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestVersion();
+			delayMs(configOptions.sysexDelay);
+			midi_handler.requestMCU();
+			delayMs(configOptions.sysexDelay);
 		} else {
 			tglbtnMidi.setText("Open MIDI");
 			tglbtnMidi.setSelected(false);

@@ -625,12 +625,21 @@ public class Utils {
 			sysex_short[1] = sysex[i++];
 			sysex_short[2] = sysex[i++];
 			sysex_short[3] = sysex[i++];
-			if (config.lowLevel != sysex2short(sysex_short)) result = 1;
+			if (!config.autoLevels) {
+				// The HiHat levels may actually changes between sending a pedal config
+				// and receiving a reply to a pedal request
+				// if autoLevels is set Yes so
+				// check it only if autoLevels is set to No 
+				if (config.lowLevel != sysex2short(sysex_short)) result = 1;
+			}
 			sysex_short[0] = sysex[i++];
 			sysex_short[1] = sysex[i++];
 			sysex_short[2] = sysex[i++];
 			sysex_short[3] = sysex[i++];
-			if (config.highLevel != sysex2short(sysex_short)) result = 1;
+			if (!config.autoLevels) {
+				// Same as for lowLevel
+				if (config.highLevel != sysex2short(sysex_short)) result = 1;
+			}
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			if (config.openLevel != sysex2byte(sysex_byte)) result = 1;
