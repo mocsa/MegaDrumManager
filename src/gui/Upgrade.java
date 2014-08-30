@@ -176,6 +176,8 @@ public class Upgrade extends JDialog {
 		btnClose = new JButton("Close");
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				midi_handler.closeAllPorts();
+				midi_handler.initPorts();
 				btnStart.setEnabled(false);
 				btnCancel.setEnabled(false);
 				setVisible(false);

@@ -486,7 +486,8 @@ public class Midi_handler {
 					    	midiin = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midiin.open();
 							transmitter = midiin.getTransmitter();
-							transmitter.setReceiver(dump_receiver);		
+							transmitter.setReceiver(dump_receiver);
+							//System.out.printf("Opened MIDI In Port: %s\n",configOptions.MidiInName);
 							break;
 						}
 					}
@@ -508,6 +509,7 @@ public class Midi_handler {
 					    	midiout = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midiout.open();
 					    	receiver = midiout.getReceiver();
+							//System.out.printf("Opened MIDI Out Port: %s\n",configOptions.MidiOutName);
 							break;
 						}
 					}
@@ -618,6 +620,7 @@ public class Midi_handler {
 		int upgradeError = 0;
 
 		closeAllPorts();
+		initPorts();
 		try {
 			fis = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
@@ -630,25 +633,28 @@ public class Midi_handler {
 		bis = new BufferedInputStream(fis);
 		dis = new DataInputStream(bis);
 
-		initPorts();
-
-		while (dis.available() > 1)
-		{
-			buffer[bufferSize] = readHex(dis);
-			bufferSize++;
-		}
-		
+		//System.out.printf("Starting upgrade\n");
+				
 		if (configOptions.mcuType > 2) {
 			// Restart ARM based MegaDrum in bootloader mode
 			requestArmBootloader();
+			//System.out.printf("Sent reboot request\n");
 			try {
-				Thread.sleep(6000);
-				initPorts();
+				Thread.sleep(4000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		closeAllPorts();
+		//System.out.printf("Loading Firmware file\n");
+		while (dis.available() > 1)
+		{
+			buffer[bufferSize] = readHex(dis);
+			bufferSize++;
+		}
+		//System.out.printf("Firmware file loaded\n");
+		initPorts();
 		parent.getProgressBar().setMinimum(0);
 		parent.getProgressBar().setMaximum(bufferSize);
 		dis.close();
@@ -675,7 +681,7 @@ public class Midi_handler {
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
-			inDelay = 2500;
+			inDelay = 2000;
 			receivedBuffer = null;	
  			while ((nBytes == 0) && (inDelay > 0)) {
 
