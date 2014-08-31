@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20140830";
+	public static final String MD_VERSION = "20140831";
 	public static final int MD_MINIMUM_VERSION = 20140516;
 	public static final String WARNING_VERSION = "<html><font size=2>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=2>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
@@ -137,20 +137,22 @@ public interface Constants {
 			"    Atmega based MegaDrum\n" +
 			"    ARM based MegaDrum in 'recovery' mode\n" +
 			"\n" +
-			"1. Select the MegaDrum firmware file.\n" +
-			"2. Disconnect (power off) MegaDrum.\n" +
-			"3. While holding MegaDrum's button LEFT connect (power on) MegaDrum.\n" +
-			"4. By pressing MegaDrum's button UP select a correct MegaDrum crystal frequency.\n" +
-			"5. Press MegaDrum's button DOWN. MegaDrum LCD will show 'StartUpdateOnPC'.\n" +
-			"6. Click button Start.\n" +
-			"7. Wait for the upgrade to finish.\n" +
-			"8. Click button Close.";
+			"1. Make sure you have a backup copy of your MegaDrum config.\n" +
+			"2. Select the MegaDrum firmware file.\n" +
+			"3. Disconnect (power off) MegaDrum.\n" +
+			"4. While holding MegaDrum's button LEFT connect (power on) MegaDrum.\n" +
+			"5. By pressing MegaDrum's button UP select a correct MegaDrum crystal frequency.\n" +
+			"6. Press MegaDrum's button DOWN. MegaDrum LCD will show 'StartUpdateOnPC'.\n" +
+			"7. Click button Start.\n" +
+			"8. Wait for the upgrade to finish.\n" +
+			"9. Click button Close.";
 	public static final String UPGRADE_INSTRUCTION_ARM =
 			"Upgrade instruction for:\n" +
 			"    ARM based MegaDrum\n" +
 			"\n" +
-			"1. Select the MegaDrum firmware file.\n" +
-			"2. Click button Start.\n" +
-			"3. Wait for the upgrade to finish.\n" +
-			"4. Click button Close.";
+			"1. Make sure you have a backup copy of your MegaDrum config.\n" +
+			"2. Select the MegaDrum firmware file.\n" +
+			"3. Click button Start.\n" +
+			"4. Wait for the upgrade to finish.\n" +
+			"5. Click button Close.";
 }

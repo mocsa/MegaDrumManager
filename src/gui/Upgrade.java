@@ -143,6 +143,7 @@ public class Upgrade extends JDialog {
 		progressBar.setStringPainted(true);
 		pbBgColor = progressBar.getBackground();
 		pbFgColor = progressBar.getForeground();
+
 		getContentPane().add(progressBar, "2, 6");
 		
 		JPanel panel = new JPanel();
@@ -153,6 +154,7 @@ public class Upgrade extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				btnCancel.setEnabled(true);
 				btnStart.setEnabled(false);
+				btnClose.setEnabled(false);
 				progressBar.setString(null);
 				progressBar.setBackground(pbBgColor);
 				progressBar.setForeground(pbFgColor);
@@ -176,15 +178,24 @@ public class Upgrade extends JDialog {
 		btnClose = new JButton("Close");
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				midi_handler.closeAllPorts();
-				midi_handler.initPorts();
-				midi_handler.requestVersionAndMcu();
 				btnStart.setEnabled(false);
 				btnCancel.setEnabled(false);
 				setVisible(false);
+				if (midi_handler.isMidiOpen()) {
+					midi_handler.closeAllPorts();
+					midi_handler.initPorts();
+					midi_handler.requestVersionAndMcu();
+				}
 			}
 		});
 		panel.add(btnClose);
+	}
+	
+	public void setVisible(boolean v) {
+		super.setVisible(v);
+		progressBar.setMinimum(0);
+		progressBar.setMaximum(100);
+		progressBar.setValue(0);
 	}
 	
 	private void callUpgradeThread() {
@@ -257,7 +268,8 @@ public class Upgrade extends JDialog {
 		}
 		progressBar.setString(resultString);
 		btnStart.setEnabled(true);
-		btnCancel.setEnabled(false);	
+		btnCancel.setEnabled(false);
+		btnClose.setEnabled(true);
 	}
 	
 	public void setProgressBar(int v) {

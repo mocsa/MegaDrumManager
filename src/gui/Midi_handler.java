@@ -679,9 +679,9 @@ public class Midi_handler {
 		dis.close();
 		bis.close();
 		fis.close();
-		//System.out.printf("Firmware file is loaded\n");
 		//System.out.printf("Firmware size is %d bytes\n", bufferSize);
 		
+		clear_midi_input();
 		for(index = 0; index < bufferSize; index += frameSize)
 		{
 			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
@@ -692,11 +692,9 @@ public class Midi_handler {
 			}
 			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
-			Block_size = frameSize;
-			//Block_size = frameSize/8 + 2;
-			//Block_size = frameSize/2 + 2;
-			//Block_size = 2;
-			if (frameSize < 80) Block_size = 2;
+			//Block_size = frameSize;				// Seem it fails
+			//if (frameSize < 80) Block_size = 2;	// with some firmware sizes
+			Block_size = 2;
 			writeMid(receiver, buffer, index, frameSize);
 
 			nBytes = 0;
