@@ -126,20 +126,29 @@ public class Midi_handler {
 	}
 	
 	public void sendSysex(byte [] buf) {
+		//System.out.printf("Preparing to send SysEx\n");
 		if (midiout != null) {
+			//System.out.printf("midiout is not Null\n");
 			if (midiout.isOpen()) {
+				//System.out.printf("midiout is open\n");
 				SysexMessage	sysexMessage = new SysexMessage();
 				midiout.close();
+				//System.out.printf("midiout closed\n");
 		    	try {
 					midiout.open();
+					//System.out.printf("midiout re-opened\n");
 					receiver = midiout.getReceiver();
+					//System.out.printf("midiout provded receiver\n");
 				} catch (MidiUnavailableException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				try {
 					sysexMessage.setMessage(buf, buf.length);
+					//sysexMessage.setMessage(0xf0,buf, buf.length);
+					//System.out.printf("trying to send\n");
 					receiver.send(sysexMessage, -1);
+					//System.out.printf("SysEx has been sent\n");
 				} catch (InvalidMidiDataException e) {
 					// TODO Auto-generated catch block
 					//e.printStackTrace();
@@ -511,7 +520,7 @@ public class Midi_handler {
 					    	midiin.open();
 							transmitter = midiin.getTransmitter();
 							transmitter.setReceiver(dump_receiver);
-							//System.out.printf("Opened MIDI In Port: %s\n",configOptions.MidiInName);
+							System.out.printf("Opened MIDI In Port: %s\n",configOptions.MidiInName);
 							break;
 						}
 					}
@@ -533,7 +542,7 @@ public class Midi_handler {
 					    	midiout = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midiout.open();
 					    	receiver = midiout.getReceiver();
-							//System.out.printf("Opened MIDI Out Port: %s\n",configOptions.MidiOutName);
+							System.out.printf("Opened MIDI Out Port: %s\n",configOptions.MidiOutName);
 							break;
 						}
 					}
@@ -612,7 +621,7 @@ public class Midi_handler {
 		}
 	}	
 
-	public void writeMid(Receiver rr, int[] buf, int ind, int size)
+	public void writeMidX(Receiver rr, int[] buf, int ind, int size)
 	{
 		int p = 0;
 		while ((p + Block_size) < size) {
@@ -624,6 +633,19 @@ public class Midi_handler {
 		}
 	}	
 
+	public void writeMid(Receiver rr, int[] buf, int ind, int size)
+	{
+		byte[] buffer = new byte[(size*2) + 2];
+		int p = 0;
+		buffer[0] = (byte)0xf0;
+		for (p=0;p<size;p++) {
+			buffer[(p*2) + 1] = (byte)((buf[ind+p]>>4) & 0x0f);
+			buffer[(p*2) + 2] = (byte)((buf[ind+p]) & 0x0f);
+		}
+		buffer[buffer.length - 1] = (byte)0xf7;
+		sendSysex(buffer);
+	}
+	
 	public void doFirmwareUpgrade (Upgrade parent, File file) throws IOException {		
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
@@ -672,7 +694,7 @@ public class Midi_handler {
 			buffer[bufferSize] = readHex(dis);
 			bufferSize++;
 		}
-		//System.out.printf("Firmware file loaded\n");
+		System.out.printf("Firmware file loaded\n");
 		initPorts();
 		parent.getProgressBar().setMinimum(0);
 		parent.getProgressBar().setMaximum(bufferSize);
@@ -690,35 +712,51 @@ public class Midi_handler {
 				parent.setProgressBar(bytesSent);
 				prevBytesSent = bytesSent;				
 			}
-			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
+			System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
-			//Block_size = frameSize;				// Seem it fails
+			Block_size = frameSize;				// Seem it fails
 			//if (frameSize < 80) Block_size = 2;	// with some firmware sizes
 			Block_size = 2;
+			//if (Block_size > frameSize) Block_size = frameSize;
+//			delayMs(200);
 			writeMid(receiver, buffer, index, frameSize);
+//			int b;
+//			for (b=0;b<(frameSize);b++) {
+//				delayMs(1);
+//				writeMid(receiver, buffer, index + b, 1);				
+//			}
+			System.out.printf("Sent %d bytes\n", frameSize);
+			
 
 			nBytes = 0;
-			inDelay = 2000;
-			receivedBuffer = null;	
+			inDelay = 1000;
+			receivedBuffer = null;
+			int t = 0;
  			while ((nBytes == 0) && (inDelay > 0)) {
-
  				receivedBuffer = dump_receiver.getByteMessage();
+ 				t++;
+ 				if (t > 100) {
+ 					t = 0;
+ 	 				System.out.printf(".");
+ 				}
  				if (receivedBuffer != null)
  				{
  					nBytes = receivedBuffer.length;
  				}
 			    inDelay--;
-			    delayMs(1);
+			    delayMs(10);
+			    if (upgradeCancelled) break;
 			}
-			//System.out.printf("Received %d bytes\n", nBytes);
+ 			System.out.printf("\n");
+			System.out.printf("Received %d bytes\n", nBytes);
 						
  			receivedByte = Constants.Error_NoResponse;
 			if (nBytes > 2) {
 				receivedByte = receivedBuffer[1]<<4;
 				receivedByte = receivedBuffer[2]|receivedByte;
-				//System.out.println(String.valueOf((int)receivedByte));
+				System.out.println(String.valueOf((int)receivedByte));
 			} else {
-				//System.out.println("Read error\n");
+				System.out.println("Read error\n");
 				if (nBytes > 0) {
 					receivedByte = Constants.Error_Read;
 				}
