@@ -77,7 +77,7 @@ public class Upgrade extends JDialog {
 		setResizable(false);
 		setName("upgradeDialog");
 		setTitle("MegaDrum Firmware Upgrade");
-		setBounds(100, 100, 495, 365);
+		setBounds(100, 100, 495, 400);
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),
@@ -170,6 +170,7 @@ public class Upgrade extends JDialog {
 				midi_handler.upgradeCancelled = true;
 				btnStart.setEnabled(true);
 				btnCancel.setEnabled(false);
+				btnClose.setEnabled(true);
 			}
 		});
 		btnCancel.setEnabled(false);

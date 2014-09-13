@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20140901";
+	public static final String MD_VERSION = "20140914";
 	public static final int MD_MINIMUM_VERSION = 20140516;
 	public static final String WARNING_VERSION = "<html><font size=2>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=2>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
@@ -141,8 +141,10 @@ public interface Constants {
 			"2. Select the MegaDrum firmware file.\n" +
 			"3. Disconnect (power off) MegaDrum.\n" +
 			"4. While holding MegaDrum's button LEFT connect (power on) MegaDrum.\n" +
-			"5. By pressing MegaDrum's button UP select a correct MegaDrum crystal frequency.\n" +
-			"6. Press MegaDrum's button DOWN. MegaDrum LCD will show 'StartUpdateOnPC'.\n" +
+			"5. Skip this step on an ARM based MegaDrum.\n" +
+			"    By pressing MegaDrum's button UP select a correct MegaDrum crystal frequency.\n" +
+			"6. Skip this step on an ARM based MegaDrum.\n" +
+			"    Press MegaDrum's button DOWN. MegaDrum LCD will show 'StartUpdateOnPC'.\n" +
 			"7. Click button Start.\n" +
 			"8. Wait for the upgrade to finish.\n" +
 			"9. Click button Close.";

@@ -551,7 +551,7 @@ public class Midi_handler {
 					    	midiin.open();
 							transmitter = midiin.getTransmitter();
 							transmitter.setReceiver(dump_receiver);
-							System.out.printf("Opened MIDI In Port: %s\n",configOptions.MidiInName);
+							//System.out.printf("Opened MIDI In Port: %s\n",configOptions.MidiInName);
 							break;
 						}
 					}
@@ -573,7 +573,7 @@ public class Midi_handler {
 					    	midiout = MidiSystem.getMidiDevice(aInfos[i]);
 					    	midiout.open();
 					    	receiver = midiout.getReceiver();
-							System.out.printf("Opened MIDI Out Port: %s\n",configOptions.MidiOutName);
+							//System.out.printf("Opened MIDI Out Port: %s\n",configOptions.MidiOutName);
 							break;
 						}
 					}
@@ -712,7 +712,7 @@ public class Midi_handler {
 		bis = new BufferedInputStream(fis);
 		dis = new DataInputStream(bis);
 
-		//System.out.printf("Starting upgrade\n");
+		//("Starting upgrade\n");
 				
 		if (configOptions.mcuType > 2) {
 			// Restart ARM based MegaDrum in bootloader mode
@@ -727,7 +727,7 @@ public class Midi_handler {
 			buffer[bufferSize] = readHex(dis);
 			bufferSize++;
 		}
-		System.out.printf("Firmware file loaded\n");
+		//System.out.printf("Firmware file loaded\n");
 		initPorts();
 		parent.getProgressBar().setMinimum(0);
 		parent.getProgressBar().setMaximum(bufferSize);
@@ -746,14 +746,14 @@ public class Midi_handler {
 				parent.setProgressBar(bytesSent);
 				prevBytesSent = bytesSent;				
 			}
-			System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
+			//System.out.printf("index=%d , frameSize=%d \n", index, frameSize);
 
 			Block_size = frameSize;				// Seem it fails
 			//if (frameSize < 80) Block_size = 2;	// with some firmware sizes
 			Block_size = 2;
 			//if (Block_size > frameSize) Block_size = frameSize;
 			writeMid(receiver, buffer, index, frameSize);
-			System.out.printf("Sent %d bytes\n", frameSize);
+			//System.out.printf("Sent %d bytes\n", frameSize);
 			
 
 			nBytes = 0;
@@ -770,7 +770,7 @@ public class Midi_handler {
  				t++;
  				if (t > 100) {
  					t = 0;
- 	 				System.out.printf(".");
+ 	 				//System.out.printf(".");
  				}
  				if (receivedBuffer != null)
  				{
@@ -780,16 +780,16 @@ public class Midi_handler {
 			    delayMs(2);
 			    if (upgradeCancelled) break;
 			}
- 			System.out.printf("\n");
-			System.out.printf("Received %d bytes\n", nBytes);
+ 			//System.out.printf("\n");
+			//System.out.printf("Received %d bytes\n", nBytes);
 						
  			receivedByte = Constants.Error_NoResponse;
 			if (nBytes > 2) {
 				receivedByte = receivedBuffer[1]<<4;
 				receivedByte = receivedBuffer[2]|receivedByte;
-				System.out.println(String.valueOf((int)receivedByte));
+				//System.out.println(String.valueOf((int)receivedByte));
 			} else {
-				System.out.println("Read error\n");
+				//System.out.println("Read error\n");
 				if (nBytes > 0) {
 					receivedByte = Constants.Error_Read;
 				}
