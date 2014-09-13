@@ -160,6 +160,37 @@ public class Midi_handler {
 		}
 	}
 
+	public void sendSysexUpgrade(byte [] buf) {
+		//System.out.printf("Preparing to send SysEx\n");
+		if (midiout != null) {
+			if (!midiout.isOpen()) {
+				try {
+					midiout.open();
+				} catch (MidiUnavailableException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			SysexMessage	sysexMessage = new SysexMessage();
+			try {
+				receiver = midiout.getReceiver();
+			} catch (MidiUnavailableException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			try {
+				sysexMessage.setMessage(buf, buf.length);
+			} catch (InvalidMidiDataException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				Utils.show_error("Error sending Sysex MIDI message to port:\n" +
+						midiout.getDeviceInfo().getName() + "\n" +
+						"(" + e.getMessage() + ")");
+			}
+			receiver.send(sysexMessage, -1);
+		}
+	}
+
 	public void requestConfigGlobalMisc() {
 		byte [] sx = new byte[5];
 		
@@ -643,7 +674,8 @@ public class Midi_handler {
 			buffer[(p*2) + 2] = (byte)((buf[ind+p]) & 0x0f);
 		}
 		buffer[buffer.length - 1] = (byte)0xf7;
-		sendSysex(buffer);
+		sendSysexUpgrade(buffer);
+		//sendSysex(buffer);
 	}
 	
 	public void doFirmwareUpgrade (Upgrade parent, File file) throws IOException {		
@@ -663,10 +695,11 @@ public class Midi_handler {
 		int prevBytesSent = 0;
 		int nBytes;
 		int inDelay;
+		boolean firstDelay;
 		int upgradeError = 0;
 
-		closeAllPorts();
-		initPorts();
+		//closeAllPorts();
+		//initPorts();
 		try {
 			fis = new FileInputStream(file);
 		} catch (FileNotFoundException e) {
@@ -687,7 +720,7 @@ public class Midi_handler {
 			//System.out.printf("Sent reboot request\n");
 			delayMs(4000);
 		}
-		closeAllPorts();
+		//closeAllPorts();
 		//System.out.printf("Loading Firmware file\n");
 		while (dis.available() > 1)
 		{
@@ -704,6 +737,7 @@ public class Midi_handler {
 		//System.out.printf("Firmware size is %d bytes\n", bufferSize);
 		
 		clear_midi_input();
+		firstDelay = true;
 		for(index = 0; index < bufferSize; index += frameSize)
 		{
 			frameSize = ((buffer[index] << 8) | buffer[index + 1]) + 2;
@@ -718,18 +752,17 @@ public class Midi_handler {
 			//if (frameSize < 80) Block_size = 2;	// with some firmware sizes
 			Block_size = 2;
 			//if (Block_size > frameSize) Block_size = frameSize;
-//			delayMs(200);
 			writeMid(receiver, buffer, index, frameSize);
-//			int b;
-//			for (b=0;b<(frameSize);b++) {
-//				delayMs(1);
-//				writeMid(receiver, buffer, index + b, 1);				
-//			}
 			System.out.printf("Sent %d bytes\n", frameSize);
 			
 
 			nBytes = 0;
-			inDelay = 1000;
+			if (firstDelay) {
+				inDelay = 5000;				
+				firstDelay = false;
+			} else {
+				inDelay = 1000;
+			}
 			receivedBuffer = null;
 			int t = 0;
  			while ((nBytes == 0) && (inDelay > 0)) {
@@ -744,7 +777,7 @@ public class Midi_handler {
  					nBytes = receivedBuffer.length;
  				}
 			    inDelay--;
-			    delayMs(10);
+			    delayMs(2);
 			    if (upgradeCancelled) break;
 			}
  			System.out.printf("\n");
