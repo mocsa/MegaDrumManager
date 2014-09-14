@@ -720,7 +720,7 @@ public class Midi_handler {
 			//System.out.printf("Sent reboot request\n");
 			delayMs(4000);
 		}
-		//closeAllPorts();
+		closeAllPorts();
 		//System.out.printf("Loading Firmware file\n");
 		while (dis.available() > 1)
 		{
