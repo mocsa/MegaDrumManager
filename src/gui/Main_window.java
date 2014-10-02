@@ -114,6 +114,7 @@ public class Main_window {
 	private JPanel [] controlsPanels;
 	private ViewMenu [] viewMenus;
 	private ConfigFull configFull;
+	private ConfigFull moduleConfigFull;
 	private ConfigFull [] fullConfigs;
 	private ConfigOptions configOptions;
 	private FileManager fileManager;
@@ -217,6 +218,7 @@ public class Main_window {
 	 */
 	private void initialize() {
 		configFull = new ConfigFull();
+		moduleConfigFull = new ConfigFull();
 		frmMegadrummanager = new JFrame();
 		frmMegadrummanager.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_window.class.getResource("/icons/megadrum-manager128.png")));
 		frmMegadrummanager.addWindowListener(new WindowAdapter() {
@@ -509,7 +511,7 @@ public class Main_window {
 //		FlowLayout flowLayout = (FlowLayout) panel_main.getLayout();
 //		flowLayout.setAlignOnBaseline(true);
 		
-		controlsMisc = new ControlsMisc(configFull);
+		controlsMisc = new ControlsMisc(configFull, moduleConfigFull);
 		controlsMisc.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];
@@ -531,6 +533,7 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueChanged")) {
 						sendMisc(true);
+						getMisc();
 					}
 				}
 				if (arg0.getPropertyName().equals("octaveValueChanged")) {
@@ -2209,6 +2212,8 @@ public class Main_window {
 			mntmLoadFromMd.removeAll();
 			popupMenuSaveToSlot.removeAll();
 			mntmSaveToMd.removeAll();
+			configFull.resetSyncState();
+			updateAllControls();
 		}
 	}
 	
@@ -2287,14 +2292,18 @@ public class Main_window {
 				switch (buffer[3]) {
 					case Constants.MD_SYSEX_MISC:
 						Utils.copySysexToConfigMisc(midi_handler.bufferIn, configFull.configMisc);
+						Utils.copySysexToConfigMisc(midi_handler.bufferIn, moduleConfigFull.configMisc);
+						configFull.configMisc.syncState = Constants.SYNC_STATE_RECEIVED;
 						controlsMisc.updateControls();
 						break;
 					case Constants.MD_SYSEX_PEDAL:
 						Utils.copySysexToConfigPedal(midi_handler.bufferIn, configFull.configPedal);
+						Utils.copySysexToConfigPedal(midi_handler.bufferIn, moduleConfigFull.configPedal);
 						controlsPedal.updateControls();
 						break;
 					case Constants.MD_SYSEX_PAD:
 						Utils.copySysexToConfigPad(midi_handler.bufferIn, configFull.configPads[buffer[4] - 1]);
+						Utils.copySysexToConfigPad(midi_handler.bufferIn, moduleConfigFull.configPads[buffer[4] - 1]);
 						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_POS:
@@ -2305,10 +2314,12 @@ public class Main_window {
 							id = (id*2) + 3;
 						}
 						Utils.copySysexToConfigPos(midi_handler.bufferIn, configFull.configPos[id]);
+						Utils.copySysexToConfigPos(midi_handler.bufferIn, moduleConfigFull.configPos[id]);
 						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_3RD:
 						Utils.copySysexToConfig3rd(midi_handler.bufferIn, configFull.config3rds[buffer[4]]);
+						Utils.copySysexToConfig3rd(midi_handler.bufferIn, moduleConfigFull.config3rds[buffer[4]]);
 						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_VERSION:
@@ -2343,14 +2354,17 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_CURVE:
 						Utils.copySysexToConfigCurve(midi_handler.bufferIn, configFull.configCurves[buffer[4]]);
+						Utils.copySysexToConfigCurve(midi_handler.bufferIn, moduleConfigFull.configCurves[buffer[4]]);
 						controlsPadsExtra.updateControls();
 						break;
 					case Constants.MD_SYSEX_CUSTOM_NAME:
 						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, configFull.configCustomNames[buffer[4]]);
+						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, moduleConfigFull.configCustomNames[buffer[4]]);
 						controlsPadsExtra.updateControls();
 						break;
 					case Constants.MD_SYSEX_CONFIG_NAME:
 						Utils.copySysexToConfigConfigName(midi_handler.bufferIn, configFull.configConfigNames[buffer[4]]);
+						Utils.copySysexToConfigConfigName(midi_handler.bufferIn, moduleConfigFull.configConfigNames[buffer[4]]);
 						if (buffer[4] < configFull.configNamesCount) {
 							menuItemsSaveToSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
 							popupMenuItemsSaveToSlot[buffer[4]].setText(((Integer)(buffer[4]+1)).toString() + " " + configFull.configConfigNames[buffer[4]].name);
@@ -2363,6 +2377,7 @@ public class Main_window {
 						break;
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
+						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, moduleConfigFull.configGlobalMisc);
 						int c = comboBox_inputsCount.getSelectedIndex();
 						comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 						if (comboBox_inputsCount.getSelectedIndex() != c) {

@@ -103,6 +103,7 @@ public interface Constants {
 	public static final int SYNC_STATE_UNKNOWN			= 0;
 	public static final int SYNC_STATE_SYNCED			= 1;
 	public static final int SYNC_STATE_NOT_SYNCED		= 2;
+	public static final int SYNC_STATE_RECEIVED			= 3;
 	
 	public static final String [] NOTES_NAMES = {
 		"C ",

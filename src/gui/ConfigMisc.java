@@ -24,6 +24,7 @@ public class ConfigMisc {
 	public boolean midi_thru = false;
 	public boolean send_triggered_in = false;
 	public boolean alt_note_choking = false;
+	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 
 	public ConfigMisc (){
 	}

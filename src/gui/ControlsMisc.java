@@ -36,6 +36,7 @@ public class ControlsMisc extends JPanel {
 	private Boolean changeEventsAllowed = false;
 	
 	private ConfigFull configFull;
+	private ConfigFull moduleConfigFull;
 	private JSpinner spinner_noteoff;
 	private JSpinner spinner_pressroll;
 	private JSpinner spinner_latency;
@@ -51,7 +52,7 @@ public class ControlsMisc extends JPanel {
 	private JButton btnSave;
 	private LabelWithState lblBigVuSplit, lblNoteOffDelay, lblPressrollTimeout, lblLatency, lblBigVuMeter;
 	private LabelWithState lblMidiThruEnabled, lblQuickAccess, lblAltFalsetrsuppression, lblAllGainsLow;
-	private LabelWithState lblOctaveShift, lblInputsPriority, labelSendTriggeredIn, lblAltnoteChoking;
+	private LabelWithState lblOctaveShift, lblInputsPriority, lblSendTriggeredIn, lblAltnoteChoking;
 	private JCheckBox checkBox_bigVuSplit;
 	private JCheckBox checkBox_MidiThru;
 	private JSpinner spinner_octaveShift;
@@ -60,8 +61,9 @@ public class ControlsMisc extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsMisc(ConfigFull config) {
+	public ControlsMisc(ConfigFull config, ConfigFull moduleConfig) {
 		configFull = config;
+		moduleConfigFull = moduleConfig;
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
@@ -297,9 +299,9 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_MidiThru, "3, 11");
 		
-		labelSendTriggeredIn = new LabelWithState("Send TriggeredIn");
-		labelSendTriggeredIn.setFont(new Font("Dialog", Font.PLAIN, 10));
-		panel.add(labelSendTriggeredIn, "1, 12");
+		lblSendTriggeredIn = new LabelWithState("Send TriggeredIn");
+		lblSendTriggeredIn.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel.add(lblSendTriggeredIn, "1, 12");
 		
 		checkBox_sendTriggeredIn = new JCheckBox("");
 		checkBox_sendTriggeredIn.addItemListener(new ItemListener() {
@@ -338,6 +340,39 @@ public class ControlsMisc extends JPanel {
 		if (changeEventsAllowed) {
 			firePropertyChange("valueChanged", false, true);
 		}
+		updateSyncState();
+	}
+	
+	public void updateSyncState() {
+		if (configFull.configMisc.syncState == Constants.SYNC_STATE_UNKNOWN ) {
+			lblNoteOffDelay.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblPressrollTimeout.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblLatency.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblOctaveShift.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBigVuMeter.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblQuickAccess.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBigVuSplit.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblAltFalsetrsuppression.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblInputsPriority.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblAllGainsLow.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblMidiThruEnabled.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblSendTriggeredIn.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblAltnoteChoking.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+		} else {
+			lblNoteOffDelay.setSyncNotSync(configFull.configMisc.note_off == moduleConfigFull.configMisc.note_off);
+			lblPressrollTimeout.setSyncNotSync(configFull.configMisc.pressroll == moduleConfigFull.configMisc.pressroll);
+			lblLatency.setSyncNotSync(configFull.configMisc.latency == moduleConfigFull.configMisc.latency);
+			lblOctaveShift.setSyncNotSync(configFull.configMisc.octave_shift == moduleConfigFull.configMisc.octave_shift);
+			lblBigVuMeter.setSyncNotSync(configFull.configMisc.big_vu_meter == moduleConfigFull.configMisc.big_vu_meter);
+			lblQuickAccess.setSyncNotSync(configFull.configMisc.quick_access == moduleConfigFull.configMisc.quick_access);
+			lblBigVuSplit.setSyncNotSync(configFull.configMisc.big_vu_split == moduleConfigFull.configMisc.big_vu_split);
+			lblAltFalsetrsuppression.setSyncNotSync(configFull.configMisc.alt_false_tr_supp == moduleConfigFull.configMisc.alt_false_tr_supp);
+			lblInputsPriority.setSyncNotSync(configFull.configMisc.inputs_priority == moduleConfigFull.configMisc.inputs_priority);
+			lblAllGainsLow.setSyncNotSync(configFull.configMisc.all_gains_low == moduleConfigFull.configMisc.all_gains_low);
+			lblMidiThruEnabled.setSyncNotSync(configFull.configMisc.midi_thru == moduleConfigFull.configMisc.midi_thru);
+			lblSendTriggeredIn.setSyncNotSync(configFull.configMisc.send_triggered_in == moduleConfigFull.configMisc.send_triggered_in);
+			lblAltnoteChoking.setSyncNotSync(configFull.configMisc.alt_note_choking == moduleConfigFull.configMisc.alt_note_choking);
+		}		
 	}
 	
 	public void updateControls() {
@@ -359,6 +394,7 @@ public class ControlsMisc extends JPanel {
 		checkBox_sendTriggeredIn.setSelected(configFull.configMisc.send_triggered_in);		
 		checkBox_altNoteChoking.setSelected(configFull.configMisc.alt_note_choking);		
 		changeEventsAllowed = true;
+		updateSyncState();
 	}
 
 	public JButton getBtnGet() {

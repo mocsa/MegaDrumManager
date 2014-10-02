@@ -20,7 +20,7 @@ class LabelWithState extends JLabel {
 				setForeground(Color.BLUE);
 				break;
 			case Constants.SYNC_STATE_SYNCED:
-				setForeground(Color.GREEN);
+				setForeground(Color.BLACK);
 				break;
 			case Constants.SYNC_STATE_NOT_SYNCED:
 				setForeground(Color.RED);
@@ -28,6 +28,14 @@ class LabelWithState extends JLabel {
 			default:
 				setForeground(Color.BLACK);
 				break;
+		}
+	}
+	
+	public void setSyncNotSync(boolean synced) {
+		if (synced) {
+			setSyncState(Constants.SYNC_STATE_SYNCED);
+		} else {
+			setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
 		}
 	}
 }

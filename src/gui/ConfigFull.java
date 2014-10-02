@@ -105,4 +105,8 @@ public class ConfigFull implements java.io.Serializable {
 			configCustomNames[i].copyFromPropertiesConfiguration(prop, configCustomNamePrefix, i);
 		}
 	}
+	
+	public void resetSyncState() {
+		configMisc.syncState = Constants.SYNC_STATE_UNKNOWN;
+	}
 }
