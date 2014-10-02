@@ -27,7 +27,7 @@ import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
@@ -128,15 +128,14 @@ public class Main_window {
 	private int chckbxConfignamesenEventDisabled = 0;
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
-	private JLabel lblVersion;
-	private JLabel commsStateLabel;
+	private LabelWithState lblVersion, commsStateLabel, lblCfgSlotsNr, lblCfgCurrent, lblMCU;
+	private LabelWithState lblMidi, lblFirmwareVer, lblMcu, lblConfigSlots, lblCurrent, lblInputs;
+	private LabelWithState lblLCDcontrast, lblConfigName;
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox<String> comboBoxCfg;
 	private JCheckBox checkBoxAutoResize;
 	private JCheckBox chckbxConfignamesen;
 	private JCheckBox chckbxCustomPadsNames;
-	private JLabel lblCfgSlotsNr;
-	private JLabel lblCfgCurrent;
 	private JButton btnSaveToSlot;
 	private JButton btnLoadFromSlot;
 	private JPopupMenu popupMenuSaveToSlot;
@@ -160,7 +159,6 @@ public class Main_window {
 	private int delayedSaveToSlotNumber;
 	private int compareResultCombined;
 	private Timer sysexWaitTimer;
-	private JLabel lblMCU;
 	private JTextField configNameTextField;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
@@ -1011,7 +1009,7 @@ public class Main_window {
 		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panel_top.add(btnNextcfg, "20, 1");
 		
-		commsStateLabel = new JLabel("SysEx Ok");
+		commsStateLabel = new LabelWithState("SysEx Ok");
 		panel_top.add(commsStateLabel, "22, 1");
 		commsStateLabel.setOpaque(true);
 		commsStateLabel.setBackground(Color.GREEN);
@@ -1047,7 +1045,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),}));
 		
-		JLabel lblMidi = new JLabel("MIDI :");
+		lblMidi = new LabelWithState("MIDI :");
 		lblMidi.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblMidi, "2, 1");
 		
@@ -1057,11 +1055,11 @@ public class Main_window {
 		tglbtnMidi.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		tglbtnMidi.setMargin(new Insets(1, 1, 1, 1));
 		
-		JLabel lblFirmwareVer = new JLabel("FW version:");
+		lblFirmwareVer = new LabelWithState("FW version:");
 		lblFirmwareVer.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblFirmwareVer, "6, 1");
 		
-		lblVersion = new JLabel("???????");
+		lblVersion = new LabelWithState("???????");
 		panel.add(lblVersion, "8, 1");
 		lblVersion.setToolTipText("<html>Shows the current firmware version<br>\r\nof the connected MegaDrum.\r\n</html>");
 		lblVersion.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1070,11 +1068,11 @@ public class Main_window {
 		lblVersion.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		lblVersion.setForeground(new Color(0, 0, 0));
 		
-		JLabel lblMcu = new JLabel("MCU:");
+		lblMcu = new LabelWithState("MCU:");
 		lblMcu.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblMcu, "10, 1");
 		
-		lblMCU = new JLabel("Unknown");
+		lblMCU = new LabelWithState("Unknown");
 		lblMCU.setToolTipText("<html>Shows the MCU type<br>\r\nof the connected MegaDrum.\r\n</html>");
 		lblMCU.setHorizontalAlignment(SwingConstants.CENTER);
 		lblMCU.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -1097,11 +1095,11 @@ public class Main_window {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblConfigSlots = new JLabel("CfgSlots:");
+		lblConfigSlots = new LabelWithState("CfgSlots:");
 		panel_2.add(lblConfigSlots, "2, 2");
 		lblConfigSlots.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
-		lblCfgSlotsNr = new JLabel("??");
+		lblCfgSlotsNr = new LabelWithState("??");
 		panel_2.add(lblCfgSlotsNr, "4, 2");
 		lblCfgSlotsNr.setToolTipText("<html>Shows the total number of Config Slots<br>\r\non the connected MegaDrum.\r\n</html>");
 		lblCfgSlotsNr.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1109,11 +1107,11 @@ public class Main_window {
 		lblCfgSlotsNr.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		lblCfgSlotsNr.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		
-		JLabel lblCurrent = new JLabel("Current:");
+		lblCurrent = new LabelWithState("Current:");
 		lblCurrent.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel_2.add(lblCurrent, "6, 2");
 		
-		lblCfgCurrent = new JLabel("??");
+		lblCfgCurrent = new LabelWithState("??");
 		lblCfgCurrent.setToolTipText("<html>Shows the current Config Slot<br>\r\non the connected MegaDrum.\r\n</html>");
 		lblCfgCurrent.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCfgCurrent.setForeground(Color.BLACK);
@@ -1121,7 +1119,7 @@ public class Main_window {
 		lblCfgCurrent.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_2.add(lblCfgCurrent, "8, 2");
 		
-		JLabel lblInputs = new JLabel("Inputs:");
+		lblInputs = new LabelWithState("Inputs:");
 		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblInputs, "2, 3");
 		
@@ -1147,7 +1145,7 @@ public class Main_window {
 		
 		progressBar.setStringPainted(true);
 				
-		JLabel lblLCDcontrast = new JLabel("LCD contrast:");
+		lblLCDcontrast = new LabelWithState("LCD contrast:");
 		lblLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblLCDcontrast, "6, 3");
 		
@@ -1224,7 +1222,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblConfigName = new JLabel("Config Name:");
+		lblConfigName = new LabelWithState("Config Name:");
 		lblConfigName.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel_3.add(lblConfigName, "2, 2, right, default");
 		

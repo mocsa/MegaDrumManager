@@ -9,7 +9,7 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import java.awt.Component;
 import javax.swing.Box;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import net.miginfocom.swing.MigLayout;
 import java.awt.Font;
@@ -83,6 +83,81 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	private ConfigFull configFull;
 	private JButton btnLoad;
 	private JButton btnSave;
+	private LabelWithState lblType;
+
+	private LabelWithState lblNewAlgorithm;
+
+	private LabelWithState lblChickCurve;
+
+	private LabelWithState lblHihatInput;
+
+	private LabelWithState lblAltInput;
+
+	private LabelWithState lblReverseLevels;
+
+	private LabelWithState lblSoftChicks;
+
+	private LabelWithState lblAutoLevels;
+
+	private LabelWithState lblChickDelay;
+
+	private LabelWithState lblCcNumber;
+
+	private LabelWithState lblCcRdcLvl;
+
+	private LabelWithState lblLow;
+
+	private LabelWithState lblHigh;
+
+	private LabelWithState lblOpen;
+
+	private LabelWithState lblClosed;
+
+	private LabelWithState lblHalfopen;
+
+	private LabelWithState lblClosed_1;
+
+	private LabelWithState lblChickthresh;
+
+	private LabelWithState lblCurve;
+
+	private LabelWithState lblShortThresh;
+
+	private LabelWithState lblLongchickthresh;
+
+	private LabelWithState lblMinVelocity;
+
+	private LabelWithState lblMaxVelocity;
+
+	private LabelWithState lblChickDeadPeriod;
+
+	private LabelWithState lblBowSemiopen;
+
+	private LabelWithState lblEdgeSemiopen;
+
+	private LabelWithState lblBellSemiopen;
+
+	private LabelWithState lblBowHalfopen;
+
+	private LabelWithState lblEdgeHalfopen;
+
+	private LabelWithState lblBellHalfopen;
+
+	private LabelWithState lblBowSemiclosed;
+
+	private LabelWithState lblEdgeSemiclosed;
+
+	private LabelWithState lblBellSemiclosed;
+
+	private LabelWithState lblBowClosed;
+
+	private LabelWithState lblEdgeClosed;
+
+	private LabelWithState lblBellClosed;
+
+	private LabelWithState lblChick;
+
+	private LabelWithState lblSplash;
 
 	/**
 	 * Create the panel.
@@ -154,7 +229,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblType = new JLabel("Type");
+		lblType = new LabelWithState("Type");
 		lblType.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblType, "1, 1, right, default");
 		
@@ -177,7 +252,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		comboBox_type.addItem("FootContr");
 		panel_misc.add(comboBox_type, "3, 1, fill, default");
 		
-		JLabel lblCurve = new JLabel("Curve");
+		lblCurve = new LabelWithState("Curve");
 		lblCurve.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblCurve, "1, 2, right, default");
 		
@@ -202,7 +277,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 			}
 		panel_misc.add(comboBox_curve, "3, 2, fill, default");
 		
-		JLabel lblChickCurve = new JLabel("Chick Curve");
+		lblChickCurve = new LabelWithState("Chick Curve");
 		lblChickCurve.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel_misc.add(lblChickCurve, "1, 3, right, default");
 		
@@ -227,7 +302,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 			}
 		panel_misc.add(comboBox_chickCurve, "3, 3, fill, default");
 		
-		JLabel lblHihatInput = new JLabel("HiHat Input");
+		lblHihatInput = new LabelWithState("HiHat Input");
 		lblHihatInput.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblHihatInput, "1, 4, right, default");
 		
@@ -250,7 +325,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		comboBox_input.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(comboBox_input, "3, 4, fill, default");
 		
-		JLabel lblAltInput = new JLabel("Alt Input");
+		lblAltInput = new LabelWithState("Alt Input");
 		lblAltInput.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblAltInput, "1, 5");
 		
@@ -259,7 +334,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		checkBox_altInput.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(checkBox_altInput, "3, 5");
 		
-		JLabel lblReverseLevels = new JLabel("Reverse Levels");
+		lblReverseLevels = new LabelWithState("Reverse Levels");
 		lblReverseLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblReverseLevels, "1, 6");
 		
@@ -268,7 +343,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		checkBox_reverseLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(checkBox_reverseLevels, "3, 6");
 		
-		JLabel lblSoftChicks = new JLabel("Soft Chicks");
+		lblSoftChicks = new LabelWithState("Soft Chicks");
 		lblSoftChicks.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblSoftChicks, "1, 7");
 		
@@ -277,7 +352,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		checkBox_softChicks.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(checkBox_softChicks, "3, 7");
 		
-		JLabel lblAutoLevels = new JLabel("Auto Levels");
+		lblAutoLevels = new LabelWithState("Auto Levels");
 		lblAutoLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblAutoLevels, "1, 8");
 		
@@ -286,7 +361,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		checkBox_autoLevels.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(checkBox_autoLevels, "3, 8");
 		
-		JLabel lblNewAlgorithm = new JLabel("New Algorithm");
+		lblNewAlgorithm = new LabelWithState("New Algorithm");
 		lblNewAlgorithm.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel_misc.add(lblNewAlgorithm, "1, 9");
 		
@@ -295,7 +370,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		checkBox_new_algorithm.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel_misc.add(checkBox_new_algorithm, "3, 9");
 		
-		JLabel lblChickDelay = new JLabel("Chick Delay");
+		lblChickDelay = new LabelWithState("Chick Delay");
 		lblChickDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblChickDelay, "1, 10");
 		
@@ -304,7 +379,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_chickDelay.setEventListener(this);
 		panel_misc.add(spin127Control_chickDelay, "3, 10, fill, fill");
 		
-		JLabel lblCcNumber = new JLabel("CC Number");
+		lblCcNumber = new LabelWithState("CC Number");
 		lblCcNumber.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblCcNumber, "1, 11");
 		
@@ -313,7 +388,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_cc.setEventListener(this);
 		panel_misc.add(spin127Control_cc, "3, 11, fill, fill");
 		
-		JLabel lblCcRdcLvl = new JLabel("CC Reduction Lvl");
+		lblCcRdcLvl = new LabelWithState("CC Reduction Lvl");
 		lblCcRdcLvl.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_misc.add(lblCcRdcLvl, "1, 12");
 		
@@ -343,7 +418,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblLow = new JLabel("Low");
+		lblLow = new LabelWithState("Low");
 		lblLow.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_levels.add(lblLow, "1, 1");
 		
@@ -351,7 +426,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin1023Control_lowLevel.setEventListener(this);
 		panel_levels.add(spin1023Control_lowLevel, "3, 1, fill, fill");
 		
-		JLabel lblHigh = new JLabel("High");
+		lblHigh = new LabelWithState("High");
 		lblHigh.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_levels.add(lblHigh, "1, 2");
 		
@@ -359,7 +434,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin1023Control_highLevel.setEventListener(this);
 		panel_levels.add(spin1023Control_highLevel, "3, 2, fill, fill");
 		
-		JLabel lblOpen = new JLabel("Open");
+		lblOpen = new LabelWithState("Open");
 		lblOpen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_levels.add(lblOpen, "1, 3");
 		
@@ -367,7 +442,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_openLevel.setEventListener(this);
 		panel_levels.add(spin127Control_openLevel, "3, 3, fill, fill");
 		
-		JLabel lblClosed = new JLabel("SemiOpen");
+		lblClosed = new LabelWithState("SemiOpen");
 		lblClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_levels.add(lblClosed, "1, 4");
 		
@@ -375,7 +450,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_semiOpen.setEventListener(this);
 		panel_levels.add(spin127Control_semiOpen, "3, 4, fill, fill");
 		
-		JLabel lblHalfopen = new JLabel("HalfOpen");
+		lblHalfopen = new LabelWithState("HalfOpen");
 		lblHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_levels.add(lblHalfopen, "1, 5");
 		
@@ -383,7 +458,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_halfOpen.setEventListener(this);
 		panel_levels.add(spin127Control_halfOpen, "3, 5, fill, fill");
 		
-		JLabel lblClosed_1 = new JLabel("Closed");
+		lblClosed_1 = new LabelWithState("Closed");
 		lblClosed_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_levels.add(lblClosed_1, "1, 6");
 		
@@ -391,7 +466,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_closed.setEventListener(this);
 		panel_levels.add(spin127Control_closed, "3, 6, fill, fill");
 		
-		JLabel lblChickthresh = new JLabel("ChickThresh");
+		lblChickthresh = new LabelWithState("ChickThresh");
 		lblChickthresh.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel_levels.add(lblChickthresh, "1, 7");
 		
@@ -399,7 +474,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_chickThres.setEventListener(this);
 		panel_levels.add(spin127Control_chickThres, "3, 7, fill, fill");
 
-		JLabel lblShortThresh = new JLabel("ShortChickThresh");
+		lblShortThresh = new LabelWithState("ShortChickThresh");
 		lblShortThresh.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_levels.add(lblShortThresh, "1, 8");
 		
@@ -407,7 +482,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_shortThres.setEventListener(this);
 		panel_levels.add(spin127Control_shortThres, "3, 8, fill, fill");
 		
-		JLabel lblLongchickthresh = new JLabel("LongChickThresh");
+		lblLongchickthresh = new LabelWithState("LongChickThresh");
 		lblLongchickthresh.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_levels.add(lblLongchickthresh, "1, 9");
 		
@@ -415,7 +490,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_longThres.setEventListener(this);
 		panel_levels.add(spin127Control_longThres, "3, 9, fill, fill");
 		
-		JLabel lblMinVelocity = new JLabel("Chick Min Velocity");
+		lblMinVelocity = new LabelWithState("Chick Min Velocity");
 		lblMinVelocity.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel_levels.add(lblMinVelocity, "1, 10");
 		
@@ -423,7 +498,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin1023Control_chickParam1.setEventListener(this);
 		panel_levels.add(spin1023Control_chickParam1, "3, 10, fill, fill");
 		
-		JLabel lblMaxVelocity = new JLabel("Chick Max Velocity");
+		lblMaxVelocity = new LabelWithState("Chick Max Velocity");
 		lblMaxVelocity.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel_levels.add(lblMaxVelocity, "1, 11");
 		
@@ -431,7 +506,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin1023Control_chickParam2.setEventListener(this);
 		panel_levels.add(spin1023Control_chickParam2, "3, 11, fill, fill");
 		
-		JLabel lblChickDeadPeriod = new JLabel("Chick Dead Period");
+		lblChickDeadPeriod = new LabelWithState("Chick Dead Period");
 		lblChickDeadPeriod.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel_levels.add(lblChickDeadPeriod, "1, 12");
 		
@@ -462,7 +537,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblBowSemiopen = new JLabel("Bow SemiOpen");
+		lblBowSemiopen = new LabelWithState("Bow SemiOpen");
 		lblBowSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBowSemiopen, "1, 1");
 		
@@ -470,7 +545,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bowSemiOpen.setEventListener(this);
 		panel_notes.add(noteSpinControl_bowSemiOpen, "3, 1, left, center");
 		
-		JLabel lblEdgeSemiopen = new JLabel("Edge SemiOpen");
+		lblEdgeSemiopen = new LabelWithState("Edge SemiOpen");
 		lblEdgeSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblEdgeSemiopen, "1, 2");
 		
@@ -478,7 +553,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_edgeSemiOpen.setEventListener(this);
 		panel_notes.add(noteSpinControl_edgeSemiOpen, "3, 2, left, center");
 		
-		JLabel lblBellSemiopen = new JLabel("Bell SemiOpen");
+		lblBellSemiopen = new LabelWithState("Bell SemiOpen");
 		lblBellSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBellSemiopen, "1, 3");
 		
@@ -486,7 +561,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bellSemiOpen.setEventListener(this);
 		panel_notes.add(noteSpinControl_bellSemiOpen, "3, 3, left, center");
 		
-		JLabel lblBowHalfopen = new JLabel("Bow HalfOpen");
+		lblBowHalfopen = new LabelWithState("Bow HalfOpen");
 		lblBowHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBowHalfopen, "1, 4");
 		
@@ -494,7 +569,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bowHalfOpen.setEventListener(this);
 		panel_notes.add(noteSpinControl_bowHalfOpen, "3, 4, left, center");
 		
-		JLabel lblEdgeHalfopen = new JLabel("Edge HalfOpen");
+		lblEdgeHalfopen = new LabelWithState("Edge HalfOpen");
 		lblEdgeHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblEdgeHalfopen, "1, 5");
 		
@@ -502,7 +577,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_edgeHalfOpen.setEventListener(this);
 		panel_notes.add(noteSpinControl_edgeHalfOpen, "3, 5, left, center");
 		
-		JLabel lblBellHalfopen = new JLabel("Bell HalfOpen");
+		lblBellHalfopen = new LabelWithState("Bell HalfOpen");
 		lblBellHalfopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBellHalfopen, "1, 6");
 		
@@ -510,7 +585,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bellHalfOpen.setEventListener(this);
 		panel_notes.add(noteSpinControl_bellHalfOpen, "3, 6, left, center");
 		
-		JLabel lblBowSemiclosed = new JLabel("Bow SemiClosed");
+		lblBowSemiclosed = new LabelWithState("Bow SemiClosed");
 		lblBowSemiclosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBowSemiclosed, "1, 7");
 		
@@ -518,7 +593,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bowSemiClosed.setEventListener(this);
 		panel_notes.add(noteSpinControl_bowSemiClosed, "3, 7, left, center");
 		
-		JLabel lblEdgeSemiclosed = new JLabel("Edge SemiClosed");
+		lblEdgeSemiclosed = new LabelWithState("Edge SemiClosed");
 		lblEdgeSemiclosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblEdgeSemiclosed, "1, 8");
 		
@@ -526,7 +601,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_edgeSemiClosed.setEventListener(this);
 		panel_notes.add(noteSpinControl_edgeSemiClosed, "3, 8, left, center");
 		
-		JLabel lblBellSemiclosed = new JLabel("Bell SemiClosed");
+		lblBellSemiclosed = new LabelWithState("Bell SemiClosed");
 		lblBellSemiclosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBellSemiclosed, "1, 9");
 		
@@ -534,7 +609,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bellSemiClosed.setEventListener(this);
 		panel_notes.add(noteSpinControl_bellSemiClosed, "3, 9, left, center");
 		
-		JLabel lblBowClosed = new JLabel("Bow Closed");
+		lblBowClosed = new LabelWithState("Bow Closed");
 		lblBowClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBowClosed, "1, 10");
 		
@@ -542,7 +617,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bowClosed.setEventListener(this);
 		panel_notes.add(noteSpinControl_bowClosed, "3, 10, left, center");
 		
-		JLabel lblEdgeClosed = new JLabel("Edge Closed");
+		lblEdgeClosed = new LabelWithState("Edge Closed");
 		lblEdgeClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblEdgeClosed, "1, 11");
 		
@@ -550,7 +625,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_edgeClosed.setEventListener(this);
 		panel_notes.add(noteSpinControl_edgeClosed, "3, 11, left, center");
 		
-		JLabel lblBellClosed = new JLabel("Bell Closed");
+		lblBellClosed = new LabelWithState("Bell Closed");
 		lblBellClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblBellClosed, "1, 12");
 		
@@ -558,7 +633,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bellClosed.setEventListener(this);
 		panel_notes.add(noteSpinControl_bellClosed, "3, 12, left, center");
 		
-		JLabel lblChick = new JLabel("Chick");
+		lblChick = new LabelWithState("Chick");
 		lblChick.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblChick, "1, 13");
 		
@@ -566,7 +641,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_chick.setEventListener(this);
 		panel_notes.add(noteSpinControl_chick, "3, 13, left, center");
 		
-		JLabel lblSplash = new JLabel("Splash");
+		lblSplash = new LabelWithState("Splash");
 		lblSplash.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_notes.add(lblSplash, "1, 14");
 		

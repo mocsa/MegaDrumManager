@@ -20,7 +20,7 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JButton;
 import java.awt.Insets;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
@@ -71,7 +71,7 @@ public class ControlsPadsExtra extends JPanel {
 	private JPanel panelNamesEdit;
 	private JTextField textFieldEditName;
 	private JComboBox<String> comboBoxSelectName;
-	private JLabel lblCustomNames;
+	private LabelWithState lblCustomNames, lblEditSelectedName, lblSelectNameTo, lblwhenModifiedCustom, lblCurve;
 	private JComboBox<String> comboBoxCustomNamesCount;
 	private JButton button_customNameGet;
 	private JButton button_customNameSend;
@@ -79,10 +79,7 @@ public class ControlsPadsExtra extends JPanel {
 	private JButton button_customNamesSendAll;
 	private JButton button_customNameLoad;
 	private JButton button_customNameSave;
-	private JLabel lblEditSelectedName;
-	private JLabel lblSelectNameTo;
 	private JPanel panel;
-	private JLabel lblwhenModifiedCustom;
 	
 	/**
 	 * Create the panel.
@@ -181,7 +178,7 @@ public class ControlsPadsExtra extends JPanel {
 			new RowSpec[] {
 				FormFactory.PREF_ROWSPEC,}));
 		
-		JLabel lblCurve = new JLabel("Curve");
+		lblCurve = new LabelWithState("Curve");
 		lblCurve.setFont(new Font("Segoe UI", Font.BOLD, 11));
 		panelCurvesSelection.add(lblCurve, "2, 1");
 		
@@ -303,7 +300,7 @@ public class ControlsPadsExtra extends JPanel {
 			new RowSpec[] {
 				FormFactory.PREF_ROWSPEC,}));
 		
-		lblCustomNames = new JLabel("Custom names:");
+		lblCustomNames = new LabelWithState("Custom names:");
 		lblCustomNames.setFont(new Font("Tahoma", Font.PLAIN, 10));
 		panelNamesGetSend.add(lblCustomNames, "1, 1, right, default");
 		
@@ -377,7 +374,7 @@ public class ControlsPadsExtra extends JPanel {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		lblEditSelectedName = new JLabel("Edit selected name:");
+		lblEditSelectedName = new LabelWithState("Edit selected name:");
 		panelNamesEdit.add(lblEditSelectedName, "1, 1, right, default");
 		
 		textFieldEditName = new JTextField();
@@ -399,7 +396,7 @@ public class ControlsPadsExtra extends JPanel {
 		textFieldEditName.setColumns(10);
 		panelNamesEdit.add(textFieldEditName, "3, 1, fill, default");
 		
-		lblSelectNameTo = new JLabel("Select name to edit:");
+		lblSelectNameTo = new LabelWithState("Select name to edit:");
 		panelNamesEdit.add(lblSelectNameTo, "1, 3, right, default");
 		
 		comboBoxSelectName = new JComboBox<String>();
@@ -426,7 +423,7 @@ public class ControlsPadsExtra extends JPanel {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		lblwhenModifiedCustom = new JLabel("<html>When modified Custom Names will be truncated<br>to 8 charachters maximum</html>");
+		lblwhenModifiedCustom = new LabelWithState("<html>When modified Custom Names will be truncated<br>to 8 charachters maximum</html>");
 		panel.add(lblwhenModifiedCustom, "2, 2");
 
 		paintPanel.addMouseMotionListener(new MouseMotionAdapter() {

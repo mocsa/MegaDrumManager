@@ -5,7 +5,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
+
+import java.awt.Color;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -47,15 +49,13 @@ public class ControlsMisc extends JPanel {
 	private JButton btnSend;
 	private JButton btnLoad;
 	private JButton btnSave;
-	private JLabel lblBigVuSplit;
+	private LabelWithState lblBigVuSplit, lblNoteOffDelay, lblPressrollTimeout, lblLatency, lblBigVuMeter;
+	private LabelWithState lblMidiThruEnabled, lblQuickAccess, lblAltFalsetrsuppression, lblAllGainsLow;
+	private LabelWithState lblOctaveShift, lblInputsPriority, labelSendTriggeredIn, lblAltnoteChoking;
 	private JCheckBox checkBox_bigVuSplit;
 	private JCheckBox checkBox_MidiThru;
-	private JLabel lblMidiThruEnabled;
 	private JSpinner spinner_octaveShift;
-	private JLabel lblOctaveShift;
-	private JLabel labelSendTriggeredIn;
 	private JCheckBox checkBox_sendTriggeredIn;
-	private JLabel lblAltnoteChoking;
 
 	/**
 	 * Create the panel.
@@ -127,7 +127,7 @@ public class ControlsMisc extends JPanel {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblNoteOffDelay = new JLabel("Note Off Delay");
+		lblNoteOffDelay = new LabelWithState("Note Off Delay");
 		lblNoteOffDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblNoteOffDelay, "1, 1");
 		
@@ -148,7 +148,7 @@ public class ControlsMisc extends JPanel {
 		spinner_noteoff.setModel(new SpinnerNumberModel(new Integer(200), new Integer(100), new Integer(2000), new Integer(10)));
 		panel.add(spinner_noteoff, "3, 1");
 		
-		JLabel lblPressrollTimeout = new JLabel("Pressroll timeout");
+		lblPressrollTimeout = new LabelWithState("Pressroll timeout");
 		lblPressrollTimeout.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblPressrollTimeout, "1, 2");
 		
@@ -165,7 +165,7 @@ public class ControlsMisc extends JPanel {
 		spinner_pressroll.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(200), new Integer(10)));
 		panel.add(spinner_pressroll, "3, 2");
 		
-		JLabel lblLatency = new JLabel("Latency");
+		lblLatency = new LabelWithState("Latency");
 		lblLatency.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblLatency, "1, 3");
 		
@@ -182,7 +182,7 @@ public class ControlsMisc extends JPanel {
 		spinner_latency.setModel(new SpinnerNumberModel(new Integer(40), new Integer(10), new Integer(100), new Integer(1)));
 		panel.add(spinner_latency, "3, 3");
 		
-		lblOctaveShift = new JLabel("Notes Octave Shift");
+		lblOctaveShift = new LabelWithState("Notes Octave Shift");
 		lblOctaveShift.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblOctaveShift, "1, 4");
 		
@@ -199,7 +199,7 @@ public class ControlsMisc extends JPanel {
 		spinner_octaveShift.setModel(new SpinnerNumberModel(new Integer(2), new Integer(0), new Integer(2), new Integer(1)));
 		panel.add(spinner_octaveShift, "3, 4");
 		
-		JLabel lblBigVuMeter = new JLabel("Big VU meter");
+		lblBigVuMeter = new LabelWithState("Big VU meter");
 		lblBigVuMeter.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblBigVuMeter, "1, 5");
 		
@@ -213,7 +213,7 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_bigVuMeter, "3, 5");
 		
-		lblBigVuSplit = new JLabel("Big VU split");
+		lblBigVuSplit = new LabelWithState("Big VU split");
 		lblBigVuSplit.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblBigVuSplit, "1, 6");
 		
@@ -227,7 +227,7 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_bigVuSplit, "3, 6");
 		
-		JLabel lblQuickAccess = new JLabel("Quick Access");
+		lblQuickAccess = new LabelWithState("Quick Access");
 		lblQuickAccess.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblQuickAccess, "1, 7");
 		
@@ -241,7 +241,7 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_quickAccess, "3, 7");
 		
-		JLabel lblAltFalsetrsuppression = new JLabel("AltFalseTrSupp");
+		lblAltFalsetrsuppression = new LabelWithState("AltFalseTrSupp");
 		lblAltFalsetrsuppression.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblAltFalsetrsuppression, "1, 8");
 		
@@ -255,7 +255,7 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_altFalseTrSupp, "3, 8");
 		
-		JLabel lblInputsPriority = new JLabel("Inputs Priority");
+		lblInputsPriority = new LabelWithState("Inputs Priority");
 		lblInputsPriority.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblInputsPriority, "1, 9");
 		
@@ -269,7 +269,7 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_inputsPriority, "3, 9");
 		
-		JLabel lblAllGainsLow = new JLabel("All Gains Low");
+		lblAllGainsLow = new LabelWithState("All Gains Low");
 		lblAllGainsLow.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblAllGainsLow, "1, 10");
 		
@@ -283,7 +283,7 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_allGainsLow, "3, 10");
 		
-		lblMidiThruEnabled = new JLabel("MIDI Thru");
+		lblMidiThruEnabled = new LabelWithState("MIDI Thru");
 		lblMidiThruEnabled.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel.add(lblMidiThruEnabled, "1, 11");
 		
@@ -297,7 +297,7 @@ public class ControlsMisc extends JPanel {
 		});
 		panel.add(checkBox_MidiThru, "3, 11");
 		
-		labelSendTriggeredIn = new JLabel("Send TriggeredIn");
+		labelSendTriggeredIn = new LabelWithState("Send TriggeredIn");
 		labelSendTriggeredIn.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel.add(labelSendTriggeredIn, "1, 12");
 		
@@ -311,7 +311,7 @@ public class ControlsMisc extends JPanel {
 		checkBox_sendTriggeredIn.setToolTipText("<html>Check this box to enable MegaDrum to send TriggeredIn info.<br>\r\nWhen enabled, triggered inputs will also send MIDI CC 0x13<br>\r\nwith the inputs number<br>\r\nto make MDM to swith to a triggered input.</html>");
 		panel.add(checkBox_sendTriggeredIn, "3, 12");
 		
-		lblAltnoteChoking = new JLabel("AltNote Choking");
+		lblAltnoteChoking = new LabelWithState("AltNote Choking");
 		lblAltnoteChoking.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel.add(lblAltnoteChoking, "1, 13");
 		

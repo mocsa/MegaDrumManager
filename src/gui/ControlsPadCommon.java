@@ -2,7 +2,7 @@ package gui;
 
 import javax.swing.JPanel;
 import java.awt.GridBagLayout;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
@@ -65,7 +65,7 @@ class PadButton extends JButton {
 	}
 }
 
-class LabelCustom extends JLabel {
+class LabelCustom extends LabelWithState {
 
 	/**
 	 * 
@@ -73,6 +73,7 @@ class LabelCustom extends JLabel {
 	private static final long serialVersionUID = 3027309691790261621L;
 
 	public LabelCustom (String name) {
+		super(name);
 		this.setText(name);
 		this.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 	}

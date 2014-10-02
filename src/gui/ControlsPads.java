@@ -7,7 +7,7 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import java.awt.GridLayout;
 import javax.swing.border.TitledBorder;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import java.awt.Font;
 
 import javax.swing.DefaultComboBoxModel;
@@ -98,6 +98,7 @@ public class ControlsPads extends JPanel {
 	private JPopupMenu popupMenu;
 	private JMenu mnCopy3rd;
 	private JButton btnCopy;
+	private LabelWithState lblInput;
 	//private ArrayList<JMenu> settingsMenu;
 	//private JMenu menu_1;
 	
@@ -256,9 +257,9 @@ public class ControlsPads extends JPanel {
 			new RowSpec[] {
 				RowSpec.decode("fill:default"),}));
 		
-		JLabel label = new JLabel("Input");
-		label.setFont(new Font("Segoe UI", Font.BOLD, 11));
-		panel_input_selection.add(label, "2, 1, right, default");
+		lblInput = new LabelWithState("Input");
+		lblInput.setFont(new Font("Segoe UI", Font.BOLD, 11));
+		panel_input_selection.add(lblInput, "2, 1, right, default");
 		
 		comboBox_padSelection = new JComboBox<String>();
 		updateInputCountsControls(Constants.PADS_COUNT);

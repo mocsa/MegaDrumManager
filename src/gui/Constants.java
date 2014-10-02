@@ -100,6 +100,10 @@ public interface Constants {
 	public static final Color MIDI_CH_PR_COLOR			= Color.decode("0x00007f");
 	public static final Color MIDI_PITCH_COLOR			= Color.decode("0x7f0000");
 	
+	public static final int SYNC_STATE_UNKNOWN			= 0;
+	public static final int SYNC_STATE_SYNCED			= 1;
+	public static final int SYNC_STATE_NOT_SYNCED		= 2;
+	
 	public static final String [] NOTES_NAMES = {
 		"C ",
 		"C#",

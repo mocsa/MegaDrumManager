@@ -5,7 +5,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
-import javax.swing.JLabel;
+//import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -73,6 +73,20 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	
 	public String pressedPadButtonName;
 
+	private LabelWithState lblNote;
+
+	private LabelWithState lblMidpoint;
+
+	private LabelWithState lblAltNote;
+
+	private LabelWithState lblMidpointWidth;
+
+	private LabelWithState lblPressrollNote;
+
+	private LabelWithState lblThreshold;
+
+	private LabelWithState lblDampenedNote;
+
 	/**
 	 * Create the panel.
 	 */
@@ -98,7 +112,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblNote = new JLabel("Note");
+		lblNote = new LabelWithState("Note");
 		lblNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblNote, "1, 1, right, default");
 		
@@ -119,7 +133,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		zoneButton_note = new ZoneButton("note");
 		add(zoneButton_note, "5, 1");
 		
-		JLabel lblMidpoint = new JLabel("MidPoint");
+		lblMidpoint = new LabelWithState("MidPoint");
 		lblMidpoint.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblMidpoint, "7, 1, right, default");
 		
@@ -144,7 +158,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		zoneButton_midpoint = new ZoneButton("midpoint");
 		add(zoneButton_midpoint, "11, 1");
 		
-		JLabel lblAltNote = new JLabel("Alt Note");
+		lblAltNote = new LabelWithState("Alt Note");
 		lblAltNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblAltNote, "1, 2, right, default");
 		
@@ -165,7 +179,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		zoneButton_altNote = new ZoneButton("altNote");
 		add(zoneButton_altNote, "5, 2");
 		
-		JLabel lblMidpointWidth = new JLabel("MidPoint Width");
+		lblMidpointWidth = new LabelWithState("MidPoint Width");
 		lblMidpointWidth.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblMidpointWidth, "7, 2, right, default");
 		
@@ -184,7 +198,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		zoneButton_midwidth = new ZoneButton("midwidth");
 		add(zoneButton_midwidth, "11, 2");
 		
-		JLabel lblPressrollNote = new JLabel("Pressroll Note");
+		lblPressrollNote = new LabelWithState("Pressroll Note");
 		lblPressrollNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblPressrollNote, "1, 3, right, default");
 		
@@ -205,7 +219,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		zoneButton_pressrollNote = new ZoneButton("pressrollNote");
 		add(zoneButton_pressrollNote, "5, 3");
 		
-		JLabel lblThreshold = new JLabel("Threshold");
+		lblThreshold = new LabelWithState("Threshold");
 		lblThreshold.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblThreshold, "7, 3, right, default");
 		
@@ -223,7 +237,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		zoneButton_threshold = new ZoneButton("threshold");
 		add(zoneButton_threshold, "11, 3");
 		
-		JLabel lblDampenedNote = new JLabel("Dampened Note");
+		lblDampenedNote = new LabelWithState("Dampened Note");
 		lblDampenedNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		add(lblDampenedNote, "1, 4");
 		
