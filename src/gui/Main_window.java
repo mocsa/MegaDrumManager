@@ -1402,6 +1402,7 @@ public class Main_window {
 					}
 					if (arg0.getPropertyName().equals("valueCustomNameChanged")) {
 						sendCustomName(controlsPadsExtra.getCustomNamePointer(), true);
+						getCustomName(controlsPadsExtra.getCustomNamePointer());
 					}
 				}
 				if (arg0.getPropertyName().equals("CustomNamesChanged")) {
@@ -2371,6 +2372,7 @@ public class Main_window {
 					case Constants.MD_SYSEX_CUSTOM_NAME:
 						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, configFull.configCustomNames[buffer[4]]);
 						Utils.copySysexToConfigCustomName(midi_handler.bufferIn, moduleConfigFull.configCustomNames[buffer[4]]);
+						configFull.configCustomNames[buffer[4]].syncState = Constants.SYNC_STATE_RECEIVED;
 						controlsPadsExtra.updateControls();
 						break;
 					case Constants.MD_SYSEX_CONFIG_NAME:

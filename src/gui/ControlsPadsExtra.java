@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -14,6 +16,8 @@ import java.awt.Font;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.plaf.basic.BasicComboBoxEditor;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -29,13 +33,128 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTabbedPane;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
+import javax.swing.ListCellRenderer;
+
 import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+
+class ColorCellRenderer implements ListCellRenderer<Object> {
+	  protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+	  //private final static Dimension preferredSize = new Dimension(0, 20);
+	  private int length = 0;
+	  int[]	syncStates;
+
+	  public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+	      boolean isSelected, boolean cellHasFocus) {
+	    JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index,
+	        isSelected, cellHasFocus);
+	    if ((syncStates != null) && (index < syncStates.length) && (index > -1)) {
+		    switch (syncStates[index]) {
+			    case Constants.SYNC_STATE_UNKNOWN:
+				    renderer.setForeground(Color.BLUE);
+			    	break;
+			    case Constants.SYNC_STATE_NOT_SYNCED:
+				    renderer.setForeground(Color.RED);
+			    	break;
+			    case Constants.SYNC_STATE_SYNCED:
+				    renderer.setForeground(Color.BLACK);
+			    	break;
+			    default:
+				    renderer.setForeground(Color.BLACK);
+			    	break;	    	
+		    }	    	
+	    }
+	    //renderer.setPreferredSize(preferredSize);
+	    return renderer;
+	  }
+	  
+	  public void setLength(int l) {
+		length = l;
+		if (syncStates != null) {
+			syncStates = null;
+		}
+		syncStates = new int[length];
+	  }
+	  
+	  public void setSyncStateAtIndex(int state, int index) {
+		  if ((index < length) && (index > -1)) {
+			  syncStates[index] = state;
+		  }
+	  }
+	  
+	  public void setSyncNotSyncedAtIndex(boolean synced, int index) {
+		  if ((index < length) && (index > -1)) {
+			  if (synced) {
+				  syncStates[index] = Constants.SYNC_STATE_SYNCED;				  
+			  } else {
+				  syncStates[index] = Constants.SYNC_STATE_NOT_SYNCED;
+			  }
+		  }
+	  }
+}
+
+class ComboBoxRendererWithState extends JLabel implements ListCellRenderer<Object> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3445288274669149526L;
+
+	public ComboBoxRendererWithState() {
+		setOpaque(true);
+		setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 24));
+		setBackground(Color.BLUE);
+		setForeground(Color.YELLOW);
+	}
+	
+	@Override
+	public Component getListCellRendererComponent(JList<?> list, Object value,
+			int index, boolean isSelected, boolean cellHasFocus) {
+		setText(value.toString()); 
+		return this;
+	}
+
+}
+
+class ComboBoxEditorWithState extends BasicComboBoxEditor {
+	private JLabel label = new JLabel();
+	private JPanel panel = new JPanel();
+	private Object selectedItem;
+	
+	public ComboBoxEditorWithState() {
+		
+		label.setOpaque(false);
+		label.setFont(new Font("Arial", Font.BOLD, 24));
+		label.setForeground(Color.BLACK);
+		
+		panel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 2));
+		panel.add(label);
+		panel.setBackground(Color.GREEN);
+	}
+	
+	public Component getEditorComponent() {
+		return this.panel;
+	}
+	
+	public Object getItem() {
+		return "[" + this.selectedItem.toString() + "]";
+	}
+	
+	public void setItem(Object item) {
+		this.selectedItem = item;
+		label.setText(item.toString());
+	}
+	
+}
 
 public class ControlsPadsExtra extends JPanel {
 	/**
@@ -81,6 +200,8 @@ public class ControlsPadsExtra extends JPanel {
 	private JButton button_customNameLoad;
 	private JButton button_customNameSave;
 	private JPanel panel;
+
+	private ColorCellRenderer comboBoxSelectNameRenderer;
 	
 	/**
 	 * Create the panel.
@@ -402,6 +523,10 @@ public class ControlsPadsExtra extends JPanel {
 		panelNamesEdit.add(lblSelectNameTo, "1, 3, right, default");
 		
 		comboBoxSelectName = new JComboBox<String>();
+		comboBoxSelectNameRenderer = new ColorCellRenderer();
+		comboBoxSelectNameRenderer.setLength(0);
+		comboBoxSelectName.setRenderer(comboBoxSelectNameRenderer);
+		//comboBoxSelectName.setEditor(new ComboBoxEditorWithState());
 		comboBoxSelectName.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				if (arg0.getStateChange() == ItemEvent.SELECTED) {
@@ -411,7 +536,6 @@ public class ControlsPadsExtra extends JPanel {
 				}
 			}
 		});
-		
 		updateCustomNameControls();
 		
 		panelNamesEdit.add(comboBoxSelectName, "3, 3, fill, default");
@@ -470,10 +594,10 @@ public class ControlsPadsExtra extends JPanel {
 		if (changeEventsAllowed) {
 			firePropertyChange("valueCurveChanged", false, true);
 		}
-		updateSyncState();
+		updateCurveSyncState();
 	}
 
-	private void updateSyncState() {
+	private void updateCurveSyncState() {
 		if (configFull.configCurves[curvePointer].syncState == Constants.SYNC_STATE_UNKNOWN ) {
 			lblCurve.setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		} else {
@@ -484,12 +608,6 @@ public class ControlsPadsExtra extends JPanel {
 					break;
 				}
 			}
-		}
-	}
-
-	private void valueCustomNameChanged() {
-		if (changeEventsAllowed) {
-			firePropertyChange("valueCustomNameChanged", false, true);
 		}
 	}
 
@@ -506,20 +624,39 @@ public class ControlsPadsExtra extends JPanel {
     	comboBox_curveNumber.setSelectedIndex(curvePointer);
     	updateYvalues();
     	paintPanel.repaint();
-    	updateSyncState();
+    	updateCurveSyncState();
 	}
 	
+	private void valueCustomNameChanged() {
+		if (changeEventsAllowed) {
+			firePropertyChange("valueCustomNameChanged", false, true);
+		}
+		updateCustomNameSyncState();
+	}
+	
+	private void updateCustomNameSyncState() {		
+		for (int i = 0; i < configFull.customNamesCount; i++) {
+			if (configFull.configCustomNames[i].syncState == Constants.SYNC_STATE_UNKNOWN) {
+				comboBoxSelectNameRenderer.setSyncStateAtIndex(i, Constants.SYNC_STATE_UNKNOWN);
+			} else {
+				comboBoxSelectNameRenderer.setSyncNotSyncedAtIndex(configFull.configCustomNames[i].name.equals(moduleConfigFull.configCustomNames[i].name), i);			
+			}
+		}
+	}
+
 	private void updateCustomNameControls() {
 		int pointer = customNamePointer;
 		if (comboBoxSelectName != null) {
 			comboBoxSelectName.removeAllItems();
 			for (int i = 0; i < configFull.customNamesCount; i++) {
 				comboBoxSelectName.addItem(configFull.configCustomNames[i].name);
-			}		
+			}
+			comboBoxSelectNameRenderer.setLength(configFull.customNamesCount);
 			comboBoxSelectName.setSelectedIndex(pointer);
 			if (changeEventsAllowed) {
 				firePropertyChange("CustomNamesChanged", false, true);
 			}
+			updateCustomNameSyncState();
 		}
 	}
 	
