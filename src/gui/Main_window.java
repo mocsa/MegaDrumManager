@@ -728,14 +728,15 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive && sendSysexEnabled) {
 					if (arg0.getPropertyName().equals("headValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer(), true);
-						//getPad(controlsPads.getPadPointer());
+						getPad(controlsPads.getPadPointer());
 					}
 					if (arg0.getPropertyName().equals("rimValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer() + 1, true);
-						//getPad(controlsPads.getPadPointer() + 1);
+						getPad(controlsPads.getPadPointer() + 1);
 					}
 					if (arg0.getPropertyName().equals("thirdZoneValueChanged")) {
 						sendThirdZone(controlsPads.getPadPointer(), true);
+						getPad(controlsPads.getPadPointer());
 					}
 				}
 			}
