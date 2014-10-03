@@ -51,6 +51,7 @@ public class ControlsPadsExtra extends JPanel {
 	private int curvePointer;
 	//private int prevCurvePointer;
 	private ConfigFull configFull;
+	private ConfigFull moduleConfigFull;
 	private int customNamePointer;
 	//private int prevCustomNamePointer;
 	private JComboBox<String> comboBox_curveNumber;
@@ -84,8 +85,9 @@ public class ControlsPadsExtra extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsPadsExtra(ConfigFull config) {
+	public ControlsPadsExtra(ConfigFull config, ConfigFull module) {
 		configFull = config;
+		moduleConfigFull = module;
         curvePointer = 0;
         //prevCurvePointer = -1;
         
@@ -468,6 +470,21 @@ public class ControlsPadsExtra extends JPanel {
 		if (changeEventsAllowed) {
 			firePropertyChange("valueCurveChanged", false, true);
 		}
+		updateSyncState();
+	}
+
+	private void updateSyncState() {
+		if (configFull.configCurves[curvePointer].syncState == Constants.SYNC_STATE_UNKNOWN ) {
+			lblCurve.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+		} else {
+			lblCurve.setSyncNotSync(true);
+			for (int i = 0; i < 9; i++) {
+				if (configFull.configCurves[curvePointer].yValues[i] != moduleConfigFull.configCurves[curvePointer].yValues[i]) {
+					lblCurve.setSyncNotSync(false);
+					break;
+				}
+			}
+		}
 	}
 
 	private void valueCustomNameChanged() {
@@ -489,6 +506,7 @@ public class ControlsPadsExtra extends JPanel {
     	comboBox_curveNumber.setSelectedIndex(curvePointer);
     	updateYvalues();
     	paintPanel.repaint();
+    	updateSyncState();
 	}
 	
 	private void updateCustomNameControls() {

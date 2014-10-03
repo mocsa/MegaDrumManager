@@ -11,6 +11,7 @@ public class Config3rd {
 	public int dampenedNote;
 	public boolean pressrollNote_linked = false;
 	public boolean altNote_linked = false;
+	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 
 	public Config3rd () {
 	}

@@ -343,7 +343,7 @@ public class ControlsMisc extends JPanel {
 		updateSyncState();
 	}
 	
-	public void updateSyncState() {
+	private void updateSyncState() {
 		if (configFull.configMisc.syncState == Constants.SYNC_STATE_UNKNOWN ) {
 			lblNoteOffDelay.setSyncState(Constants.SYNC_STATE_UNKNOWN);
 			lblPressrollTimeout.setSyncState(Constants.SYNC_STATE_UNKNOWN);

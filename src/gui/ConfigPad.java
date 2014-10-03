@@ -32,6 +32,7 @@ public class ConfigPad {
 	public boolean altNote_linked = false;
 	public boolean pressrollNote_linked = false;
 	public boolean inputDisabled = false;
+	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 
 	
 	public ConfigPad (){

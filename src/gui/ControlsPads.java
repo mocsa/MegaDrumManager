@@ -65,6 +65,7 @@ public class ControlsPads extends JPanel {
 	private String enableString = "Enable Others";	
 	
 	private ConfigFull configFull;
+	private ConfigFull moduleConfigFull;
 
 	private int padPointer;
 	private int prevPadPointer;
@@ -109,8 +110,9 @@ public class ControlsPads extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsPads(ConfigFull config) {
+	public ControlsPads(ConfigFull config, ConfigFull module) {
 		configFull = config;
+		moduleConfigFull = module;
 		
         padPointer = 0;
         prevPadPointer = -1;
@@ -315,7 +317,7 @@ public class ControlsPads extends JPanel {
 		JPanel panel_head_rim = new JPanel();
 		add(panel_head_rim, "1, 4, fill, fill");
 
-		panel_head = new ControlsPadCommon(head_pad, configFull);
+		panel_head = new ControlsPadCommon(head_pad, configFull, moduleConfigFull);
 		panel_head.addPropertyChangeListener( new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("nameChanged")) {
@@ -352,7 +354,7 @@ public class ControlsPads extends JPanel {
 		panel_head_rim.add(panel_head, "1, 1, fill, fill");
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		panel_rim = new ControlsPadCommon(rim_pad, configFull);
+		panel_rim = new ControlsPadCommon(rim_pad, configFull, moduleConfigFull);
 		panel_rim.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("nameChanged")) {
@@ -393,7 +395,7 @@ public class ControlsPads extends JPanel {
 		panel_head_rim.add(panel_rim, "2, 1, fill, fill");
 		panel_rim.setBorder(new TitledBorder(null, "Rim/Edge", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		
-		panel_3rd_zone = new ThirdZoneControls(configFull);
+		panel_3rd_zone = new ThirdZoneControls(configFull, moduleConfigFull);
 		panel_3rd_zone.addPropertyChangeListener( new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent arg0) {
 				if (arg0.getPropertyName().equals("valueChanged")) {

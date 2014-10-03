@@ -44,6 +44,7 @@ public class ConfigPedal {
 	public int bellClosedNote;
 	public int chickNote;
 	public int splashNote;
+	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 	
 	
 	public ConfigPedal (){

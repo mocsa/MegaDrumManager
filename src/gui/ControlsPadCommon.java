@@ -111,6 +111,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	//private static final boolean rim_pad = false;
 	
 	private ConfigFull configFull;
+	private ConfigFull moduleConfigFull;
 	private int	configIndex;
 	private PadButton padButton__name;
 	private PadButton padButton__note;
@@ -145,14 +146,20 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 	private PadButton padButton_posLevel;
 	private PadButton padButton_posLow;
 	private PadButton padButton_posHigh;
+
+	private LabelCustom lblName, lblNote, lblAltNote, lblPressrollNote, lblChannel, lblFunction, lblCurve;
+	private LabelCustom lblCompression, lblShift, lblXtalkLevel, lblXtalkGroup, lblThreshold, lblGain;
+	private LabelCustom lblHighlevelAuto, lblHighlevel, lblRetriggerMask, lblDynLevel;
+	private LabelCustom lblDynTime, lblMinscan, lblType;
 	
 	
 	/**
 	 * Create the panel.
 	 */
-	public ControlsPadCommon(boolean pad_type, ConfigFull config) {
+	public ControlsPadCommon(boolean pad_type, ConfigFull config, ConfigFull module) {
 		head_rim_pad = pad_type;
 		configFull = config;
+		moduleConfigFull = module;
 		if (pad_type == head_pad)
 		{
 			configIndex = 0;
@@ -190,7 +197,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 				RowSpec.decode("20px"),
 				RowSpec.decode("20px"),}));
 		
-		LabelCustom lblName = new LabelCustom("Name");
+		lblName = new LabelCustom("Name");
 		lblName.setToolTipText("Input Name");
 		add(lblName, "1, 1, right, center");
 		
@@ -200,7 +207,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton__name = new PadButton("name",head_rim_pad);
 		add(padButton__name, "5, 1");
 		
-		LabelCustom lblNote = new LabelCustom("Note");
+		lblNote = new LabelCustom("Note");
 		add(lblNote, "1, 2, right, center");
 		
 		noteSpinControl_note = new NoteSpinControl(configFull);
@@ -220,7 +227,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		add(padButton__note, "5, 2");
 		
 		
-		LabelCustom lblAltNote = new LabelCustom("Alt Note");
+		lblAltNote = new LabelCustom("Alt Note");
 		add(lblAltNote, "1, 3, right, center");
 		
 		noteSpinControl_altNote = new NoteSpinControl(configFull);
@@ -239,7 +246,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_altNote = new PadButton("altNote", head_rim_pad);
 		add(padButton_altNote, "5, 3");
 		
-		LabelCustom lblPressrollNote = new LabelCustom("Pressroll Note");
+		lblPressrollNote = new LabelCustom("Pressroll Note");
 		add(lblPressrollNote, "1, 4, right, center");
 		
 		noteSpinControl_pressrollNote = new NoteSpinControl(configFull);
@@ -258,8 +265,8 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_pressrollNote = new PadButton("pressrollNote", head_rim_pad);
 		add(padButton_pressrollNote, "5, 4");
 		
-		LabelCustom lblCurve = new LabelCustom("Channel");
-		add(lblCurve, "1, 5, right, center");
+		lblChannel = new LabelCustom("Channel");
+		add(lblChannel, "1, 5, right, center");
 		
 		spinner_channel = new JSpinnerCustom(this);
 		spinner_channel.setModel(new SpinnerNumberModel(1, 1, 16, 1));
@@ -268,7 +275,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_channel = new PadButton("channel", head_rim_pad);
 		add(padButton_channel, "5, 5");
 		
-		LabelCustom lblFunction = new LabelCustom("Special Function");
+		lblFunction = new LabelCustom("Special Function");
 		lblFunction.setText("Function");
 		add(lblFunction, "1, 6, right, default");
 		
@@ -282,8 +289,8 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_function = new PadButton("function", head_rim_pad);
 		add(padButton_function, "5, 6");
 		
-		LabelCustom lblCurve_1 = new LabelCustom("Curve");
-		add(lblCurve_1, "1, 7, right, center");
+		lblCurve = new LabelCustom("Curve");
+		add(lblCurve, "1, 7, right, center");
 		
 		comboBox_curve = new JComboBoxCustom();
 		for (String string : Constants.CURVES_LIST) {
@@ -294,7 +301,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_curve = new PadButton("curve", head_rim_pad);
 		add(padButton_curve, "5, 7");
 				
-		LabelCustom lblCompression = new LabelCustom("Compression");
+		lblCompression = new LabelCustom("Compression");
 		add(lblCompression, "1, 8, right, center");
 		
 		comboBox_compression = new JComboBoxCustom();
@@ -306,7 +313,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_compression = new PadButton("compression", head_rim_pad);
 		add(padButton_compression, "5, 8");
 		
-		LabelCustom lblShift = new LabelCustom("Level Shift");
+		lblShift = new LabelCustom("Level Shift");
 		add(lblShift, "1, 9, right, center");
 		
 		comboBox_shift = new JComboBoxCustom();
@@ -318,7 +325,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_shift = new PadButton("shift", head_rim_pad);
 		add(padButton_shift, "5, 9");
 		
-		LabelCustom lblXtalkLevel = new LabelCustom("XTalk Level");
+		lblXtalkLevel = new LabelCustom("XTalk Level");
 		add(lblXtalkLevel, "1, 10, right, center");
 		
 		comboBox_xtalkLevel = new JComboBoxCustom();
@@ -330,7 +337,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_xtalkLevel = new PadButton("xtalkLevel", head_rim_pad);
 		add(padButton_xtalkLevel, "5, 10");
 		
-		LabelCustom lblXtalkGroup = new LabelCustom("XTalk Group");
+		lblXtalkGroup = new LabelCustom("XTalk Group");
 		add(lblXtalkGroup, "1, 11, right, center");
 		
 		comboBox_xtalkGroup = new JComboBoxCustom();
@@ -342,7 +349,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_xtalkGroup = new PadButton("xtalkGroup", head_rim_pad);
 		add(padButton_xtalkGroup, "5, 11");
 		
-		LabelCustom lblThreshold = new LabelCustom("Threshold");
+		lblThreshold = new LabelCustom("Threshold");
 		add(lblThreshold, "1, 12, right, center");
 		
 		spinner_threshold = new JSpinnerCustom(this);
@@ -352,7 +359,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_threshold = new PadButton("threshold", head_rim_pad);
 		add(padButton_threshold, "5, 12");
 		
-		LabelCustom lblGain = new LabelCustom("Gain");
+		lblGain = new LabelCustom("Gain");
 		add(lblGain, "1, 13, right, center");
 		
 		comboBox_gain = new JComboBoxCustom();
@@ -364,7 +371,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_gain = new PadButton("gain", head_rim_pad);
 		add(padButton_gain, "5, 13");
 		
-		LabelCustom lblHighlevelAuto = new LabelCustom("HighLevel Auto");
+		lblHighlevelAuto = new LabelCustom("HighLevel Auto");
 		add(lblHighlevelAuto, "1, 14, right, center");
 		
 		checkBox_autoLevel = new JCheckBoxCustom(this);		
@@ -373,7 +380,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_autoLevel = new PadButton("autoLevel", head_rim_pad);
 		add(padButton_autoLevel, "5, 14");
 		
-		LabelCustom lblHighlevel = new LabelCustom("HighLevel");
+		lblHighlevel = new LabelCustom("HighLevel");
 		add(lblHighlevel, "1, 15, right, center");
 				
 		spinner_highLevel = new JSpinnerCustom(this);
@@ -385,7 +392,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_highLevel = new PadButton("highLevel", head_rim_pad);
 		add(padButton_highLevel, "5, 15");
 		
-		LabelCustom lblRetriggerMask = new LabelCustom("Retrigger Mask");
+		lblRetriggerMask = new LabelCustom("Retrigger Mask");
 		add(lblRetriggerMask, "1, 16, right, center");
 		
 		spinner_retrigger = new JSpinnerCustom(this);
@@ -395,9 +402,9 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_retrigger = new PadButton("retrigger", head_rim_pad);
 		add(padButton_retrigger, "5, 16");
 		
-		LabelCustom lblDyn = new LabelCustom(" DynLevel");
-		lblDyn.setToolTipText("Dynamic Threshold Level");
-		add(lblDyn, "1, 17, right, center");
+		lblDynLevel = new LabelCustom(" DynLevel");
+		lblDynLevel.setToolTipText("Dynamic Threshold Level");
+		add(lblDynLevel, "1, 17, right, center");
 		
 		comboBox_dynLevel = new JComboBoxCustom();
         for(int i=0; i<16; i++){
@@ -408,9 +415,9 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_dynLevel = new PadButton("dynLevel", head_rim_pad);
 		add(padButton_dynLevel, "5, 17");
 		
-		LabelCustom lblDyntime = new LabelCustom("DynTime");
-		lblDyntime.setToolTipText("Dynamic Threshold decay time");
-		add(lblDyntime, "1, 18, right, center");
+		lblDynTime = new LabelCustom("DynTime");
+		lblDynTime.setToolTipText("Dynamic Threshold decay time");
+		add(lblDynTime, "1, 18, right, center");
 		
 		comboBox_dynTime = new JComboBoxCustom();
         for(int i=0; i<16; i++){
@@ -421,7 +428,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_dynTime = new PadButton("dynTime", head_rim_pad);
 		add(padButton_dynTime, "5, 18");
 		
-		LabelCustom lblMinscan = new LabelCustom("MinScan");
+		lblMinscan = new LabelCustom("MinScan");
 		add(lblMinscan, "1, 19, right, center");
 		
 		spinner_minScan = new JSpinnerCustom(this);
@@ -464,7 +471,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		padButton_posHigh = new PadButton("posHigh", false);
 		add(padButton_posHigh, "5, 22");
 		
-		LabelCustom lblType = new LabelCustom("Type");
+		lblType = new LabelCustom("Type");
 		add(lblType, "1, 23, right, center");
 		
 		comboBox_type = new JComboBoxCustom();
@@ -532,9 +539,62 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 			}
 			updateConfig();
 			firePropertyChange("valueChanged", false, true);
+			updateSyncState();
 		}
 	}
 
+	private void updateSyncState() {
+		if (configFull.configPads[configIndex].syncState == Constants.SYNC_STATE_UNKNOWN ) {
+			lblName.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblNote.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblAltNote.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblPressrollNote.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblChannel.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblFunction.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblCurve.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblCompression.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblShift.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblXtalkLevel.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblXtalkGroup.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblThreshold.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblGain.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblHighlevelAuto.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblHighlevel.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblRetriggerMask.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblDynLevel.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblDynTime.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblMinscan.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblPosLevel.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblPosLow.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblPosHigh.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblType.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+		} else {
+			lblName.setSyncNotSync(configFull.configPads[configIndex].name == moduleConfigFull.configPads[configIndex].name);
+			lblNote.setSyncNotSync(configFull.configPads[configIndex].note == moduleConfigFull.configPads[configIndex].note);
+			lblAltNote.setSyncNotSync(configFull.configPads[configIndex].altNote == moduleConfigFull.configPads[configIndex].altNote);
+			lblPressrollNote.setSyncNotSync(configFull.configPads[configIndex].pressrollNote == moduleConfigFull.configPads[configIndex].pressrollNote);
+			lblChannel.setSyncNotSync(configFull.configPads[configIndex].channel == moduleConfigFull.configPads[configIndex].channel);
+			lblFunction.setSyncNotSync(configFull.configPads[configIndex].function == moduleConfigFull.configPads[configIndex].function);
+			lblCurve.setSyncNotSync(configFull.configPads[configIndex].curve == moduleConfigFull.configPads[configIndex].curve);
+			lblCompression.setSyncNotSync(configFull.configPads[configIndex].compression == moduleConfigFull.configPads[configIndex].compression);
+			lblShift.setSyncNotSync(configFull.configPads[configIndex].shift == moduleConfigFull.configPads[configIndex].shift);
+			lblXtalkLevel.setSyncNotSync(configFull.configPads[configIndex].xtalkLevel == moduleConfigFull.configPads[configIndex].xtalkLevel);
+			lblXtalkGroup.setSyncNotSync(configFull.configPads[configIndex].xtalkGroup == moduleConfigFull.configPads[configIndex].xtalkGroup);
+			lblThreshold.setSyncNotSync(configFull.configPads[configIndex].threshold == moduleConfigFull.configPads[configIndex].threshold);
+			lblGain.setSyncNotSync(configFull.configPads[configIndex].gain == moduleConfigFull.configPads[configIndex].gain);
+			lblHighlevelAuto.setSyncNotSync(configFull.configPads[configIndex].autoLevel == moduleConfigFull.configPads[configIndex].autoLevel);
+			lblHighlevel.setSyncNotSync(configFull.configPads[configIndex].levelMax == moduleConfigFull.configPads[configIndex].levelMax);
+			lblRetriggerMask.setSyncNotSync(configFull.configPads[configIndex].retrigger == moduleConfigFull.configPads[configIndex].retrigger);
+			lblDynLevel.setSyncNotSync(configFull.configPads[configIndex].dynLevel == moduleConfigFull.configPads[configIndex].dynLevel);
+			lblDynTime.setSyncNotSync(configFull.configPads[configIndex].dynTime == moduleConfigFull.configPads[configIndex].dynTime);
+			lblMinscan.setSyncNotSync(configFull.configPads[configIndex].minScan == moduleConfigFull.configPads[configIndex].minScan);
+			lblPosLevel.setSyncNotSync(configFull.configPos[configIndex].level == moduleConfigFull.configPos[configIndex].level);
+			lblPosLow.setSyncNotSync(configFull.configPos[configIndex].low == moduleConfigFull.configPos[configIndex].low);
+			lblPosHigh.setSyncNotSync(configFull.configPos[configIndex].high == moduleConfigFull.configPos[configIndex].high);
+			lblType.setSyncNotSync(configFull.configPads[configIndex].type == moduleConfigFull.configPads[configIndex].type);
+		}
+	}
+	
 	private void updateControls() {
 
 		comboBox_name.setSelectedIndexWithoutEvent(configFull.configPads[configIndex].name);
@@ -576,6 +636,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 				comboBox_type.setSelectedIndexWithoutEvent(0);
 			}
 		}
+		updateSyncState();
 	}
 	
 	public void updateConfig() {

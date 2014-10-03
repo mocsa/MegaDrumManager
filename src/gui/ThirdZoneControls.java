@@ -59,6 +59,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 
 	//private Config3rd config3rd;
 	private ConfigFull configFull;
+	private ConfigFull moduleConfigFull;
 	private int	configIndex = 0;
 	//private boolean inUpdate = false;
 
@@ -73,25 +74,14 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	
 	public String pressedPadButtonName;
 
-	private LabelWithState lblNote;
-
-	private LabelWithState lblMidpoint;
-
-	private LabelWithState lblAltNote;
-
-	private LabelWithState lblMidpointWidth;
-
-	private LabelWithState lblPressrollNote;
-
-	private LabelWithState lblThreshold;
-
-	private LabelWithState lblDampenedNote;
+	private LabelWithState lblNote, lblMidpoint, lblAltNote, lblMidpointWidth, lblPressrollNote, lblThreshold, lblDampenedNote;
 
 	/**
 	 * Create the panel.
 	 */
-	public ThirdZoneControls(ConfigFull config) {
+	public ThirdZoneControls(ConfigFull config, ConfigFull module) {
 		configFull = config;
+		moduleConfigFull = module;
 		configIndex = 0;
 		//controls = new ArrayList<Object>();
 		setLayout(new FormLayout(new ColumnSpec[] {
@@ -281,9 +271,30 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		}
 		updateConfig();
 		firePropertyChange("valueChanged", false, true);
+		updateSyncState();
 		//updateControls();
 	}
 
+	private void updateSyncState() {
+		if (configFull.config3rds[configIndex].syncState == Constants.SYNC_STATE_UNKNOWN ) {
+			lblNote.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblAltNote.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblPressrollNote.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblDampenedNote.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblThreshold.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblMidpoint.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblMidpointWidth.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+		} else {
+			lblNote.setSyncNotSync(configFull.config3rds[configIndex].note == moduleConfigFull.config3rds[configIndex].note);
+			lblAltNote.setSyncNotSync(configFull.config3rds[configIndex].altNote == moduleConfigFull.config3rds[configIndex].altNote);
+			lblPressrollNote.setSyncNotSync(configFull.config3rds[configIndex].pressrollNote == moduleConfigFull.config3rds[configIndex].pressrollNote);
+			lblDampenedNote.setSyncNotSync(configFull.config3rds[configIndex].dampenedNote == moduleConfigFull.config3rds[configIndex].dampenedNote);
+			lblThreshold.setSyncNotSync(configFull.config3rds[configIndex].threshold == moduleConfigFull.config3rds[configIndex].threshold);
+			lblMidpoint.setSyncNotSync(((configFull.config3rds[configIndex].threshold&0xf0)>>4) == ((moduleConfigFull.config3rds[configIndex].threshold&0xf0)>>4));
+			lblMidpointWidth.setSyncNotSync((configFull.config3rds[configIndex].threshold&0x0f) == (moduleConfigFull.config3rds[configIndex].threshold&0x0f));
+		}
+	}
+	
 	public void updateControls() {
 		if (controlsInited) {
 			//if (!inUpdate) {
@@ -295,10 +306,11 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 				noteSpinControl_altNote.getCheckBox().setSelected(configFull.config3rds[configIndex].altNote_linked);
 				noteSpinControl_pressrollNote.getCheckBox().setSelected(configFull.config3rds[configIndex].pressrollNote_linked);
 				spinner_threshold.setValueWithoutEvent(configFull.config3rds[configIndex].threshold);
-				spinner_midPointWidth.setValueWithoutEvent(configFull.config3rds[configIndex].threshold&0x0f);
 				slider_midPoint.setValueWithoutEvent((configFull.config3rds[configIndex].threshold&0xf0)>>4);
+				spinner_midPointWidth.setValueWithoutEvent(configFull.config3rds[configIndex].threshold&0x0f);
 				//inUpdate = false;
 			//}
+			updateSyncState();
 		}
 	}
 	

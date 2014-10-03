@@ -555,7 +555,7 @@ public class Main_window {
 			}
 		});
 		
-		controlsPedal = new ControlsPedal(configFull);
+		controlsPedal = new ControlsPedal(configFull, moduleConfigFull);
 		controlsPedal.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PEDAL_SIZE];
@@ -577,6 +577,7 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueChanged")) {
 						sendPedal(true);
+						getPedal();
 					}
 				}
 			}
@@ -594,7 +595,7 @@ public class Main_window {
 			}
 		});
 		
-		controlsPads = new ControlsPads(configFull);
+		controlsPads = new ControlsPads(configFull, moduleConfigFull);
 		controlsPads.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_PAD_SIZE];
@@ -727,9 +728,11 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive && sendSysexEnabled) {
 					if (arg0.getPropertyName().equals("headValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer(), true);
+						//getPad(controlsPads.getPadPointer());
 					}
 					if (arg0.getPropertyName().equals("rimValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer() + 1, true);
+						//getPad(controlsPads.getPadPointer() + 1);
 					}
 					if (arg0.getPropertyName().equals("thirdZoneValueChanged")) {
 						sendThirdZone(controlsPads.getPadPointer(), true);
@@ -1303,6 +1306,7 @@ public class Main_window {
 					} else {
 			        	configFull.configGlobalMisc.inputs_count = ((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
 			        	updateGlobalMiscControls();
+			        	configFull.resetSyncState();
 						if (configOptions.interactive) {
 							sendGlobalMisc(true);
 						}
@@ -1336,7 +1340,7 @@ public class Main_window {
 //		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
 		global_panel.add(panel_main, "1, 5, 3, 1, left, fill");
 		
-		controlsPadsExtra = new ControlsPadsExtra(configFull);
+		controlsPadsExtra = new ControlsPadsExtra(configFull, moduleConfigFull);
 		controlsPadsExtra.getBtnCurveSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_CURVE_SIZE];
@@ -1393,6 +1397,7 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueCurveChanged")) {
 						sendCurve(controlsPadsExtra.getCurvePointer(),true);
+						getCurve(controlsPadsExtra.getCurvePointer());
 					}
 					if (arg0.getPropertyName().equals("valueCustomNameChanged")) {
 						sendCustomName(controlsPadsExtra.getCustomNamePointer(), true);
@@ -1914,6 +1919,7 @@ public class Main_window {
 		compareSysexToConfigIsOn = false;
 		for (int i = 0; i<Constants.CURVES_COUNT; i++) {
 			getCurve(i);
+    		delayMs(5);
 		}
 	}
 		
@@ -2299,11 +2305,13 @@ public class Main_window {
 					case Constants.MD_SYSEX_PEDAL:
 						Utils.copySysexToConfigPedal(midi_handler.bufferIn, configFull.configPedal);
 						Utils.copySysexToConfigPedal(midi_handler.bufferIn, moduleConfigFull.configPedal);
+						configFull.configPedal.syncState = Constants.SYNC_STATE_RECEIVED;
 						controlsPedal.updateControls();
 						break;
 					case Constants.MD_SYSEX_PAD:
 						Utils.copySysexToConfigPad(midi_handler.bufferIn, configFull.configPads[buffer[4] - 1]);
 						Utils.copySysexToConfigPad(midi_handler.bufferIn, moduleConfigFull.configPads[buffer[4] - 1]);
+						configFull.configPads[buffer[4] - 1].syncState = Constants.SYNC_STATE_RECEIVED;
 						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_POS:
@@ -2320,6 +2328,7 @@ public class Main_window {
 					case Constants.MD_SYSEX_3RD:
 						Utils.copySysexToConfig3rd(midi_handler.bufferIn, configFull.config3rds[buffer[4]]);
 						Utils.copySysexToConfig3rd(midi_handler.bufferIn, moduleConfigFull.config3rds[buffer[4]]);
+						configFull.config3rds[buffer[4]].syncState = Constants.SYNC_STATE_RECEIVED;
 						controlsPads.updateControls();
 						break;
 					case Constants.MD_SYSEX_VERSION:
@@ -2355,6 +2364,7 @@ public class Main_window {
 					case Constants.MD_SYSEX_CURVE:
 						Utils.copySysexToConfigCurve(midi_handler.bufferIn, configFull.configCurves[buffer[4]]);
 						Utils.copySysexToConfigCurve(midi_handler.bufferIn, moduleConfigFull.configCurves[buffer[4]]);
+						configFull.configCurves[buffer[4]].syncState = Constants.SYNC_STATE_RECEIVED;
 						controlsPadsExtra.updateControls();
 						break;
 					case Constants.MD_SYSEX_CUSTOM_NAME:

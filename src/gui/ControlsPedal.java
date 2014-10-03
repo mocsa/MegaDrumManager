@@ -55,9 +55,9 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	private Spin127Control spin127Control_ccRdcLvl;
 	private Spin1023Control spin1023Control_lowLevel;
 	private Spin1023Control spin1023Control_highLevel;
-	private Spin1023Control spin1023Control_chickParam1;
-	private Spin1023Control spin1023Control_chickParam2;
-	private Spin1023Control spin1023Control_chickParam3;
+	private Spin1023Control spin1023Control_chickMinVelocity;
+	private Spin1023Control spin1023Control_chickMaxVelocity;
+	private Spin1023Control spin1023Control_chickDeadPeriod;
 	private Spin127Control spin127Control_openLevel;
 	private Spin127Control spin127Control_semiOpen;
 	private Spin127Control spin127Control_halfOpen;
@@ -81,6 +81,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	private NoteSpinControl noteSpinControl_splash;
 	
 	private ConfigFull configFull;
+	private ConfigFull moduleConfigFull;
 	private JButton btnLoad;
 	private JButton btnSave;
 	private LabelWithState lblType;
@@ -111,11 +112,11 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 
 	private LabelWithState lblOpen;
 
-	private LabelWithState lblClosed;
+	private LabelWithState lblSemiOpen;
 
 	private LabelWithState lblHalfopen;
 
-	private LabelWithState lblClosed_1;
+	private LabelWithState lblClosed;
 
 	private LabelWithState lblChickthresh;
 
@@ -125,9 +126,9 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 
 	private LabelWithState lblLongchickthresh;
 
-	private LabelWithState lblMinVelocity;
+	private LabelWithState lblChickMinVelocity;
 
-	private LabelWithState lblMaxVelocity;
+	private LabelWithState lblChickMaxVelocity;
 
 	private LabelWithState lblChickDeadPeriod;
 
@@ -162,8 +163,9 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsPedal(ConfigFull config) {
+	public ControlsPedal(ConfigFull config, ConfigFull module) {
 		configFull = config;
+		moduleConfigFull = module;
 		setLayout(new GridLayout(1, 0, 0, 0));		
 		JPanel panel = new JPanel();
 		add(panel);
@@ -442,9 +444,9 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_openLevel.setEventListener(this);
 		panel_levels.add(spin127Control_openLevel, "3, 3, fill, fill");
 		
-		lblClosed = new LabelWithState("SemiOpen");
-		lblClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_levels.add(lblClosed, "1, 4");
+		lblSemiOpen = new LabelWithState("SemiOpen");
+		lblSemiOpen.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_levels.add(lblSemiOpen, "1, 4");
 		
 		spin127Control_semiOpen = new Spin127Control();
 		spin127Control_semiOpen.setEventListener(this);
@@ -458,9 +460,9 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_halfOpen.setEventListener(this);
 		panel_levels.add(spin127Control_halfOpen, "3, 5, fill, fill");
 		
-		lblClosed_1 = new LabelWithState("Closed");
-		lblClosed_1.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-		panel_levels.add(lblClosed_1, "1, 6");
+		lblClosed = new LabelWithState("Closed");
+		lblClosed.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_levels.add(lblClosed, "1, 6");
 		
 		spin127Control_closed = new Spin127Control();
 		spin127Control_closed.setEventListener(this);
@@ -490,29 +492,29 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_longThres.setEventListener(this);
 		panel_levels.add(spin127Control_longThres, "3, 9, fill, fill");
 		
-		lblMinVelocity = new LabelWithState("Chick Min Velocity");
-		lblMinVelocity.setFont(new Font("Dialog", Font.PLAIN, 10));
-		panel_levels.add(lblMinVelocity, "1, 10");
+		lblChickMinVelocity = new LabelWithState("Chick Min Velocity");
+		lblChickMinVelocity.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel_levels.add(lblChickMinVelocity, "1, 10");
 		
-		spin1023Control_chickParam1 = new Spin1023Control();
-		spin1023Control_chickParam1.setEventListener(this);
-		panel_levels.add(spin1023Control_chickParam1, "3, 10, fill, fill");
+		spin1023Control_chickMinVelocity = new Spin1023Control();
+		spin1023Control_chickMinVelocity.setEventListener(this);
+		panel_levels.add(spin1023Control_chickMinVelocity, "3, 10, fill, fill");
 		
-		lblMaxVelocity = new LabelWithState("Chick Max Velocity");
-		lblMaxVelocity.setFont(new Font("Dialog", Font.PLAIN, 10));
-		panel_levels.add(lblMaxVelocity, "1, 11");
+		lblChickMaxVelocity = new LabelWithState("Chick Max Velocity");
+		lblChickMaxVelocity.setFont(new Font("Dialog", Font.PLAIN, 10));
+		panel_levels.add(lblChickMaxVelocity, "1, 11");
 		
-		spin1023Control_chickParam2 = new Spin1023Control();
-		spin1023Control_chickParam2.setEventListener(this);
-		panel_levels.add(spin1023Control_chickParam2, "3, 11, fill, fill");
+		spin1023Control_chickMaxVelocity = new Spin1023Control();
+		spin1023Control_chickMaxVelocity.setEventListener(this);
+		panel_levels.add(spin1023Control_chickMaxVelocity, "3, 11, fill, fill");
 		
 		lblChickDeadPeriod = new LabelWithState("Chick Dead Period");
 		lblChickDeadPeriod.setFont(new Font("Dialog", Font.PLAIN, 10));
 		panel_levels.add(lblChickDeadPeriod, "1, 12");
 		
-		spin1023Control_chickParam3 = new Spin1023Control();
-		spin1023Control_chickParam3.setEventListener(this);
-		panel_levels.add(spin1023Control_chickParam3, "3, 12, fill, fill");
+		spin1023Control_chickDeadPeriod = new Spin1023Control();
+		spin1023Control_chickDeadPeriod.setEventListener(this);
+		panel_levels.add(spin1023Control_chickDeadPeriod, "3, 12, fill, fill");
 		
 		
 		JPanel panel_notes = new JPanel();
@@ -657,6 +659,89 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 			updateConfig();
 			firePropertyChange("valueChanged", false, true);
 		}
+		updateSyncState();
+	}
+
+	private void updateSyncState() {
+		if (configFull.configPedal.syncState == Constants.SYNC_STATE_UNKNOWN ) {
+			lblType.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblCurve.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblChickCurve.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblHihatInput.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblAltInput.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblReverseLevels.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblSoftChicks.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblAutoLevels.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblNewAlgorithm.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblChickDelay.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblCcRdcLvl.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblCcNumber.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblLow.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblHigh.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblOpen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblSemiOpen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblHalfopen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblClosed.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblShortThresh.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblLongchickthresh.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblChickthresh.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblChickMinVelocity.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblChickMaxVelocity.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblChickDeadPeriod.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBowSemiopen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblEdgeSemiopen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBellSemiopen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBowHalfopen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblEdgeHalfopen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBellHalfopen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBowSemiclosed.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblEdgeSemiclosed.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBellSemiclosed.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBowClosed.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblEdgeClosed.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblBellClosed.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblChick.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblSplash.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+		} else {
+			lblType.setSyncNotSync(configFull.configPedal.type == moduleConfigFull.configPedal.type);
+			lblCurve.setSyncNotSync(configFull.configPedal.curve == moduleConfigFull.configPedal.curve);
+			lblChickCurve.setSyncNotSync(configFull.configPedal.chickCurve == moduleConfigFull.configPedal.chickCurve);
+			lblHihatInput.setSyncNotSync(configFull.configPedal.hhInput == moduleConfigFull.configPedal.hhInput);
+			lblAltInput.setSyncNotSync(configFull.configPedal.altIn == moduleConfigFull.configPedal.altIn);
+			lblReverseLevels.setSyncNotSync(configFull.configPedal.reverseLevels == moduleConfigFull.configPedal.reverseLevels);
+			lblSoftChicks.setSyncNotSync(configFull.configPedal.softChicks == moduleConfigFull.configPedal.softChicks);
+			lblAutoLevels.setSyncNotSync(configFull.configPedal.autoLevels == moduleConfigFull.configPedal.autoLevels);
+			lblNewAlgorithm.setSyncNotSync(configFull.configPedal.new_algorithm == moduleConfigFull.configPedal.new_algorithm);
+			lblChickDelay.setSyncNotSync(configFull.configPedal.chickDelay == moduleConfigFull.configPedal.chickDelay);
+			lblCcRdcLvl.setSyncNotSync(configFull.configPedal.ccRdcLvl == moduleConfigFull.configPedal.ccRdcLvl);
+			lblCcNumber.setSyncNotSync(configFull.configPedal.cc == moduleConfigFull.configPedal.cc);
+			lblLow.setSyncNotSync(configFull.configPedal.lowLevel == moduleConfigFull.configPedal.lowLevel);
+			lblHigh.setSyncNotSync(configFull.configPedal.highLevel == moduleConfigFull.configPedal.highLevel);
+			lblOpen.setSyncNotSync(configFull.configPedal.openLevel == moduleConfigFull.configPedal.openLevel);
+			lblSemiOpen.setSyncNotSync(configFull.configPedal.semiOpenLevel == moduleConfigFull.configPedal.semiOpenLevel);
+			lblHalfopen.setSyncNotSync(configFull.configPedal.halfOpenLevel == moduleConfigFull.configPedal.halfOpenLevel);
+			lblClosed.setSyncNotSync(configFull.configPedal.closedLevel == moduleConfigFull.configPedal.closedLevel);
+			lblShortThresh.setSyncNotSync(configFull.configPedal.shortThres == moduleConfigFull.configPedal.shortThres);
+			lblLongchickthresh.setSyncNotSync(configFull.configPedal.longThres == moduleConfigFull.configPedal.longThres);
+			lblChickthresh.setSyncNotSync(configFull.configPedal.chickThres == moduleConfigFull.configPedal.chickThres);
+			lblChickMinVelocity.setSyncNotSync(configFull.configPedal.chickParam1 == moduleConfigFull.configPedal.chickParam1);
+			lblChickMaxVelocity.setSyncNotSync(configFull.configPedal.chickParam2 == moduleConfigFull.configPedal.chickParam2);
+			lblChickDeadPeriod.setSyncNotSync(configFull.configPedal.chickParam3 == moduleConfigFull.configPedal.chickParam3);
+			lblBowSemiopen.setSyncNotSync(configFull.configPedal.bowSemiOpenNote == moduleConfigFull.configPedal.bowSemiOpenNote);
+			lblEdgeSemiopen.setSyncNotSync(configFull.configPedal.edgeSemiOpenNote == moduleConfigFull.configPedal.edgeSemiOpenNote);
+			lblBellSemiopen.setSyncNotSync(configFull.configPedal.bellSemiOpenNote == moduleConfigFull.configPedal.bellSemiOpenNote);
+			lblBowHalfopen.setSyncNotSync(configFull.configPedal.bowHalfOpenNote == moduleConfigFull.configPedal.bowHalfOpenNote);
+			lblEdgeHalfopen.setSyncNotSync(configFull.configPedal.edgeHalfOpenNote == moduleConfigFull.configPedal.edgeHalfOpenNote);
+			lblBellHalfopen.setSyncNotSync(configFull.configPedal.bellHalfOpenNote == moduleConfigFull.configPedal.bellHalfOpenNote);
+			lblBowSemiclosed.setSyncNotSync(configFull.configPedal.bowSemiClosedNote == moduleConfigFull.configPedal.bowSemiClosedNote);
+			lblEdgeSemiclosed.setSyncNotSync(configFull.configPedal.edgeSemiClosedNote == moduleConfigFull.configPedal.edgeSemiClosedNote);
+			lblBellSemiclosed.setSyncNotSync(configFull.configPedal.bellSemiClosedNote == moduleConfigFull.configPedal.bellSemiClosedNote);
+			lblBowClosed.setSyncNotSync(configFull.configPedal.bowClosedNote == moduleConfigFull.configPedal.bowClosedNote);
+			lblEdgeClosed.setSyncNotSync(configFull.configPedal.edgeClosedNote == moduleConfigFull.configPedal.edgeClosedNote);
+			lblBellClosed.setSyncNotSync(configFull.configPedal.bellClosedNote == moduleConfigFull.configPedal.bellClosedNote);
+			lblChick.setSyncNotSync(configFull.configPedal.chickNote == moduleConfigFull.configPedal.chickNote);
+			lblSplash.setSyncNotSync(configFull.configPedal.splashNote == moduleConfigFull.configPedal.splashNote);
+		}		
 	}
 
 	public void updateControls() {
@@ -681,9 +766,9 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		spin127Control_shortThres.setValueWithoutEvents(configFull.configPedal.shortThres);
 		spin127Control_longThres.setValueWithoutEvents(configFull.configPedal.longThres);
 		spin127Control_chickThres.setValueWithoutEvents(configFull.configPedal.chickThres);
-		spin1023Control_chickParam1.setValueWithoutEvents(configFull.configPedal.chickParam1);
-		spin1023Control_chickParam2.setValueWithoutEvents(configFull.configPedal.chickParam2);
-		spin1023Control_chickParam3.setValueWithoutEvents(configFull.configPedal.chickParam3);
+		spin1023Control_chickMinVelocity.setValueWithoutEvents(configFull.configPedal.chickParam1);
+		spin1023Control_chickMaxVelocity.setValueWithoutEvents(configFull.configPedal.chickParam2);
+		spin1023Control_chickDeadPeriod.setValueWithoutEvents(configFull.configPedal.chickParam3);
 		noteSpinControl_bowSemiOpen.setValueWithoutEvents(configFull.configPedal.bowSemiOpenNote);
 		noteSpinControl_edgeSemiOpen.setValueWithoutEvents(configFull.configPedal.edgeSemiOpenNote);
 		noteSpinControl_bellSemiOpen.setValueWithoutEvents(configFull.configPedal.bellSemiOpenNote);
@@ -698,6 +783,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		noteSpinControl_bellClosed.setValueWithoutEvents(configFull.configPedal.bellClosedNote);
 		noteSpinControl_chick.setValueWithoutEvents(configFull.configPedal.chickNote);
 		noteSpinControl_splash.setValueWithoutEvents(configFull.configPedal.splashNote);
+		updateSyncState();
 	}
 	
 	public void updateConfig() {
@@ -723,9 +809,9 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 			configFull.configPedal.chickThres = (Integer)spin127Control_chickThres.getSpinner().getValue();
 			configFull.configPedal.lowLevel = (Integer)spin1023Control_lowLevel.getSpinner().getValue();
 			configFull.configPedal.highLevel = (Integer)spin1023Control_highLevel.getSpinner().getValue();
-			configFull.configPedal.chickParam1 = (Integer)spin1023Control_chickParam1.getSpinner().getValue();
-			configFull.configPedal.chickParam2 = (Integer)spin1023Control_chickParam2.getSpinner().getValue();
-			configFull.configPedal.chickParam3 = (Integer)spin1023Control_chickParam3.getSpinner().getValue();
+			configFull.configPedal.chickParam1 = (Integer)spin1023Control_chickMinVelocity.getSpinner().getValue();
+			configFull.configPedal.chickParam2 = (Integer)spin1023Control_chickMaxVelocity.getSpinner().getValue();
+			configFull.configPedal.chickParam3 = (Integer)spin1023Control_chickDeadPeriod.getSpinner().getValue();
 		
 			configFull.configPedal.bowSemiOpenNote = (Integer)noteSpinControl_bowSemiOpen.getValue();		
 			configFull.configPedal.edgeSemiOpenNote = (Integer)noteSpinControl_edgeSemiOpen.getValue();
