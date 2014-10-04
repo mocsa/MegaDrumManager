@@ -533,7 +533,6 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueChanged")) {
 						sendMisc(true);
-						getMisc();
 					}
 				}
 				if (arg0.getPropertyName().equals("octaveValueChanged")) {
@@ -577,7 +576,6 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueChanged")) {
 						sendPedal(true);
-						getPedal();
 					}
 				}
 			}
@@ -728,15 +726,12 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive && sendSysexEnabled) {
 					if (arg0.getPropertyName().equals("headValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer(), true);
-						getPad(controlsPads.getPadPointer());
 					}
 					if (arg0.getPropertyName().equals("rimValueChanged")) {
 						sendPadOneZone(controlsPads.getPadPointer() + 1, true);
-						getPad(controlsPads.getPadPointer() + 1);
 					}
 					if (arg0.getPropertyName().equals("thirdZoneValueChanged")) {
 						sendThirdZone(controlsPads.getPadPointer(), true);
-						getPad(controlsPads.getPadPointer());
 					}
 				}
 			}
@@ -1398,11 +1393,9 @@ public class Main_window {
 				if ((configOptions != null) && configOptions.interactive) {
 					if (arg0.getPropertyName().equals("valueCurveChanged")) {
 						sendCurve(controlsPadsExtra.getCurvePointer(),true);
-						getCurve(controlsPadsExtra.getCurvePointer());
 					}
 					if (arg0.getPropertyName().equals("valueCustomNameChanged")) {
 						sendCustomName(controlsPadsExtra.getCustomNamePointer(), true);
-						getCustomName(controlsPadsExtra.getCustomNamePointer());
 					}
 				}
 				if (arg0.getPropertyName().equals("CustomNamesChanged")) {
@@ -1568,6 +1561,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
+		getPedal();
 	}
 	
 	private void getGlobalMisc() {
@@ -1623,6 +1617,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
+    	getMisc();
 	}
 	
 	private void getPad(int pad_id) {
@@ -1679,6 +1674,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
+    	getPad(pad_id);
 	}
 	
 	private void sendThirdZone(int pad_id, boolean withReport) {
@@ -1693,6 +1689,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
+    	getPad(pad_id);
 	}
 
 	private void sendPad(int pad_id, boolean withReport) {
@@ -1835,6 +1832,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
+    	getCustomName(name_id);
 	}
 
 	private void sendConfigName(int name_id, boolean withReport) {
@@ -1915,6 +1913,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
+    	getCurve(curve_id);
 	}
 	
 	private void getAllCurves() {

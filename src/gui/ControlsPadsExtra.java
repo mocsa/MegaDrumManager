@@ -47,7 +47,7 @@ import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-class ColorCellRenderer implements ListCellRenderer<Object> {
+class ComboBoxRendererWithState implements ListCellRenderer<Object> {
 	  protected DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 	  //private final static Dimension preferredSize = new Dimension(0, 20);
 	  private int length = 0;
@@ -73,6 +73,9 @@ class ColorCellRenderer implements ListCellRenderer<Object> {
 			    	break;	    	
 		    }	    	
 	    }
+//	    if ((index == -1) && (length > 0)) {
+//	    	renderer.setForeground(Color.YELLOW);
+//	    }
 	    //renderer.setPreferredSize(preferredSize);
 	    return renderer;
 	  }
@@ -100,29 +103,6 @@ class ColorCellRenderer implements ListCellRenderer<Object> {
 			  }
 		  }
 	  }
-}
-
-class ComboBoxRendererWithState extends JLabel implements ListCellRenderer<Object> {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 3445288274669149526L;
-
-	public ComboBoxRendererWithState() {
-		setOpaque(true);
-		setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 24));
-		setBackground(Color.BLUE);
-		setForeground(Color.YELLOW);
-	}
-	
-	@Override
-	public Component getListCellRendererComponent(JList<?> list, Object value,
-			int index, boolean isSelected, boolean cellHasFocus) {
-		setText(value.toString()); 
-		return this;
-	}
-
 }
 
 class ComboBoxEditorWithState extends BasicComboBoxEditor {
@@ -200,8 +180,10 @@ public class ControlsPadsExtra extends JPanel {
 	private JButton button_customNameLoad;
 	private JButton button_customNameSave;
 	private JPanel panel;
+	private int selectedCustomName = 0;
+	private int textFieldEditNameCaretPos = 0;
 
-	private ColorCellRenderer comboBoxSelectNameRenderer;
+	private ComboBoxRendererWithState comboBoxSelectNameRenderer;
 	
 	/**
 	 * Create the panel.
@@ -511,6 +493,7 @@ public class ControlsPadsExtra extends JPanel {
 				text = text.trim();
 				int ind = comboBoxSelectName.getSelectedIndex();
 				configFull.configCustomNames[ind].name = text;
+				textFieldEditNameCaretPos = textFieldEditName.getCaretPosition();
 				updateCustomNameControls();
 				comboBoxSelectName.setSelectedIndex(ind);
 				valueCustomNameChanged();
@@ -523,7 +506,7 @@ public class ControlsPadsExtra extends JPanel {
 		panelNamesEdit.add(lblSelectNameTo, "1, 3, right, default");
 		
 		comboBoxSelectName = new JComboBox<String>();
-		comboBoxSelectNameRenderer = new ColorCellRenderer();
+		comboBoxSelectNameRenderer = new ComboBoxRendererWithState();
 		comboBoxSelectNameRenderer.setLength(0);
 		comboBoxSelectName.setRenderer(comboBoxSelectNameRenderer);
 		//comboBoxSelectName.setEditor(new ComboBoxEditorWithState());
@@ -533,6 +516,8 @@ public class ControlsPadsExtra extends JPanel {
 					//prevCustomNamePointer = customNamePointer;
 					customNamePointer = comboBoxSelectName.getSelectedIndex();
 					textFieldEditName.setText(configFull.configCustomNames[comboBoxSelectName.getSelectedIndex()].name);
+					selectedCustomName = comboBoxSelectName.getSelectedIndex();
+					updateCustomNameSyncState();
 				}
 			}
 		});
@@ -642,6 +627,16 @@ public class ControlsPadsExtra extends JPanel {
 				comboBoxSelectNameRenderer.setSyncNotSyncedAtIndex(configFull.configCustomNames[i].name.equals(moduleConfigFull.configCustomNames[i].name), i);			
 			}
 		}
+		if (configFull.configCustomNames[selectedCustomName].syncState == Constants.SYNC_STATE_UNKNOWN) {
+			textFieldEditName.setForeground(Color.BLUE);
+		} else {
+			if (configFull.configCustomNames[selectedCustomName].name.equals(moduleConfigFull.configCustomNames[selectedCustomName].name)) {
+				textFieldEditName.setForeground(Color.BLACK);
+			} else {				
+				textFieldEditName.setForeground(Color.RED);
+			}
+		}
+		textFieldEditName.setCaretPosition(textFieldEditNameCaretPos);
 	}
 
 	private void updateCustomNameControls() {

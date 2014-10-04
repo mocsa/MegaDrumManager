@@ -118,5 +118,8 @@ public class ConfigFull implements java.io.Serializable {
 		for (Integer i = 0; i < Constants.CURVES_COUNT;i++) {
 			configCurves[i].syncState = Constants.SYNC_STATE_UNKNOWN;
 		}
+		for (Integer i = 0; i < Constants.CUSTOM_NAMES_MAX;i++) {
+			configCustomNames[i].syncState = Constants.SYNC_STATE_UNKNOWN;
+		}
 	}
 }
