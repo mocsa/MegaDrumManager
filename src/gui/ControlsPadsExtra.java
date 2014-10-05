@@ -52,7 +52,7 @@ class ComboBoxRendererWithState implements ListCellRenderer<Object> {
 	  //private final static Dimension preferredSize = new Dimension(0, 20);
 	  private int length = 0;
 	  int[]	syncStates;
-
+	  
 	  public Component getListCellRendererComponent(JList<?> list, Object value, int index,
 	      boolean isSelected, boolean cellHasFocus) {
 	    JLabel renderer = (JLabel) defaultRenderer.getListCellRendererComponent(list, value, index,
@@ -622,7 +622,7 @@ public class ControlsPadsExtra extends JPanel {
 	private void updateCustomNameSyncState() {		
 		for (int i = 0; i < configFull.customNamesCount; i++) {
 			if (configFull.configCustomNames[i].syncState == Constants.SYNC_STATE_UNKNOWN) {
-				comboBoxSelectNameRenderer.setSyncStateAtIndex(i, Constants.SYNC_STATE_UNKNOWN);
+				comboBoxSelectNameRenderer.setSyncStateAtIndex(Constants.SYNC_STATE_UNKNOWN,i);
 			} else {
 				comboBoxSelectNameRenderer.setSyncNotSyncedAtIndex(configFull.configCustomNames[i].name.equals(moduleConfigFull.configCustomNames[i].name), i);			
 			}
