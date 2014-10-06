@@ -147,7 +147,7 @@ public class ControlsMisc extends JPanel {
 				valueChanged();
 			}
 		});
-		spinner_noteoff.setModel(new SpinnerNumberModel(new Integer(200), new Integer(100), new Integer(2000), new Integer(10)));
+		spinner_noteoff.setModel(new SpinnerNumberModel(new Integer(200), new Integer(20), new Integer(2000), new Integer(10)));
 		panel.add(spinner_noteoff, "3, 1");
 		
 		lblPressrollTimeout = new LabelWithState("Pressroll timeout");

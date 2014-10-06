@@ -15,6 +15,7 @@ public class ConfigGlobalMisc {
 	public int inputs_count = 18;
 	public boolean custom_names_en = false;
 	public boolean config_names_en = false;
+	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 
 	public ConfigGlobalMisc (){
 	}

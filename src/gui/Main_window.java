@@ -7,6 +7,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JMenu;
@@ -95,6 +96,43 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+class CheckBoxWithState extends JCheckBox {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4271346265812705819L;
+
+	public CheckBoxWithState(String string) {
+		super(string);
+		//setForeground(Color.red);
+	}
+	
+	public void setSyncState(int state) {
+		switch (state) {
+			case Constants.SYNC_STATE_UNKNOWN:
+				setForeground(Color.BLUE);
+				break;
+			case Constants.SYNC_STATE_SYNCED:
+				setForeground(Color.BLACK);
+				break;
+			case Constants.SYNC_STATE_NOT_SYNCED:
+				setForeground(Color.RED);
+				break;
+			default:
+				setForeground(Color.BLACK);
+				break;
+		}
+	}
+	
+	public void setSyncNotSync(boolean synced) {
+		if (synced) {
+			setSyncState(Constants.SYNC_STATE_SYNCED);
+		} else {
+			setSyncState(Constants.SYNC_STATE_NOT_SYNCED);
+		}
+	}
+}
+
 public class Main_window {
 
 	private JFrame frmMegadrummanager;
@@ -135,8 +173,8 @@ public class Main_window {
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox<String> comboBoxCfg;
 	private JCheckBox checkBoxAutoResize;
-	private JCheckBox chckbxConfignamesen;
-	private JCheckBox chckbxCustomPadsNames;
+	private CheckBoxWithState chckbxConfignamesen;
+	private CheckBoxWithState chckbxCustomPadsNames;
 	private JButton btnSaveToSlot;
 	private JButton btnLoadFromSlot;
 	private JPopupMenu popupMenuSaveToSlot;
@@ -1162,13 +1200,14 @@ public class Main_window {
 						sendGlobalMisc(true);
 					}
 				}
+				updateGlobalMiscSyncState();
 			}
 		});
 		spinnerLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		spinnerLCDcontrast.setModel(new SpinnerNumberModel(new Integer(50), new Integer(1), new Integer(100), new Integer(1)));
 		panel.add(spinnerLCDcontrast, "8, 3, left, default");
 		
-		chckbxConfignamesen = new JCheckBox("ConfigNamesEn");
+		chckbxConfignamesen = new CheckBoxWithState("ConfigNamesEn");
 		chckbxConfignamesen.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (chckbxConfignamesenEventDisabled > 0) {
@@ -1182,13 +1221,14 @@ public class Main_window {
 				if (configNameTextField != null) {
 					configNameTextField.setEnabled(configFull.configGlobalMisc.config_names_en);						
 				}
+				updateGlobalMiscSyncState();
 			}
 		});
 		chckbxConfignamesen.setSelected(false);
 		chckbxConfignamesen.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(chckbxConfignamesen, "12, 3");
 		
-		chckbxCustomPadsNames = new JCheckBox("Custom Pads Names");
+		chckbxCustomPadsNames = new CheckBoxWithState("Custom Pads Names");
 		chckbxCustomPadsNames.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (chckbxCustomPadsNamesEventDisabled > 0) {
@@ -1199,6 +1239,7 @@ public class Main_window {
 						sendGlobalMisc(true);
 					}
 				}
+				updateGlobalMiscSyncState();
 			}
 		});
 		chckbxCustomPadsNames.setSelected(false);
@@ -1302,12 +1343,13 @@ public class Main_window {
 					} else {
 			        	configFull.configGlobalMisc.inputs_count = ((comboBox_inputsCount.getSelectedIndex()*2) + Constants.MIN_INPUTS);
 			        	updateGlobalMiscControls();
-			        	configFull.resetSyncState();
+			        	//configFull.resetSyncState();
 						if (configOptions.interactive) {
 							sendGlobalMisc(true);
 						}
 					}
 		        }
+		        updateGlobalMiscSyncState();
 			}
 		});
 		tglbtnMidi.addItemListener(new ItemListener() {
@@ -1598,6 +1640,7 @@ public class Main_window {
     		configFull.configNameChanged = false;
     		sendConfigName(configFull.configCurrent, withReport);
     	}
+    	getGlobalMisc();
     	getReadOnlyData();
 	}
 
@@ -2168,6 +2211,7 @@ public class Main_window {
 			chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);
 			chckbxCustomPadsNames.setSelected(configFull.configGlobalMisc.custom_names_en);
 		}
+		//updateGlobalMiscSyncState();
 	}
 	
 	private void resizeMainWindow() {
@@ -2390,6 +2434,7 @@ public class Main_window {
 					case Constants.MD_SYSEX_GLOBAL_MISC:
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, configFull.configGlobalMisc);
 						Utils.copySysexToConfigGlobalMisc(midi_handler.bufferIn, moduleConfigFull.configGlobalMisc);
+						configFull.configGlobalMisc.syncState = Constants.SYNC_STATE_RECEIVED;
 						int c = comboBox_inputsCount.getSelectedIndex();
 						comboBox_inputsCount.setSelectedIndexWithoutEvent((configFull.configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 						if (comboBox_inputsCount.getSelectedIndex() != c) {
@@ -2408,6 +2453,7 @@ public class Main_window {
 							chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);
 							configNameTextField.setEnabled(configFull.configGlobalMisc.config_names_en);
 						}
+						updateGlobalMiscSyncState();
 						break;
 					case Constants.MD_SYSEX_MCU_TYPE:
 						if (buffer.length >= Constants.MD_SYSEX_MCU_TYPE_SIZE) {
@@ -2454,6 +2500,20 @@ public class Main_window {
 				}
 			}
 		}		
+	}
+	
+	private void updateGlobalMiscSyncState() {
+		if (configFull.configGlobalMisc.syncState == Constants.SYNC_STATE_UNKNOWN ) {
+			chckbxConfignamesen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			chckbxCustomPadsNames.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblLCDcontrast.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			lblInputs.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+		} else {
+			chckbxConfignamesen.setSyncNotSync(configFull.configGlobalMisc.config_names_en == moduleConfigFull.configGlobalMisc.config_names_en);
+			chckbxCustomPadsNames.setSyncNotSync(configFull.configGlobalMisc.custom_names_en == moduleConfigFull.configGlobalMisc.custom_names_en);
+			lblLCDcontrast.setSyncNotSync(configFull.configGlobalMisc.lcd_contrast == moduleConfigFull.configGlobalMisc.lcd_contrast);
+			lblInputs.setSyncNotSync(configFull.configGlobalMisc.inputs_count == moduleConfigFull.configGlobalMisc.inputs_count);
+		}
 	}
 	
 	private void setConfigCurrent(int id) {

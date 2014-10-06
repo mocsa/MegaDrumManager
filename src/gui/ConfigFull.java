@@ -109,6 +109,7 @@ public class ConfigFull implements java.io.Serializable {
 	public void resetSyncState() {
 		configMisc.syncState = Constants.SYNC_STATE_UNKNOWN;
 		configPedal.syncState = Constants.SYNC_STATE_UNKNOWN;
+		configGlobalMisc.syncState = Constants.SYNC_STATE_UNKNOWN;
 		for (Integer i = 0; i < Constants.PADS_COUNT;i++) {
 			configPads[i].syncState = Constants.SYNC_STATE_UNKNOWN;
 			if ((i>0) && ((i&0x01)==0)) {
