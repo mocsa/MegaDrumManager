@@ -132,8 +132,12 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		slider_midPoint.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {
 				if (configFull != null) {
-					configFull.config3rds[configIndex].threshold = (configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4);
-					updateControls();					
+					int v = (configFull.config3rds[configIndex].threshold&0x0f)|((slider_midPoint.getValue()&0x0f)<<4);
+					if (v != configFull.config3rds[configIndex].threshold) {
+						configFull.config3rds[configIndex].threshold = v;
+						valueChanged();
+						//updateControls();
+					}
 				}
 			}
 		});
@@ -242,7 +246,7 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		for (Object control: this.getComponents()) {
 			//System.out.printf("Component -> %s\n",control.getClass().toString());
 			if (control.getClass().equals(JSliderCustom.class)) {
-				((JSliderCustom) control).setValueChangedListener(this);
+				//((JSliderCustom) control).setValueChangedListener(this);
 			} else if (control.getClass().equals (NoteSpinControl.class)) {
 				NoteSpinControl noteSpinControl = ((NoteSpinControl) control);
 				noteSpinControl.setEventListener(this);
@@ -263,16 +267,18 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 	}
 
 	public void valueChanged() {
-		if (noteSpinControl_altNote.getCheckBox().isSelected()) {
-			noteSpinControl_altNote.setValueWithoutEvents(noteSpinControl_note.getValue());
+		if (controlsInited) {
+			if (noteSpinControl_altNote.getCheckBox().isSelected()) {
+				noteSpinControl_altNote.setValueWithoutEvents(noteSpinControl_note.getValue());
+			}
+			if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
+				noteSpinControl_pressrollNote.setValueWithoutEvents(noteSpinControl_note.getValue());
+			}
+			updateConfig();
+			firePropertyChange("valueChanged", false, true);
+			updateSyncState();
+			updateControls();			
 		}
-		if (noteSpinControl_pressrollNote.getCheckBox().isSelected()) {
-			noteSpinControl_pressrollNote.setValueWithoutEvents(noteSpinControl_note.getValue());
-		}
-		updateConfig();
-		firePropertyChange("valueChanged", false, true);
-		updateSyncState();
-		//updateControls();
 	}
 
 	private void updateSyncState() {

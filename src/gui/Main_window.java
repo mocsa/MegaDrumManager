@@ -1684,6 +1684,20 @@ public class Main_window {
 		}
 	}
 	
+	private void getPadOneZone(int pad_id) {
+		compareSysexToConfigIsOn = false;
+		midi_handler.requestConfigPad(pad_id + 1);
+		delayMs(configOptions.sysexDelay);
+		midi_handler.requestConfigPos(pad_id);
+		delayMs(configOptions.sysexDelay);
+	}
+	
+	private void getThirdZone(int pad_id) {
+		compareSysexToConfigIsOn = false;
+		midi_handler.requestConfig3rd(pad_id);
+		delayMs(configOptions.sysexDelay);
+	}
+	
 	private void sendPadOneZone(int pad_id, boolean withReport) {
 		byte [] sysexPad = new byte[Constants.MD_SYSEX_PAD_SIZE];
 		byte [] sysexPos = new byte[Constants.MD_SYSEX_POS_SIZE];
@@ -1717,7 +1731,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
-    	getPad(pad_id);
+    	getPadOneZone(pad_id);
 	}
 	
 	private void sendThirdZone(int pad_id, boolean withReport) {
@@ -1732,7 +1746,7 @@ public class Main_window {
     	while (compareSysexToConfigIsOn) {
     		delayMs(10);
     	}
-    	getPad(pad_id);
+    	getThirdZone(pad_id);
 	}
 
 	private void sendPad(int pad_id, boolean withReport) {
