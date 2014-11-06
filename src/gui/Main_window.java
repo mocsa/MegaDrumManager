@@ -1175,7 +1175,13 @@ public class Main_window {
 		
 		checkBoxAutoResize = new JCheckBox("AutoResize");
 		checkBoxAutoResize.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		checkBoxAutoResize.setSelected(true);
+		//checkBoxAutoResize.setSelected(true);
+		checkBoxAutoResize.setSelected(configOptions.autoResize);
+		checkBoxAutoResize.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				configOptions.autoResize = checkBoxAutoResize.isSelected();
+			}
+		});
 		panel.add(checkBoxAutoResize, "14, 1");
 		
 		progressBar = new JProgressBar();
@@ -2197,6 +2203,7 @@ public class Main_window {
 			viewMenus[i].setConfigOptions(configOptions);
 		}
 		tglbtnLiveUpdates.setSelected(configOptions.interactive);
+		checkBoxAutoResize.setSelected(configOptions.autoResize);
 	}
 	
 	private void saveAndExit() {

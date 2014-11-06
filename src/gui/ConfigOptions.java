@@ -34,6 +34,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public Point [] framesPositions = { new Point(10,10), new Point(210,10), new Point(410,10), new Point(610,10), new Point(810,10)};
 	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
 	public int mcuType = 0;
+	public boolean autoResize = true;
 
 	public ConfigOptions() {
 		configsNames = new String[Constants.CONFIGS_COUNT];
@@ -72,6 +73,7 @@ public class ConfigOptions implements java.io.Serializable {
 			prop.setProperty("framesPositions"+ ((Integer)i).toString()+"Y", framesPositions[i].y);
 			prop.setProperty("showPanels"+ ((Integer)i).toString(), showPanels[i]);
 		}
+		prop.setProperty("autoResize", autoResize);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop) {
@@ -113,5 +115,6 @@ public class ConfigOptions implements java.io.Serializable {
 					);
 			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString(),showPanels[i]),0,2,showPanels[i]);
 		}
+		autoResize = prop.getBoolean("autoResize", autoResize);
 	}
 }
