@@ -404,11 +404,11 @@ public class ControlsMisc extends JPanel {
 			} else {
 				if (parentMain_window.configOptions.mcuType < 6) {
 					lblAllGainsLow.setText("Unused");
-					checkBox_allGainsLow.setEnabled(true);
+					checkBox_allGainsLow.setEnabled(false);
 					checkBox_allGainsLow.setToolTipText("<html>This setting is unused on this MegaDrum hardware version</html>");
 				} else {
-					lblAllGainsLow.setText("Alt sampling alg");
-					checkBox_allGainsLow.setEnabled(false);
+					lblAllGainsLow.setText("Alt Sampling Alg");
+					checkBox_allGainsLow.setEnabled(true);
 					checkBox_allGainsLow.setToolTipText("<html>When enabled, MegaDrum uses a new sampling algorithm<br>\r\nwhich can reduce signal noise.<br>\r\nand improve sensitivity.</html>");
 				}
 			}
