@@ -154,7 +154,7 @@ public class Main_window {
 	private ConfigFull configFull;
 	private ConfigFull moduleConfigFull;
 	private ConfigFull [] fullConfigs;
-	private ConfigOptions configOptions;
+	protected ConfigOptions configOptions;
 	private FileManager fileManager;
 	//private int chainId;
 	//private JMenuItem menuItem;
@@ -549,7 +549,7 @@ public class Main_window {
 //		FlowLayout flowLayout = (FlowLayout) panel_main.getLayout();
 //		flowLayout.setAlignOnBaseline(true);
 		
-		controlsMisc = new ControlsMisc(configFull, moduleConfigFull);
+		controlsMisc = new ControlsMisc(configFull, moduleConfigFull, this);
 		controlsMisc.getBtnSave().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				byte [] sysex = new byte[Constants.MD_SYSEX_MISC_SIZE];

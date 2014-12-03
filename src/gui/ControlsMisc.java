@@ -37,6 +37,7 @@ public class ControlsMisc extends JPanel {
 	
 	private ConfigFull configFull;
 	private ConfigFull moduleConfigFull;
+	private Main_window parentMain_window;
 	private JSpinner spinner_noteoff;
 	private JSpinner spinner_pressroll;
 	private JSpinner spinner_latency;
@@ -61,9 +62,10 @@ public class ControlsMisc extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ControlsMisc(ConfigFull config, ConfigFull moduleConfig) {
+	public ControlsMisc(ConfigFull config, ConfigFull moduleConfig, Main_window mW) {
 		configFull = config;
 		moduleConfigFull = moduleConfig;
+		parentMain_window = mW;
 		setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
@@ -389,7 +391,28 @@ public class ControlsMisc extends JPanel {
 		checkBox_bigVuSplit.setSelected(configFull.configMisc.big_vu_split);
 		checkBox_altFalseTrSupp.setSelected(configFull.configMisc.alt_false_tr_supp);
 		checkBox_inputsPriority.setSelected(configFull.configMisc.inputs_priority);
-		checkBox_allGainsLow.setSelected(configFull.configMisc.all_gains_low);		
+		checkBox_allGainsLow.setSelected(configFull.configMisc.all_gains_low);
+		if (parentMain_window.configOptions.mcuType < 1) {
+			lblAllGainsLow.setText("Unknown function");
+			checkBox_allGainsLow.setEnabled(true);
+			checkBox_allGainsLow.setToolTipText("<html>This setting depends on MegaDrum hardware version (MCU type).</html>");
+		} else {
+			if (parentMain_window.configOptions.mcuType < 3) {
+				lblAllGainsLow.setText("All Gains Low");
+				checkBox_allGainsLow.setEnabled(true);
+				checkBox_allGainsLow.setToolTipText("<html>When enabled, it will disable all individual input Gain levels<br>\r\nand make Gain even lower than 'Gain Level' 0.<br>\r\nIt could be used if all your pads are 'hot' and to get<br>\r\na better dynamic range with such pads.</html>");
+			} else {
+				if (parentMain_window.configOptions.mcuType < 6) {
+					lblAllGainsLow.setText("Unused");
+					checkBox_allGainsLow.setEnabled(true);
+					checkBox_allGainsLow.setToolTipText("<html>This setting is unused on this MegaDrum hardware version</html>");
+				} else {
+					lblAllGainsLow.setText("Alt sampling alg");
+					checkBox_allGainsLow.setEnabled(false);
+					checkBox_allGainsLow.setToolTipText("<html>When enabled, MegaDrum uses a new sampling algorithm<br>\r\nwhich can reduce signal noise.<br>\r\nand improve sensitivity.</html>");
+				}
+			}
+		}
 		checkBox_MidiThru.setSelected(configFull.configMisc.midi_thru);
 		checkBox_sendTriggeredIn.setSelected(configFull.configMisc.send_triggered_in);		
 		checkBox_altNoteChoking.setSelected(configFull.configMisc.alt_note_choking);		
