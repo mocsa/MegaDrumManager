@@ -399,7 +399,7 @@ public class Utils {
 		int i = 0;
 
 		flags = (short) (
-				(((config.custom_names_en)?1:0)<<1)|(((config.config_names_en)?1:0)<<2)
+				(((config.custom_names_en)?1:0)<<1)|(((config.config_names_en)?1:0)<<2)|(((config.midi2_for_sysex)?1:0)<<5)
 				);
 		sysex[i++] = Constants.SYSEX_START;
 		sysex[i++] = Constants.MD_SYSEX;
@@ -443,6 +443,7 @@ public class Utils {
 
 			if (config.custom_names_en != ((flags&(1<<1)) != 0)) result = 1;
 			if (config.config_names_en != ((flags&(1<<2)) != 0)) result = 1;
+			if (config.midi2_for_sysex != ((flags&(1<<5)) != 0)) result = 1;
 
 		}
 		return result;
@@ -468,6 +469,7 @@ public class Utils {
 			flags = sysex2short(sysex_short);
 			config.custom_names_en = ((flags&(1<<1)) != 0);
 			config.config_names_en = ((flags&(1<<2)) != 0);
+			config.midi2_for_sysex = ((flags&(1<<5)) != 0);
 		}
 		
 	}

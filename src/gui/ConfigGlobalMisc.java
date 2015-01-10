@@ -15,6 +15,7 @@ public class ConfigGlobalMisc {
 	public int inputs_count = 18;
 	public boolean custom_names_en = false;
 	public boolean config_names_en = false;
+	public boolean midi2_for_sysex = false;
 	public int syncState = Constants.SYNC_STATE_UNKNOWN;
 
 	public ConfigGlobalMisc (){
@@ -26,6 +27,7 @@ public class ConfigGlobalMisc {
 		prop.setProperty(prefix+"inputs_count", inputs_count);
 		prop.setProperty(prefix+"custom_names_en", custom_names_en);
 		prop.setProperty(prefix+"config_names_en", config_names_en);
+		prop.setProperty(prefix+"midi2_for_sysex", midi2_for_sysex);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
@@ -33,5 +35,6 @@ public class ConfigGlobalMisc {
 		inputs_count = Utils.validateInt(prop.getInt(prefix+"inputs_count", inputs_count),18,56,inputs_count);
 		custom_names_en = prop.getBoolean(prefix+"custom_names_en", custom_names_en);
 		config_names_en = prop.getBoolean(prefix+"config_names_en", config_names_en);
+		midi2_for_sysex = prop.getBoolean(prefix+"midi2_for_sysex", midi2_for_sysex);
 	}
 }

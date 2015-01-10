@@ -165,6 +165,7 @@ public class Main_window {
 	private int spinnerLCDEventDisabled = 0;
 	private int chckbxCustomPadsNamesEventDisabled = 0;
 	private int chckbxConfignamesenEventDisabled = 0;
+	private int chckbxMidi2ForSysexEventDisabled = 0;
 	private boolean resizeWindow = true;
 	private JToggleButton tglbtnMidi;
 	private LabelWithState lblVersion, commsStateLabel, lblCfgSlotsNr, lblCfgCurrent, lblMCU;
@@ -175,6 +176,7 @@ public class Main_window {
 	private JCheckBox checkBoxAutoResize;
 	private CheckBoxWithState chckbxConfignamesen;
 	private CheckBoxWithState chckbxCustomPadsNames;
+	private CheckBoxWithState chckbxMidi2ForSysex;
 	private JButton btnSaveToSlot;
 	private JButton btnLoadFromSlot;
 	private JPopupMenu popupMenuSaveToSlot;
@@ -1077,7 +1079,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.PREF_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu"),
+				ColumnSpec.decode("66dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("left:default"),},
 			new RowSpec[] {
@@ -1159,6 +1161,14 @@ public class Main_window {
 		lblCfgCurrent.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_2.add(lblCfgCurrent, "8, 2");
 		
+		
+		progressBar = new JProgressBar();
+		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		panel.add(progressBar, "20, 1");
+		progressBar.setVisible(false);
+		
+		progressBar.setStringPainted(true);
+		
 		lblInputs = new LabelWithState("Inputs:");
 		lblInputs.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel.add(lblInputs, "2, 3");
@@ -1183,13 +1193,6 @@ public class Main_window {
 			}
 		});
 		panel.add(checkBoxAutoResize, "14, 1");
-		
-		progressBar = new JProgressBar();
-		progressBar.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel.add(progressBar, "18, 1");
-		progressBar.setVisible(false);
-		
-		progressBar.setStringPainted(true);
 				
 		lblLCDcontrast = new LabelWithState("LCD contrast:");
 		lblLCDcontrast.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -1251,6 +1254,27 @@ public class Main_window {
 		chckbxCustomPadsNames.setSelected(false);
 		chckbxCustomPadsNames.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel.add(chckbxCustomPadsNames, "14, 3");
+		
+		chckbxMidi2ForSysex = new CheckBoxWithState("ConfigNamesEn");
+		chckbxMidi2ForSysex.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (chckbxMidi2ForSysexEventDisabled > 0) {
+					chckbxMidi2ForSysexEventDisabled--;
+				} else {
+					configFull.configGlobalMisc.midi2_for_sysex = chckbxMidi2ForSysex.isSelected();
+					if (configOptions.interactive) {
+						sendGlobalMisc(true);
+					}
+				}
+				updateGlobalMiscSyncState();
+			}
+		});
+		chckbxMidi2ForSysex.setText("MIDI2 For Sysex Only");
+		chckbxMidi2ForSysex.setSelected(false);
+		chckbxMidi2ForSysex.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		panel.add(chckbxMidi2ForSysex, "18, 1");
+		
+		
 		tglbtnLiveUpdates = new JToggleButton("Live updates");
 		tglbtnLiveUpdates.setToolTipText("<html>Enable live settingsupdates.<br>\r\n<br>\r\nWhen enabled, all changes to settings in MegaDrumManager<br>\r\nare sent to MegaDrum upon a change.\r\n</html>");
 		tglbtnLiveUpdates.setFont(new Font("Tahoma", Font.PLAIN, 9));
@@ -2231,6 +2255,7 @@ public class Main_window {
 			controlsPads.updateInputCountsControls(configFull.configGlobalMisc.inputs_count);
 			chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);
 			chckbxCustomPadsNames.setSelected(configFull.configGlobalMisc.custom_names_en);
+			chckbxMidi2ForSysex.setSelected(configFull.configGlobalMisc.midi2_for_sysex);
 		}
 		//updateGlobalMiscSyncState();
 	}
@@ -2286,6 +2311,7 @@ public class Main_window {
 			mntmSaveToMd.removeAll();
 			configFull.resetSyncState();
 			updateAllControls();
+			updateGlobalMiscSyncState();
 		}
 	}
 	
@@ -2474,6 +2500,10 @@ public class Main_window {
 							chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);
 							configNameTextField.setEnabled(configFull.configGlobalMisc.config_names_en);
 						}
+						if (chckbxMidi2ForSysex.isSelected() != configFull.configGlobalMisc.midi2_for_sysex) {
+							chckbxMidi2ForSysexEventDisabled = 1;
+							chckbxMidi2ForSysex.setSelected(configFull.configGlobalMisc.midi2_for_sysex);							
+						}
 						updateGlobalMiscSyncState();
 						break;
 					case Constants.MD_SYSEX_MCU_TYPE:
@@ -2527,11 +2557,13 @@ public class Main_window {
 		if (configFull.configGlobalMisc.syncState == Constants.SYNC_STATE_UNKNOWN ) {
 			chckbxConfignamesen.setSyncState(Constants.SYNC_STATE_UNKNOWN);
 			chckbxCustomPadsNames.setSyncState(Constants.SYNC_STATE_UNKNOWN);
+			chckbxMidi2ForSysex.setSyncState(Constants.SYNC_STATE_UNKNOWN);
 			lblLCDcontrast.setSyncState(Constants.SYNC_STATE_UNKNOWN);
 			lblInputs.setSyncState(Constants.SYNC_STATE_UNKNOWN);
 		} else {
 			chckbxConfignamesen.setSyncNotSync(configFull.configGlobalMisc.config_names_en == moduleConfigFull.configGlobalMisc.config_names_en);
 			chckbxCustomPadsNames.setSyncNotSync(configFull.configGlobalMisc.custom_names_en == moduleConfigFull.configGlobalMisc.custom_names_en);
+			chckbxMidi2ForSysex.setSyncNotSync(configFull.configGlobalMisc.midi2_for_sysex == moduleConfigFull.configGlobalMisc.midi2_for_sysex);
 			lblLCDcontrast.setSyncNotSync(configFull.configGlobalMisc.lcd_contrast == moduleConfigFull.configGlobalMisc.lcd_contrast);
 			lblInputs.setSyncNotSync(configFull.configGlobalMisc.inputs_count == moduleConfigFull.configGlobalMisc.inputs_count);
 		}
