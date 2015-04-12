@@ -1863,7 +1863,7 @@ public class Main_window {
 			}
 		}
 		compareSysexToConfigLast = withReportInTask;
-		sendPad(configFull.configGlobalMisc.inputs_count - 4, false);
+		sendPad(configFull.configGlobalMisc.inputs_count - 3, false);
 		progressBar.setVisible(false);
         resizeWindow = true;
         resizeMainWindow();
