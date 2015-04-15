@@ -740,6 +740,7 @@ public class ControlsPads extends JPanel {
 		if (prevPadPointer >= 0) {
 			updatePadsSelection(prevPadPointer);
 		}
+		updatePadsSelection(pad_id);
 		prevPadPointer = padPointer;
 		//prevThirdPointer = thirdPointer;
 		panel_head.setConfigIndex(head_pad, padPointer);
