@@ -43,9 +43,11 @@ public class ConfigOptions implements java.io.Serializable {
 		configFileNames = new String[Constants.CONFIGS_COUNT];
 		configFullPaths = new String[Constants.CONFIGS_COUNT];
 		configLoaded = new boolean[Constants.CONFIGS_COUNT];
+		Integer n;
 		for (Integer i = 0;i < Constants.CONFIGS_COUNT;i++) {
 			//configFileNames[i] = "Config"+(i+1).toString();
-			configFileNames[i] = "n"+i.toString();
+			n = i + 1;
+			configFileNames[i] = "config"+n.toString();
 			configFullPaths[i] = "";
 			configLoaded[i] = false; 
 		}

@@ -226,9 +226,12 @@ public class FileManager {
 
 	public void loadAllSilent(ConfigFull config, ConfigOptions options) {
 		file = new File(options.configFullPaths[options.lastConfig]);
-		options.configFullPaths[options.lastConfig] = file.getAbsolutePath();
 		if (file.exists()) {
-			loadConfigFull(config,file,options);
+			if (!file.isDirectory()) {
+				loadConfigFull(config,file,options);				
+				options.configFileNames[options.lastConfig] = file.getName();
+				options.configFullPaths[options.lastConfig] = file.getAbsolutePath();
+			}
 		}
 	}
 
