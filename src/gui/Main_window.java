@@ -203,6 +203,7 @@ public class Main_window {
 	private int compareResultCombined;
 	private Timer sysexWaitTimer;
 	private JTextField configNameTextField;
+	private JLabel lblOk;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
 	
@@ -914,7 +915,9 @@ public class Main_window {
 				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("50dlu"),
+				ColumnSpec.decode("80dlu"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("20dlu"),
 				ColumnSpec.decode("2dlu"),
 				FormFactory.PREF_COLSPEC,
 				ColumnSpec.decode("2dlu"),
@@ -949,7 +952,8 @@ public class Main_window {
 		panel_top.add(btnSendAll, "4, 1");
 		
 		comboBoxCfg = new JComboBox<String>();
-		comboBoxCfg.setToolTipText("<html>Select the current full config to use.<br>\r\nMegaDrumManager can hold up to 8<br>\r\nfull MegaDrum configs in memory<br>\r\nand you can quickly switch between them here<br>.\r\n</html>");
+		comboBoxCfg.setMaximumRowCount(Constants.CONFIGS_COUNT);
+		comboBoxCfg.setToolTipText("<html>Select the current full config to use.<br>\r\nMegaDrumManager can hold up to " + Integer.toString(Constants.CONFIGS_COUNT) + "<br>\r\nfull MegaDrum configs in memory<br>\r\nand you can quickly switch between them here<br>.\r\n</html>");
 		comboBoxCfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (comboBoxCfgNoActions == 0) {
@@ -973,7 +977,9 @@ public class Main_window {
 						if (comboBoxCfg.getSelectedIndex()>-1) {
 							//copyConfigToLastConfig();
 							configOptions.lastConfig = comboBoxCfg.getSelectedIndex();
+							fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
 							loadAllFromConfigFull();
+							//
 						}
 					}					
 				}
@@ -1043,9 +1049,14 @@ public class Main_window {
 				}
 			}
 		});
+		
+		lblOk = new JLabel("Ok");
+		lblOk.setOpaque(true);
+		lblOk.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_top.add(lblOk, "18, 1");
 		btnPrevcfg.setMargin(new Insets(0, 1, 0, 1));
 		btnPrevcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel_top.add(btnPrevcfg, "18, 1");
+		panel_top.add(btnPrevcfg, "20, 1");
 		
 		JButton btnNextcfg = new JButton("nextCfg");
 		btnNextcfg.setToolTipText("<html>Switch to next full MegaDrum config</html>");
@@ -1058,10 +1069,10 @@ public class Main_window {
 		});
 		btnNextcfg.setMargin(new Insets(0, 1, 0, 1));
 		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel_top.add(btnNextcfg, "20, 1");
+		panel_top.add(btnNextcfg, "22, 1");
 		
 		commsStateLabel = new LabelWithState("SysEx Ok");
-		panel_top.add(commsStateLabel, "22, 1");
+		panel_top.add(commsStateLabel, "24, 1");
 		commsStateLabel.setOpaque(true);
 		commsStateLabel.setBackground(Color.GREEN);
 		commsStateLabel.setVisible(false);
@@ -2200,12 +2211,13 @@ public class Main_window {
 	}
 	
 	private void load_all() {
-		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions, configOptions.lastConfig);
+		fileManager.load_all(fullConfigs[configOptions.lastConfig], configOptions);
 		loadAllFromConfigFull();
 	}
 
 	private void save_all() {
 		fileManager.save_all(configFull, configOptions);
+		updateGlobalMiscControls();
 	}
 	
 	private void loadConfig() {
@@ -2270,6 +2282,13 @@ public class Main_window {
 			comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configFileNames));
 			comboBoxCfg.setSelectedIndex(s);
 			comboBoxCfgNoActions = 0;
+		}
+		if (configOptions.configLoaded[configOptions.lastConfig]) {
+			lblOk.setBackground(Color.GREEN);
+			lblOk.setText("Ok");
+		} else {
+			lblOk.setBackground(Color.RED);
+			lblOk.setText("??");
 		}
 		//updateGlobalMiscSyncState();
 	}

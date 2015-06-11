@@ -141,6 +141,7 @@ public class FileManager {
 		if (!options.configFullPaths[options.lastConfig].equals("")) {
 			fileChooser.setCurrentDirectory(new File(options.configFullPaths[options.lastConfig]));
 		}
+		fileChooser.setSelectedFile(new File(options.configFileNames[options.lastConfig]));
 		returnVal = fileChooser.showSaveDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			file = fileChooser.getSelectedFile();
@@ -148,6 +149,9 @@ public class FileManager {
 				file = new File(file.getAbsolutePath() + ".mds");
 			}
 			options.configFullPaths[options.lastConfig] = file.getAbsolutePath();
+			options.configFileNames[options.lastConfig] = file.getName();
+			options.configLoaded[options.lastConfig] = true;
+
 			if (file.exists()) {
 				file.delete();
 			}
@@ -155,12 +159,13 @@ public class FileManager {
 		}
 	}
 
-	public void loadConfigFull(ConfigFull config, File file) {
+	public void loadConfigFull(ConfigFull config, File file, ConfigOptions options) {
 		fullConfig = new PropertiesConfiguration();
 		try {
 			fullConfig.load(file);
 			try {
 				config.copyFromPropertiesConfiguration(fullConfig);
+				options.configLoaded[options.lastConfig] = true;
 			} catch (ConversionException e ) {
 				Utils.show_error("Error parsing settings from:\n" +
 						file.getAbsolutePath()+"\n"+"("+e.getMessage()+")");
@@ -174,19 +179,20 @@ public class FileManager {
 		}
 	}	
 
-	public void load_all(ConfigFull config, ConfigOptions options, int configFileNamesPointer) {
+	public void load_all(ConfigFull config, ConfigOptions options) {
 		int returnVal;
 		if (!options.configFullPaths[options.lastConfig].equals("")) {
 			fileChooser.setCurrentDirectory(new File(options.configFullPaths[options.lastConfig]));
 		}
 		fileChooser.setFileFilter(configFileFilter);
+		fileChooser.setSelectedFile(new File(options.configFileNames[options.lastConfig]));
 		returnVal = fileChooser.showOpenDialog(parent);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			file = fileChooser.getSelectedFile();
 			if (file.exists()) {
-				loadConfigFull(config,file);
+				loadConfigFull(config,file,options);
 				options.configFullPaths[options.lastConfig] = file.getAbsolutePath();
-				options.configFileNames[configFileNamesPointer] = file.getName();
+				options.configFileNames[options.lastConfig] = file.getName();
 			}
 		}
 	}
@@ -222,7 +228,7 @@ public class FileManager {
 		file = new File(options.configFullPaths[options.lastConfig]);
 		options.configFullPaths[options.lastConfig] = file.getAbsolutePath();
 		if (file.exists()) {
-			loadConfigFull(config,file);
+			loadConfigFull(config,file,options);
 		}
 	}
 

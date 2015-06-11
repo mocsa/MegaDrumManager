@@ -11,7 +11,7 @@ public interface Constants {
 	public static final Double MD_CONFIG_VERSION = 0.5;
 	public static final int MIN_INPUTS = 18;
 	public static final int MAX_INPUTS = 56;
-	public static final int CONFIGS_COUNT = 8;
+	public static final int CONFIGS_COUNT = 32;
 	public static final int PANEL_HIDE = 0;
 	public static final int PANEL_SHOW = 1;
 	public static final int PANEL_DETACH = 2;

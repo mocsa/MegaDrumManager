@@ -22,6 +22,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public String [] configFileNames;
 	//public String lastFullPathConfig = "";
 	public String [] configFullPaths;
+	public boolean [] configLoaded;
 	public String lastFullPathFirmware = "";
 	public String lastFullPathSysex = "";
 	public String MidiInName = "";
@@ -41,10 +42,12 @@ public class ConfigOptions implements java.io.Serializable {
 	public ConfigOptions() {
 		configFileNames = new String[Constants.CONFIGS_COUNT];
 		configFullPaths = new String[Constants.CONFIGS_COUNT];
+		configLoaded = new boolean[Constants.CONFIGS_COUNT];
 		for (Integer i = 0;i < Constants.CONFIGS_COUNT;i++) {
 			//configFileNames[i] = "Config"+(i+1).toString();
 			configFileNames[i] = "n"+i.toString();
 			configFullPaths[i] = "";
+			configLoaded[i] = false; 
 		}
 		
 	}
