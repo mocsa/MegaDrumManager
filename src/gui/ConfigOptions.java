@@ -16,10 +16,13 @@ public class ConfigOptions implements java.io.Serializable {
 	public boolean autoOpenPorts = false;
 	public boolean saveOnExit = false;
 	public boolean interactive = false;
-	public String lastDir = "";
+	//public String lastDir = "";
 	public int lastConfig = 0;
-	public String [] configsNames;
-	public String lastFullPathConfig = "";
+	//public String [] configsNames;
+	public String [] configFileNames;
+	//public String lastFullPathConfig = "";
+	public String [] configFullPaths;
+	public boolean [] configLoaded;
 	public String lastFullPathFirmware = "";
 	public String lastFullPathSysex = "";
 	public String MidiInName = "";
@@ -35,11 +38,19 @@ public class ConfigOptions implements java.io.Serializable {
 	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
 	public int mcuType = 0;
 	public boolean autoResize = true;
+	public boolean changeNotified = false;
 
 	public ConfigOptions() {
-		configsNames = new String[Constants.CONFIGS_COUNT];
-		for (Integer i = 1;i<=Constants.CONFIGS_COUNT;i++) {
-			configsNames[i-1] = "Config"+i.toString();
+		configFileNames = new String[Constants.CONFIGS_COUNT];
+		configFullPaths = new String[Constants.CONFIGS_COUNT];
+		configLoaded = new boolean[Constants.CONFIGS_COUNT];
+		Integer n;
+		for (Integer i = 0;i < Constants.CONFIGS_COUNT;i++) {
+			//configFileNames[i] = "Config"+(i+1).toString();
+			n = i + 1;
+			configFileNames[i] = "config"+n.toString();
+			configFullPaths[i] = "";
+			configLoaded[i] = false; 
 		}
 		
 	}
@@ -51,12 +62,13 @@ public class ConfigOptions implements java.io.Serializable {
 		prop.setProperty("autoOpenPorts", autoOpenPorts);
 		prop.setProperty("saveOnExit", saveOnExit);
 		prop.setProperty("interactive", interactive);
-		prop.setProperty("lastDir", lastDir);
+		//prop.setProperty("lastDir", lastDir);
 		prop.setProperty("lastConfig", lastConfig);
 		for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
-			prop.setProperty("configName"+i.toString(), configsNames[i]);
+			prop.setProperty("configFileName"+i.toString(), configFileNames[i]);
+			prop.setProperty("configFullPath"+i.toString(), configFullPaths[i]);
 		}
-		prop.setProperty("lastFullPathConfig", lastFullPathConfig);
+		//prop.setProperty("lastFullPathConfig", lastFullPathConfig);
 		prop.setProperty("lastFullPathFirmware", lastFullPathFirmware);
 		prop.setProperty("lastFullPathSysex", lastFullPathSysex);
 		prop.setProperty("MidiInName", MidiInName);
@@ -74,6 +86,7 @@ public class ConfigOptions implements java.io.Serializable {
 			prop.setProperty("showPanels"+ ((Integer)i).toString(), showPanels[i]);
 		}
 		prop.setProperty("autoResize", autoResize);
+		prop.setProperty("changeNotified", changeNotified);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop) {
@@ -89,12 +102,13 @@ public class ConfigOptions implements java.io.Serializable {
 		autoOpenPorts = prop.getBoolean("autoOpenPorts", autoOpenPorts);
 		saveOnExit = prop.getBoolean("saveOnExit", saveOnExit);
 		interactive = prop.getBoolean("interactive", interactive);
-		lastDir = prop.getString("lastDir", lastDir);
+		//lastDir = prop.getString("lastDir", lastDir);
 		lastConfig = Utils.validateInt(prop.getInt("lastConfig",lastConfig),0,Constants.CONFIGS_COUNT-1,lastConfig);
 		for (Integer i = 0;i<Constants.CONFIGS_COUNT;i++) {
-			configsNames[i] = prop.getString("configName"+i.toString(), configsNames[i]);
+			configFileNames[i] = prop.getString("configFileName"+i.toString(), configFileNames[i]);
+			configFullPaths[i] = prop.getString("configFullPath"+i.toString(), configFullPaths[i]);
 		}
-		lastFullPathConfig = prop.getString("lastFullPathConfig", lastFullPathConfig);
+		//lastFullPathConfig = prop.getString("lastFullPathConfig", lastFullPathConfig);
 		lastFullPathFirmware = prop.getString("lastFullPathFirmware", lastFullPathFirmware);
 		lastFullPathSysex = prop.getString("lastFullPathSysex", lastFullPathSysex);
 		MidiInName = prop.getString("MidiInName", MidiInName);
@@ -116,5 +130,6 @@ public class ConfigOptions implements java.io.Serializable {
 			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString(),showPanels[i]),0,2,showPanels[i]);
 		}
 		autoResize = prop.getBoolean("autoResize", autoResize);
+		changeNotified = prop.getBoolean("changeNotified", false);
 	}
 }

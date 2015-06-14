@@ -154,6 +154,7 @@ public class Main_window {
 	private ConfigFull configFull;
 	private ConfigFull moduleConfigFull;
 	private ConfigFull [] fullConfigs;
+	private String [] configFileNames;
 	protected ConfigOptions configOptions;
 	private FileManager fileManager;
 	//private int chainId;
@@ -173,6 +174,7 @@ public class Main_window {
 	private LabelWithState lblLCDcontrast, lblConfigName;
 	private JToggleButton tglbtnLiveUpdates;
 	private JComboBox<String> comboBoxCfg;
+	private int comboBoxCfgNoActions = 0;
 	private JCheckBox checkBoxAutoResize;
 	private CheckBoxWithState chckbxConfignamesen;
 	private CheckBoxWithState chckbxCustomPadsNames;
@@ -201,6 +203,7 @@ public class Main_window {
 	private int compareResultCombined;
 	private Timer sysexWaitTimer;
 	private JTextField configNameTextField;
+	private JLabel lblOk;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
 	
@@ -279,9 +282,12 @@ public class Main_window {
 
 		configOptions = new ConfigOptions(); // default options loaded with new
 		fullConfigs = new ConfigFull[Constants.CONFIGS_COUNT];
+		configFileNames = new String[Constants.CONFIGS_COUNT];
 		for (Integer i = 1;i<=Constants.CONFIGS_COUNT;i++) {
 			fullConfigs[i-1] = new ConfigFull();
+			configFileNames[i-1] = new String();
 		}
+		
 		fileManager = new FileManager(frmMegadrummanager);
 		midi_handler = new Midi_handler(configOptions);
 		dialog_options = new Options(midi_handler);
@@ -909,7 +915,9 @@ public class Main_window {
 				ColumnSpec.decode("2dlu"),
 				FormFactory.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("50dlu"),
+				ColumnSpec.decode("80dlu"),
+				ColumnSpec.decode("2dlu"),
+				ColumnSpec.decode("20dlu"),
 				ColumnSpec.decode("2dlu"),
 				FormFactory.PREF_COLSPEC,
 				ColumnSpec.decode("2dlu"),
@@ -944,29 +952,36 @@ public class Main_window {
 		panel_top.add(btnSendAll, "4, 1");
 		
 		comboBoxCfg = new JComboBox<String>();
-		comboBoxCfg.setToolTipText("<html>Select the current full config to use.<br>\r\nMegaDrumManager can hold up to 8<br>\r\nfull MegaDrum configs in memory<br>\r\nand you can quickly switch between them here<br>.\r\n</html>");
+		comboBoxCfg.setMaximumRowCount(Constants.CONFIGS_COUNT);
+		comboBoxCfg.setToolTipText("<html>Select the current full config to use.<br>\r\nMegaDrumManager can hold up to " + Integer.toString(Constants.CONFIGS_COUNT) + "<br>\r\nfull MegaDrum configs in memory<br>\r\nand you can quickly switch between them here<br>.\r\n</html>");
 		comboBoxCfg.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String text = comboBoxCfg.getSelectedItem().toString();
-				if (comboBoxCfg.getSelectedIndex()<0) {
-					configOptions.configsNames[configOptions.lastConfig] = text;
-					comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configsNames));
-					comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
+				if (comboBoxCfgNoActions == 0) {
+					String text = comboBoxCfg.getSelectedItem().toString();
+					if (comboBoxCfg.getSelectedIndex()<0) {
+						configOptions.configFileNames[configOptions.lastConfig] = text;
+						comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configFileNames));
+						comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
+					}					
 				}
 			}			
 		});
-		comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configsNames));
+		comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configFileNames));
 		comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		comboBoxCfg.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				if (arg0.getStateChange() == ItemEvent.DESELECTED) {
-				}
-				if (arg0.getStateChange() == ItemEvent.SELECTED) {
-					if (comboBoxCfg.getSelectedIndex()>-1) {
-						copyConfigToLastConfig();
-						configOptions.lastConfig = comboBoxCfg.getSelectedIndex();
-						loadAllFromConfigFull();
+				if (comboBoxCfgNoActions == 0) {
+					if (arg0.getStateChange() == ItemEvent.DESELECTED) {
 					}
+					if (arg0.getStateChange() == ItemEvent.SELECTED) {
+						if (comboBoxCfg.getSelectedIndex()>-1) {
+							//copyConfigToLastConfig();
+							configOptions.lastConfig = comboBoxCfg.getSelectedIndex();
+							fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
+							loadAllFromConfigFull();
+							//
+						}
+					}					
 				}
 			}
 		});
@@ -1021,7 +1036,7 @@ public class Main_window {
 		panel_top.add(checkBoxSyncronized, "10, 1");
 		panel_top.add(btnLoadAll, "12, 1");
 		panel_top.add(btnSaveAll, "14, 1");
-		comboBoxCfg.setEditable(true);
+		comboBoxCfg.setEditable(false);
 		comboBoxCfg.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		panel_top.add(comboBoxCfg, "16, 1, fill, default");
 		
@@ -1034,9 +1049,14 @@ public class Main_window {
 				}
 			}
 		});
+		
+		lblOk = new JLabel("Ok");
+		lblOk.setOpaque(true);
+		lblOk.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_top.add(lblOk, "18, 1");
 		btnPrevcfg.setMargin(new Insets(0, 1, 0, 1));
 		btnPrevcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel_top.add(btnPrevcfg, "18, 1");
+		panel_top.add(btnPrevcfg, "20, 1");
 		
 		JButton btnNextcfg = new JButton("nextCfg");
 		btnNextcfg.setToolTipText("<html>Switch to next full MegaDrum config</html>");
@@ -1049,10 +1069,10 @@ public class Main_window {
 		});
 		btnNextcfg.setMargin(new Insets(0, 1, 0, 1));
 		btnNextcfg.setFont(new Font("Tahoma", Font.PLAIN, 10));
-		panel_top.add(btnNextcfg, "20, 1");
+		panel_top.add(btnNextcfg, "22, 1");
 		
 		commsStateLabel = new LabelWithState("SysEx Ok");
-		panel_top.add(commsStateLabel, "22, 1");
+		panel_top.add(commsStateLabel, "24, 1");
 		commsStateLabel.setOpaque(true);
 		commsStateLabel.setBackground(Color.GREEN);
 		commsStateLabel.setVisible(false);
@@ -1137,7 +1157,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		lblConfigSlots = new LabelWithState("CfgSlots:");
+		lblConfigSlots = new LabelWithState("SlotsCount:");
 		panel_2.add(lblConfigSlots, "2, 2");
 		lblConfigSlots.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
@@ -1295,7 +1315,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		lblConfigName = new LabelWithState("Config Name:");
+		lblConfigName = new LabelWithState("Slot Name:");
 		lblConfigName.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel_3.add(lblConfigName, "2, 2, right, default");
 		
@@ -2103,7 +2123,7 @@ public class Main_window {
         t.run();	
 	}
 
-	private void copyConfigToLastConfig() {
+	private void copyConfigToLastConfigNotNeeded() {
 		byte [] sysex = new byte[256];
 
 		Utils.copyConfigGlobalMiscToSysex(configFull.configGlobalMisc, sysex, configOptions.chainId);
@@ -2197,12 +2217,14 @@ public class Main_window {
 
 	private void save_all() {
 		fileManager.save_all(configFull, configOptions);
+		updateGlobalMiscControls();
 	}
 	
 	private void loadConfig() {
 		//copyAllToConfigFull();
 		configOptions  = fileManager.loadLastOptions(configOptions);
-		comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configsNames));
+		showChangeNotificationIfNeeded();
+		comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configFileNames));
 		comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		dialog_options.fillInPorts(midi_handler.getMidiInList());
 		dialog_options.fillOutPorts(midi_handler.getMidiOutList());
@@ -2216,7 +2238,7 @@ public class Main_window {
 		midi_handler.chainId = configOptions.chainId;
 		//comboBox_inputsCount.setSelectedIndex((fullConfigs[configOptions.lastConfig].configGlobalMisc.inputs_count - Constants.MIN_INPUTS)/2);
 		//updateInputsCountControls();
-		if (!configOptions.lastFullPathConfig.equals("")) {
+		if (!configOptions.configFullPaths[configOptions.lastConfig].equals("")) {
 			fileManager.loadAllSilent(fullConfigs[configOptions.lastConfig], configOptions);
 			loadAllFromConfigFull();
 		}
@@ -2256,6 +2278,18 @@ public class Main_window {
 			chckbxConfignamesen.setSelected(configFull.configGlobalMisc.config_names_en);
 			chckbxCustomPadsNames.setSelected(configFull.configGlobalMisc.custom_names_en);
 			chckbxMidi2ForSysex.setSelected(configFull.configGlobalMisc.midi2_for_sysex);
+			int s = comboBoxCfg.getSelectedIndex();
+			comboBoxCfgNoActions = 1;
+			comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configFileNames));
+			comboBoxCfg.setSelectedIndex(s);
+			comboBoxCfgNoActions = 0;
+		}
+		if (configOptions.configLoaded[configOptions.lastConfig]) {
+			lblOk.setBackground(Color.GREEN);
+			lblOk.setText("Ok");
+		} else {
+			lblOk.setBackground(Color.RED);
+			lblOk.setText("??");
 		}
 		//updateGlobalMiscSyncState();
 	}
@@ -2670,6 +2704,18 @@ public class Main_window {
 				    "Warning",
 				    JOptionPane.INFORMATION_MESSAGE);
 		}		
+	}
+	
+	private void showChangeNotificationIfNeeded() {
+		if (!configOptions.changeNotified) {
+			int reply = JOptionPane.showConfirmDialog(null,
+				    Constants.CHNAGE_WARNING,
+				    "Warning",
+				    JOptionPane.YES_NO_OPTION);
+			if (reply != JOptionPane.YES_OPTION) {
+				configOptions.changeNotified = true;				
+			}
+		}
 	}
 	
 	private void updateCustomNamesControls() {

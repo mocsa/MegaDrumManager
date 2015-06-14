@@ -4,14 +4,14 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20150415";
+	public static final String MD_VERSION = "20150614";
 	public static final int MD_MINIMUM_VERSION = 20140516;
 	public static final String WARNING_VERSION = "<html><font size=2>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=2>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
 	public static final Double MD_CONFIG_VERSION = 0.5;
 	public static final int MIN_INPUTS = 18;
 	public static final int MAX_INPUTS = 56;
-	public static final int CONFIGS_COUNT = 8;
+	public static final int CONFIGS_COUNT = 32;
 	public static final int PANEL_HIDE = 0;
 	public static final int PANEL_SHOW = 1;
 	public static final int PANEL_DETACH = 2;
@@ -137,6 +137,23 @@ public interface Constants {
 	public static final String MIDI_PORTS_WARNING =
 			"<html><font size=4>Before using MegaDrum Manager</font></html>\n" +
 			"<html><font size=4>you first must set MIDI In/Out ports in Main->Options!!!</font></html>";
+	public static final String CHNAGE_WARNING =
+			"<html><font size=4>In this MDM version handling of configs has changed<br>" +
+			"<br>" +
+			"Each MDM config is now mapped to a file so when you switch between configs with prefvCfg/nextCfg<br>" +
+			"or selecting a config form the dropdown list, MDM actually tries to load a config from a file mapped to this config.<br>" +
+			"A file is mapped to a selected config when you do 'Load All' or 'Save All'.<br>" +
+			"When you switch to a config which doesn't have a file mapped to it yet, MDM will show '??' in red next to the dropdownlist.<br>" +
+			"When you switch to a config which already has a file mapped to it but the file doesn't exist (deleted/moved), MDM will again show '??' in red next to the dropdownlist.<br>" +
+			"When you switch to a config which already has a file mapped to it, MDM will show 'Ok' in green next to the dropdownlist.<br>" +
+			"A file name of a file mapped to a config now means the name of a config.<br>" +
+			"<br>" +
+			"MegaDrum internal configs are now called Slots.<br>" +
+			"MDM will show number of available slots in MegaDrum in 'SlotsCount'<br>" +
+			"MDM will show current slot in MegaDrum in 'Current'<br>" +
+			"MDM will show name of a slot in 'Slot Name'<br>" +
+			"<br>" +
+			"Show this warning next time?</font></html>";
 	public static final String UPGRADE_INSTRUCTION_ATMEGA =
 			"Upgrade instruction for:\n" +
 			"    Atmega based MegaDrum\n" +
