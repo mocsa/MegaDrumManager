@@ -1157,7 +1157,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		lblConfigSlots = new LabelWithState("CfgSlots:");
+		lblConfigSlots = new LabelWithState("SlotsCount:");
 		panel_2.add(lblConfigSlots, "2, 2");
 		lblConfigSlots.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		
@@ -1315,7 +1315,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		lblConfigName = new LabelWithState("Config Name:");
+		lblConfigName = new LabelWithState("Slot Name:");
 		lblConfigName.setFont(new Font("Tahoma", Font.PLAIN, 11));
 		panel_3.add(lblConfigName, "2, 2, right, default");
 		
@@ -2223,6 +2223,7 @@ public class Main_window {
 	private void loadConfig() {
 		//copyAllToConfigFull();
 		configOptions  = fileManager.loadLastOptions(configOptions);
+		showChangeNotificationIfNeeded();
 		comboBoxCfg.setModel(new DefaultComboBoxModel<String>(configOptions.configFileNames));
 		comboBoxCfg.setSelectedIndex(configOptions.lastConfig);
 		dialog_options.fillInPorts(midi_handler.getMidiInList());
@@ -2703,6 +2704,18 @@ public class Main_window {
 				    "Warning",
 				    JOptionPane.INFORMATION_MESSAGE);
 		}		
+	}
+	
+	private void showChangeNotificationIfNeeded() {
+		if (!configOptions.changeNotified) {
+			int reply = JOptionPane.showConfirmDialog(null,
+				    Constants.CHNAGE_WARNING,
+				    "Warning",
+				    JOptionPane.YES_NO_OPTION);
+			if (reply != JOptionPane.YES_OPTION) {
+				configOptions.changeNotified = true;				
+			}
+		}
 	}
 	
 	private void updateCustomNamesControls() {

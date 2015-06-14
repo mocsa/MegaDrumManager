@@ -38,6 +38,7 @@ public class ConfigOptions implements java.io.Serializable {
 	public int [] showPanels = { Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_SHOW, Constants.PANEL_HIDE };
 	public int mcuType = 0;
 	public boolean autoResize = true;
+	public boolean changeNotified = false;
 
 	public ConfigOptions() {
 		configFileNames = new String[Constants.CONFIGS_COUNT];
@@ -85,6 +86,7 @@ public class ConfigOptions implements java.io.Serializable {
 			prop.setProperty("showPanels"+ ((Integer)i).toString(), showPanels[i]);
 		}
 		prop.setProperty("autoResize", autoResize);
+		prop.setProperty("changeNotified", changeNotified);
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop) {
@@ -128,5 +130,6 @@ public class ConfigOptions implements java.io.Serializable {
 			showPanels[i] = Utils.validateInt(prop.getInt("showPanels"+ ((Integer)i).toString(),showPanels[i]),0,2,showPanels[i]);
 		}
 		autoResize = prop.getBoolean("autoResize", autoResize);
+		changeNotified = prop.getBoolean("changeNotified", false);
 	}
 }
