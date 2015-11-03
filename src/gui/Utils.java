@@ -210,6 +210,7 @@ public class Utils {
 			sysex_byte[0] = sysex[i++];
 			sysex_byte[1] = sysex[i++];
 			config.retrigger = sysex2byte(sysex_byte);
+			if (config.retrigger <1 ) config.retrigger = 1;
 			sysex_short[0] = sysex[i++];
 			sysex_short[1] = sysex[i++];
 			sysex_short[2] = sysex[i++];

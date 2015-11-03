@@ -353,7 +353,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		add(lblThreshold, "1, 12, right, center");
 		
 		spinner_threshold = new JSpinnerCustom(this);
-		spinner_threshold.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(127), new Integer(1)));
+		spinner_threshold.setModel(new SpinnerNumberModel(0, 0, 127, 1));
 		add(spinner_threshold, "3, 12, left, center");
 		
 		padButton_threshold = new PadButton("threshold", head_rim_pad);
@@ -396,7 +396,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 		add(lblRetriggerMask, "1, 16, right, center");
 		
 		spinner_retrigger = new JSpinnerCustom(this);
-		spinner_retrigger.setModel(new SpinnerNumberModel(new Integer(0), new Integer(0), new Integer(127), new Integer(1)));
+		spinner_retrigger.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), new Integer(127), new Integer(1)));
 		add(spinner_retrigger, "3, 16, left, center");
 		
 		padButton_retrigger = new PadButton("retrigger", head_rim_pad);

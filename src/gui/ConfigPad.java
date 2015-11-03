@@ -74,8 +74,9 @@ public class ConfigPad {
 		note = Utils.validateInt(prop.getInt(prefix+"note", note),0,127,note);
 		channel = Utils.validateInt(prop.getInt(prefix+"channel", channel),0,15,channel);
 		curve = Utils.validateInt(prop.getInt(prefix+"curve", curve),0,15,curve);
-		threshold = Utils.validateInt(prop.getInt(prefix+"threshold", threshold),1,127,threshold);
+		threshold = Utils.validateInt(prop.getInt(prefix+"threshold", threshold),0,127,threshold);
 		retrigger = Utils.validateInt(prop.getInt(prefix+"retrigger", retrigger),0,127,retrigger);
+		if (retrigger < 1) retrigger = 1;
 		levelMax = Utils.validateInt(prop.getInt(prefix+"levelMax", levelMax),64,1023,levelMax);
 		minScan = Utils.validateInt(prop.getInt(prefix+"minScan", minScan),10,100,minScan);
 		type = prop.getBoolean(prefix+"type", type);		
