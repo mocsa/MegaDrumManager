@@ -52,6 +52,7 @@ import javax.swing.text.StyleContext;
 import javax.swing.JSeparator;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.JButton;
 
 class LogStore {
 	public int note = 0;
@@ -193,6 +194,7 @@ public class PanelMidiLog extends JPanel {
 	private JSeparator separator;
 	private JScrollPane scrollPaneText;
 	private NoWrapTextPane textPane;
+	private JButton btnClear;
 
 
 	/**
@@ -290,6 +292,8 @@ public class PanelMidiLog extends JPanel {
 								FormFactory.RELATED_GAP_ROWSPEC,
 								FormFactory.DEFAULT_ROWSPEC,
 								FormFactory.RELATED_GAP_ROWSPEC,
+								FormFactory.DEFAULT_ROWSPEC,
+								FormFactory.RELATED_GAP_ROWSPEC,
 								FormFactory.DEFAULT_ROWSPEC,}));
 						
 						comboBoxBarsCount = new JComboBox<String>();
@@ -358,6 +362,17 @@ public class PanelMidiLog extends JPanel {
 						lblUnknown = new JLabel("Unknown");
 						lblUnknown.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 						panel.add(lblUnknown, "3, 13");
+						
+						btnClear = new JButton("Clear");
+						btnClear.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+						btnClear.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+					        	reSetPanelBars();
+					    		panelMidiScroll.reSetSize(new Dimension(panelBars.getPreferredSize().width, 132));
+					    		firePropertyChange("resize", false, true);
+					    	}
+						});
+						panel.add(btnClear, "1, 15, 3, 1");
 						
 						lblNotesNumbers = new JLabel("notes numbers");
 						lblNotesNumbers.setFont(new Font("Tahoma", Font.PLAIN, 10));
