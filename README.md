@@ -18,7 +18,9 @@ To contribute to MDM, please set up your development environment first like this
 ## Compiling Megadrum Manager
 1. In Eclipse, open the Ant View.
 1. Add the build.xml buildfile to the view.
-1. Run the Ant target called 'build'. This is the default target. It will build a bunch of class files in the bin folder.
+1. Run the Ant target called 'build'. This is the default target.
+
+After a successful compile, you will get a bunch of class files in the bin/gui folder.
 
 
 ## Creating a runnable JAR file.
