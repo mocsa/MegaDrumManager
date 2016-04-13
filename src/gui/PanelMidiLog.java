@@ -148,7 +148,7 @@ public class PanelMidiLog extends JPanel {
 	private LogStore [] logStore; 
 	private int storePointer = 0;
 	private long prevTime;
-	//private long prevTime2;
+	private long prevTimeRawMidi;
 	private int rawLines = 0;
 	private ArrayList<String> rawStrings;
 	private JLabel lblHitsIntervalsmilliseconds;
@@ -543,18 +543,23 @@ public class PanelMidiLog extends JPanel {
 		panelMidiScroll.autoPause = checkBoxAutoPause.isSelected();
 		panelMidiScroll.reSetTimer((Integer)scrollBar.getValue());
 		prevTime = System.nanoTime();
-		//prevTime2 = System.nanoTime();
+		prevTimeRawMidi = System.nanoTime();
 		rawStrings = new ArrayList<String>();
 	}
 	
 	public void showNewHit(int note, int level, Color color) {
 		int timeDiff;
+		long currentTime;
+		long diffTime;
 		storePointer++;
 		if (storePointer >= barsCount) {
 			storePointer = 0;
 		}
-		timeDiff = (int)((System.nanoTime() - prevTime)/1000000);
-		prevTime = System.nanoTime();
+		currentTime = System.nanoTime();
+		diffTime = currentTime - prevTime;
+		timeDiff = (int)(diffTime/1000000);
+		//System.out.printf("Current = %25d , Previous = %25d , Diff = %10d\n", currentTime, prevTime, diffTime);
+		prevTime = currentTime;
 		logStore[storePointer].timeDiff = timeDiff;
 		logStore[storePointer].note = note;
 		logStore[storePointer].level = level;
@@ -885,8 +890,8 @@ public class PanelMidiLog extends JPanel {
 		Color fontColor = Color.black;
 		Float timeDiff;
 		
-		timeDiff = (Float)((float)(System.nanoTime() - prevTime)/1000000000);
-		prevTime = System.nanoTime();
+		timeDiff = (Float)((float)(System.nanoTime() - prevTimeRawMidi)/1000000000);
+		prevTimeRawMidi = System.nanoTime();
 		time = String.format("%#9.3f", timeDiff);
 				
 		if (tableModelMidiRaw.getRowCount() > 200) {

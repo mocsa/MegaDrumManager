@@ -468,6 +468,7 @@ public class Midi_handler {
 		String [] list;
 		int nPorts;
 		int port;
+		MidiSystem.
 		aInfos = MidiSystem.getMidiDeviceInfo(); 
 		nPorts = aInfos.length;
 		int[] table = new int[nPorts];
