@@ -94,6 +94,7 @@ public class ConfigPedal {
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
 		type = prop.getBoolean(prefix+"type", type);
+		new_algorithm = prop.getBoolean(prefix+"new_algorithm", new_algorithm);
 		autoLevels = prop.getBoolean(prefix+"autoLevels", autoLevels);
 		altIn = prop.getBoolean(prefix+"altIn", altIn);
 		reverseLevels = prop.getBoolean(prefix+"reverseLevels", reverseLevels);
