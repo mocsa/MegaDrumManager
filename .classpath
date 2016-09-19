@@ -12,10 +12,5 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/MegaDrumManager/commons-configuration-1.8-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="mmj.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MegaDrumManager"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
