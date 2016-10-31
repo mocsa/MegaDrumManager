@@ -17,7 +17,7 @@ import javax.swing.SwingUtilities;
 import java.awt.Font;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import net.miginfocom.swing.MigLayout;
 import java.awt.FlowLayout;
@@ -167,7 +167,7 @@ public class ControlsPadCommon extends JPanel implements ValueChangedListener {
 			configIndex = 1;
 		}
 		setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("default:grow"),
 				ColumnSpec.decode("2dlu"),

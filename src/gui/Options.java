@@ -34,7 +34,7 @@ import java.awt.event.ItemEvent;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import java.awt.Font;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -85,7 +85,7 @@ public class Options extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("276px:grow"),}));
@@ -107,7 +107,7 @@ public class Options extends JDialog {
 				RowSpec.decode("fill:default"),
 				RowSpec.decode("fill:default"),
 				RowSpec.decode("fill:default"),
-				FormFactory.RELATED_GAP_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:default"),}));
 
 		JPanel panel_misc = new JPanel();
@@ -124,7 +124,7 @@ public class Options extends JDialog {
 				RowSpec.decode("fill:default"),
 				RowSpec.decode("fill:default"),
 				RowSpec.decode("fill:default"),
-				FormFactory.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
 				RowSpec.decode("fill:default"),
 				RowSpec.decode("fill:default"),
 				RowSpec.decode("fill:default"),
@@ -263,7 +263,7 @@ public class Options extends JDialog {
 		JPanel panel = new JPanel();
 		panel_midi.add(panel, "3, 8, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("46px"),},
 			new RowSpec[] {

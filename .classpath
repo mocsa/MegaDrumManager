@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="forms-1.3.0.jar" sourcepath="forms-1.3.0-src.zip"/>
 	<classpathentry kind="lib" path="miglayout15-swing.jar" sourcepath="miglayout-src.zip"/>
 	<classpathentry kind="lib" path="commons-lang-2.6.jar" sourcepath="commons-lang-2.6-sources.jar"/>
 	<classpathentry kind="lib" path="commons-collections-3.2.1.jar" sourcepath="commons-collections-3.2.1-sources.jar"/>
@@ -17,5 +16,7 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MegaDrumManager"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jgoodies-forms-1.6.0.jar" sourcepath="jgoodies-forms-1.6.0-sources.jar.zip"/>
+	<classpathentry kind="lib" path="jgoodies-common-1.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

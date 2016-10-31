@@ -8,7 +8,7 @@ import java.awt.event.WindowEvent;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 
 public class FrameDetached extends JFrame {
 	/**
@@ -26,9 +26,9 @@ public class FrameDetached extends JFrame {
 		controlsId = id;
 		isDetached = false;
 		getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,},
+				FormSpecs.PREF_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,}));
+				FormSpecs.PREF_ROWSPEC,}));
 		//setAlwaysOnTop(true);
 		
 	}	

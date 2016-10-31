@@ -6,7 +6,7 @@ import java.awt.GridLayout;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import java.awt.Component;
 import javax.swing.Box;
 //import javax.swing.JLabel;
@@ -172,19 +172,19 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
 				RowSpec.decode("310px"),}));
 		
 		JPanel panel_buttons = new JPanel();
 		panel.add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("fill:default"),}));
 		
@@ -215,7 +215,7 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		tabbedPane.addTab("Misc", null, panel_misc, null);
 		panel_misc.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:56dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("12dlu"),
@@ -226,10 +226,10 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 				RowSpec.decode("12dlu"),
 				RowSpec.decode("12dlu"),
 				RowSpec.decode("12dlu"),
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblType = new LabelWithState("Type");
 		lblType.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -404,21 +404,21 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		tabbedPane.addTab("Levels", null, panel_levels, null);
 		panel_levels.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:56dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblLow = new LabelWithState("Low");
 		lblLow.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -521,23 +521,23 @@ public class ControlsPedal extends JPanel implements ValueChangedListener {
 		tabbedPane.addTab("Notes", null, panel_notes, null);
 		panel_notes.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:56dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("left:default:grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblBowSemiopen = new LabelWithState("Bow SemiOpen");
 		lblBowSemiopen.setFont(new Font("Segoe UI", Font.PLAIN, 10));

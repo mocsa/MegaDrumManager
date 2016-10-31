@@ -63,7 +63,7 @@ import java.awt.Rectangle;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.SwingConstants;
@@ -552,7 +552,7 @@ public class Main_window {
 				ColumnSpec.decode("default:grow"),
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				FormFactory.LINE_GAP_ROWSPEC,
+				FormSpecs.LINE_GAP_ROWSPEC,
 				RowSpec.decode("pref:grow"),}));
 //		FlowLayout flowLayout = (FlowLayout) panel_main.getLayout();
 //		flowLayout.setAlignOnBaseline(true);
@@ -817,25 +817,25 @@ public class Main_window {
 		
 		global_panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("pref:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,
+				FormSpecs.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				FormFactory.PREF_ROWSPEC,
+				FormSpecs.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				FormFactory.PREF_ROWSPEC,}));
+				FormSpecs.PREF_ROWSPEC,}));
 		
 //		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 //				ColumnSpec.decode("pref:grow"),
-//				FormFactory.RELATED_GAP_COLSPEC,
-//				FormFactory.DEFAULT_COLSPEC,},
+//				FormSpecs.RELATED_GAP_COLSPEC,
+//				FormSpecs.DEFAULT_COLSPEC,},
 //			new RowSpec[] {
-//				FormFactory.PREF_ROWSPEC,
+//				FormSpecs.PREF_ROWSPEC,
 //				RowSpec.decode("1dlu"),
-//				FormFactory.PREF_ROWSPEC,
+//				FormSpecs.PREF_ROWSPEC,
 //				RowSpec.decode("1dlu"),
-//				FormFactory.PREF_ROWSPEC,}));
+//				FormSpecs.PREF_ROWSPEC,}));
 		
 		panel_top = new JPanel();
 //		frmMegadrummanager.getContentPane().add(panel_top, "1, 1, fill, fill");
@@ -900,34 +900,34 @@ public class Main_window {
 		clearConfigSlotsNames();
 		
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("40dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("80dlu"),
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("20dlu"),
 				ColumnSpec.decode("2dlu"),
-				FormFactory.PREF_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.PREF_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.MIN_ROWSPEC,}));
+				FormSpecs.MIN_ROWSPEC,}));
 		
 		JButton btnGetAll = new JButton("Get All");
 		btnGetAll.setToolTipText("Get all settings from MegaDrum");
@@ -1082,29 +1082,29 @@ public class Main_window {
 //		frmMegadrummanager.getContentPane().add(panel, "1, 3, fill, fill");
 		global_panel.add(panel, "1, 3, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("50dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("64px"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
 				ColumnSpec.decode("50dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("66dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("left:default"),},
 			new RowSpec[] {
 				RowSpec.decode("default:grow"),
-				FormFactory.RELATED_GAP_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),}));
 		
 		lblMidi = new LabelWithState("MIDI :");
@@ -1145,17 +1145,17 @@ public class Main_window {
 		JPanel panel_2 = new JPanel();
 		panel.add(panel_2, "16, 1, fill, fill");
 		panel_2.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("15dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("15dlu"),},
 			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblConfigSlots = new LabelWithState("SlotsCount:");
 		panel_2.add(lblConfigSlots, "2, 2");
@@ -1307,13 +1307,13 @@ public class Main_window {
 		JPanel panel_3 = new JPanel();
 		panel.add(panel_3, "16, 3, fill, fill");
 		panel_3.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),},
 			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblConfigName = new LabelWithState("Slot Name:");
 		lblConfigName.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -1360,7 +1360,7 @@ public class Main_window {
 				ColumnSpec.decode("pref:grow"),
 				ColumnSpec.decode("24dlu"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		JButton btnGet = new JButton("Get");
 		panel_1.add(btnGet, "1, 1");
