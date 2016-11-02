@@ -20,22 +20,26 @@ public class PanelMidiPositional extends JPanel {
 	private JSlider posIndicator2;
 	private JSlider posIndicator3;
 	private JSlider [] posIndicators;
-	private static int posIndicatorsCount = 3;
+	private static int posIndicatorsCount = 5;
 	private int posPointer = 0;
-	private int [] posValues = {25, 25, 25};
+	private int [] posValues;
 
 	/**
 	 * Create the panel.
 	 */
 	public PanelMidiPositional() {
 		setLayout(new FormLayout(new ColumnSpec[] {
-				ColumnSpec.decode("100dlu"),},
+				ColumnSpec.decode("100dlu:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("16dlu"),
 				RowSpec.decode("16px"),
-				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
 				RowSpec.decode("16px"),
-				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
+				RowSpec.decode("16px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
+				RowSpec.decode("16px"),
+				FormSpecs.LABEL_COMPONENT_GAP_ROWSPEC,
 				RowSpec.decode("16px"),}));
 		
 		JPanel panel = new JPanel();
@@ -62,7 +66,9 @@ public class PanelMidiPositional extends JPanel {
 		panel.add(lblCenter, "6, 2");
 		
 		posIndicators = new JSlider[posIndicatorsCount];
+		posValues = new int[posIndicatorsCount];
 		for (int i = 0; i < posIndicatorsCount; i++) {
+			posValues[i] = 0;
 			posIndicators[i] = new JSlider();
 			posIndicators[i].setEnabled(false);
 			add(posIndicators[i], "1, " + Integer.toString(i*2 +2) + ", left, top");
