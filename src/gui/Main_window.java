@@ -2676,6 +2676,9 @@ public class Main_window {
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
 				panelMidiLog.showHiHatLevel(127 - buffer[2], Constants.MD_HIHAT_COLOR);
 			}
+			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x10)) {
+				panelMidiLog.showNewPositional(127 - buffer[2]);
+			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x13)) {
 				int id = buffer[2];
 				if (id > 0x3f) {

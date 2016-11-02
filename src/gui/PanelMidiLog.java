@@ -195,6 +195,7 @@ public class PanelMidiLog extends JPanel {
 	private JScrollPane scrollPaneText;
 	private NoWrapTextPane textPane;
 	private JButton btnClear;
+	private PanelMidiPositional panelPositional;
 
 
 	/**
@@ -276,8 +277,8 @@ public class PanelMidiLog extends JPanel {
 						panel = new JPanel();
 						panelCombined.add(panel, "5, 4, fill, fill");
 						panel.setLayout(new FormLayout(new ColumnSpec[] {
-								FormSpecs.PREF_COLSPEC,
-								ColumnSpec.decode("2dlu"),
+								ColumnSpec.decode("pref:grow"),
+								FormSpecs.RELATED_GAP_COLSPEC,
 								FormSpecs.PREF_COLSPEC,},
 							new RowSpec[] {
 								FormSpecs.DEFAULT_ROWSPEC,
@@ -294,7 +295,9 @@ public class PanelMidiLog extends JPanel {
 								FormSpecs.RELATED_GAP_ROWSPEC,
 								FormSpecs.DEFAULT_ROWSPEC,
 								FormSpecs.RELATED_GAP_ROWSPEC,
-								FormSpecs.DEFAULT_ROWSPEC,}));
+								FormSpecs.DEFAULT_ROWSPEC,
+								FormSpecs.RELATED_GAP_ROWSPEC,
+								RowSpec.decode("default:grow"),}));
 						
 						comboBoxBarsCount = new JComboBox<String>();
 						comboBoxBarsCount.addItemListener(new ItemListener() {
@@ -373,6 +376,9 @@ public class PanelMidiLog extends JPanel {
 					    	}
 						});
 						panel.add(btnClear, "1, 15, 3, 1");
+						
+						panelPositional = new PanelMidiPositional();
+						panel.add(panelPositional, "1, 17, 3, 1, fill, fill");
 						
 						lblNotesNumbers = new JLabel("notes numbers");
 						lblNotesNumbers.setFont(new Font("Tahoma", Font.PLAIN, 10));
@@ -545,6 +551,10 @@ public class PanelMidiLog extends JPanel {
 		prevTime = System.nanoTime();
 		prevTimeRawMidi = System.nanoTime();
 		rawStrings = new ArrayList<String>();
+	}
+	
+	public void showNewPositional(int posValue) {
+		panelPositional.setPosValue(posValue);
 	}
 	
 	public void showNewHit(int note, int level, Color color) {
