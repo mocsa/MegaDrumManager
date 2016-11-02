@@ -16,9 +16,9 @@ public class PanelMidiPositional extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -6662020825816232163L;
-	private JSlider posIndicator1;
-	private JSlider posIndicator2;
-	private JSlider posIndicator3;
+//	private JSlider posIndicator1;
+//	private JSlider posIndicator2;
+//	private JSlider posIndicator3;
 	private JSlider [] posIndicators;
 	private static int posIndicatorsCount = 5;
 	private int posPointer = 0;
