@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public interface Constants {
 	//public static final int MIDI_BARS_COUNT = 32;
-	public static final String MD_VERSION = "20151104";
+	public static final String MD_VERSION = "20161102";
 	public static final int MD_MINIMUM_VERSION = 20140516;
 	public static final String WARNING_VERSION = "<html><font size=2>For full compatibilty between MegaDrum Manager and MegaDrum</font></html>\n" +
 			"<html><font size=2>you should upgrade MegaDrum to version " + MD_MINIMUM_VERSION + " or newer</font></html>";
@@ -130,7 +130,7 @@ public interface Constants {
 	public static final String HELP_ABOUT = "<html><font size=2>MegaDrum Manager</font></html>\n" +
 			"<html><font size=2>Version: " + MD_VERSION + "</font></html>\n" +
 			"<html><font size=2>www.megadrum.info</font></html>\n"+
-			"<html><font size=2>© 2007-2014 Dmitri Skachkov</font></html>";
+			"<html><font size=2>\u00a9 2007-2016 Dmitri Skachkov</font></html>";
 	public static final String HELP_ABOUT_MMJ = "\n<html><font size=2>mmj Library is included with MegaDrum Manager for Mac OS X</font></html>\n" +
 			"<html><font size=2>mmj is copyright of Humatic</font></html>\n" +
 			"<html><font size=2>See www.humatic.de/htools/mmj.htm for details</font></html>";

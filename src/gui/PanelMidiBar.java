@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
@@ -32,11 +32,11 @@ public class PanelMidiBar extends JPanel {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("center:pref"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.NARROW_LINE_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.NARROW_LINE_GAP_ROWSPEC,
+				FormSpecs.PREF_ROWSPEC,
+				FormSpecs.NARROW_LINE_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblTime = new JLabel("?");
 		lblTime.setFont(new Font("Tahoma", Font.PLAIN, 9));

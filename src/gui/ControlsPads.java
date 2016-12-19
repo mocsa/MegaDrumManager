@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import java.awt.GridLayout;
 import javax.swing.border.TitledBorder;
 //import javax.swing.JLabel;
@@ -157,35 +157,35 @@ public class ControlsPads extends JPanel {
 		popupMenu.add(mnCopy3rd);
       
 		setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,
+				FormSpecs.PREF_ROWSPEC,
 				RowSpec.decode("1dlu"),
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.PREF_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		
 		JPanel panel_buttons = new JPanel();
 		add(panel_buttons, "1, 1, fill, fill");
 		panel_buttons.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		btnGet = new JButton("Get");
 		btnGet.setMargin(new Insets(1, 2, 1, 2));
@@ -243,18 +243,18 @@ public class ControlsPads extends JPanel {
 		JPanel panel_input_selection = new JPanel();
 		add(panel_input_selection, "1, 3, fill, fill");
 		panel_input_selection.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("70dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("fill:default"),}));
@@ -346,10 +346,10 @@ public class ControlsPads extends JPanel {
 			}
 		});		
 		panel_head_rim.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,}));
 
 		panel_head_rim.add(panel_head, "1, 1, fill, fill");
 		panel_head.setBorder(new TitledBorder(null, "Head/Bow", TitledBorder.LEADING, TitledBorder.TOP, null, null));

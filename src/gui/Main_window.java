@@ -44,7 +44,7 @@ import java.awt.Rectangle;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 
 import javax.swing.SwingConstants;
@@ -780,42 +780,42 @@ public class Main_window {
 		
 		global_panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("pref:grow"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("pref:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("pref:grow"),}));
 		
 //		frmMegadrummanager.getContentPane().setLayout(new FormLayout(new ColumnSpec[] {
 //				ColumnSpec.decode("pref:grow"),
-//				FormFactory.RELATED_GAP_COLSPEC,
-//				FormFactory.DEFAULT_COLSPEC,},
+//				FormSpecs.RELATED_GAP_COLSPEC,
+//				FormSpecs.DEFAULT_COLSPEC,},
 //			new RowSpec[] {
-//				FormFactory.PREF_ROWSPEC,
+//				FormSpecs.PREF_ROWSPEC,
 //				RowSpec.decode("1dlu"),
-//				FormFactory.PREF_ROWSPEC,
+//				FormSpecs.PREF_ROWSPEC,
 //				RowSpec.decode("1dlu"),
-//				FormFactory.PREF_ROWSPEC,}));
+//				FormSpecs.PREF_ROWSPEC,}));
 		JPanel panel_md = new JPanel();
 		panel_md.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "MegaDrum", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		global_panel.add(panel_md, "1, 1, fill, fill");
 		panel_md.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("pref:grow"),},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
+				FormSpecs.PREF_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.PREF_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:pref:grow"),}));			
 
 		panel_configs = new JPanel();
 		panel_configs.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Configuration Slots", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		panel_md.add(panel_configs, "1, 5, fill, fill");
 		panel_configs.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),}));	
 
 		JPanel panel_configstop = new JPanel();
@@ -825,19 +825,19 @@ public class Main_window {
 				ColumnSpec.decode("max(25dlu;pref)"),
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("max(25dlu;pref)"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("max(12dlu;pref)"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("max(12dlu;pref)"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("66dlu"),},
 			new RowSpec[] {
 				RowSpec.decode("fill:pref"),}));	
@@ -846,35 +846,35 @@ public class Main_window {
 		panel_mdm.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "MegaDrumManager", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		global_panel.add(panel_mdm, "3, 1, fill, fill");
 		panel_mdm.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("pref:grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));	
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));	
 
 		JPanel panel_mdmmain = new JPanel();
 		panel_mdmmain.setBorder(null);
 		panel_mdm.add(panel_mdmmain, "2, 1, fill, fill");
 		panel_mdmmain.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("50dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.UNRELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("right:pref"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.UNRELATED_GAP_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("right:pref"),
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,},
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));	
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));	
 
 		panel_top = new JPanel();
 		panel_top.setBorder(null);
@@ -940,21 +940,21 @@ public class Main_window {
 		clearConfigSlotsNames();
 		
 		panel_top.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(25dlu;pref)"),
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("max(25dlu;pref)"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("80dlu"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(25dlu;pref)"),
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("max(25dlu;pref)"),
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("80dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(25dlu;pref)"),
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("max(25dlu;pref)"),},
@@ -1117,27 +1117,27 @@ public class Main_window {
 //		frmMegadrummanager.getContentPane().add(panel, "1, 3, fill, fill");
 		panel_md.add(panel_globaltop, "1, 3, fill, fill");
 		panel_globaltop.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(25dlu;pref)"),
 				ColumnSpec.decode("1dlu"),
 				ColumnSpec.decode("max(25dlu;pref)"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("40dlu"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,},
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,
+				FormSpecs.UNRELATED_GAP_COLSPEC,
+				FormSpecs.PREF_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("fill:pref"),
-				FormFactory.RELATED_GAP_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:pref"),}));
 		
 		lblMidi = new LabelWithState("MIDI:");
@@ -2682,6 +2682,9 @@ public class Main_window {
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x04)) {
 				panelMidiLog.showHiHatLevel(127 - buffer[2], Constants.MD_HIHAT_COLOR);
+			}
+			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x10)) {
+				panelMidiLog.showNewPositional(127 - buffer[2]);
 			}
 			if (((buffer[0]&0xf0) == 0xb0) && (buffer[1] == 0x13)) {
 				int id = buffer[2];

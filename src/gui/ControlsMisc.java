@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 //import javax.swing.JLabel;
 
 import java.awt.Color;
@@ -67,10 +67,10 @@ public class ControlsMisc extends JPanel {
 		moduleConfigFull = moduleConfig;
 		parentMain_window = mW;
 		setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,},
+				FormSpecs.PREF_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
+				FormSpecs.PREF_ROWSPEC,
+				FormSpecs.PREF_ROWSPEC,
 				RowSpec.decode("min:grow"),}));
 		
 		JPanel panel_buttons = new JPanel();
@@ -114,22 +114,22 @@ public class ControlsMisc extends JPanel {
 		add(panel, "1, 2, 1, 2, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:56dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("32dlu"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblNoteOffDelay = new LabelWithState("Note Off Delay");
 		lblNoteOffDelay.setFont(new Font("Segoe UI", Font.PLAIN, 10));

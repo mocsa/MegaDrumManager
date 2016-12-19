@@ -47,7 +47,7 @@ public class ConfigMisc {
 	}
 
 	public void copyFromPropertiesConfiguration(PropertiesConfiguration prop, String prefix) {
-		note_off = Utils.validateInt(prop.getInt(prefix+"note_off", note_off),10,200,note_off);
+		note_off = Utils.validateInt(prop.getInt(prefix+"note_off", note_off),2,200,note_off);
 		latency = Utils.validateInt(prop.getInt(prefix+"latency", latency),10,100,latency);
 		pressroll = Utils.validateInt(prop.getInt(prefix+"pressroll", pressroll),0,note_off,pressroll);
 		octave_shift = Utils.validateInt(prop.getInt(prefix+"octave_shift", octave_shift),0,4,octave_shift);

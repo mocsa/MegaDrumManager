@@ -17,7 +17,7 @@ import javax.swing.BoxLayout;
 import net.miginfocom.swing.MigLayout;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.JCheckBox;
 
@@ -52,9 +52,9 @@ public class NoteSpinControl extends JPanel {
 			}
 		});
 		setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("30dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
 				RowSpec.decode("20px"),}));
 		spinner.setFont(new Font("Tahoma", Font.PLAIN, 11));

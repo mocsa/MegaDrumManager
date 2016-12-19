@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 //import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
@@ -87,20 +87,20 @@ public class ThirdZoneControls extends JPanel implements ValueChangedListener {
 		setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("right:default"),
 				ColumnSpec.decode("3px"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("3px"),
 				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("12dlu", true), Sizes.constant("12dlu", true)), 0),
 				ColumnSpec.decode("10dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("3px"),
 				ColumnSpec.decode("60dlu"),
 				ColumnSpec.decode("3px"),
 				new ColumnSpec(ColumnSpec.FILL, Sizes.bounded(Sizes.PREFERRED, Sizes.constant("12dlu", true), Sizes.constant("12dlu", true)), 0),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblNote = new LabelWithState("Note");
 		lblNote.setFont(new Font("Segoe UI", Font.PLAIN, 10));

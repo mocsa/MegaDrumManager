@@ -10,7 +10,7 @@ import java.awt.Dimension;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
+import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JSpinner;
 import java.awt.Font;
 import javax.swing.SpinnerNumberModel;
@@ -200,9 +200,9 @@ public class ControlsPadsExtra extends JPanel {
         //prevCustomNamePointer = -1;
 
         setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.PREF_COLSPEC,},
+				FormSpecs.PREF_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
 				RowSpec.decode("1dlu"),}));
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -211,29 +211,29 @@ public class ControlsPadsExtra extends JPanel {
 		panelCurves = new JPanel();
 		tabbedPane.addTab("Custom Curves", null, panelCurves, null);
 		panelCurves.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		JPanel panelCurvesGetSend = new JPanel();
 		panelCurves.add(panelCurvesGetSend, "1, 1, left, default");
 		panelCurvesGetSend.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		button_curveGet = new JButton("Get");
 		button_curveGet.setMargin(new Insets(1, 4, 1, 4));
@@ -268,20 +268,20 @@ public class ControlsPadsExtra extends JPanel {
 		JPanel panelCurvesSelection = new JPanel();
 		panelCurves.add(panelCurvesSelection, "1, 2, left, default");
 		panelCurvesSelection.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("center:default"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("2dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,}));
+				FormSpecs.PREF_ROWSPEC,}));
 		
 		lblCurve = new LabelWithState("Curve");
 		lblCurve.setFont(new Font("Segoe UI", Font.BOLD, 11));
@@ -379,31 +379,31 @@ public class ControlsPadsExtra extends JPanel {
 		panelCustomNames.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("default:grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("default:grow"),}));
 		
 		panelNamesGetSend = new JPanel();
 		panelCustomNames.add(panelNamesGetSend, "1, 1, fill, fill");
 		panelNamesGetSend.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
 				ColumnSpec.decode("1dlu"),
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.PREF_ROWSPEC,}));
+				FormSpecs.PREF_ROWSPEC,}));
 		
 		lblCustomNames = new LabelWithState("Custom names:");
 		lblCustomNames.setFont(new Font("Tahoma", Font.PLAIN, 10));
@@ -471,13 +471,13 @@ public class ControlsPadsExtra extends JPanel {
 		panelNamesEdit = new JPanel();
 		panelCustomNames.add(panelNamesEdit, "1, 3, fill, fill");
 		panelNamesEdit.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(151dlu;default):grow"),},
 			new RowSpec[] {
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.DEFAULT_ROWSPEC,
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblEditSelectedName = new LabelWithState("Edit selected name:");
 		panelNamesEdit.add(lblEditSelectedName, "1, 1, right, default");
@@ -528,11 +528,11 @@ public class ControlsPadsExtra extends JPanel {
 		panel = new JPanel();
 		panelCustomNames.add(panel, "1, 5, fill, fill");
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				FormSpecs.RELATED_GAP_COLSPEC,
+				FormSpecs.DEFAULT_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormSpecs.RELATED_GAP_ROWSPEC,
+				FormSpecs.DEFAULT_ROWSPEC,}));
 		
 		lblwhenModifiedCustom = new LabelWithState("<html>When modified Custom Names will be truncated<br>to 8 charachters maximum</html>");
 		panel.add(lblwhenModifiedCustom, "2, 2");
