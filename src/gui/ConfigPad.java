@@ -1,8 +1,5 @@
 package gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 

@@ -1,42 +1,24 @@
 package gui;
 
 import javax.swing.JPanel;
-import java.awt.GridBagLayout;
 //import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
 
-import javax.swing.Icon;
-import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.JCheckBox;
 import javax.swing.JButton;
-import javax.swing.SwingUtilities;
 
 import java.awt.Font;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
-import net.miginfocom.swing.MigLayout;
-import java.awt.FlowLayout;
-import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.JPopupMenu;
-import java.awt.Component;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JMenuItem;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
 import com.jgoodies.forms.layout.Sizes;
 import javax.swing.DefaultComboBoxModel;
 

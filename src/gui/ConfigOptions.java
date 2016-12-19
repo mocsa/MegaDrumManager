@@ -4,7 +4,6 @@ import java.awt.Point;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 public class ConfigOptions implements java.io.Serializable {
 	/**

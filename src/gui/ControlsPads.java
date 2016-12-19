@@ -5,21 +5,16 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
-import java.awt.GridLayout;
 import javax.swing.border.TitledBorder;
 //import javax.swing.JLabel;
 import java.awt.Font;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
-import java.util.BitSet;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -30,22 +25,9 @@ import java.beans.PropertyChangeEvent;
 import javax.swing.JPopupMenu;
 import java.awt.Component;
 import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
-import org.omg.CORBA.PUBLIC_MEMBER;
-
-import java.awt.Dimension;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Member;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.border.MatteBorder;
 
 public class ControlsPads extends JPanel {
 	/**

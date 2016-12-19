@@ -1,7 +1,5 @@
 package gui;
 
-import java.util.EventObject;
-
 import	javax.sound.midi.MidiMessage;
 import	javax.sound.midi.ShortMessage;
 import	javax.sound.midi.MetaMessage;

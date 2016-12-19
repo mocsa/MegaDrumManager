@@ -1,7 +1,5 @@
 package gui;
 
-import java.security.PublicKey;
-
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 

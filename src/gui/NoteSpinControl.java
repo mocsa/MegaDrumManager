@@ -1,20 +1,13 @@
 package gui;
 
 import javax.swing.JPanel;
-import java.awt.GridLayout;
-import java.awt.GridBagLayout;
 import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
 import javax.swing.JSpinner;
-import java.awt.Insets;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SpinnerModel;
 import java.awt.Font;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
-import net.miginfocom.swing.MigLayout;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormSpecs;

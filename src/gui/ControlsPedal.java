@@ -7,27 +7,14 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
-import java.awt.Component;
-import javax.swing.Box;
 //import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import net.miginfocom.swing.MigLayout;
 import java.awt.Font;
-import java.awt.GridBagLayout;
-import javax.swing.JComboBox;
-import javax.swing.JCheckBox;
 import javax.swing.JButton;
-import javax.swing.event.ChangeListener;
 
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
-import javax.swing.event.ChangeEvent;
 import java.awt.Insets;
-import java.util.ArrayList;
 import javax.swing.SpinnerNumberModel;
-
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 public class ControlsPedal extends JPanel implements ValueChangedListener {
 	/**

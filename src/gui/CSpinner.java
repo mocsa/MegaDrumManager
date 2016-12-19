@@ -1,7 +1,6 @@
 package gui;
 
 import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
 import java.awt.Font;
 
 public class CSpinner extends JSpinner {

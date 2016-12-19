@@ -6,14 +6,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Timer;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Transmitter;
 import javax.sound.midi.Receiver;
-import	javax.sound.midi.Sequence;
-import	javax.sound.midi.Sequencer;
 //import	javax.sound.midi.Track;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
