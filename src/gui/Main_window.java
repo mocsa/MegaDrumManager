@@ -3,9 +3,6 @@ package gui;
 import java.awt.EventQueue;
 
 import javax.swing.BorderFactory;
-import javax.swing.ComboBoxModel;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
@@ -15,87 +12,64 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-import javax.swing.UIDefaults;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPanel;
-import javax.swing.border.EtchedBorder;
-import javax.swing.JSplitPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-//import javax.swing.JLabel;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JSeparator;
 
-import java.awt.Dialog.ModalityType;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.text.JTextComponent;
 
 import java.awt.Font;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.swing.JComboBox;
-import java.awt.CardLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+
 import java.awt.Rectangle;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.RowSpec;
-import net.miginfocom.swing.MigLayout;
+
 import javax.swing.SwingConstants;
-import java.awt.Dimension;
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
+
 import java.awt.Color;
 import java.awt.Insets;
 import java.awt.Component;
-import javax.swing.Box;
-import javax.swing.SpringLayout;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+
 import javax.swing.JProgressBar;
-import javax.swing.JCheckBoxMenuItem;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
-import javax.swing.JRadioButtonMenuItem;
+
 import javax.swing.DefaultComboBoxModel;
-import java.awt.event.WindowFocusListener;
 import javax.swing.JToggleButton;
 import javax.swing.border.BevelBorder;
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+
 import java.awt.Toolkit;
-import com.jgoodies.forms.layout.Sizes;
-import javax.swing.ScrollPaneConstants;
+
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 class CheckBoxWithState extends JCheckBox {
 	/**
@@ -206,7 +180,6 @@ public class Main_window {
 	private JLabel lblOk;
 	private JPanel panel_configs;
 	private JPanel panel_mdm;
-	private JPanel panel_mdmmain;
 	private JTabbedPane tabbedPane;
 	//private int configPointer = 0;
 	//private String [] configsStrings;
@@ -807,7 +780,7 @@ public class Main_window {
 		
 		global_panel.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("pref:grow"),
-				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("pref:grow"),},
 			new RowSpec[] {
 				RowSpec.decode("pref:grow"),}));
@@ -832,7 +805,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.PREF_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,}));			
+				RowSpec.decode("fill:pref:grow"),}));			
 
 		panel_configs = new JPanel();
 		panel_configs.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Configuration Slots", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -850,33 +823,31 @@ public class Main_window {
 		panel_configs.add(panel_configstop, "2, 1, fill, fill");
 		panel_configstop.setLayout(new FormLayout(new ColumnSpec[] {
 				ColumnSpec.decode("max(25dlu;pref)"),
-				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("50dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("64px"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				ColumnSpec.decode("2dlu"),
-				ColumnSpec.decode("50dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("1dlu"),
+				ColumnSpec.decode("max(25dlu;pref)"),
+				FormFactory.UNRELATED_GAP_COLSPEC,
 				FormFactory.PREF_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("66dlu"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("left:default"),},
+				FormFactory.UNRELATED_GAP_COLSPEC,
+				FormFactory.PREF_COLSPEC,
+				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("max(12dlu;pref)"),
+				FormFactory.UNRELATED_GAP_COLSPEC,
+				FormFactory.PREF_COLSPEC,
+				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("max(12dlu;pref)"),
+				FormFactory.UNRELATED_GAP_COLSPEC,
+				FormFactory.PREF_COLSPEC,
+				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("66dlu"),},
 			new RowSpec[] {
-				RowSpec.decode("default:grow"),}));	
+				RowSpec.decode("fill:pref"),}));	
 
 		panel_mdm = new JPanel();
 		panel_mdm.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "MegaDrumManager", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 		global_panel.add(panel_mdm, "3, 1, fill, fill");
 		panel_mdm.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("default:grow"),},
+				ColumnSpec.decode("pref:grow"),},
 			new RowSpec[] {
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -899,10 +870,10 @@ public class Main_window {
 				FormFactory.UNRELATED_GAP_COLSPEC,
 				ColumnSpec.decode("right:pref"),
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.UNRELATED_GAP_COLSPEC,
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));	
 
 		panel_top = new JPanel();
@@ -986,9 +957,7 @@ public class Main_window {
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode("max(25dlu;pref)"),
 				ColumnSpec.decode("1dlu"),
-				ColumnSpec.decode("max(25dlu;pref)"),
-				FormFactory.UNRELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,},
+				ColumnSpec.decode("max(25dlu;pref)"),},
 			new RowSpec[] {
 				RowSpec.decode("fill:pref"),}));
 		
@@ -1071,20 +1040,20 @@ public class Main_window {
 		
 		btnLoadFromSlot = new JButton("Load from Slot");
 		btnLoadFromSlot.setToolTipText("<html>Tell MegaDrum to load settings<br>\r\nfrom one of non-volatile memory slots.<br>\r\n<br>\r\n</html>");
-		btnLoadFromSlot.setMargin(new Insets(0, 1, 0, 1));
-		btnLoadFromSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnLoadFromSlot.setMargin(new Insets(1, 2, 2, 2));
+		btnLoadFromSlot.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		btnLoadFromSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				popupMenuLoadFromSlot.show(btnLoadFromSlot, btnLoadFromSlot.getWidth(),0);
 			}
 		});
 
-		panel_configstop.add(btnLoadFromSlot, "1, 1");
+		panel_configstop.add(btnLoadFromSlot, "1, 1, default, fill");
 		
 		btnSaveToSlot = new JButton("Save To Slot");
 		btnSaveToSlot.setToolTipText("<html>Tell MegaDrum to save settings<br>\r\nin one of non-volatile memory slots.<br>\r\n<br>\r\nIt also sets MegaDrum to load the saved settings<br>\r\nfrom that slot on power up.\r\n</html>");
-		btnSaveToSlot.setMargin(new Insets(0, 1, 0, 1));
-		btnSaveToSlot.setFont(new Font("Tahoma", Font.PLAIN, 10));
+		btnSaveToSlot.setMargin(new Insets(1, 2, 2, 2));
+		btnSaveToSlot.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		btnSaveToSlot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				popupMenuSaveToSlot.show(btnSaveToSlot, btnSaveToSlot.getWidth(),0);
@@ -1092,10 +1061,10 @@ public class Main_window {
 		});
 		panel_configstop.add(btnSaveToSlot, "3, 1");
 		
-		checkBoxSyncronized = new JCheckBox("Synchronized");
+		checkBoxSyncronized = new JCheckBox("Send before Save");
 		checkBoxSyncronized.setToolTipText("<html>Do GetAll/SendAll after/before Load from/Save to Slot </html>");
 		checkBoxSyncronized.setSelected(true);
-		checkBoxSyncronized.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		checkBoxSyncronized.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_configstop.add(checkBoxSyncronized, "5, 1");
 		panel_top.add(btnLoadAll, "8, 1, default, fill");
 		panel_top.add(btnSaveAll, "10, 1, default, fill");
@@ -1117,6 +1086,7 @@ public class Main_window {
 		lblOk.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		lblOk.setOpaque(true);
 		lblOk.setHorizontalAlignment(SwingConstants.CENTER);
+		lblOk.setBorder(BorderFactory.createCompoundBorder(null,BorderFactory.createEmptyBorder(2,6,2,6)));
 		panel_top.add(lblOk, "14, 1");
 		btnPrevcfg.setMargin(new Insets(1, 2, 2, 2));
 		btnPrevcfg.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -1135,12 +1105,12 @@ public class Main_window {
 		btnNextcfg.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		panel_top.add(btnNextcfg, "18, 1, default, fill");
 		
-		commsStateLabel = new LabelWithState("SysEx Ok");
+		commsStateLabel = new LabelWithState("SysEx Status");
 		commsStateLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		panel_top.add(commsStateLabel, "20, 1");
+		panel_mdmmain.add(commsStateLabel, "4, 3, 3, 1, fill, fill");
 		commsStateLabel.setOpaque(true);
-		commsStateLabel.setBackground(Color.GREEN);
-		commsStateLabel.setVisible(false);
+//		commsStateLabel.setBackground(Color.GREEN);
+//		commsStateLabel.setVisible(false);
 		
 		JPanel panel_globaltop = new JPanel();
 		panel_globaltop.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Global Settings", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -1161,11 +1131,13 @@ public class Main_window {
 				FormFactory.PREF_COLSPEC,
 				FormFactory.UNRELATED_GAP_COLSPEC,
 				FormFactory.PREF_COLSPEC,
-				FormFactory.UNRELATED_GAP_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.PREF_COLSPEC,
 				FormFactory.UNRELATED_GAP_COLSPEC,
 				FormFactory.PREF_COLSPEC,},
 			new RowSpec[] {
+				RowSpec.decode("fill:pref"),
+				FormFactory.RELATED_GAP_ROWSPEC,
 				RowSpec.decode("fill:pref"),}));
 		
 		lblMidi = new LabelWithState("MIDI:");
@@ -1204,28 +1176,30 @@ public class Main_window {
 		panel_mdmmain.add(lblMCU, "14, 1");
 		
 		lblConfigSlots = new LabelWithState("SlotsCount:");
-		panel_configstop.add(lblConfigSlots, "7, 1");
-		lblConfigSlots.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblConfigSlots.setText("Total Slots");
+		panel_globaltop.add(lblConfigSlots, "6, 3");
+		lblConfigSlots.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		
 		lblCfgSlotsNr = new LabelWithState("??");
-		panel_configstop.add(lblCfgSlotsNr, "9, 1");
+		panel_globaltop.add(lblCfgSlotsNr, "8, 3");
 		lblCfgSlotsNr.setToolTipText("<html>Shows the total number of Config Slots<br>\r\non the connected MegaDrum.\r\n</html>");
 		lblCfgSlotsNr.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCfgSlotsNr.setForeground(Color.BLACK);
-		lblCfgSlotsNr.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblCfgSlotsNr.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		lblCfgSlotsNr.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		
 		lblCurrent = new LabelWithState("Current:");
-		lblCurrent.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel_configstop.add(lblCurrent, "11, 1");
+		lblCurrent.setText("Last Used Slot");
+		lblCurrent.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_globaltop.add(lblCurrent, "10, 3");
 		
 		lblCfgCurrent = new LabelWithState("??");
 		lblCfgCurrent.setToolTipText("<html>Shows the current Config Slot<br>\r\non the connected MegaDrum.\r\n</html>");
 		lblCfgCurrent.setHorizontalAlignment(SwingConstants.CENTER);
 		lblCfgCurrent.setForeground(Color.BLACK);
-		lblCfgCurrent.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblCfgCurrent.setFont(new Font("Segoe UI", Font.PLAIN, 10));
 		lblCfgCurrent.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel_configstop.add(lblCfgCurrent, "13, 1");
+		panel_globaltop.add(lblCfgCurrent, "12, 3");
 		
 		
 		progressBar = new JProgressBar();
@@ -1249,7 +1223,7 @@ public class Main_window {
 			comboBox_inputsCount.addItem((i*2) + Constants.MIN_INPUTS);
 		}		
 				
-		checkBoxAutoResize = new JCheckBox("AutoResize");
+		checkBoxAutoResize = new JCheckBox("Auto Resize Window");
 		checkBoxAutoResize.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		//checkBoxAutoResize.setSelected(true);
 		checkBoxAutoResize.setSelected(configOptions.autoResize);
@@ -1258,7 +1232,7 @@ public class Main_window {
 				configOptions.autoResize = checkBoxAutoResize.isSelected();
 			}
 		});
-		panel_mdmmain.add(checkBoxAutoResize, "16, 1");
+		panel_mdmmain.add(checkBoxAutoResize, "14, 3");
 		
 		lblLCDcontrast = new LabelWithState("LCD contrast:");
 		lblLCDcontrast.setFont(new Font("Segoe UI", Font.PLAIN, 10));
@@ -1304,6 +1278,7 @@ public class Main_window {
 		panel_globaltop.add(chckbxConfignamesen, "14, 1");		
 
 		chckbxCustomPadsNames = new CheckBoxWithState("Custom Pads Names");
+		chckbxCustomPadsNames.setText("Custom Pad Names");
 		chckbxCustomPadsNames.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (chckbxCustomPadsNamesEventDisabled > 0) {
@@ -1351,8 +1326,9 @@ public class Main_window {
 		});
 		
 		lblConfigName = new LabelWithState("Slot Name:");
-		lblConfigName.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel_configstop.add(lblConfigName, "15, 1, right, default");
+		lblConfigName.setText("Last Used Slot Name");
+		lblConfigName.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_globaltop.add(lblConfigName, "14, 3, right, default");
 		
 		configNameTextField = new JTextField();
 //		configNameTextField.addActionListener(new ActionListener() {
@@ -1382,8 +1358,8 @@ public class Main_window {
 				  popupMenuItemsLoadFromSlot[id].setText(((Integer)(id+1)).toString() + " " + configFull.configConfigNames[id].name);				  
 			  }
 			});
-		configNameTextField.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		panel_configstop.add(configNameTextField, "17, 1, fill, default");
+		configNameTextField.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+		panel_globaltop.add(configNameTextField, "16, 3, fill, default");
 		configNameTextField.setColumns(12);
 		configNameTextField.setEnabled(false);
 		
@@ -1454,7 +1430,6 @@ public class Main_window {
 //		frmMegadrummanager.getContentPane().add(panel_main, "1, 5, 3, 1, left, fill");
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panel_configs.add(tabbedPane, "2, 3, fill, fill");
 		tabbedPane.addTab("Misc", null, controlsMisc, null);
 		tabbedPane.addTab("HiHat Pedal", null, controlsPedal, null);
@@ -2329,7 +2304,7 @@ public class Main_window {
 	private void resizeMainWindow() {
 		if (checkBoxAutoResize.isSelected()) {
 			// Show panels. 0 - Misc, 1 - Pedal, 2 - Pads, 3 - Pads Extra, 4 - MIDI Log
-			for (int i = 0; i< Constants.PANELS_COUNT; i++) {
+/*			for (int i = 0; i< Constants.PANELS_COUNT; i++) {
 				if (LookAndFeelChanged) {
 					SwingUtilities.updateComponentTreeUI(framesDetached[i]);
 				}
@@ -2352,7 +2327,7 @@ public class Main_window {
 					}
 				}
 				framesDetached[i].pack();
-			}
+			}*/
 			if (LookAndFeelChanged) {
 				SwingUtilities.updateComponentTreeUI(frmMegadrummanager);
 			}

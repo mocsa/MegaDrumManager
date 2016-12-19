@@ -1,6 +1,9 @@
 package gui;
 
 import java.awt.Color;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 class LabelWithState extends JLabel {
@@ -12,6 +15,7 @@ class LabelWithState extends JLabel {
 	public LabelWithState(String string) {
 		super(string);
 		//setForeground(Color.red);
+		setBorder(BorderFactory.createCompoundBorder(null,BorderFactory.createEmptyBorder(2,6,2,6)));
 	}
 	
 	public void setSyncState(int state) {
